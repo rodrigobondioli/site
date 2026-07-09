@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>BOND | Strategic Product Designer</title>
+<meta name="description" content="Strategic Product Designer pra pensar o produto antes de executar." />
+<meta property="og:title" content="BOND | Strategic Product Designer" />
+<meta property="og:description" content="Strategic Product Designer pra pensar o produto antes de executar." />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://www.rodrigobondioli.com/" />
+<meta property="og:image" content="https://framerusercontent.com/images/VgXXe3toz0HOKc5Hf4LjaRVKSiQ.png" />
+<meta name="twitter:card" content="summary_large_image" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Martian+Mono:wght@600;700&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --bg:#F1F1F1;
+    --ink:#101010;
+    --magenta:#FF00D7;
+    --lime:#E7F99A;
+    --dark:#161616;
+    --muted:rgba(0,0,0,.5);
+    --logo:#c4c4c4;
+    --sans:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+    --mono:'Martian Mono','Inter',monospace; /* substituto da Rooftop Mono (trial) */
+    --maxw:1200px;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{font-family:var(--sans);background:var(--bg);color:var(--ink);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+  html.lenis,html.lenis body{height:auto}
+  .lenis.lenis-smooth{scroll-behavior:auto !important}
+  .lenis.lenis-smooth [data-lenis-prevent]{overscroll-behavior:contain}
+  .lenis.lenis-stopped{overflow:hidden}
+  a{color:inherit;text-decoration:none}
+  .label{font-size:11.2px;font-weight:600;letter-spacing:1.12px;text-transform:uppercase}
+
+  /* NAV */
+  nav{position:fixed;top:0;left:0;right:0;z-index:50;display:flex;align-items:center;justify-content:space-between;
+      padding:26px 56px;mix-blend-mode:normal}
+  .logo{width:69px;height:69px;display:block}
+  .logo img{width:100%;height:100%;display:block}
+  .say-hello{display:inline-flex;align-items:center;gap:10px;background:#fff;color:var(--ink);
+      font-weight:500;font-size:14px;padding:12px 24px;border-radius:99px;box-shadow:0 2px 14px rgba(0,0,0,.06);
+      transition:transform .25s ease, box-shadow .25s ease}
+  .say-hello:hover{background:linear-gradient(90deg,#E7F99A 0%,#ffffff 100%)}
+  .say-hello .arrow{display:inline-flex;align-items:center;justify-content:center}
+  .say-hello .arrow #arrow-lottie{width:24px;height:24px}
+
+  /* HERO */
+  .hero{position:relative;min-height:100vh;display:flex;flex-direction:column;align-items:center;
+        justify-content:center;padding:40px 24px;overflow:hidden}
+  .marquee{position:absolute;top:50%;left:0;width:100%;transform:translateY(-50%);
+        display:flex;overflow:hidden;pointer-events:none;z-index:1;
+        -webkit-mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);
+        mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent)}
+  .marquee__track{display:flex;align-items:center;flex:0 0 auto;
+        animation:scroll 24s linear infinite}
+  .marquee .brand{flex:0 0 auto;height:34px;display:flex;align-items:center;margin-right:74px}
+  .marquee .brand img{height:34px;width:auto;display:block;filter:brightness(0);opacity:.7}
+  @keyframes scroll{from{transform:translateX(0)}to{transform:translateX(-33.3333%)}}
+
+  .hero__frame{position:relative;z-index:2;width:400px;max-width:100%;display:flex;flex-direction:column;gap:8px}
+  .hero__row{display:flex;justify-content:space-between;align-items:center}
+  .hero__img{width:400px;height:536px;max-width:100%;overflow:hidden;background:var(--bg)}
+  .hero__img img{width:100%;height:100%;object-fit:cover;display:block;
+        clip-path:inset(100% 0 0 0);animation:reveal 1.2s cubic-bezier(.5,0,.1,1) .25s forwards}
+  .underline{width:56px;height:4px;background:var(--magenta)}
+  .disclaimer{position:absolute;bottom:26px;left:0;width:100%;text-align:center;font-size:12.8px;color:var(--muted);z-index:2;padding:0 24px}
+  @keyframes reveal{to{clip-path:inset(0 0 0 0)}}
+
+  /* CONTACT */
+  .contact{position:relative;background:var(--dark);color:#fff;padding:120px 24px 130px;overflow:hidden}
+  .contact::before{content:"";position:absolute;inset:-20%;pointer-events:none;
+        background:radial-gradient(55% 40% at 24% 34%,rgba(255,255,255,.045),transparent 62%),
+                   radial-gradient(48% 34% at 76% 70%,rgba(255,255,255,.028),transparent 64%);
+        filter:blur(58px);will-change:transform;
+        animation:blob 22s ease-in-out infinite alternate}
+  @keyframes blob{
+        0%{transform:translate(-3%,-1%) scale(1) rotate(0deg)}
+        50%{transform:translate(4%,3%) scale(1.06) rotate(4deg)}
+        100%{transform:translate(-2%,2%) scale(1.03) rotate(-3deg)}}
+  @media (prefers-reduced-motion:reduce){.contact::before{animation:none}}
+  .contact__inner{position:relative;max-width:760px;margin:0 auto;text-align:center;z-index:1}
+  .coffee{width:88px;height:88px;margin:0 auto 22px}
+  #coffee-lottie{width:100%;height:100%;filter:invert(1)}
+  .contact h2{font-family:var(--mono);font-weight:700;font-size:24px;text-transform:uppercase;letter-spacing:1px;margin-bottom:20px}
+  .contact__sub{font-size:16px;line-height:1.5;color:#fff;max-width:800px;margin:0 auto 44px}
+  form{display:flex;flex-direction:column;gap:20px;text-align:left;max-width:724px;margin:0 auto}
+  .field{position:relative}
+  .field input,.field textarea{width:100%;background:transparent;border:1px solid rgba(255,255,255,.14);border-radius:8px;
+        color:#fff;font-family:var(--sans);font-size:15px;padding:15px 16px;outline:none;resize:none;transition:border-color .25s}
+  .field textarea{min-height:120px}
+  .field input::placeholder,.field textarea::placeholder{color:rgba(255,255,255,.5)}
+  .field input:focus,.field textarea:focus{border-color:rgba(255,255,255,.45)}
+  .hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+  .submit{align-self:center;margin-top:8px;background:var(--magenta);color:#fff;font-weight:700;font-size:15px;
+        border:none;border-radius:99px;padding:15px 34px;cursor:pointer;transition:transform .2s,filter .2s}
+  .submit:hover{transform:translateY(-1px);filter:brightness(1.08)}
+  .mentoria{display:block;text-align:center;margin-top:40px;font-size:14px;color:rgba(255,255,255,.55);
+        text-decoration:underline;text-underline-offset:3px}
+  .mentoria:hover{color:#fff}
+
+  /* FOOTER */
+  footer{background:var(--dark);color:#fff;padding:0 56px 46px}
+  .foot-inner{max-width:1440px;margin:0 auto}
+  .foot-divider{height:1px;background:rgba(255,255,255,.1);margin-bottom:40px}
+  .foot-row{display:flex;align-items:center;justify-content:space-between;gap:24px}
+  .foot-logo{width:44px;height:44px;border-radius:50%;border:1px solid rgba(255,255,255,.15);
+        display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.35);flex:0 0 auto}
+  .foot-logo svg{width:23px;height:23px;fill:currentColor}
+  .socials{display:flex;gap:12px;align-items:center;font-size:12.8px}
+  .socials a{color:rgba(255,255,255,.25);transition:color .2s}
+  .socials a:hover{color:rgba(255,255,255,.65)}
+  .socials .sep,.legal .sep{color:rgba(255,255,255,.15)}
+  .legal{display:flex;gap:12px;align-items:center;font-size:12px;color:rgba(255,255,255,.25)}
+  @media (max-width:640px){
+    footer{padding:0 20px 36px}
+    .foot-row{flex-direction:column;gap:22px;text-align:center}
+  }
+
+  @media (max-width:520px){
+    nav{padding:20px}
+    .hero__frame,.hero__img{width:320px}
+    .hero__img{height:428px}
+    .marquee .brand{margin-right:56px}
+    .contact h2{font-size:20px}
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="#" class="logo" aria-label="Rodrigo Bondioli">
+    <img src="img/logo-bondioli.svg" alt="Rodrigo Bondioli" />
+  </a>
+  <a class="say-hello" href="https://wa.me/5511932001431?text=Fala%20Bond!%20Vim%20do%20seu%20site%20e..." target="_blank" rel="noopener">
+    Say hello
+    <span class="arrow"><span id="arrow-lottie"></span></span>
+  </a>
+</nav>
+
+<main>
+  <section class="hero">
+    <!-- Ticker de logos (passa atrás da foto) -->
+    <div class="marquee" aria-hidden="true">
+      <div class="marquee__track">
+        <span class="brand"><img src="img/logo-clientes/logo-nike.svg" alt=""></span>
+        <span class="brand"><img src="img/logo-clientes/logo-cocacola.svg" alt=""></span>
+        <span class="brand"><img src="img/logo-clientes/logo-vivo.svg" alt=""></span>
+        <span class="brand"><img src="img/logo-clientes/logo-loreal.svg" alt=""></span>
+        <span class="brand"><img src="img/logo-clientes/logo-itau.svg" alt=""></span>
+        <span class="brand"><img src="img/logo-clientes/logo-havaianas.svg" alt=""></span>
+        <span class="brand"><img src="img/logo-clientes/logo-harleydavidson.svg" alt=""></span>
+        <span class="brand"><img src="img/logo-clientes/logo-unilever.svg" alt=""></span>
+        <span class="brand"><img src="img/logo-clientes/logo-nike.svg" alt=""></span>
+        <span class="brand"><img src="img/logo-clientes/logo-cocacola.svg" alt=""></span>
+        <span class="brand"><img src="img/logo-clientes/logo-vivo.svg" alt=""></span>
+        <span class="brand"><img src="img/logo-clientes/logo-loreal.svg" alt=""></span>
+        <span class="brand"><img src="img/logo-clientes/logo-itau.svg" alt=""></span>
+        <span class="brand"><img src="img/logo-clientes/logo-havaianas.svg" alt=""></span>
+        <span class="brand"><img src="img/logo-clientes/logo-harleydavidson.svg" alt=""></span>
+        <span class="brand"><img src="img/logo-clientes/logo-unilever.svg" alt=""></span>
+        <span class="brand"><img src="img/logo-clientes/logo-nike.svg" alt=""></span>
+        <span class="brand"><img src="img/logo-clientes/logo-cocacola.svg" alt=""></span>
+        <span class="brand"><img src="img/logo-clientes/logo-vivo.svg" alt=""></span>
+        <span class="brand"><img src="img/logo-clientes/logo-loreal.svg" alt=""></span>
+        <span class="brand"><img src="img/logo-clientes/logo-itau.svg" alt=""></span>
+        <span class="brand"><img src="img/logo-clientes/logo-havaianas.svg" alt=""></span>
+        <span class="brand"><img src="img/logo-clientes/logo-harleydavidson.svg" alt=""></span>
+        <span class="brand"><img src="img/logo-clientes/logo-unilever.svg" alt=""></span>
+      </div>
+    </div>
+
+    <div class="hero__frame">
+      <div class="hero__row">
+        <span class="label">Rodrigo Bondioli</span>
+        <span class="label">Since 2005</span>
+      </div>
+      <div class="hero__img">
+        <img src="https://framerusercontent.com/images/xULmS8qQVmHPJmkGd2SFiU7RzA.png" alt="Rodrigo Bondioli" />
+      </div>
+      <div class="hero__row">
+        <span class="underline"></span>
+        <span class="label">Strategic Product Designer</span>
+      </div>
+    </div>
+
+    <p class="disclaimer">Logos indicam histórico de atuação e colaboração; não implicam endosso.</p>
+  </section>
+
+  <section class="contact" id="contato">
+    <div class="contact__inner">
+      <div class="coffee"><div id="coffee-lottie"></div></div>
+      <h2>Tem algo na cabeça? Dá o papo.</h2>
+      <p class="contact__sub">Deixe seu contato aqui embaixo e me conta qual é o seu desafio ou o seu momento atual.<br>Se o papo render um café, a gente marca de conversar.</p>
+
+      <form id="contato-form" onsubmit="return sendWhats(event)">
+        <div class="hp" aria-hidden="true"><input type="text" name="website" tabindex="-1" autocomplete="off"/></div>
+        <div class="field"><input type="text" name="nome" placeholder="Nome" required /></div>
+        <div class="field"><input type="email" name="email" placeholder="Email" required /></div>
+        <div class="field"><input type="text" name="empresa" placeholder="Empresa" /></div>
+        <div class="field"><textarea name="mensagem" placeholder="Escreva aqui a sua mensagem"></textarea></div>
+        <button type="submit" class="submit">Enviar mensagem</button>
+      </form>
+
+    </div>
+  </section>
+
+  <footer>
+    <div class="foot-inner">
+      <div class="foot-divider"></div>
+      <div class="foot-row">
+        <a href="#" class="foot-logo" aria-label="Rodrigo Bondioli">
+          <svg viewBox="150 149 300 300" xmlns="http://www.w3.org/2000/svg"><path d="M190 324.99L190 163.574L262.891 205.657C263.187 208.281 263.33 210.834 263.33 213.254L263.33 324.99C263.33 345.24 279.74 361.65 299.99 361.65C320.239 361.65 336.66 345.229 336.66 324.99C336.66 308.692 326.029 294.886 311.335 290.107C301.481 286.9 290.687 288.014 281.67 293.222L281.67 216.501C294.863 214.275 308.425 214.51 321.547 217.114C371.982 227.131 410 271.613 410 325C410 385.749 360.759 435 300 435C287.144 435 274.808 432.794 263.34 428.74C220.615 413.637 190.01 372.892 190.01 325L190 324.99Z"/></svg>
+        </a>
+        <div class="socials">
+          <a href="https://www.youtube.com/@falabondioli" target="_blank" rel="noopener">Youtube</a>
+          <span class="sep">/</span>
+          <a href="https://www.instagram.com/falabondioli" target="_blank" rel="noopener">Instagram</a>
+          <span class="sep">/</span>
+          <a href="https://falabondioli.substack.com/" target="_blank" rel="noopener">Substack</a>
+        </div>
+        <div class="legal"><span>Política de Privacidade</span><span class="sep">/</span><span>Termos de Uso</span></div>
+      </div>
+    </div>
+  </footer>
+</main>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.12.2/lottie.min.js"></script>
+<script src="img/animated/lottie-data.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js"></script>
+<script>
+  // ----- Lottie (café + seta do botão) -----
+  if(window.lottie){
+    const cEl=document.getElementById('coffee-lottie');
+    if(cEl&&window.COFFEE_LOTTIE) lottie.loadAnimation({container:cEl,renderer:'svg',loop:true,autoplay:true,animationData:window.COFFEE_LOTTIE});
+    const aEl=document.getElementById('arrow-lottie');
+    if(aEl&&window.ARROW_LOTTIE) lottie.loadAnimation({container:aEl,renderer:'svg',loop:true,autoplay:true,animationData:window.ARROW_LOTTIE});
+  }
+
+  // ----- Smooth scroll (estilo Framer) -----
+  if(window.Lenis){
+    const lenis=new Lenis({duration:1.15,smoothWheel:true,easing:t=>Math.min(1,1.001-Math.pow(2,-10*t))});
+    function raf(t){lenis.raf(t);requestAnimationFrame(raf);}
+    requestAnimationFrame(raf);
+  }
+
+  // ----- Form -> WhatsApp (v1 sem backend) -----
+  function sendWhats(e){
+    e.preventDefault();
+    const f=e.target;
+    if(f.website.value) return false; // honeypot
+    const nome=f.nome.value.trim(), email=f.email.value.trim(), empresa=f.empresa.value.trim(), msg=f.mensagem.value.trim();
+    let t='Fala Bond! Vim do seu site.%0A%0A';
+    t+='*Nome:* '+encodeURIComponent(nome)+'%0A';
+    t+='*Email:* '+encodeURIComponent(email)+'%0A';
+    if(empresa) t+='*Empresa:* '+encodeURIComponent(empresa)+'%0A';
+    if(msg) t+='%0A'+encodeURIComponent(msg);
+    window.open('https://wa.me/5511932001431?text='+t,'_blank');
+    return false;
+  }
+</script>
+</body>
+</html>
