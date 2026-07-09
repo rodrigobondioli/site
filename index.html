@@ -96,11 +96,11 @@
   .field input::placeholder,.field textarea::placeholder{color:rgba(255,255,255,.5)}
   .field input:focus,.field textarea:focus{border-color:rgba(255,255,255,.45)}
   .hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
-  .submit{align-self:center;margin-top:8px;background:var(--magenta);color:#fff;font-weight:700;font-size:15px;
+  .submit{align-self:center;margin-top:8px;background:var(--magenta);color:#101010;font-weight:700;font-size:15px;
         border:none;border-radius:99px;padding:15px 34px;cursor:pointer;transition:transform .2s,filter .2s}
   .submit:hover{transform:translateY(-1px);filter:brightness(1.08)}
   .submit:disabled{opacity:.6;cursor:default;transform:none}
-  .form-status{text-align:center;margin-top:16px;font-size:14px;min-height:18px;color:rgba(255,255,255,.75)}
+  .form-status{text-align:center;margin-top:16px;font-size:12.8px;min-height:18px;color:rgba(255,255,255,.5)}
   .mentoria{display:block;text-align:center;margin-top:40px;font-size:14px;color:rgba(255,255,255,.55);
         text-decoration:underline;text-underline-offset:3px}
   .mentoria:hover{color:#fff}
@@ -259,13 +259,13 @@
     const btn=f.querySelector('.submit');
     const status=document.getElementById('form-status');
     const orig=btn.textContent;
-    btn.disabled=true; btn.textContent='Enviando...'; status.textContent='';
+    btn.disabled=true; btn.textContent='Enviando...'; status.textContent=''; status.style.color='';
     try{
       const r=await fetch('/api/contact',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({
         nome:f.nome.value, email:f.email.value, empresa:f.empresa.value, mensagem:f.mensagem.value, botcheck:f.botcheck.value
       })});
       const j=await r.json().catch(()=>({}));
-      if(r.ok && j.success){ f.reset(); btn.textContent='Mensagem enviada ✓'; status.style.color='#E7F99A'; status.textContent='Valeu! Retorno em breve.'; }
+      if(r.ok && j.success){ f.reset(); btn.textContent='Mensagem enviada ✓'; status.textContent='Valeu! Retorno em breve.'; }
       else { throw new Error(); }
     }catch(err){
       btn.disabled=false; btn.textContent=orig;
