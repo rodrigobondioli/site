@@ -13,7 +13,7 @@
 <meta name="twitter:card" content="summary_large_image" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Martian+Mono:wght@600;700&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
 <style>
   :root{
     --bg:#F1F1F1;
@@ -86,7 +86,7 @@
   .contact__inner{position:relative;max-width:760px;margin:0 auto;text-align:center;z-index:1}
   .coffee{width:88px;height:88px;margin:0 auto 22px}
   #coffee-lottie{width:100%;height:100%;filter:invert(1)}
-  .contact h2{font-family:var(--mono);font-weight:700;font-size:24px;text-transform:uppercase;letter-spacing:1px;margin-bottom:20px}
+  .contact h2{font-family:var(--sans);font-weight:800;font-size:24px;text-transform:uppercase;letter-spacing:1px;margin-bottom:20px}
   .contact__sub{font-size:16px;line-height:1.5;color:#fff;max-width:800px;margin:0 auto 44px}
   form{display:flex;flex-direction:column;gap:20px;text-align:left;max-width:724px;margin:0 auto}
   .field{position:relative}
@@ -99,6 +99,8 @@
   .submit{align-self:center;margin-top:8px;background:var(--magenta);color:#fff;font-weight:700;font-size:15px;
         border:none;border-radius:99px;padding:15px 34px;cursor:pointer;transition:transform .2s,filter .2s}
   .submit:hover{transform:translateY(-1px);filter:brightness(1.08)}
+  .submit:disabled{opacity:.6;cursor:default;transform:none}
+  .form-status{text-align:center;margin-top:16px;font-size:14px;min-height:18px;color:rgba(255,255,255,.75)}
   .mentoria{display:block;text-align:center;margin-top:40px;font-size:14px;color:rgba(255,255,255,.55);
         text-decoration:underline;text-underline-offset:3px}
   .mentoria:hover{color:#fff}
@@ -197,13 +199,14 @@
       <h2>Tem algo na cabeça? Dá o papo.</h2>
       <p class="contact__sub">Deixe seu contato aqui embaixo e me conta qual é o seu desafio ou o seu momento atual.<br>Se o papo render um café, a gente marca de conversar.</p>
 
-      <form id="contato-form" onsubmit="return sendWhats(event)">
-        <div class="hp" aria-hidden="true"><input type="text" name="website" tabindex="-1" autocomplete="off"/></div>
+      <form id="contato-form" onsubmit="return sendForm(event)">
+        <div class="hp" aria-hidden="true"><input type="text" name="botcheck" tabindex="-1" autocomplete="off"/></div>
         <div class="field"><input type="text" name="nome" placeholder="Nome" required /></div>
         <div class="field"><input type="email" name="email" placeholder="Email" required /></div>
         <div class="field"><input type="text" name="empresa" placeholder="Empresa" /></div>
         <div class="field"><textarea name="mensagem" placeholder="Escreva aqui a sua mensagem"></textarea></div>
         <button type="submit" class="submit">Enviar mensagem</button>
+        <p class="form-status" id="form-status" role="status"></p>
       </form>
 
     </div>
@@ -248,18 +251,29 @@
     requestAnimationFrame(raf);
   }
 
-  // ----- Form -> WhatsApp (v1 sem backend) -----
-  function sendWhats(e){
+  // ----- Form -> email via Web3Forms (envia pra hello@rodrigobondioli.com) -----
+  const WEB3FORMS_KEY = "2c0b23f7-d150-4e91-83ae-76f47238b38d";
+  async function sendForm(e){
     e.preventDefault();
     const f=e.target;
-    if(f.website.value) return false; // honeypot
-    const nome=f.nome.value.trim(), email=f.email.value.trim(), empresa=f.empresa.value.trim(), msg=f.mensagem.value.trim();
-    let t='Fala Bond! Vim do seu site.%0A%0A';
-    t+='*Nome:* '+encodeURIComponent(nome)+'%0A';
-    t+='*Email:* '+encodeURIComponent(email)+'%0A';
-    if(empresa) t+='*Empresa:* '+encodeURIComponent(empresa)+'%0A';
-    if(msg) t+='%0A'+encodeURIComponent(msg);
-    window.open('https://wa.me/5511932001431?text='+t,'_blank');
+    if(f.botcheck.value) return false; // honeypot
+    const btn=f.querySelector('.submit');
+    const status=document.getElementById('form-status');
+    const orig=btn.textContent;
+    btn.disabled=true; btn.textContent='Enviando...'; status.textContent='';
+    const data=new FormData(f);
+    data.append('access_key', WEB3FORMS_KEY);
+    data.append('subject','Novo contato pelo site — rodrigobondioli.com');
+    data.append('from_name','Site rodrigobondioli.com');
+    try{
+      const r=await fetch('https://api.web3forms.com/submit',{method:'POST',headers:{'Accept':'application/json'},body:data});
+      const j=await r.json();
+      if(j.success){ f.reset(); btn.textContent='Mensagem enviada ✓'; status.style.color='#E7F99A'; status.textContent='Valeu! Retorno em breve.'; }
+      else { throw new Error(j.message||'erro'); }
+    }catch(err){
+      btn.disabled=false; btn.textContent=orig;
+      status.style.color='#ff6b6b'; status.textContent='Deu ruim no envio. Tenta de novo ou chama no WhatsApp.';
+    }
     return false;
   }
 </script>
