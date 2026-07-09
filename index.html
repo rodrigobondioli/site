@@ -251,8 +251,7 @@
     requestAnimationFrame(raf);
   }
 
-  // ----- Form -> email via Web3Forms (envia pra hello@rodrigobondioli.com) -----
-  const WEB3FORMS_KEY = "2c0b23f7-d150-4e91-83ae-76f47238b38d";
+  // ----- Form -> email via Resend (função serverless /api/contact) -----
   async function sendForm(e){
     e.preventDefault();
     const f=e.target;
@@ -261,15 +260,13 @@
     const status=document.getElementById('form-status');
     const orig=btn.textContent;
     btn.disabled=true; btn.textContent='Enviando...'; status.textContent='';
-    const data=new FormData(f);
-    data.append('access_key', WEB3FORMS_KEY);
-    data.append('subject','Novo contato pelo site — rodrigobondioli.com');
-    data.append('from_name','Site rodrigobondioli.com');
     try{
-      const r=await fetch('https://api.web3forms.com/submit',{method:'POST',headers:{'Accept':'application/json'},body:data});
-      const j=await r.json();
-      if(j.success){ f.reset(); btn.textContent='Mensagem enviada ✓'; status.style.color='#E7F99A'; status.textContent='Valeu! Retorno em breve.'; }
-      else { throw new Error(j.message||'erro'); }
+      const r=await fetch('/api/contact',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({
+        nome:f.nome.value, email:f.email.value, empresa:f.empresa.value, mensagem:f.mensagem.value, botcheck:f.botcheck.value
+      })});
+      const j=await r.json().catch(()=>({}));
+      if(r.ok && j.success){ f.reset(); btn.textContent='Mensagem enviada ✓'; status.style.color='#E7F99A'; status.textContent='Valeu! Retorno em breve.'; }
+      else { throw new Error(); }
     }catch(err){
       btn.disabled=false; btn.textContent=orig;
       status.style.color='#ff6b6b'; status.textContent='Deu ruim no envio. Tenta de novo ou chama no WhatsApp.';
