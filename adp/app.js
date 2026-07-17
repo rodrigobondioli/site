@@ -19,7 +19,7 @@
 
   // Fade-up fino em cards e blocos (stagger por irmãos)
   if (!reduced) {
-    var fadeSel = ".card, .section-head, .stack-tags, .trust-bar, .deliver-now, .faq-item, .audience-block, .choices-cta";
+    var fadeSel = ".card, .section-head, .stack-tags, .trust-bar, .deliver-now, .faq-item, .audience-block .h-24-eb, .audience-list li, .choices-cta";
     var fadeEls = document.querySelectorAll(fadeSel);
     var byParent = new Map();
     fadeEls.forEach(function (el) {

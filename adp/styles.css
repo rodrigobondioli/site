@@ -210,13 +210,13 @@ s { text-decoration: line-through; }
   z-index: 1;
 }
 .hero-photo {
+  position: relative;
+  left: -240px;
   width: 518px;
   height: 720px;
   max-width: 100%;
   border-radius: 16px;
   overflow: hidden;
-  margin-left: auto;
-  margin-right: 182px;
 }
 .hero-photo img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 32%; }
 .b-wrap { position: absolute; z-index: 2; }
@@ -231,10 +231,10 @@ s { text-decoration: line-through; }
   box-shadow: 8px 8px 20px 0 rgba(0, 0, 0, 0.1);
 }
 /* frame coords (photo box: x1040..1558, y703..1513 → visual col x962..1680) */
-.b-wrap.b1 { width: 344px; left: -120px; top: 64px; }
-.b-wrap.b2 { width: 296px; right: 140px; top: 248px; }
-.b-wrap.b3 { width: 315px; left: -120px; top: 436px; }
-.b-wrap.b4 { width: 312px; right: 128px; top: 596px; }
+.b-wrap.b1 { width: 344px; left: -300px; top: 48px; }
+.b-wrap.b2 { width: 296px; right: 130px; top: 240px; }
+.b-wrap.b3 { width: 315px; left: -300px; top: 436px; }
+.b-wrap.b4 { width: 312px; right: 106px; top: 600px; }
 .b-wrap.b1 .b-body, .b-wrap.b3 .b-body { box-shadow: -8px 8px 20px 0 rgba(0,0,0,.1); }
 .hero-eusei {
   grid-area: eusei;
@@ -332,6 +332,8 @@ s { text-decoration: line-through; }
 .deliver-grid .col { display: flex; flex-direction: column; gap: 24px; }
 .product { justify-content: center; }
 .product-media {
+  position: relative;
+  overflow: hidden;
   width: 100%;
   height: 309px;
   border-radius: var(--radius);
@@ -340,9 +342,25 @@ s { text-decoration: line-through; }
   flex-direction: column;
   justify-content: space-between;
   align-items: flex-start;
+}
+.product-media::before {
+  content: "";
+  position: absolute;
+  inset: -12%;
   background-image: var(--pimg, linear-gradient(135deg, #dbe4ff, #ffd6f2));
   background-size: cover;
   background-position: center;
+  animation: bgDrift 16s ease-in-out infinite alternate;
+  z-index: 0;
+}
+.product-media > * { position: relative; z-index: 1; }
+.col > .product:nth-of-type(2) .product-media::before { animation-delay: -8s; animation-duration: 19s; }
+@keyframes bgDrift {
+  0% { transform: translate(-2%, -2%) scale(1) rotate(0deg); }
+  100% { transform: translate(2%, 2%) scale(1.12) rotate(2deg); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .product-media::before { animation: none; }
 }
 .floating-note {
   text-align: center;
@@ -624,7 +642,7 @@ s { text-decoration: line-through; }
   .hero-checklist li { align-items: flex-start; }
   .hero-arrow { display: none; }
   .hero-visual { margin-top: 0; }
-  .hero-photo { height: auto; aspect-ratio: 518 / 700; }
+  .hero-photo { left: 0; height: auto; aspect-ratio: 518 / 700; }
   .b-wrap { position: static; margin-top: 12px; width: 100% !important; transform: none !important; }
   .b-body { box-shadow: 4px 4px 16px rgba(0,0,0,.12) !important; }
   .hero-visual { display: flex; flex-direction: column; }
@@ -701,10 +719,10 @@ html.lenis, html.lenis body { height: auto; }
 /* Máscara esquerda → direita nas tarjas */
 .reveal {
   clip-path: inset(0 100% 0 0);
-  transition: clip-path 0.9s cubic-bezier(0.77, 0, 0.18, 1);
+  transition: clip-path 1.5s cubic-bezier(0.77, 0, 0.18, 1);
 }
 .inview .reveal, .reveal.inview { clip-path: inset(0 0 0 0); }
-.reveal-d2 { transition-delay: 0.25s; }
+.reveal-d2 { transition-delay: 0.4s; }
 
 /* Linha respirando após a seção de entregas */
 section.deliver + hr.rule { margin-top: 200px; }
@@ -726,7 +744,8 @@ section.deliver + hr.rule { margin-top: 200px; }
   [data-scroll-speed] { transform: none !important; }
 }
 /* fade só de opacidade p/ quem tem parallax (transform é do Locomotive) */
-.fade-op { opacity: 0; transition: opacity 0.9s cubic-bezier(0.22, 1, 0.36, 1); }
+.fade-op { opacity: 0; transition: opacity 1.1s cubic-bezier(0.22, 1, 0.36, 1); }
+.floating-note.fade-op { transition-duration: 1.8s; transition-delay: 0.2s; }
 .fade-op.fade-in { opacity: 1; }
 @media (prefers-reduced-motion: reduce) {
   .fade-op { opacity: 1; transition: none; }
@@ -736,7 +755,7 @@ section.deliver + hr.rule { margin-top: 200px; }
 .fade {
   opacity: 0;
   transform: translateY(28px);
-  transition: opacity 0.9s cubic-bezier(0.22, 1, 0.36, 1), transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+  transition: opacity 1.1s cubic-bezier(0.22, 1, 0.36, 1), transform 1.1s cubic-bezier(0.22, 1, 0.36, 1);
 }
 .fade.fade-in { opacity: 1; transform: none; }
 @media (prefers-reduced-motion: reduce) {
