@@ -52,6 +52,7 @@
     var byParent = new Map();
     fadeEls.forEach(function (el) {
       if (el.closest(".hero")) return; // hero tem coreografia própria
+      if (el.classList.contains("stack-tags") && el.closest(".card")) return; // card já faz o fade
       el.classList.add("fade");
       var p = el.parentElement;
       var n = byParent.get(p) || 0;
@@ -66,7 +67,7 @@
             fio.unobserve(e.target);
           }
         });
-      }, { threshold: 0.15, rootMargin: "0px 0px -5% 0px" });
+      }, { threshold: 0, rootMargin: "0px 0px -8% 0px" });
       document.querySelectorAll(".fade").forEach(function (el) { fio.observe(el); });
     } else {
       document.querySelectorAll(".fade").forEach(function (el) { el.classList.add("fade-in"); });
