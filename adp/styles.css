@@ -187,7 +187,7 @@ s { text-decoration: line-through; }
   font-family: var(--mono);
   font-weight: 800;
   font-size: clamp(32px, 3.125vw, 60px);
-  line-height: 1.2;
+  line-height: 1.08;
   text-transform: uppercase;
   max-width: 1318px;
   margin-top: 32px;
