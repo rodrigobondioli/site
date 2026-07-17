@@ -277,10 +277,15 @@ s { text-decoration: line-through; }
    AGITAÇÃO
    ============================================================ */
 .agitation { padding-block: 80px; text-align: center; }
-.agitation .h-36 { max-width: none; }
+.agit-lead {
+  font-family: var(--sans);
+  font-weight: 700;
+  font-size: clamp(17px, 1.04vw, 20px);
+  line-height: 1.3;
+  text-transform: none;
+}
 .versus { text-align: left; }
 .diff { margin-inline: auto; }
-.agitation .h-36 { max-width: 631px; }
 .strike-line { margin-top: 32px; }
 .strike-line + .strike-line { margin-top: 11px; }
 .agitation-body { margin-top: 56px; max-width: 1062px; margin-inline: auto; display: flex; flex-direction: column; gap: 26px; }
@@ -335,18 +340,12 @@ s { text-decoration: line-through; }
 .deliver { padding-block: 80px; }
 /* título alinhado ao stack e travado no topo enquanto os cards empilham */
 .deliver .section-head {
-  position: sticky;
-  top: 24px;
-  z-index: 1;
   width: min(920px, 100%);
   margin-inline: auto;
-  background: var(--bg);
-  padding-block: 8px;
   flex-direction: column;
   align-items: center;
   gap: 8px;
 }
-.deliver .section-head .h-36 { white-space: nowrap; }
 .stack { display: flex; flex-direction: column; gap: 48px; margin-top: 56px; }
 .stack .product {
   position: sticky;
@@ -685,7 +684,6 @@ s { text-decoration: line-through; }
   .trust-bar { flex-direction: column; gap: 12px; padding: 24px; }
   .postbuy { margin-top: 40px; }
   .stack { gap: 24px; }
-  .deliver .section-head { top: 12px; }
   .stack .product { top: calc(72px + var(--i, 0) * 20px); }
   .choices-cta { margin-top: 32px; }
   .offer { padding-block: 40px; }
