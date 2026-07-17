@@ -1,48 +1,20 @@
 // ANTI DESIGNER PATO — interações
 (function () {
-  // Smooth scroll (Lenis — igual ao site principal)
-  if (window.Lenis && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-    var lenis = new Lenis({
-      duration: 1.15,
-      smoothWheel: true,
-      easing: function (t) { return Math.min(1, 1.001 - Math.pow(2, -10 * t)); }
-    });
-    function raf(t) { lenis.raf(t); requestAnimationFrame(raf); }
-    requestAnimationFrame(raf);
-  }
-
-  // Parallax em camadas (pegada Locomotive) — elementos com data-speed
+  // Locomotive Scroll v5 (smooth + parallax nativo via data-scroll-speed)
   var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  if (!reduced && window.matchMedia("(min-width: 901px)").matches) {
-    var pEls = [];
-    document.querySelectorAll("[data-speed]").forEach(function (el) {
-      pEls.push({ el: el, speed: parseFloat(el.getAttribute("data-speed")) || 0, y: 0, top: 0, h: 0 });
+  var LS = window.locomotiveScroll;
+  if (LS && LS.default) LS = LS.default;
+  if (LS && !reduced) {
+    new LS({
+      lenisOptions: {
+        duration: 1.15,
+        smoothWheel: true,
+        easing: function (t) { return Math.min(1, 1.001 - Math.pow(2, -10 * t)); }
+      }
     });
-    var measure = function () {
-      var sy = window.scrollY || window.pageYOffset;
-      pEls.forEach(function (o) {
-        var r = o.el.getBoundingClientRect();
-        o.top = r.top + sy - o.y;
-        o.h = r.height;
-      });
-    };
-    var update = function () {
-      var sy = window.scrollY || window.pageYOffset;
-      var vh = window.innerHeight;
-      pEls.forEach(function (o) {
-        var center = o.top + o.h / 2 - sy;
-        var y = (vh / 2 - center) * o.speed;
-        if (Math.abs(y - o.y) > 0.1) {
-          o.y = y;
-          o.el.style.transform = "translate3d(0," + y.toFixed(1) + "px,0)";
-        }
-      });
-      requestAnimationFrame(update);
-    };
-    window.addEventListener("resize", function () { requestAnimationFrame(measure); });
-    window.addEventListener("load", measure);
-    measure();
-    requestAnimationFrame(update);
+  } else if (window.Lenis && !reduced) {
+    var lenis = new Lenis({ duration: 1.15, smoothWheel: true });
+    (function raf(t) { lenis.raf(t); requestAnimationFrame(raf); })();
   }
 
   // Fade-up fino em cards e blocos (stagger por irmãos)
@@ -53,7 +25,7 @@
     fadeEls.forEach(function (el) {
       if (el.closest(".hero")) return; // hero tem coreografia própria
       if (el.classList.contains("stack-tags") && el.closest(".card")) return; // card já faz o fade
-      el.classList.add("fade");
+      el.classList.add(el.hasAttribute("data-scroll-speed") ? "fade-op" : "fade");
       var p = el.parentElement;
       var n = byParent.get(p) || 0;
       el.style.transitionDelay = (n * 0.12) + "s";
@@ -68,9 +40,9 @@
           }
         });
       }, { threshold: 0, rootMargin: "0px 0px -8% 0px" });
-      document.querySelectorAll(".fade").forEach(function (el) { fio.observe(el); });
+      document.querySelectorAll(".fade, .fade-op").forEach(function (el) { fio.observe(el); });
     } else {
-      document.querySelectorAll(".fade").forEach(function (el) { el.classList.add("fade-in"); });
+      document.querySelectorAll(".fade, .fade-op").forEach(function (el) { el.classList.add("fade-in"); });
     }
   }
 

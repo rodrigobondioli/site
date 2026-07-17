@@ -805,10 +805,16 @@ section.deliver + hr.rule { margin-top: 200px; }
   .reveal { clip-path: none; transition: none; }
 }
 
-/* ---------- Parallax (pegada Locomotive) ---------- */
-[data-speed] { will-change: transform; }
+/* ---------- Parallax (Locomotive Scroll v5) ---------- */
+[data-scroll-speed] { will-change: transform; }
 @media (max-width: 900px) {
-  [data-speed] { transform: none !important; }
+  [data-scroll-speed] { transform: none !important; }
+}
+/* fade só de opacidade p/ quem tem parallax (transform é do Locomotive) */
+.fade-op { opacity: 0; transition: opacity 0.9s cubic-bezier(0.22, 1, 0.36, 1); }
+.fade-op.fade-in { opacity: 1; }
+@media (prefers-reduced-motion: reduce) {
+  .fade-op { opacity: 1; transition: none; }
 }
 
 /* ---------- Fade-up fino (cards e blocos) ---------- */
