@@ -70,7 +70,7 @@
       var anim = lottie.loadAnimation({
         container: el,
         renderer: "svg",
-        loop: false,
+        loop: true,
         autoplay: false,
         animationData: data
       });
