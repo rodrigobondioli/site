@@ -232,9 +232,9 @@ s { text-decoration: line-through; }
 }
 /* frame coords (photo box: x1040..1558, y703..1513 → visual col x962..1680) */
 .b-wrap.b1 { width: 344px; left: -300px; top: 48px; }
-.b-wrap.b2 { width: 296px; right: 130px; top: 240px; }
+.b-wrap.b2 { width: 296px; right: 44px; top: 240px; }
 .b-wrap.b3 { width: 315px; left: -300px; top: 436px; }
-.b-wrap.b4 { width: 312px; right: 106px; top: 440px; }
+.b-wrap.b4 { width: 312px; right: 20px; top: 440px; }
 .b-wrap.b1 .b-body, .b-wrap.b3 .b-body { box-shadow: -8px 8px 20px 0 rgba(0,0,0,.1); }
 .hero { padding-bottom: 80px; }
 .hero-eusei {
@@ -329,8 +329,14 @@ s { text-decoration: line-through; }
    O QUE VOCÊ RECEBE
    ============================================================ */
 .deliver { padding-block: 80px; }
-.deliver-grid { margin-top: 56px; }
-.deliver-grid .col { display: flex; flex-direction: column; gap: 24px; }
+.stack { display: flex; flex-direction: column; gap: 48px; margin-top: 56px; }
+.stack .product {
+  position: sticky;
+  top: calc(110px + var(--i, 0) * 40px);
+  width: min(920px, 100%);
+  margin-inline: auto;
+  background: var(--bg);
+}
 .product { justify-content: center; }
 .product-media {
   position: relative;
@@ -365,8 +371,8 @@ s { text-decoration: line-through; }
 }
 .floating-note {
   text-align: center;
-  max-width: 291px;
-  margin: auto;
+  max-width: 420px;
+  margin: 56px auto 0;
 }
 
 /* ============================================================
@@ -662,6 +668,8 @@ s { text-decoration: line-through; }
   .product-media { padding: 24px; height: 220px; }
   .trust-bar { flex-direction: column; gap: 12px; padding: 24px; }
   .postbuy { margin-top: 40px; }
+  .stack { gap: 24px; }
+  .stack .product { top: calc(72px + var(--i, 0) * 20px); }
   .choices-cta { margin-top: 32px; }
   .offer { padding-block: 40px; }
   .deliver-now { margin-top: 80px; }
