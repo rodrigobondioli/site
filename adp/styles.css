@@ -234,7 +234,7 @@ s { text-decoration: line-through; }
 .b-wrap.b1 { width: 344px; left: -300px; top: 48px; }
 .b-wrap.b2 { width: 296px; right: 130px; top: 240px; }
 .b-wrap.b3 { width: 315px; left: -300px; top: 436px; }
-.b-wrap.b4 { width: 312px; right: 106px; top: 600px; }
+.b-wrap.b4 { width: 312px; right: 106px; top: 532px; }
 .b-wrap.b1 .b-body, .b-wrap.b3 .b-body { box-shadow: -8px 8px 20px 0 rgba(0,0,0,.1); }
 .hero-eusei {
   grid-area: eusei;
