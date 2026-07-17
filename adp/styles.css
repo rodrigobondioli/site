@@ -737,7 +737,7 @@ html.lenis, html.lenis body { height: auto; }
 .circle-vec path, .scribble path {
   stroke-dasharray: 1;
   stroke-dashoffset: 1;
-  transition: stroke-dashoffset 0.9s ease 0.25s;
+  transition: stroke-dashoffset 1.2s ease 0.45s;
 }
 .circle-vec.inview path, .scribble.inview path { stroke-dashoffset: 0; }
 

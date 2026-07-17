@@ -47,7 +47,10 @@
   }
 
   // Animações on-scroll
-  var targets = document.querySelectorAll("[data-animate]");
+  var targets = Array.prototype.filter.call(
+    document.querySelectorAll("[data-animate]"),
+    function (el) { return !el.classList.contains("circle-vec") && !el.classList.contains("scribble"); }
+  );
   if ("IntersectionObserver" in window) {
     var io = new IntersectionObserver(function (entries) {
       entries.forEach(function (e) {
@@ -61,6 +64,22 @@
     targets.forEach(function (el) { io.observe(el); });
   } else {
     targets.forEach(function (el) { el.classList.add("inview"); });
+  }
+
+  // Rabiscos: desenham só quando chegam na faixa central da tela (senão passa batido)
+  var sketches = document.querySelectorAll(".circle-vec, .scribble");
+  if ("IntersectionObserver" in window) {
+    var sio = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting || e.boundingClientRect.top < 0) {
+          e.target.classList.add("inview");
+          sio.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0, rootMargin: "-30% 0px -30% 0px" });
+    sketches.forEach(function (el) { sio.observe(el); });
+  } else {
+    sketches.forEach(function (el) { el.classList.add("inview"); });
   }
 
   // Ícones Lottie dos cards pós-compra (tocam quando entram na tela)
