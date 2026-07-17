@@ -106,6 +106,20 @@
 .btn-pill--pink { background: var(--bnd-pink); }
 .btn-pill--pink:hover { background: var(--bnd-pink); filter: brightness(1.08); }
 
+/* Variante de VENDA: o único bloco grande pink da página — pop-out por cor reservada */
+.btn-pill--buy {
+  background: var(--bnd-pink);
+  color: var(--bnd-ink);
+  font-family: var(--bnd-display);
+  font-weight: 700;
+  font-size: 19px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 24px 48px;
+}
+.btn-pill--buy:hover { background: var(--bnd-pink); filter: brightness(1.12); }
+.btn-pill--buy .arrow-lottie { width: 26px; height: 26px; }
+
 /* ---------- Componente: tarja marca-texto ---------- */
 .tag-lime {
   display: inline-block;
