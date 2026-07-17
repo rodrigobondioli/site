@@ -740,3 +740,56 @@ s { text-decoration: line-through; }
   .audience-list li { align-items: flex-start; }
   .checklist li { align-items: flex-start; }
 }
+
+/* ============================================================
+   ANIMAÇÕES
+   ============================================================ */
+html { scroll-behavior: smooth; }
+html.lenis, html.lenis body { height: auto; }
+.lenis.lenis-smooth { scroll-behavior: auto !important; }
+.lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
+.lenis.lenis-stopped { overflow: hidden; }
+
+/* Balões: entrada + flutuação contínua */
+@keyframes balloonIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes balloonFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+.hero-visual .balloon { opacity: 0; }
+.hero-visual.inview .balloon {
+  animation: balloonIn 0.7s ease both, balloonFloat 5.2s ease-in-out infinite;
+}
+.hero-visual.inview .b1 { animation-delay: 0.15s, 0.15s; }
+.hero-visual.inview .b2 { animation-delay: 0.4s, 1.2s; animation-duration: 0.7s, 6.1s; }
+.hero-visual.inview .b3 { animation-delay: 0.65s, 0.7s; animation-duration: 0.7s, 5.6s; }
+.hero-visual.inview .b4 { animation-delay: 0.9s, 1.8s; animation-duration: 0.7s, 6.6s; }
+
+/* Rabiscos: desenho do traço */
+.circle-vec path, .scribble path {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  transition: stroke-dashoffset 0.9s ease 0.25s;
+}
+.circle-vec.inview path, .scribble.inview path { stroke-dashoffset: 0; }
+
+/* Máscara esquerda → direita nas tarjas */
+.reveal {
+  clip-path: inset(0 100% 0 0);
+  transition: clip-path 0.9s cubic-bezier(0.77, 0, 0.18, 1);
+}
+.inview .reveal, .reveal.inview { clip-path: inset(0 0 0 0); }
+.reveal-d2 { transition-delay: 0.25s; }
+
+/* Linha respirando após a seção de entregas */
+section.deliver + hr.rule { margin-top: 200px; }
+
+@media (max-width: 900px) {
+  section.deliver + hr.rule { margin-top: 72px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-visual .balloon { opacity: 1; animation: none !important; }
+  .circle-vec path, .scribble path { stroke-dashoffset: 0; transition: none; }
+  .reveal { clip-path: none; transition: none; }
+}
