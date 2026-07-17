@@ -279,12 +279,12 @@ s { text-decoration: line-through; }
 }
 .hero-photo {
   width: 518px;
-  height: 810px;
+  height: 720px;
   max-width: 100%;
   border-radius: 16px;
   overflow: hidden;
   margin-left: auto;
-  margin-right: 122px;
+  margin-right: 182px;
 }
 .hero-photo img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 32%; }
 .balloon {
@@ -300,10 +300,10 @@ s { text-decoration: line-through; }
   z-index: 2;
 }
 /* frame coords (photo box: x1040..1558, y703..1513 → visual col x962..1680) */
-.balloon.b1 { width: 344px; left: -101px; top: 153px; box-shadow: -8px 8px 20px 0 rgba(0,0,0,.1); }
-.balloon.b2 { width: 296px; right: -20px; top: 337px; }
-.balloon.b3 { width: 315px; left: -101px; top: 560px; box-shadow: -8px 8px 20px 0 rgba(0,0,0,.1); }
-.balloon.b4 { width: 312px; right: -30px; top: 647px; }
+.balloon.b1 { width: 344px; left: -131px; top: 136px; box-shadow: -8px 8px 20px 0 rgba(0,0,0,.1); }
+.balloon.b2 { width: 296px; right: 10px; top: 300px; }
+.balloon.b3 { width: 315px; left: -131px; top: 498px; box-shadow: -8px 8px 20px 0 rgba(0,0,0,.1); }
+.balloon.b4 { width: 312px; right: 0px; top: 576px; }
 .hero-eusei {
   grid-area: eusei;
   position: relative;
@@ -396,7 +396,7 @@ s { text-decoration: line-through; }
    O QUE VOCÊ RECEBE
    ============================================================ */
 .deliver { padding-top: 100px; }
-.deliver-grid { margin-top: 56px; align-items: start; }
+.deliver-grid { margin-top: 56px; }
 .deliver-grid .col { display: flex; flex-direction: column; gap: 24px; }
 .product { justify-content: center; }
 .product-media {
@@ -415,7 +415,7 @@ s { text-decoration: line-through; }
 .floating-note {
   text-align: center;
   max-width: 291px;
-  margin: 96px auto 0;
+  margin: auto;
 }
 
 /* ============================================================
@@ -480,10 +480,9 @@ s { text-decoration: line-through; }
   text-decoration: none;
   padding: 20px;
   border-radius: 8px;
-  transition: transform 0.12s ease;
+  transition: background 0.2s ease;
 }
-.btn-cta:hover { transform: translate(-2px, -2px); box-shadow: 4px 4px 0 var(--ink); background: var(--ink); }
-.card-cyan .btn-cta:hover { box-shadow: 4px 4px 0 rgba(16,16,16,.35); }
+.btn-cta:hover { background: #333333; }
 .guarantee { gap: 32px; }
 .guarantee .body-20 { max-width: 598px; }
 .trust-bar {
@@ -498,6 +497,7 @@ s { text-decoration: line-through; }
 .deliver-now { text-align: center; margin-top: 200px; }
 .postbuy { margin-top: 75px; }
 .postbuy .card { align-items: center; text-align: center; justify-content: center; min-height: 220px; }
+.postbuy-ic { width: 48px; height: 48px; }
 .postbuy .card .body-20 { max-width: 258px; }
 
 /* ============================================================
@@ -539,10 +539,10 @@ s { text-decoration: line-through; }
 .bio-photo {
   position: absolute;
   left: 50%;
-  top: 0;
+  bottom: 0;
   transform: translateX(-50%);
-  width: 807px;
-  height: 100%;
+  width: 680px;
+  height: 90%;
   z-index: 1;
 }
 .bio-photo img { width: 100%; height: 100%; object-fit: cover; }
@@ -642,7 +642,7 @@ s { text-decoration: line-through; }
 .footer-row .disclaimer {
   max-width: 661px;
   text-align: center;
-  font-size: 11px;
+  font-size: 14px;
   line-height: 1.3;
 }
 .footer-row > span { white-space: nowrap; }
@@ -754,16 +754,16 @@ html.lenis, html.lenis body { height: auto; }
 @keyframes balloonIn { from { opacity: 0; } to { opacity: 1; } }
 @keyframes balloonFloat {
   0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-8px); }
+  50% { transform: translateY(-10px); }
 }
 .hero-visual .balloon { opacity: 0; }
 .hero-visual.inview .balloon {
-  animation: balloonIn 0.7s ease both, balloonFloat 5.2s ease-in-out infinite;
+  animation: balloonIn 1.5s cubic-bezier(0.25, 0.6, 0.3, 1) both, balloonFloat 9s ease-in-out infinite;
 }
-.hero-visual.inview .b1 { animation-delay: 0.15s, 0.15s; }
-.hero-visual.inview .b2 { animation-delay: 0.4s, 1.2s; animation-duration: 0.7s, 6.1s; }
-.hero-visual.inview .b3 { animation-delay: 0.65s, 0.7s; animation-duration: 0.7s, 5.6s; }
-.hero-visual.inview .b4 { animation-delay: 0.9s, 1.8s; animation-duration: 0.7s, 6.6s; }
+.hero-visual.inview .b1 { animation-delay: 0.2s, 0.2s; }
+.hero-visual.inview .b2 { animation-delay: 0.55s, 2.1s; animation-duration: 1.5s, 10.4s; }
+.hero-visual.inview .b3 { animation-delay: 0.9s, 1.2s; animation-duration: 1.5s, 9.6s; }
+.hero-visual.inview .b4 { animation-delay: 1.25s, 3s; animation-duration: 1.5s, 11s; }
 
 /* Rabiscos: desenho do traço */
 .circle-vec path, .scribble path {

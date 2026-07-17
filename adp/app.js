@@ -28,6 +28,34 @@
     targets.forEach(function (el) { el.classList.add("inview"); });
   }
 
+  // Ícones Lottie dos cards pós-compra (tocam quando entram na tela)
+  if (window.lottie) {
+    document.querySelectorAll(".postbuy-ic[data-lottie]").forEach(function (el, i) {
+      var data = window[el.getAttribute("data-lottie")];
+      if (!data) return;
+      var anim = lottie.loadAnimation({
+        container: el,
+        renderer: "svg",
+        loop: false,
+        autoplay: false,
+        animationData: data
+      });
+      if ("IntersectionObserver" in window) {
+        var lio = new IntersectionObserver(function (entries) {
+          entries.forEach(function (e) {
+            if (e.isIntersecting || e.boundingClientRect.top < 0) {
+              setTimeout(function () { anim.play(); }, i * 250);
+              lio.unobserve(e.target);
+            }
+          });
+        }, { threshold: 0.4 });
+        lio.observe(el);
+      } else {
+        anim.play();
+      }
+    });
+  }
+
   // FAQ: accordion — abre um, fecha os outros
   var items = document.querySelectorAll(".faq-item");
   items.forEach(function (item) {
