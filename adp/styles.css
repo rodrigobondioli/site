@@ -329,6 +329,16 @@ s { text-decoration: line-through; }
    O QUE VOCÊ RECEBE
    ============================================================ */
 .deliver { padding-block: 80px; }
+/* título alinhado ao stack e travado no topo enquanto os cards empilham */
+.deliver .section-head {
+  position: sticky;
+  top: 32px;
+  z-index: 1;
+  width: min(920px, 100%);
+  margin-inline: auto;
+  background: var(--bg);
+  padding-block: 8px;
+}
 .stack { display: flex; flex-direction: column; gap: 48px; margin-top: 56px; }
 .stack .product {
   position: sticky;
@@ -669,6 +679,7 @@ s { text-decoration: line-through; }
   .trust-bar { flex-direction: column; gap: 12px; padding: 24px; }
   .postbuy { margin-top: 40px; }
   .stack { gap: 24px; }
+  .deliver .section-head { top: 12px; }
   .stack .product { top: calc(72px + var(--i, 0) * 20px); }
   .choices-cta { margin-top: 32px; }
   .offer { padding-block: 40px; }
@@ -781,6 +792,9 @@ html.lenis, html.lenis body { height: auto; }
 @media (prefers-reduced-motion: reduce) {
   [data-text-reveal] .w { color: var(--ink); transition: none; }
 }
+
+.launch-note { margin-top: 24px; width: 100%; }
+.launch-note .body-20 { max-width: 1100px; }
 
 /* ---------- CTA sticky (aparece depois do hero) ---------- */
 .btn-sticky {
