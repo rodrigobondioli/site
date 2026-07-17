@@ -212,11 +212,12 @@ s { text-decoration: line-through; }
    ============================================================ */
 .topbar {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   justify-content: space-between;
-  padding: 48px;
+  padding: 26px 56px;
 }
-.logo img { width: 64px; height: 64px; border-radius: 999px; }
+.logo { width: 69px; height: 69px; display: block; }
+.logo img { width: 100%; height: 100%; border-radius: 999px; }
 .topnav {
   display: flex;
   gap: 24px;
@@ -287,8 +288,8 @@ s { text-decoration: line-through; }
   margin-right: 182px;
 }
 .hero-photo img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 32%; }
+.b-wrap { position: absolute; z-index: 2; }
 .balloon {
-  position: absolute;
   background: rgba(255, 255, 255, 0.8);
   backdrop-filter: blur(5px);
   -webkit-backdrop-filter: blur(5px);
@@ -297,13 +298,13 @@ s { text-decoration: line-through; }
   font-size: 16px;
   line-height: 1.2;
   box-shadow: 8px 8px 20px 0 rgba(0, 0, 0, 0.1);
-  z-index: 2;
 }
 /* frame coords (photo box: x1040..1558, y703..1513 → visual col x962..1680) */
-.balloon.b1 { width: 344px; left: -131px; top: 136px; box-shadow: -8px 8px 20px 0 rgba(0,0,0,.1); }
-.balloon.b2 { width: 296px; right: 10px; top: 300px; }
-.balloon.b3 { width: 315px; left: -131px; top: 498px; box-shadow: -8px 8px 20px 0 rgba(0,0,0,.1); }
-.balloon.b4 { width: 312px; right: 0px; top: 576px; }
+.b-wrap.b1 { width: 344px; left: -131px; top: 136px; }
+.b-wrap.b2 { width: 296px; right: 10px; top: 300px; }
+.b-wrap.b3 { width: 315px; left: -131px; top: 498px; }
+.b-wrap.b4 { width: 312px; right: 0px; top: 576px; }
+.b-wrap.b1 .balloon, .b-wrap.b3 .balloon { box-shadow: -8px 8px 20px 0 rgba(0,0,0,.1); }
 .hero-eusei {
   grid-area: eusei;
   position: relative;
@@ -656,8 +657,8 @@ s { text-decoration: line-through; }
   .hero { grid-template-columns: 1fr 420px; }
   .hero-photo { width: 100%; height: 660px; margin-right: 0; }
   .hero-visual { margin-top: 0; }
-  .balloon.b1, .balloon.b3 { left: -40px; }
-  .balloon.b2, .balloon.b4 { right: -8px; }
+  .b-wrap.b1, .b-wrap.b3 { left: -40px; }
+  .b-wrap.b2, .b-wrap.b4 { right: -8px; }
   .bio-title .l1, .bio-title .l2 { margin-left: 48px; }
   .bio-col-left { left: 48px; }
 }
@@ -709,7 +710,8 @@ s { text-decoration: line-through; }
   .hero-arrow { display: none; }
   .hero-visual { margin-top: 0; }
   .hero-photo { height: auto; aspect-ratio: 518 / 700; }
-  .balloon { position: static; margin-top: 12px; width: 100% !important; box-shadow: 4px 4px 16px rgba(0,0,0,.12) !important; }
+  .b-wrap { position: static; margin-top: 12px; width: 100% !important; transform: none !important; }
+  .balloon { width: 100%; box-shadow: 4px 4px 16px rgba(0,0,0,.12) !important; }
   .hero-visual { display: flex; flex-direction: column; }
   .hero-eusei { padding-bottom: 0; }
   .belief { padding-block: 96px; }
@@ -760,10 +762,10 @@ html.lenis, html.lenis body { height: auto; }
 .hero-visual.inview .balloon {
   animation: balloonIn 1.5s cubic-bezier(0.25, 0.6, 0.3, 1) both, balloonFloat 9s ease-in-out infinite;
 }
-.hero-visual.inview .b1 { animation-delay: 0.2s, 0.2s; }
-.hero-visual.inview .b2 { animation-delay: 0.55s, 2.1s; animation-duration: 1.5s, 10.4s; }
-.hero-visual.inview .b3 { animation-delay: 0.9s, 1.2s; animation-duration: 1.5s, 9.6s; }
-.hero-visual.inview .b4 { animation-delay: 1.25s, 3s; animation-duration: 1.5s, 11s; }
+.hero-visual.inview .b1 .balloon { animation-delay: 0.2s, 0.2s; }
+.hero-visual.inview .b2 .balloon { animation-delay: 0.55s, 2.1s; animation-duration: 1.5s, 10.4s; }
+.hero-visual.inview .b3 .balloon { animation-delay: 0.9s, 1.2s; animation-duration: 1.5s, 9.6s; }
+.hero-visual.inview .b4 .balloon { animation-delay: 1.25s, 3s; animation-duration: 1.5s, 11s; }
 
 /* Rabiscos: desenho do traço */
 .circle-vec path, .scribble path {
@@ -792,4 +794,10 @@ section.deliver + hr.rule { margin-top: 200px; }
   .hero-visual .balloon { opacity: 1; animation: none !important; }
   .circle-vec path, .scribble path { stroke-dashoffset: 0; transition: none; }
   .reveal { clip-path: none; transition: none; }
+}
+
+/* ---------- Parallax (pegada Locomotive) ---------- */
+[data-speed] { will-change: transform; }
+@media (max-width: 900px) {
+  [data-speed] { transform: none !important; }
 }

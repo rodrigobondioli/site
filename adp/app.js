@@ -11,6 +11,40 @@
     requestAnimationFrame(raf);
   }
 
+  // Parallax em camadas (pegada Locomotive) — elementos com data-speed
+  var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (!reduced && window.matchMedia("(min-width: 901px)").matches) {
+    var pEls = [];
+    document.querySelectorAll("[data-speed]").forEach(function (el) {
+      pEls.push({ el: el, speed: parseFloat(el.getAttribute("data-speed")) || 0, y: 0, top: 0, h: 0 });
+    });
+    var measure = function () {
+      var sy = window.scrollY || window.pageYOffset;
+      pEls.forEach(function (o) {
+        var r = o.el.getBoundingClientRect();
+        o.top = r.top + sy - o.y;
+        o.h = r.height;
+      });
+    };
+    var update = function () {
+      var sy = window.scrollY || window.pageYOffset;
+      var vh = window.innerHeight;
+      pEls.forEach(function (o) {
+        var center = o.top + o.h / 2 - sy;
+        var y = (vh / 2 - center) * o.speed;
+        if (Math.abs(y - o.y) > 0.1) {
+          o.y = y;
+          o.el.style.transform = "translate3d(0," + y.toFixed(1) + "px,0)";
+        }
+      });
+      requestAnimationFrame(update);
+    };
+    window.addEventListener("resize", function () { requestAnimationFrame(measure); });
+    window.addEventListener("load", measure);
+    measure();
+    requestAnimationFrame(update);
+  }
+
   // Animações on-scroll
   var targets = document.querySelectorAll("[data-animate]");
   if ("IntersectionObserver" in window) {
