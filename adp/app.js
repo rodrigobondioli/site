@@ -117,6 +117,29 @@
     requestAnimationFrame(tick);
   });
 
+  // CTA sticky: aparece quando o hero sai de cena, some sobre a oferta
+  var sticky = document.getElementById("sticky-cta");
+  var heroEl = document.querySelector(".hero");
+  var offerEl = document.querySelector(".offer-box");
+  if (sticky && heroEl && "IntersectionObserver" in window) {
+    var heroGone = false, offerVisible = false;
+    var refresh = function () {
+      var show = heroGone && !offerVisible;
+      sticky.classList.toggle("show", show);
+      sticky.setAttribute("aria-hidden", show ? "false" : "true");
+    };
+    new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) { heroGone = !e.isIntersecting; });
+      refresh();
+    }, { threshold: 0 }).observe(heroEl);
+    if (offerEl) {
+      new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) { offerVisible = e.isIntersecting; });
+        refresh();
+      }, { threshold: 0.15 }).observe(offerEl);
+    }
+  }
+
   // FAQ: accordion — abre um, fecha os outros
   var items = document.querySelectorAll(".faq-item");
   items.forEach(function (item) {
