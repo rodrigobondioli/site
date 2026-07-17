@@ -236,6 +236,7 @@ s { text-decoration: line-through; }
 .b-wrap.b3 { width: 315px; left: -300px; top: 436px; }
 .b-wrap.b4 { width: 312px; right: 106px; top: 440px; }
 .b-wrap.b1 .b-body, .b-wrap.b3 .b-body { box-shadow: -8px 8px 20px 0 rgba(0,0,0,.1); }
+.hero { padding-bottom: 80px; }
 .hero-eusei {
   grid-area: eusei;
   position: relative;
@@ -249,7 +250,7 @@ s { text-decoration: line-through; }
 /* ============================================================
    QUEBRA DE CRENÇA
    ============================================================ */
-.belief { padding-top: 200px; position: relative; }
+.belief { padding-block: 80px; position: relative; }
 .belief-text {
   font-family: var(--mono);
   font-weight: 700;
@@ -269,16 +270,16 @@ s { text-decoration: line-through; }
   line-height: 1.2;
   text-transform: uppercase;
 }
-.belief { padding-bottom: 200px; }
+
 
 /* ============================================================
    AGITAÇÃO
    ============================================================ */
-.agitation { padding-top: 88px; padding-bottom: 57px; }
+.agitation { padding-block: 80px; }
 .agitation .h-36 { max-width: 631px; }
 .strike-line { margin-top: 32px; }
 .strike-line + .strike-line { margin-top: 11px; }
-.agitation-body { margin-top: 99px; max-width: 1062px; display: flex; flex-direction: column; gap: 26px; }
+.agitation-body { margin-top: 56px; max-width: 1062px; display: flex; flex-direction: column; gap: 26px; }
 .scribbled { position: relative; display: inline-block; }
 .scribble {
   position: absolute;
@@ -288,14 +289,14 @@ s { text-decoration: line-through; }
   max-width: 100%;
   pointer-events: none;
 }
-.versus { margin-top: 121px; }
+.versus { margin-top: 80px; }
 .versus .checklist li { white-space: nowrap; }
 .diff { margin-top: 56px; max-width: 708px; }
 
 /* ============================================================
    AGORA TE PERGUNTO / IMAGINA SÓ
    ============================================================ */
-.pergunto { padding-block: 88px; align-items: start; }
+.pergunto { padding-block: 80px; align-items: start; }
 .pergunto-left { max-width: 587px; display: flex; flex-direction: column; gap: 32px; }
 .stack-tags { display: flex; flex-direction: column; gap: 8px; align-items: flex-start; }
 .pergunto-left .body-20 strong:only-child { display: block; max-width: 426px; }
@@ -318,7 +319,7 @@ s { text-decoration: line-through; }
 /* ============================================================
    3 PASSOS
    ============================================================ */
-.steps { padding-top: 88px; padding-bottom: 108px; }
+.steps { padding-block: 80px; }
 .section-head { display: flex; gap: 16px; align-items: center; }
 .section-head.centered { justify-content: center; }
 .steps .grid-3 { margin-top: 56px; }
@@ -327,7 +328,7 @@ s { text-decoration: line-through; }
 /* ============================================================
    O QUE VOCÊ RECEBE
    ============================================================ */
-.deliver { padding-top: 100px; }
+.deliver { padding-block: 80px; }
 .deliver-grid { margin-top: 56px; }
 .deliver-grid .col { display: flex; flex-direction: column; gap: 24px; }
 .product { justify-content: center; }
@@ -372,7 +373,7 @@ s { text-decoration: line-through; }
    PARA QUEM É / NÃO É
    ============================================================ */
 .audience {
-  padding-top: 88px;
+  padding-block: 80px;
   display: flex;
   flex-direction: column;
   gap: 56px;
@@ -392,7 +393,7 @@ s { text-decoration: line-through; }
 /* ============================================================
    RECAP + OFERTA
    ============================================================ */
-.offer { padding-top: 200px; }
+.offer { padding-block: 80px; }
 .offer-grid { align-items: start; }
 .offer-grid .col { display: flex; flex-direction: column; gap: 24px; }
 .recap .stack-tags { gap: 8px; }
@@ -428,8 +429,8 @@ s { text-decoration: line-through; }
   padding: 32px 48px;
   font-size: 16px;
 }
-.deliver-now { text-align: center; margin-top: 200px; }
-.postbuy { margin-top: 75px; }
+.deliver-now { text-align: center; margin-top: 160px; }
+.postbuy { margin-top: 56px; }
 .postbuy .card { align-items: center; text-align: center; justify-content: center; min-height: 220px; }
 .postbuy-ic { width: 48px; height: 48px; }
 .postbuy .card .body-20 { max-width: 258px; }
@@ -437,8 +438,8 @@ s { text-decoration: line-through; }
 /* ============================================================
    2 ESCOLHAS
    ============================================================ */
-.choices { padding-top: 220px; padding-bottom: 112px; }
-.choices .deliver-now { margin-top: 0; margin-bottom: 75px; }
+.choices { padding-block: 80px; }
+.choices .deliver-now { margin-top: 0; margin-bottom: 56px; }
 .choices-cta {
   margin-top: 56px;
   display: flex;
@@ -459,7 +460,7 @@ s { text-decoration: line-through; }
   color: var(--white);
   min-height: 1080px;
   overflow: hidden;
-  margin-top: 108px;
+  margin-top: 80px;
 }
 .bio-corner {
   position: absolute;
@@ -534,7 +535,7 @@ s { text-decoration: line-through; }
 /* ============================================================
    FAQ
    ============================================================ */
-.faq { padding-top: 200px; display: flex; flex-direction: column; gap: 32px; }
+.faq { padding-top: 160px; display: flex; flex-direction: column; gap: 32px; }
 .faq-list { display: flex; flex-direction: column; gap: 8px; }
 .faq-item { background: var(--white); border-radius: 8px; }
 .faq-item summary {
@@ -564,7 +565,7 @@ s { text-decoration: line-through; }
 /* ============================================================
    FOOTER
    ============================================================ */
-.footer { padding-top: 200px; padding-bottom: 88px; }
+.footer { padding-top: 160px; padding-bottom: 80px; }
 .footer-row {
   display: flex;
   justify-content: space-between;
@@ -601,9 +602,10 @@ s { text-decoration: line-through; }
   .versus .checklist li, .recap-list li { white-space: normal; }
   .belief-nao { margin-right: 0; }
   .floating-note { margin-top: 24px; }
-  .deliver-now { margin-top: 120px; }
-  .offer, .faq, .footer { padding-top: 120px; }
-  .choices { padding-top: 140px; }
+  .deliver-now { margin-top: 80px; }
+  .offer { padding-block: 60px; }
+  .faq, .footer { padding-top: 100px; }
+  .choices { padding-block: 60px; }
   .bio { min-height: 0; padding-bottom: 0; }
   .bio-photo {
     position: relative;
@@ -647,13 +649,13 @@ s { text-decoration: line-through; }
   .b-body { box-shadow: 4px 4px 16px rgba(0,0,0,.12) !important; }
   .hero-visual { display: flex; flex-direction: column; }
   .hero-eusei { padding-bottom: 0; }
-  .belief { padding-block: 96px; }
+  .belief { padding-block: 40px; }
   .belief-nao { text-align: left; margin-top: 24px; }
   .big-strike-no, .strike-line .tag-lime { font-size: clamp(24px, 7vw, 40px); }
   .strike-line .tag-lime { white-space: normal; }
-  .agitation, .pergunto, .steps, .deliver, .audience { padding-top: 72px; }
-  .agitation-body { margin-top: 48px; }
-  .versus { margin-top: 48px; }
+  .agitation, .pergunto, .steps, .deliver, .audience { padding-block: 40px; }
+  .agitation-body { margin-top: 40px; }
+  .versus { margin-top: 40px; }
   .scribble { display: none; }
   .card { padding: 28px; gap: 24px; }
   :root { --pad-card: 28px; }
@@ -661,14 +663,14 @@ s { text-decoration: line-through; }
   .trust-bar { flex-direction: column; gap: 12px; padding: 24px; }
   .postbuy { margin-top: 40px; }
   .choices-cta { margin-top: 32px; }
-  .offer { padding-top: 96px; }
-  .deliver-now { margin-top: 96px; }
-  .choices { padding-top: 96px; padding-bottom: 72px; }
-  .bio { margin-top: 72px; padding: 64px 24px 0; }
-  .faq { padding-top: 96px; }
+  .offer { padding-block: 40px; }
+  .deliver-now { margin-top: 80px; }
+  .choices { padding-block: 40px; }
+  .bio { margin-top: 40px; padding: 64px 24px 0; }
+  .faq { padding-top: 80px; }
   .faq-item summary { padding: 16px; }
   .faq-item > p { padding: 0 16px 16px; }
-  .footer { padding-top: 96px; padding-bottom: 48px; }
+  .footer { padding-top: 80px; padding-bottom: 48px; }
   .footer-row { flex-direction: column; align-items: flex-start; gap: 16px; }
   .footer-row .disclaimer { text-align: left; }
   .imagine-list li { align-items: flex-start; }
@@ -725,7 +727,7 @@ html.lenis, html.lenis body { height: auto; }
 .reveal-d2 { transition-delay: 0.6s; }
 
 /* Linha respirando após a seção de entregas */
-section.deliver + hr.rule { margin-top: 200px; }
+
 
 @media (max-width: 900px) {
   section.deliver + hr.rule { margin-top: 72px; }
