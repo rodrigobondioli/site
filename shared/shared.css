@@ -1,0 +1,127 @@
+/* ============================================================
+   RODRIGOBONDIOLI.COM — SHARED / DESIGN TOKENS
+   Fonte única de fontes, cores e componentes base.
+   Usado por: / (home) · /adp · /design-system
+   ============================================================ */
+
+/* ---------- Fontes ---------- */
+@font-face {
+  font-family: "Aeion Mono";
+  src: url("/shared/fonts/AeionMono-Regular.woff2") format("woff2");
+  font-weight: 400; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: "Aeion Mono";
+  src: url("/shared/fonts/AeionMono-SemiBold.woff2") format("woff2");
+  font-weight: 600; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: "Aeion Mono";
+  src: url("/shared/fonts/AeionMono-Bold.woff2") format("woff2");
+  font-weight: 700; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: "Aeion Mono";
+  src: url("/shared/fonts/AeionMono-ExtraBold.woff2") format("woff2");
+  font-weight: 800; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: "Inter";
+  src: url("/shared/fonts/inter-latin-400-normal.woff2") format("woff2");
+  font-weight: 400; font-style: normal; font-display: swap;
+  unicode-range: U+0000-00FF, U+2000-206F, U+20AC, U+2192;
+}
+@font-face {
+  font-family: "Inter";
+  src: url("/shared/fonts/inter-latin-ext-400-normal.woff2") format("woff2");
+  font-weight: 400; font-style: normal; font-display: swap;
+  unicode-range: U+0100-024F, U+1E00-1EFF;
+}
+@font-face {
+  font-family: "Inter";
+  src: url("/shared/fonts/inter-latin-700-normal.woff2") format("woff2");
+  font-weight: 700; font-style: normal; font-display: swap;
+  unicode-range: U+0000-00FF, U+2000-206F, U+20AC, U+2192;
+}
+@font-face {
+  font-family: "Inter";
+  src: url("/shared/fonts/inter-latin-ext-700-normal.woff2") format("woff2");
+  font-weight: 700; font-style: normal; font-display: swap;
+  unicode-range: U+0100-024F, U+1E00-1EFF;
+}
+@font-face {
+  font-family: "Inter";
+  src: url("/shared/fonts/inter-latin-400-italic.woff2") format("woff2");
+  font-weight: 400; font-style: italic; font-display: swap;
+  unicode-range: U+0000-00FF, U+2000-206F, U+20AC, U+2192;
+}
+@font-face {
+  font-family: "Inter";
+  src: url("/shared/fonts/inter-latin-ext-400-italic.woff2") format("woff2");
+  font-weight: 400; font-style: italic; font-display: swap;
+  unicode-range: U+0100-024F, U+1E00-1EFF;
+}
+
+/* ---------- Tokens ---------- */
+:root {
+  /* cores */
+  --bnd-ink: #101010;
+  --bnd-bg: #f1f1f1;
+  --bnd-dark: #010101;
+  --bnd-white: #ffffff;
+  --bnd-lime: #e7f99a;
+  --bnd-cyan: #00fff6;
+  --bnd-pink: #ff00d7;
+  /* famílias */
+  --bnd-display: "Aeion Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --bnd-body: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+  /* forma */
+  --bnd-radius: 16px;
+  --bnd-rule: 1px dashed var(--bnd-ink);
+  --bnd-rule-soft: 1px dashed rgba(16, 16, 16, 0.5);
+}
+
+/* ---------- Componente: botão pill ---------- */
+.btn-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--bnd-white);
+  color: var(--bnd-ink);
+  font-family: var(--bnd-body);
+  font-weight: 500;
+  font-size: 15px;
+  line-height: 1;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  padding: 15px 34px;
+  border-radius: 99px;
+  box-shadow: 0 2px 14px rgba(0, 0, 0, 0.06);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+.btn-pill:hover { background: linear-gradient(90deg, var(--bnd-lime) 0%, var(--bnd-white) 100%); }
+.btn-pill .arrow { display: inline-flex; align-items: center; justify-content: center; }
+.btn-pill .arrow-lottie { display: block; width: 24px; height: 24px; }
+.btn-pill--pink { background: var(--bnd-pink); }
+.btn-pill--pink:hover { background: var(--bnd-pink); filter: brightness(1.08); }
+
+/* ---------- Componente: tarja marca-texto ---------- */
+.tag-lime {
+  display: inline-block;
+  background: var(--bnd-lime);
+  padding: 8px;
+  width: fit-content;
+  font-family: var(--bnd-display);
+  text-transform: uppercase;
+}
+.tag-lime.strike { text-decoration: line-through; }
+
+/* ---------- Componente: título display ---------- */
+.bnd-display {
+  font-family: var(--bnd-display);
+  font-weight: 800;
+  line-height: 1.2;
+  text-transform: uppercase;
+  color: var(--bnd-ink);
+}
