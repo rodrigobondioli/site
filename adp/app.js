@@ -98,6 +98,25 @@
     });
   }
 
+  // Text reveal: palavras clareiam -> escurecem conforme o scroll
+  document.querySelectorAll("[data-text-reveal]").forEach(function (el) {
+    var words = el.textContent.trim().split(/\s+/);
+    el.innerHTML = words.map(function (w) { return '<span class="w">' + w + "</span>"; }).join(" ");
+    var spans = el.querySelectorAll(".w");
+    if (reduced) { spans.forEach(function (s) { s.classList.add("on"); }); return; }
+    var tick = function () {
+      var r = el.getBoundingClientRect();
+      var vh = window.innerHeight;
+      // progresso: 0 quando o topo entra na tela, 1 quando o el passa de 40% da altura
+      var p = (vh * 0.85 - r.top) / (vh * 0.55);
+      p = Math.max(0, Math.min(1, p));
+      var n = Math.round(p * spans.length);
+      spans.forEach(function (s, i) { s.classList.toggle("on", i < n); });
+      requestAnimationFrame(tick);
+    };
+    requestAnimationFrame(tick);
+  });
+
   // FAQ: accordion — abre um, fecha os outros
   var items = document.querySelectorAll(".faq-item");
   items.forEach(function (item) {

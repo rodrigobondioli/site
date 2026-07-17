@@ -234,7 +234,7 @@ s { text-decoration: line-through; }
 .b-wrap.b1 { width: 344px; left: -300px; top: 48px; }
 .b-wrap.b2 { width: 296px; right: 130px; top: 240px; }
 .b-wrap.b3 { width: 315px; left: -300px; top: 436px; }
-.b-wrap.b4 { width: 312px; right: 106px; top: 496px; }
+.b-wrap.b4 { width: 312px; right: 106px; top: 440px; }
 .b-wrap.b1 .b-body, .b-wrap.b3 .b-body { box-shadow: -8px 8px 20px 0 rgba(0,0,0,.1); }
 .hero-eusei {
   grid-area: eusei;
@@ -760,4 +760,14 @@ section.deliver + hr.rule { margin-top: 200px; }
 .fade.fade-in { opacity: 1; transform: none; }
 @media (prefers-reduced-motion: reduce) {
   .fade { opacity: 1; transform: none; transition: none; }
+}
+
+/* ---------- Text reveal (cinza -> ink no scroll) ---------- */
+[data-text-reveal] .w {
+  color: rgba(16, 16, 16, 0.16);
+  transition: color 0.35s ease;
+}
+[data-text-reveal] .w.on { color: var(--ink); }
+@media (prefers-reduced-motion: reduce) {
+  [data-text-reveal] .w { color: var(--ink); transition: none; }
 }
