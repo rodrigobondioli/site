@@ -91,6 +91,13 @@
     });
   }
 
+  // Seta lottie dos botões pill (igual ao "Say hello" do site raiz)
+  if (window.lottie && window.ARROW_LOTTIE) {
+    document.querySelectorAll(".btn-pill .arrow-lottie").forEach(function (el) {
+      lottie.loadAnimation({ container: el, renderer: "svg", loop: true, autoplay: true, animationData: window.ARROW_LOTTIE });
+    });
+  }
+
   // FAQ: accordion — abre um, fecha os outros
   var items = document.querySelectorAll(".faq-item");
   items.forEach(function (item) {

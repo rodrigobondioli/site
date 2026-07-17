@@ -467,23 +467,26 @@ s { text-decoration: line-through; }
   text-transform: uppercase;
 }
 .avista { font-size: 16px; text-decoration: underline; }
-.btn-cta {
+/* Componente: botão pill (mesmo do "Say hello" do site raiz) */
+.btn-pill {
   display: inline-flex;
   align-items: center;
-  justify-content: center;
-  background: var(--ink);
-  color: var(--white);
-  font-family: var(--mono);
-  font-weight: 700;
-  font-size: clamp(18px, 1.25vw, 24px);
-  line-height: 1.2;
-  text-transform: uppercase;
+  gap: 10px;
+  background: var(--white);
+  color: var(--ink);
+  font-family: var(--sans);
+  font-weight: 500;
+  font-size: 15px;
+  line-height: 1;
   text-decoration: none;
-  padding: 20px;
-  border-radius: 8px;
-  transition: background 0.2s ease;
+  padding: 15px 34px;
+  border-radius: 99px;
+  box-shadow: 0 2px 14px rgba(0, 0, 0, 0.06);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
-.btn-cta:hover { background: #333333; }
+.btn-pill:hover { background: linear-gradient(90deg, #e7f99a 0%, #ffffff 100%); }
+.btn-pill .arrow { display: inline-flex; align-items: center; justify-content: center; }
+.btn-pill .arrow-lottie { display: block; width: 24px; height: 24px; }
 .guarantee { gap: 32px; }
 .guarantee .body-20 { max-width: 598px; }
 .trust-bar {
