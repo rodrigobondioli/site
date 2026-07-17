@@ -45,6 +45,34 @@
     requestAnimationFrame(update);
   }
 
+  // Fade-up fino em cards e blocos (stagger por irmãos)
+  if (!reduced) {
+    var fadeSel = ".card, .section-head, .stack-tags, .trust-bar, .deliver-now, .faq-item, .audience-block, .choices-cta";
+    var fadeEls = document.querySelectorAll(fadeSel);
+    var byParent = new Map();
+    fadeEls.forEach(function (el) {
+      if (el.closest(".hero")) return; // hero tem coreografia própria
+      el.classList.add("fade");
+      var p = el.parentElement;
+      var n = byParent.get(p) || 0;
+      el.style.transitionDelay = (n * 0.12) + "s";
+      byParent.set(p, n + 1);
+    });
+    if ("IntersectionObserver" in window) {
+      var fio = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+          if (e.isIntersecting || e.boundingClientRect.top < 0) {
+            e.target.classList.add("fade-in");
+            fio.unobserve(e.target);
+          }
+        });
+      }, { threshold: 0.15, rootMargin: "0px 0px -5% 0px" });
+      document.querySelectorAll(".fade").forEach(function (el) { fio.observe(el); });
+    } else {
+      document.querySelectorAll(".fade").forEach(function (el) { el.classList.add("fade-in"); });
+    }
+  }
+
   // Animações on-scroll
   var targets = document.querySelectorAll("[data-animate]");
   if ("IntersectionObserver" in window) {
