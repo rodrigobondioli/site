@@ -173,7 +173,8 @@ s { text-decoration: line-through; }
     "eusei  visual";
   column-gap: 24px;
 }
-.hero-copy { grid-area: copy; position: relative; z-index: 2; }
+.hero-copy { grid-area: copy; position: relative; z-index: 2; text-align: center; }
+.hero-copy .hero-title { margin-inline: auto; }
 .eyebrow {
   font-family: var(--mono);
   font-weight: 700;
@@ -206,7 +207,7 @@ s { text-decoration: line-through; }
 .hero-visual {
   grid-area: visual;
   position: relative;
-  margin-top: -28px; /* photo top = 703 ; checklist ends ~731 */
+  margin-top: 64px;
   z-index: 1;
 }
 .hero-photo {
@@ -275,11 +276,14 @@ s { text-decoration: line-through; }
 /* ============================================================
    AGITAÇÃO
    ============================================================ */
-.agitation { padding-block: 80px; }
+.agitation { padding-block: 80px; text-align: center; }
+.agitation .h-36 { max-width: none; }
+.versus { text-align: left; }
+.diff { margin-inline: auto; }
 .agitation .h-36 { max-width: 631px; }
 .strike-line { margin-top: 32px; }
 .strike-line + .strike-line { margin-top: 11px; }
-.agitation-body { margin-top: 56px; max-width: 1062px; display: flex; flex-direction: column; gap: 26px; }
+.agitation-body { margin-top: 56px; max-width: 1062px; margin-inline: auto; display: flex; flex-direction: column; gap: 26px; }
 .scribbled { position: relative; display: inline-block; }
 .scribble {
   position: absolute;
@@ -320,7 +324,7 @@ s { text-decoration: line-through; }
    3 PASSOS
    ============================================================ */
 .steps { padding-block: 80px; }
-.section-head { display: flex; gap: 16px; align-items: center; }
+.section-head { display: flex; gap: 16px; align-items: center; justify-content: center; text-align: center; }
 .section-head.centered { justify-content: center; }
 .steps .grid-3 { margin-top: 56px; }
 .steps .card { min-height: 285px; }
@@ -339,7 +343,7 @@ s { text-decoration: line-through; }
   background: var(--bg);
   padding-block: 8px;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: center;
   gap: 8px;
 }
 .deliver .section-head .h-36 { white-space: nowrap; }
