@@ -139,11 +139,17 @@
   // CTA sticky: aparece quando o hero sai de cena, some sobre a oferta
   var sticky = document.getElementById("sticky-cta");
   var heroEl = document.querySelector(".hero");
-  var offerEl = document.querySelector(".offer-box");
+  // esconde o sticky sobre qualquer CTA/rodapé (evita sobreposição)
+  var hideEls = [
+    document.querySelector(".offer-box"),
+    document.querySelector(".final-cta"),
+    document.querySelector(".footer")
+  ].filter(Boolean);
   if (sticky && heroEl && "IntersectionObserver" in window) {
-    var heroGone = false, offerVisible = false;
+    var heroGone = false;
+    var nearCTA = new Set();
     var refresh = function () {
-      var show = heroGone && !offerVisible;
+      var show = heroGone && nearCTA.size === 0;
       sticky.classList.toggle("show", show);
       sticky.setAttribute("aria-hidden", show ? "false" : "true");
     };
@@ -151,12 +157,12 @@
       entries.forEach(function (e) { heroGone = !e.isIntersecting; });
       refresh();
     }, { threshold: 0 }).observe(heroEl);
-    if (offerEl) {
+    hideEls.forEach(function (el) {
       new IntersectionObserver(function (entries) {
-        entries.forEach(function (e) { offerVisible = e.isIntersecting; });
+        entries.forEach(function (e) { if (e.isIntersecting) nearCTA.add(el); else nearCTA.delete(el); });
         refresh();
-      }, { threshold: 0.15 }).observe(offerEl);
-    }
+      }, { threshold: 0.15 }).observe(el);
+    });
   }
 
   // FAQ: accordion — abre um, fecha os outros
