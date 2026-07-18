@@ -726,14 +726,14 @@ s { text-decoration: line-through; }
 
   /* --- Hero: H1 um degrau menor + eyebrow menor --- */
   .hero-title { font-size: clamp(26px, 7vw, 38px); }
-  .eyebrow { font-size: 12px; letter-spacing: 1px; }
+  .eyebrow { font-size: 11px; letter-spacing: 0.4px; }
   .hero { padding-bottom: 48px; }
 
   /* --- PADRÃO de espaçamento entre seções (base 48 / quebra grande 64) --- */
   .agitation, .pergunto, .steps, .deliver, .audience,
   .belief, .offer, .choices { padding-block: 48px; }
   .deliver-now { margin-top: 64px; }
-  .choices .deliver-now { margin-top: 0; margin-bottom: 40px; }
+  .choices .deliver-now { margin-top: 0; margin-bottom: 20px; }
   .faq { padding-top: 64px; }
   .footer { padding-top: 64px; padding-bottom: 48px; }
   .bio { margin-top: 48px; padding: 56px 24px 0; }
@@ -783,9 +783,20 @@ s { text-decoration: line-through; }
   .bio-col-left { order: 3; }
   .bio-col-right { order: 4; margin-top: -10px; }
   .bio-corner.left { display: none; }   /* remove "@ bondioli 2026" */
-  .bio-col { align-items: center; text-align: center; gap: 14px; }
+  .bio-col { align-items: center; text-align: center; gap: 10px; font-size: 15px; }
+  .bio-col p { line-height: 1.35; }
   .bio-col-left p, .bio-col-right p { max-width: none; }
-  .bio-punch { max-width: none !important; margin-inline: auto; margin-top: 4px; }
+  /* punch em Inter bold menor, sem caixa-alta */
+  .bio-punch {
+    font-family: var(--sans);
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 1.35;
+    text-transform: none;
+    max-width: none !important;
+    margin-inline: auto;
+    margin-top: 8px;
+  }
 
   /* --- Footer centralizado --- */
   .footer-row { align-items: center; text-align: center; }
