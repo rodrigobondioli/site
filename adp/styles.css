@@ -619,6 +619,8 @@ s { text-decoration: line-through; }
    RESPONSIVE
    ============================================================ */
 .desk-only { display: inline; }
+.mob-br { display: none; }
+.lbl-mob { display: none; }
 
 @media (max-width: 1240px) {
   .hero { grid-template-columns: 1fr 420px; }
@@ -714,6 +716,66 @@ s { text-decoration: line-through; }
 }
 
 /* ============================================================
+   MOBILE — ajustes finos (padrão de espaçamento + centralização)
+   Vem depois do bloco 900 principal → sobrescreve o que precisar.
+   ============================================================ */
+@media (max-width: 900px) {
+  /* --- Header: some com o nav textual, centraliza o logo --- */
+  .topnav { display: none; }
+  .topbar { justify-content: center; padding: 24px; }
+
+  /* --- Hero: H1 um degrau menor --- */
+  .hero-title { font-size: clamp(26px, 7vw, 38px); }
+  .hero { padding-bottom: 48px; }
+
+  /* --- PADRÃO de espaçamento entre seções (base 48 / quebra grande 64) --- */
+  .agitation, .pergunto, .steps, .deliver, .audience,
+  .belief, .offer, .choices { padding-block: 48px; }
+  .deliver-now { margin-top: 64px; }
+  .choices .deliver-now { margin-top: 0; margin-bottom: 40px; }
+  .faq { padding-top: 64px; }
+  .footer { padding-top: 64px; padding-bottom: 48px; }
+  .bio { margin-top: 48px; padding: 56px 24px 0; }
+
+  /* --- PADRÃO entre elementos e cards --- */
+  .stack, .grid-2, .grid-3 { gap: 20px; }
+  .steps .grid-3, .stack, .postbuy { margin-top: 32px; }
+  .agitation-body, .versus { margin-top: 32px; }
+  .floating-note { margin-top: 32px; }
+
+  /* --- Títulos centralizados; sub sempre embaixo do título --- */
+  .section-head { flex-direction: column; align-items: center; gap: 8px; text-align: center; }
+  .belief-text { text-align: center; margin-inline: auto; }
+  .belief-nao { text-align: center; }
+  .pergunto .stack-tags { align-items: center; text-align: center; }
+
+  /* --- Quebras de linha controladas no mobile --- */
+  .mob-br { display: inline; }
+
+  /* --- Card da oferta: tudo centralizado + CTA em 1 linha --- */
+  .offer-box { align-items: center; text-align: center; }
+  .offer-head { align-items: center; }
+  .offer-price { justify-content: center; }
+  .offer-box .btn-pill--buy { width: 100%; justify-content: center; }
+  .lbl-desk { display: none; }
+  .lbl-mob { display: inline; }
+
+  /* --- BIO: título → foto → texto corrido, tudo centralizado --- */
+  .bio { text-align: center; gap: 32px; }
+  .bio-title { order: 1; align-items: center; text-align: center; }
+  .bio-photo { order: 2; }
+  .bio-col-left { order: 3; }
+  .bio-col-right { order: 4; }
+  .bio-corner.left { order: 5; }
+  .bio-col { align-items: center; text-align: center; gap: 14px; }
+  .bio-col-left p, .bio-col-right p { max-width: none; }
+  .bio-punch { max-width: none !important; margin-inline: auto; }
+
+  /* --- Footer centralizado --- */
+  .footer-row { align-items: center; text-align: center; }
+}
+
+/* ============================================================
    ANIMAÇÕES
    ============================================================ */
 html { scroll-behavior: smooth; }
@@ -765,7 +827,7 @@ html.lenis, html.lenis body { height: auto; }
 
 
 @media (max-width: 900px) {
-  section.deliver + hr.rule { margin-top: 72px; }
+  section.deliver + hr.rule { margin-top: 48px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
