@@ -1,21 +1,7 @@
 // ANTI DESIGNER PATO — interações
 (function () {
-  // Locomotive Scroll v5 (smooth + parallax nativo via data-scroll-speed)
+  // Scroll nativo (removido locomotive/lenis por performance)
   var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  var LS = window.locomotiveScroll;
-  if (LS && LS.default) LS = LS.default;
-  if (LS && !reduced) {
-    new LS({
-      lenisOptions: {
-        duration: 1.15,
-        smoothWheel: true,
-        easing: function (t) { return Math.min(1, 1.001 - Math.pow(2, -10 * t)); }
-      }
-    });
-  } else if (window.Lenis && !reduced) {
-    var lenis = new Lenis({ duration: 1.15, smoothWheel: true });
-    (function raf(t) { lenis.raf(t); requestAnimationFrame(raf); })();
-  }
 
   // Fade-up fino em cards e blocos (stagger por irmãos)
   if (!reduced) {
@@ -82,40 +68,45 @@
     sketches.forEach(function (el) { el.classList.add("inview"); });
   }
 
-  // Ícones Lottie dos cards pós-compra (tocam quando entram na tela)
-  if (window.lottie) {
-    document.querySelectorAll(".postbuy-ic[data-lottie]").forEach(function (el, i) {
-      var data = window[el.getAttribute("data-lottie")];
-      if (!data) return;
-      var anim = lottie.loadAnimation({
-        container: el,
-        renderer: "svg",
-        loop: true,
-        autoplay: false,
-        animationData: data
+  // Ícones Lottie dos cards pós-compra — lazy: carrega o lottie só quando os cards se aproximam
+  (function () {
+    var icons = document.querySelectorAll(".postbuy-ic[data-lottie]");
+    if (!icons.length) return;
+    var booted = false;
+    function loadScript(src) {
+      return new Promise(function (res, rej) {
+        var s = document.createElement("script");
+        s.src = src; s.async = false; s.onload = res; s.onerror = rej;
+        document.body.appendChild(s);
       });
-      if ("IntersectionObserver" in window) {
-        var lio = new IntersectionObserver(function (entries) {
-          entries.forEach(function (e) {
-            if (e.isIntersecting || e.boundingClientRect.top < 0) {
-              setTimeout(function () { anim.play(); }, i * 250);
-              lio.unobserve(e.target);
-            }
-          });
-        }, { threshold: 0.4 });
-        lio.observe(el);
-      } else {
-        anim.play();
-      }
-    });
-  }
-
-  // Seta lottie dos botões pill (igual ao "Say hello" do site raiz)
-  if (window.lottie && window.ARROW_LOTTIE) {
-    document.querySelectorAll(".btn-pill .arrow-lottie").forEach(function (el) {
-      lottie.loadAnimation({ container: el, renderer: "svg", loop: true, autoplay: true, animationData: window.ARROW_LOTTIE });
-    });
-  }
+    }
+    function initIcons() {
+      if (!window.lottie) return;
+      icons.forEach(function (el, i) {
+        var data = window[el.getAttribute("data-lottie")];
+        if (!data) return;
+        var anim = lottie.loadAnimation({ container: el, renderer: "svg", loop: true, autoplay: false, animationData: data });
+        if (reduced) { anim.goToAndStop(0, true); }
+        else { setTimeout(function () { anim.play(); }, i * 250); }
+      });
+    }
+    function boot() {
+      if (booted) return;
+      booted = true;
+      loadScript("/antipato/assets/js/lottie_light.min.js")
+        .then(function () { return loadScript("/antipato/assets/js/lottie-icons.js"); })
+        .then(initIcons)
+        .catch(function () {});
+    }
+    if ("IntersectionObserver" in window) {
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) { if (e.isIntersecting) { boot(); io.disconnect(); } });
+      }, { rootMargin: "400px 0px" });
+      icons.forEach(function (el) { io.observe(el); });
+    } else {
+      boot();
+    }
+  })();
 
   // Text reveal: palavras clareiam -> escurecem conforme o scroll
   document.querySelectorAll("[data-text-reveal]").forEach(function (el) {
