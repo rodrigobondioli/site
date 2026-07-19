@@ -168,12 +168,11 @@ s { text-decoration: line-through; }
 .hero {
   position: relative;
   display: grid;
-  grid-template-columns: 518px 460px;
+  grid-template-columns: 1fr 518px 96px 460px 1fr;
   grid-template-areas:
-    "copy   copy"
-    "visual eusei";
-  justify-content: center;
-  column-gap: 96px;
+    "copy copy   copy copy  copy"
+    "gl   visual gap  eusei gr";
+  column-gap: 0;
 }
 .hero-copy { grid-area: copy; position: relative; z-index: 2; text-align: center; }
 .hero-copy .hero-title { margin-inline: auto; }
@@ -262,13 +261,20 @@ s { text-decoration: line-through; }
 .belief { padding-block: 80px; position: relative; }
 .belief-text {
   font-family: var(--mono);
-  font-weight: 700;
+  font-weight: 400;
   font-size: clamp(26px, 1.875vw, 36px);
-  line-height: 1.2;
-  text-transform: uppercase;
-  max-width: 1018px;
+  line-height: 1.35;
+  text-transform: none;
+  max-width: 900px;
   margin-inline: auto;
-  text-align: left;
+  text-align: center;
+}
+.belief-punch {
+  background: var(--lime);
+  color: var(--ink);
+  padding: 0 8px;
+  font-weight: 700;
+  white-space: nowrap;
 }
 .belief-nao { text-align: right; margin: 20px 236px 0 0; }
 .big-strike-no,
@@ -671,7 +677,7 @@ s { text-decoration: line-through; }
 .bio-name-mob { display: none; }
 
 @media (max-width: 1240px) {
-  .hero { grid-template-columns: 440px 400px; column-gap: 64px; }
+  .hero { grid-template-columns: 1fr 440px 64px 380px 1fr; }
   .hero-photo { width: 100%; height: auto; aspect-ratio: 4 / 5; margin-right: 0; }
   .hero-visual { margin-top: 0; }
   .b-wrap.b1, .b-wrap.b3 { left: -40px; }
