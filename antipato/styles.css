@@ -168,10 +168,10 @@ s { text-decoration: line-through; }
 .hero {
   position: relative;
   display: grid;
-  grid-template-columns: 1fr 518px;
+  grid-template-columns: 518px 1fr;
   grid-template-areas:
     "copy   copy"
-    "eusei  visual";
+    "visual eusei";
   column-gap: 24px;
 }
 .hero-copy { grid-area: copy; position: relative; z-index: 2; text-align: center; }
@@ -213,7 +213,7 @@ s { text-decoration: line-through; }
 }
 .hero-photo {
   position: relative;
-  left: -240px;
+  left: 0;
   width: 518px;
   aspect-ratio: 4 / 5;
   height: auto;
@@ -234,8 +234,8 @@ s { text-decoration: line-through; }
   line-height: 1.3;
   box-shadow: 0 6px 22px rgba(0, 0, 0, 0.08);
 }
-/* Balão único em vidro que cicla as 4 frases (efeito gif) */
-.b-wrap.b-solo { width: 258px; left: -150px; top: 300px; }
+/* Balão único em vidro que cicla as 4 frases (efeito gif) — abaixo do "Eu sei" */
+.b-wrap.b-solo { position: static; width: 100%; max-width: 380px; }
 .b-cycle { position: relative; }
 .b-cycle .b-sizer { display: block; visibility: hidden; }
 .b-cycle .b-line {
@@ -815,9 +815,8 @@ s { text-decoration: line-through; }
   .versus { margin-top: 24px; }
   .floating-note { margin-top: 28px; }
 
-  /* --- Balão único do hero: glass SOBRE a foto, ciclando (igual desktop) --- */
-  .hero-visual { position: relative; }
-  .hero-visual .b-wrap.b-solo { display: block; position: absolute; left: 12px; right: 12px; bottom: 14px; width: auto !important; margin: 0; top: auto; z-index: 3; }
+  /* --- Balão único do hero: em fluxo abaixo do "Eu sei" no mobile --- */
+  .hero-eusei .b-wrap.b-solo { display: block; position: static; width: 100% !important; max-width: 100%; margin: 0; }
 
   /* --- Botões de venda: mais magros e sempre 1 linha --- */
   .btn-pill--buy { padding: 15px 26px; font-size: 17px; white-space: nowrap; }
