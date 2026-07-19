@@ -648,6 +648,7 @@ s { text-decoration: line-through; }
 .lbl-mob { display: none; }
 .h1-mob { display: none; }
 .hero-sub { display: none; }
+.bio-mob { display: none; }
 
 @media (max-width: 1240px) {
   .hero { grid-template-columns: 1fr 420px; }
@@ -722,7 +723,10 @@ s { text-decoration: line-through; }
   .card { padding: 28px; gap: 24px; }
   :root { --pad-card: 28px; }
   .product-media { padding: 24px; height: 220px; }
-  .trust-bar { flex-direction: column; gap: 12px; padding: 24px; }
+  .trust-bar { flex-direction: column; align-items: flex-start; text-align: left; gap: 12px; padding: 24px; }
+  /* "Imagina só" gruda nos ticks, respira da seção de cima */
+  .pergunto-right { gap: 20px; }
+  .pergunto-right > .body-20:first-child { margin-top: 16px; }
   .postbuy { margin-top: 40px; }
   .stack { gap: 24px; }
   .stack .product { top: calc(72px + var(--i, 0) * 20px); }
@@ -765,7 +769,7 @@ s { text-decoration: line-through; }
     font-size: 16px;
     line-height: 1.45;
     color: rgba(16,16,16,0.72);
-    max-width: 30ch;
+    max-width: 38ch;
     margin: 16px auto 0;
     text-transform: none;
   }
@@ -777,7 +781,7 @@ s { text-decoration: line-through; }
   .choices .deliver-now { margin-top: 0; margin-bottom: 20px; }
   .faq { padding-top: 64px; }
   .footer { padding-top: 64px; padding-bottom: 48px; }
-  .bio { margin-top: 48px; padding: 56px 24px 0; }
+  .bio { margin-top: 48px; padding: 56px 24px 56px; }
 
   /* --- PADRÃO entre elementos e cards --- */
   .stack, .grid-2, .grid-3 { gap: 20px; }
@@ -817,16 +821,35 @@ s { text-decoration: line-through; }
   .lbl-desk { display: none; }
   .lbl-mob { display: inline; }
 
-  /* --- BIO: título → foto → texto corrido, tudo centralizado --- */
+  /* --- BIO: título → foto → texto corrido (paragrafado) --- */
   .bio { text-align: center; gap: 24px; }
   .bio-title { order: 1; align-items: center; text-align: center; }
   .bio-photo { order: 2; }
-  .bio-col-left { order: 3; }
-  .bio-col-right { order: 4; margin-top: -10px; }
   .bio-corner.left { display: none; }   /* remove "@ bondioli 2026" */
-  .bio-col { align-items: center; text-align: center; gap: 10px; font-size: 15px; }
-  .bio-col p { line-height: 1.35; }
-  .bio-col-left p, .bio-col-right p { max-width: none; }
+  /* desktop cols fora no mobile → texto corrido no lugar */
+  .bio-col-left, .bio-col-right { display: none; }
+  .bio-mob {
+    display: flex;
+    order: 3;
+    flex-direction: column;
+    gap: 16px;
+    text-align: center;
+    margin-inline: auto;
+    max-width: 62ch;
+  }
+  .bio-mob p {
+    font-family: var(--sans);
+    font-size: 15px;
+    line-height: 1.5;
+    color: rgba(255,255,255,0.7);
+    max-width: none;
+  }
+  .bio-mob .bio-punch {
+    color: var(--white);
+    font-size: 18px;
+    font-weight: 700;
+    margin-top: 4px;
+  }
   /* punch em Inter bold menor, sem caixa-alta */
   .bio-punch {
     font-family: var(--sans);
