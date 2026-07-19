@@ -787,7 +787,7 @@ s { text-decoration: line-through; }
   .stack, .grid-2, .grid-3 { gap: 20px; }
   /* título → conteúdo do bloco: mais curto no mobile */
   .steps .grid-3, .stack, .postbuy { margin-top: 20px; }
-  .deliver .section-head { gap: 6px; }
+  .deliver .section-head { gap: 6px; align-items: flex-start; }
   .audience-block { gap: 20px; }
   .pergunto-left { gap: 20px; }
   .agitation-body { margin-top: 20px; }
@@ -826,8 +826,8 @@ s { text-decoration: line-through; }
   .lbl-mob { display: inline; }
 
   /* --- BIO: título → foto → texto corrido (paragrafado) --- */
-  .bio { text-align: left; gap: 24px; }
-  .bio-title { order: 1; align-items: flex-start; text-align: left; }
+  .bio { text-align: left; gap: 16px; }
+  .bio-title { order: 1; align-items: center; text-align: center; line-height: 0.95; gap: 4px; margin-bottom: -8px; }
   .bio-photo { order: 2; }
   .bio-corner.left { display: none; }   /* remove "@ bondioli 2026" */
   /* desktop cols fora no mobile → texto corrido no lugar */
