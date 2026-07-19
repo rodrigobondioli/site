@@ -1,7 +1,19 @@
 // ANTI DESIGNER PATO — interações
 (function () {
-  // Scroll nativo (removido locomotive/lenis por performance)
   var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  // Smooth scroll com lenis (13KB) — carregado à parte pra não bloquear o primeiro paint
+  if (!reduced) {
+    var _ls = document.createElement("script");
+    _ls.src = "/antipato/assets/js/lenis.min.js";
+    _ls.onload = function () {
+      if (window.Lenis) {
+        var lenis = new Lenis({ duration: 1.15, smoothWheel: true });
+        requestAnimationFrame(function raf(t) { lenis.raf(t); requestAnimationFrame(raf); });
+      }
+    };
+    document.head.appendChild(_ls);
+  }
 
   // Fade-up fino em cards e blocos (stagger por irmãos)
   if (!reduced) {
