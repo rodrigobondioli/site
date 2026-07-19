@@ -646,6 +646,8 @@ s { text-decoration: line-through; }
 .desk-only { display: inline; }
 .mob-br { display: none; }
 .lbl-mob { display: none; }
+.h1-mob { display: none; }
+.hero-sub { display: none; }
 
 @media (max-width: 1240px) {
   .hero { grid-template-columns: 1fr 420px; }
@@ -753,6 +755,20 @@ s { text-decoration: line-through; }
   .hero-title { font-size: clamp(26px, 7vw, 38px); }
   .eyebrow { font-size: 11px; letter-spacing: 0.4px; }
   .hero { padding-bottom: 48px; }
+
+  /* --- Copy do hero no mobile: H1 curto + sub-headline --- */
+  .h1-desk { display: none; }
+  .h1-mob { display: inline; }
+  .hero-sub {
+    display: block;
+    font-family: var(--sans);
+    font-size: 16px;
+    line-height: 1.45;
+    color: rgba(16,16,16,0.72);
+    max-width: 30ch;
+    margin: 16px auto 0;
+    text-transform: none;
+  }
 
   /* --- PADRÃO de espaçamento entre seções (base 48 / quebra grande 64) --- */
   .agitation, .pergunto, .steps, .deliver, .audience,
