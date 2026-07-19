@@ -62,6 +62,33 @@
   unicode-range: U+0100-024F, U+1E00-1EFF;
 }
 
+/* Inter Tight — TESTE de display (substitui Aeion Mono) */
+@font-face {
+  font-family: "Inter Tight";
+  src: url("/shared/fonts/inter-tight-latin-400-normal.woff2") format("woff2");
+  font-weight: 400; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: "Inter Tight";
+  src: url("/shared/fonts/inter-tight-latin-500-normal.woff2") format("woff2");
+  font-weight: 500; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: "Inter Tight";
+  src: url("/shared/fonts/inter-tight-latin-600-normal.woff2") format("woff2");
+  font-weight: 600; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: "Inter Tight";
+  src: url("/shared/fonts/inter-tight-latin-700-normal.woff2") format("woff2");
+  font-weight: 700; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: "Inter Tight";
+  src: url("/shared/fonts/inter-tight-latin-800-normal.woff2") format("woff2");
+  font-weight: 800; font-style: normal; font-display: swap;
+}
+
 /* ---------- Tokens ---------- */
 :root {
   /* cores */
@@ -73,7 +100,7 @@
   --bnd-cyan: #00fff6;
   --bnd-pink: #ff00d7;
   /* famílias */
-  --bnd-display: "Aeion Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --bnd-display: "Inter Tight", "Aeion Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
   --bnd-body: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
   /* forma */
   --bnd-radius: 16px;
