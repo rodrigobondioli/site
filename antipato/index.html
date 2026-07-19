@@ -1,11 +1,15 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <!-- Google Tag Manager -->
-  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-  new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-  j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-  'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+  <!-- Google Tag Manager (adiado: carrega na 1a interacao ou apos 2.5s) -->
+  <script>(function(w,d,s,l,i){w[l]=w[l]||[];var loaded=false;
+  function loadGTM(){if(loaded)return;loaded=true;
+  w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});
+  var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';
+  j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);}
+  ['scroll','mousemove','touchstart','keydown','click'].forEach(function(e){
+  w.addEventListener(e,loadGTM,{once:true,passive:true});});
+  setTimeout(loadGTM,2500);
   })(window,document,'script','dataLayer','GTM-PBHQZ25');</script>
   <!-- End Google Tag Manager -->
   <meta charset="UTF-8">
@@ -27,6 +31,8 @@
   <link rel="icon" type="image/png" href="/shared/favicon.png">
   <link rel="preload" href="/shared/fonts/AeionMono-Bold.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="/shared/fonts/AeionMono-ExtraBold.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/shared/fonts/inter-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/shared/fonts/inter-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" as="image" href="/antipato/assets/img/hero-designer.webp" imagesrcset="/antipato/assets/img/hero-designer-720.webp 720w, /antipato/assets/img/hero-designer.webp 1036w" imagesizes="(max-width: 900px) 88vw, 500px" fetchpriority="high">
   <link rel="stylesheet" href="/shared/shared.css">
   <link rel="stylesheet" href="/antipato/styles.css">
