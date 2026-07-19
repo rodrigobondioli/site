@@ -120,6 +120,20 @@
     }
   })();
 
+  // Balão único do hero: cicla as frases (efeito gif)
+  (function () {
+    var cyc = document.querySelector(".b-cycle");
+    if (!cyc) return;
+    var lines = cyc.querySelectorAll(".b-line");
+    if (lines.length < 2 || reduced) return;
+    var i = 0;
+    setInterval(function () {
+      lines[i].classList.remove("is-active");
+      i = (i + 1) % lines.length;
+      lines[i].classList.add("is-active");
+    }, 3600);
+  })();
+
   // Text reveal desligado — texto estático (só os balões animam)
   document.querySelectorAll("[data-text-reveal]").forEach(function (el) {
     var beliefWrap = el.closest(".belief");
