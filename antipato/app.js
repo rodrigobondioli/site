@@ -120,26 +120,11 @@
     }
   })();
 
-  // Text reveal: palavras clareiam -> escurecem conforme o scroll
+  // Text reveal desligado — texto estático (só os balões animam)
   document.querySelectorAll("[data-text-reveal]").forEach(function (el) {
-    var words = el.textContent.trim().split(/\s+/);
-    el.innerHTML = words.map(function (w) { return '<span class="w">' + w + "</span>"; }).join(" ");
-    var spans = el.querySelectorAll(".w");
     var beliefWrap = el.closest(".belief");
     var beliefNao = beliefWrap ? beliefWrap.querySelector(".belief-nao") : null;
-    if (reduced) { spans.forEach(function (s) { s.classList.add("on"); }); if (beliefNao) beliefNao.classList.add("inview"); return; }
-    var tick = function () {
-      var r = el.getBoundingClientRect();
-      var vh = window.innerHeight;
-      // progresso: 0 quando o topo entra na tela, 1 quando o el passa de 40% da altura
-      var p = (vh * 0.85 - r.top) / (vh * 0.55);
-      p = Math.max(0, Math.min(1, p));
-      var n = Math.round(p * spans.length);
-      spans.forEach(function (s, i) { s.classList.toggle("on", i < n); });
-      if (beliefNao && n >= spans.length) beliefNao.classList.add("inview");
-      requestAnimationFrame(tick);
-    };
-    requestAnimationFrame(tick);
+    if (beliefNao) beliefNao.classList.add("inview");
   });
 
   // CTA sticky: aparece quando o hero sai de cena, some sobre a oferta

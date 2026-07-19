@@ -975,15 +975,14 @@ html.lenis, html.lenis body { height: auto; }
   .fade-op { opacity: 1; transition: none; }
 }
 
-/* ---------- Fade-up fino (cards e blocos) ---------- */
+/* ---------- Reveal por máscara lateral (cards e blocos) — sem mover ---------- */
 .fade {
-  opacity: 0;
-  transform: translateY(28px);
-  transition: opacity 1.1s cubic-bezier(0.22, 1, 0.36, 1), transform 1.1s cubic-bezier(0.22, 1, 0.36, 1);
+  clip-path: inset(0 100% 0 0);
+  transition: clip-path 1.4s cubic-bezier(0.77, 0, 0.18, 1);
 }
-.fade.fade-in { opacity: 1; transform: none; }
+.fade.fade-in { clip-path: inset(0 0 0 0); }
 @media (prefers-reduced-motion: reduce) {
-  .fade { opacity: 1; transform: none; transition: none; }
+  .fade { clip-path: none; transition: none; }
 }
 
 /* ---------- Text reveal (cinza -> ink no scroll) ---------- */
@@ -1033,3 +1032,16 @@ html.lenis, html.lenis body { height: auto; }
   .btn-sticky { transition: opacity 0.3s ease; transform: translate(-50%, 0); }
   .btn-sticky:not(.show) { visibility: hidden; }
 }
+
+/* ============================================================
+   AJUSTES FINAIS
+   ============================================================ */
+/* Botões rosa (compra) com texto branco */
+.btn-pill--buy, .btn-pill--buy:hover { color: #fff; }
+
+/* Animações de entrada desligadas — página estática, só os balões animam */
+.fade { clip-path: none; transition: none; }
+.fade-op { opacity: 1; transition: none; }
+.reveal { clip-path: none; transition: none; }
+[data-text-reveal] .w { color: var(--ink); transition: none; }
+.circle-vec path, .scribble path { stroke-dashoffset: 0; transition: none; }
