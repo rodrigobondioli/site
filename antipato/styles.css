@@ -726,7 +726,7 @@ s { text-decoration: line-through; }
   .trust-bar { flex-direction: column; align-items: flex-start; text-align: left; gap: 12px; padding: 24px; }
   /* "Imagina só" gruda nos ticks, respira da seção de cima */
   .pergunto-right { gap: 20px; }
-  .pergunto-right > .body-20:first-child { margin-top: 16px; }
+  .pergunto-right > .body-20:first-child { margin-top: 32px; }
   .postbuy { margin-top: 40px; }
   .stack { gap: 24px; }
   .stack .product { top: calc(72px + var(--i, 0) * 20px); }
@@ -800,13 +800,17 @@ s { text-decoration: line-through; }
   /* --- Botões de venda: mais magros e sempre 1 linha --- */
   .btn-pill--buy { padding: 15px 26px; font-size: 17px; white-space: nowrap; }
 
-  /* --- Títulos centralizados; sub sempre embaixo do título --- */
-  .section-head { flex-direction: column; align-items: center; gap: 8px; text-align: center; }
-  .belief-text { text-align: center; margin-inline: auto; }
-  .belief-nao { text-align: center; }
-  .pergunto .stack-tags { align-items: center; text-align: center; }
-  /* Coerência: título centralizado, corpo à esquerda */
+  /* --- Alinhamento à ESQUERDA no mobile (títulos e textos) --- */
+  .section-head { flex-direction: column; align-items: flex-start; gap: 8px; text-align: left; }
+  .belief-text { text-align: left; margin-inline: 0; }
+  .belief-nao { text-align: left; }
+  .agit-lead, .strike-line { text-align: left; }
+  .pergunto .stack-tags { align-items: flex-start; text-align: left; }
   .agitation-body, .diff { text-align: left; }
+  .deliver-now { text-align: left; }
+  .floating-note { text-align: left; }
+  .audience-block .h-24-eb { text-align: left; }
+  .faq > .h-24-eb { text-align: left; }
 
   /* --- Quebras de linha controladas no mobile --- */
   .mob-br { display: inline; }
@@ -822,8 +826,8 @@ s { text-decoration: line-through; }
   .lbl-mob { display: inline; }
 
   /* --- BIO: título → foto → texto corrido (paragrafado) --- */
-  .bio { text-align: center; gap: 24px; }
-  .bio-title { order: 1; align-items: center; text-align: center; }
+  .bio { text-align: left; gap: 24px; }
+  .bio-title { order: 1; align-items: flex-start; text-align: left; }
   .bio-photo { order: 2; }
   .bio-corner.left { display: none; }   /* remove "@ bondioli 2026" */
   /* desktop cols fora no mobile → texto corrido no lugar */
@@ -833,8 +837,8 @@ s { text-decoration: line-through; }
     order: 3;
     flex-direction: column;
     gap: 16px;
-    text-align: center;
-    margin-inline: auto;
+    text-align: left;
+    margin-inline: 0;
     max-width: 62ch;
   }
   .bio-mob p {
