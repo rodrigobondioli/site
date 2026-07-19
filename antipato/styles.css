@@ -649,6 +649,7 @@ s { text-decoration: line-through; }
 .h1-mob { display: none; }
 .hero-sub { display: none; }
 .bio-mob { display: none; }
+.bio-name-mob { display: none; }
 
 @media (max-width: 1240px) {
   .hero { grid-template-columns: 1fr 420px; }
@@ -827,8 +828,31 @@ s { text-decoration: line-through; }
 
   /* --- BIO: título → foto → texto corrido (paragrafado) --- */
   .bio { text-align: left; gap: 16px; }
+  .bio-name-mob {
+    display: block;
+    order: 0;
+    text-align: center;
+    font-family: var(--sans);
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.5);
+    margin-bottom: -6px;
+  }
   .bio-title { order: 1; align-items: center; text-align: center; line-height: 0.95; gap: 4px; margin-bottom: -8px; }
-  .bio-photo { order: 2; }
+  .bio-photo { order: 2; position: relative; }
+  /* degrade escurece o rodapé da foto → sem quebra pro fundo */
+  .bio-photo::after {
+    content: "";
+    position: absolute;
+    left: 0; right: 0; bottom: 0;
+    height: 160px;
+    background: linear-gradient(to bottom, rgba(1,1,1,0), var(--dark));
+    pointer-events: none;
+  }
+  /* texto mais descolado da imagem */
+  .bio-mob { margin-top: 20px; }
   .bio-corner.left { display: none; }   /* remove "@ bondioli 2026" */
   /* desktop cols fora no mobile → texto corrido no lugar */
   .bio-col-left, .bio-col-right { display: none; }
