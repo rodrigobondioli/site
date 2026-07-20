@@ -1,0 +1,77 @@
+<!doctype html><html lang="pt-br"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Entrar · Anti Designer Pato</title>
+<link rel="icon" type="image/png" href="/shared/favicon.png">
+<style>
+@font-face{font-family:Vinila;src:url(/shared/fonts/vinila-400-normal.woff2) format('woff2');font-weight:400;font-display:swap}
+@font-face{font-family:Vinila;src:url(/shared/fonts/vinila-700-normal.woff2) format('woff2');font-weight:700;font-display:swap}
+@font-face{font-family:Vinila;src:url(/shared/fonts/vinila-800-normal.woff2) format('woff2');font-weight:800;font-display:swap}
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--ink:#101010;--bg:#f1f1f1;--pink:#ff00d7;--lime:#e7f99a;--mut:rgba(16,16,16,.5);--dash:rgba(16,16,16,.45)}
+html,body{height:100%}
+body{font-family:Vinila,system-ui,sans-serif;color:var(--ink);background:var(--bg);-webkit-font-smoothing:antialiased}
+.login{display:flex;min-height:100vh;position:relative}
+.photo{width:66%;position:relative;overflow:hidden;background:#0a2a44}
+.photo img{width:100%;height:100%;object-fit:cover;object-position:50% 22%}
+.logo{position:absolute;left:2.6%;top:32px;width:64px;height:64px;z-index:5}
+.logo svg{width:100%;height:100%;display:block}
+.photo-cap{position:absolute;left:2.6%;bottom:30px;display:flex;gap:12px;align-items:center;font-weight:400;font-size:13px;color:#fff;z-index:5}
+.photo-cap .sep{opacity:.7}
+.panel{flex:1;position:relative;display:flex;align-items:center}
+.form{width:100%;padding:0 9% 0 8%;display:flex;flex-direction:column;gap:30px}
+h1{font-weight:800;font-size:clamp(40px,4.4vw,64px);line-height:.9;display:flex;align-items:flex-start;gap:14px}
+.rock{width:auto;height:.62em;flex:none;transform:rotate(8deg);margin-top:.05em}
+.sub,.note{font-weight:400;font-size:clamp(15px,1.28vw,18px);line-height:1.2}
+.field{display:flex;align-items:center;gap:10px;border-bottom:1.5px dashed var(--dash);padding:22px 0 16px}
+.field svg{width:22px;height:22px;color:var(--ink);flex:none}
+.field input{border:none;background:none;outline:none;font-family:Vinila;font-weight:400;font-size:clamp(14px,1.05vw,16px);color:var(--ink);width:100%}
+.field input::placeholder{color:var(--mut)}
+.btn{align-self:flex-start;background:var(--pink);color:#fff;border:none;font-family:Vinila;font-weight:700;font-size:clamp(14px,1.1vw,16px);letter-spacing:1.6px;padding:1.15em 2em;border-radius:999px;cursor:pointer;transition:filter .2s}
+.btn:hover{filter:brightness(1.08)}
+.msg{font-weight:400;font-size:15px;color:var(--ink);min-height:1em}
+@media(max-width:820px){.login{flex-direction:column}.photo{width:100%;height:38vh;min-height:280px}.form{padding:40px 28px;gap:22px}.logo{width:52px;height:52px;top:22px}.photo-cap{bottom:18px;font-size:12px}}
+</style></head>
+<body>
+<main class="login">
+  <div class="photo">
+    <img src="/app/foto-login.webp" alt="Rodrigo Bondioli">
+    <div class="logo"><svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g clip-path="url(#clip0_26_964)">
+<rect width="64" height="64" rx="32" fill="#E7F99A"/>
+<rect x="-508" y="-508" width="1080" height="1080" fill="#E7F99A"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M20.5867 34.7487L20.5867 17.9659L28.1653 22.3413C28.1961 22.6142 28.211 22.8796 28.211 23.1312L28.211 34.7487C28.211 36.8541 29.9172 38.5603 32.0226 38.5603C34.128 38.5603 35.8352 36.853 35.8352 34.7487C35.8352 33.0541 34.73 31.6187 33.2021 31.1218C32.1776 30.7884 31.0553 30.9042 30.1178 31.4456L30.1178 23.4688C31.4896 23.2374 32.8996 23.2618 34.2639 23.5325C39.5077 24.5741 43.4606 29.199 43.4606 34.7497C43.4606 41.0659 38.3409 46.1867 32.0236 46.1867C30.6869 46.1867 29.4043 45.9573 28.212 45.5358C23.7697 43.9655 20.5877 39.7292 20.5877 34.7497L20.5867 34.7487Z" fill="#FF00D7"/>
+</g>
+<defs>
+<clipPath id="clip0_26_964">
+<rect width="64" height="64" rx="32" fill="white"/>
+</clipPath>
+</defs>
+</svg></div>
+    <div class="photo-cap"><span>Anti Designer Pato</span><span class="sep">/</span><span>Do Genérico ao Especialista</span></div>
+  </div>
+  <div class="panel">
+    <form class="form" id="f" novalidate>
+      <h1>Bem-vindo <svg class="rock" aria-hidden="true" width="31" height="51" viewBox="0 0 31 51" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M0 7.20147L1.93518 5.268H4.73979L6.70301 7.22949V29.4504L9.47958 32.2245H17.5849L20.9224 35.559V33.6255L18.1739 30.8795H10.0405L8.07727 28.918V26.1439L10.0405 24.1824H20.9785L30.9629 34.158V40.2666L20.9504 50.2702H9.98441L0 40.2946V7.20147Z" fill="#FF00D7"/>
+<path d="M30.9629 1.90545V32.1965L24.316 25.5834V1.90545L26.2231 0H29.0557L30.9629 1.90545Z" fill="#FF00D7"/>
+<path d="M16.1826 15.2996L18.1178 13.3662H20.9224L22.8576 15.2996V24.0983L21.5394 22.7813H16.1826V15.2996Z" fill="#FF00D7"/>
+<path d="M14.7522 15.2996V22.7813H9.42348L8.07727 24.1263V15.2996L10.0125 13.3662H12.8171L14.7522 15.2996Z" fill="#FF00D7"/>
+</svg></h1>
+      <p class="sub">Entra com o e-mail da tua compra.</p>
+      <label class="field"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4-8 5-8-5V6l8 5 8-5v2z"/></svg><input id="email" type="email" placeholder="Email que você realmente abre" autocomplete="email" required></label>
+      <p class="note">Enviamos um link mágico. Sem senha pra decorar.</p>
+      <button class="btn" type="submit">Quero entrar</button>
+      <p class="msg" id="msg"></p>
+    </form>
+  </div>
+</main>
+<script>
+document.getElementById('f').addEventListener('submit',function(e){
+  e.preventDefault();
+  var v=document.getElementById('email').value.trim();
+  var m=document.getElementById('msg');
+  if(!v||v.indexOf('@')<0){m.textContent='Coloca um e-mail válido.';return;}
+  m.textContent='Se esse e-mail comprou, o link mágico tá indo. (login ainda em setup)';
+});
+</script>
+</body></html>
