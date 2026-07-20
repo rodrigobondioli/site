@@ -408,7 +408,7 @@ s { text-decoration: line-through; }
 }
 .floating-note {
   text-align: center;
-  max-width: 420px;
+  max-width: none;
   margin: 56px auto 0;
 }
 
