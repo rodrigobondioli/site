@@ -129,7 +129,7 @@ s { text-decoration: line-through; }
 .card-cyan { background: var(--cyan); }
 .card-white { background: var(--white); }
 .card-rule { width: 100%; border-top: var(--rule-soft); }
-.card-head { display: flex; flex-direction: column; gap: 16px; }
+.card-head { display: flex; flex-direction: column; gap: 8px; }
 
 /* ---------- Grids ---------- */
 .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
@@ -263,12 +263,13 @@ s { text-decoration: line-through; }
 .belief-text {
   font-family: var(--mono);
   font-weight: 700;
-  font-size: clamp(28px, 2.3vw, 42px);
+  font-size: clamp(26px, 2.2vw, 40px);
   line-height: 1.2;
   text-transform: none;
-  max-width: 1240px;
+  max-width: none;
   margin-inline: auto;
   text-align: center;
+  text-wrap: balance;
 }
 .belief-punch {
   background: none;
