@@ -15,13 +15,13 @@ body{font-family:Vinila,system-ui,sans-serif;color:var(--ink);background:var(--b
 .photo img{width:100%;height:100%;object-fit:cover;object-position:58% 22%;display:block}
 .logo{position:absolute;left:56px;top:26px;width:69px;height:69px;z-index:5}
 .logo svg{width:100%;height:100%;display:block}
-.photo-cap{position:absolute;left:56px;bottom:26px;display:flex;gap:12px;align-items:center;font-weight:400;font-size:13px;color:#fff;z-index:5}
-.photo-cap .sep{opacity:.7}
-.panel{flex:1;height:100vh;display:flex;align-items:center;overflow:hidden}
+.panel{flex:1;height:100vh;display:flex;align-items:center;overflow:hidden;position:relative}
+.cap{position:absolute;left:8%;bottom:40px;display:flex;gap:12px;align-items:center;font-weight:400;font-size:13px;line-height:1.2;color:rgba(16,16,16,.38)}
+.cap .sep{opacity:.7}
 .form{width:100%;padding:0 9% 0 8%;display:flex;flex-direction:column}
 h1{font-weight:800;font-size:clamp(32px,3.125vw,60px);line-height:1.05;display:flex;align-items:flex-start;gap:14px}
 .rock{width:auto;height:.6em;flex:none;transform:rotate(8deg);margin-top:.05em}
-.sub{font-weight:400;font-size:clamp(15px,1.15vw,18px);line-height:1.2;margin-top:24px}
+.sub{font-weight:400;font-size:clamp(15px,1.15vw,18px);line-height:1.2;margin-top:16px}
 .field{display:flex;align-items:center;gap:10px;border-bottom:1.5px dashed var(--dash);padding:clamp(12px,1.8vh,20px) 0 clamp(12px,1.6vh,16px);margin-top:clamp(18px,2.6vh,30px)}
 .field svg{width:22px;height:22px;color:var(--ink);flex:none}
 .field input{border:none;background:none;outline:none;font-family:Vinila;font-weight:400;font-size:clamp(14px,1.05vw,16px);color:var(--ink);width:100%}
@@ -38,7 +38,7 @@ h1{font-weight:800;font-size:clamp(32px,3.125vw,60px);line-height:1.05;display:f
   .panel{height:auto}
   .form{padding:36px 26px;gap:20px}
   .logo{left:22px;top:20px;width:54px;height:54px}
-  .photo-cap{left:22px;bottom:16px;font-size:12px}
+  .cap{left:26px;bottom:20px;font-size:12px}
 }
 </style></head>
 <body>
@@ -57,7 +57,6 @@ h1{font-weight:800;font-size:clamp(32px,3.125vw,60px);line-height:1.05;display:f
 </clipPath>
 </defs>
 </svg></div>
-    <div class="photo-cap"><span>Anti Designer Pato</span><span class="sep">/</span><span>Do Genérico ao Especialista</span></div>
   </div>
   <div class="panel">
     <form class="form" id="f" novalidate>
@@ -73,6 +72,7 @@ h1{font-weight:800;font-size:clamp(32px,3.125vw,60px);line-height:1.05;display:f
       <p class="note">Enviamos um link mágico. Sem senha pra decorar.</p>
       <p class="msg" id="msg"></p>
     </form>
+    <div class="cap"><span>Anti Designer Pato</span><span class="sep">/</span><span>Do Genérico ao Especialista</span></div>
   </div>
 </main>
 <script>
