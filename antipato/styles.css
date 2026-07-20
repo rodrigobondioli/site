@@ -830,6 +830,7 @@ s { text-decoration: line-through; }
     display: flex;
     flex-direction: column;
     gap: 48px;
+    margin-top: 8px;
   }
   .hero-title { font-size: clamp(30px, 8vw, 42px); margin-top: 24px; }
   .hero-checklist { margin-top: 32px; }
