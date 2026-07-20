@@ -1,7 +1,7 @@
 /* ============================================================
    RODRIGOBONDIOLI.COM — SHARED / DESIGN TOKENS
    Fonte única de fontes, cores e componentes base.
-   Usado por: / (home) · /antipato · /design-system
+   Usado por: / (home) · /adp · /design-system
    ============================================================ */
 
 /* ---------- Fontes ---------- */
@@ -61,7 +61,6 @@
   font-weight: 400; font-style: italic; font-display: swap;
   unicode-range: U+0100-024F, U+1E00-1EFF;
 }
-
 /* Inter Tight — TESTE de display (substitui Aeion Mono) */
 @font-face {
   font-family: "Inter Tight";
@@ -88,6 +87,22 @@
   src: url("/shared/fonts/inter-tight-latin-800-normal.woff2") format("woff2");
   font-weight: 800; font-style: normal; font-display: swap;
 }
+/* Vinila — fonte padrão da marca (Bondioli + Pato) */
+@font-face {
+  font-family: "Vinila";
+  src: url("/shared/fonts/vinila-400-normal.woff2") format("woff2");
+  font-weight: 400; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: "Vinila";
+  src: url("/shared/fonts/vinila-700-normal.woff2") format("woff2");
+  font-weight: 700; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: "Vinila";
+  src: url("/shared/fonts/vinila-800-normal.woff2") format("woff2");
+  font-weight: 800; font-style: normal; font-display: swap;
+}
 
 /* ---------- Tokens ---------- */
 :root {
@@ -100,8 +115,8 @@
   --bnd-cyan: #00fff6;
   --bnd-pink: #ff00d7;
   /* famílias */
-  --bnd-display: "Inter Tight", "Aeion Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
-  --bnd-body: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+  --bnd-display: "Vinila", "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+  --bnd-body: "Vinila", "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
   /* forma */
   --bnd-radius: 16px;
   --bnd-rule: 1px dashed var(--bnd-ink);
@@ -140,7 +155,7 @@
   font-family: var(--bnd-display);
   font-weight: 700;
   font-size: 19px;
-  text-transform: uppercase;
+  text-transform: none;
   letter-spacing: 0.5px;
   padding: 24px 48px;
 }
@@ -154,7 +169,7 @@
   padding: 8px;
   width: fit-content;
   font-family: var(--bnd-display);
-  text-transform: uppercase;
+  text-transform: none;
 }
 .tag-lime.strike { text-decoration: line-through; }
 
@@ -163,6 +178,6 @@
   font-family: var(--bnd-display);
   font-weight: 800;
   line-height: 1.2;
-  text-transform: uppercase;
+  text-transform: none;
   color: var(--bnd-ink);
 }
