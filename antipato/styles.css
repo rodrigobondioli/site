@@ -225,6 +225,7 @@ s { text-decoration: line-through; }
   text-transform: none;
   color: var(--ink);
   margin-top: 12px;
+  text-wrap: balance;
 }
 .hero-title {
   font-family: var(--mono);

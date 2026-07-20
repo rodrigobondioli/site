@@ -3,6 +3,8 @@
 <title>Entrar · Anti Designer Pato</title>
 <link rel="icon" type="image/png" href="/shared/favicon.png">
 <style>
+/* assinatura QUAK — Casual Human, self-hospedada */
+@font-face{font-family:'Quak';src:url(/shared/fonts/quak.woff2) format('woff2');font-display:swap}
 @font-face{font-family:Vinila;src:url(/shared/fonts/vinila-400-normal.woff2) format('woff2');font-weight:400;font-display:swap}
 @font-face{font-family:Vinila;src:url(/shared/fonts/vinila-700-normal.woff2) format('woff2');font-weight:700;font-display:swap}
 @font-face{font-family:Vinila;src:url(/shared/fonts/vinila-800-normal.woff2) format('woff2');font-weight:800;font-display:swap}
@@ -15,6 +17,7 @@ body{font-family:Vinila,system-ui,sans-serif;color:var(--ink);background:var(--b
 .photo img{width:100%;height:100%;object-fit:cover;object-position:58% 22%;display:block}
 .logo{position:absolute;left:56px;top:26px;width:69px;height:69px;z-index:5}
 .logo svg{width:100%;height:100%;display:block}
+.quak{position:absolute;left:-5%;bottom:1%;z-index:4;pointer-events:none;font-family:'Quak',cursive;font-weight:400;font-size:clamp(140px,23vw,360px);line-height:.78;color:var(--lime);transform:rotate(-7deg);transform-origin:left bottom;white-space:nowrap;letter-spacing:.01em}
 .panel{flex:1;height:100vh;display:flex;align-items:center;overflow:hidden;position:relative}
 .cap{position:absolute;left:8%;bottom:40px;display:flex;gap:12px;align-items:center;font-weight:400;font-size:13px;line-height:1.2;color:rgba(16,16,16,.38)}
 .cap .sep{opacity:.7}
@@ -39,6 +42,8 @@ h1{font-weight:800;font-size:clamp(32px,3.125vw,60px);line-height:1.05;display:f
   .form{padding:36px 26px;gap:20px}
   .logo{left:22px;top:20px;width:54px;height:54px}
   .cap{left:26px;bottom:20px;font-size:12px}
+  .photo{width:100%;height:44vh;min-height:300px}
+  .quak{font-size:23vw;left:-3%;bottom:2%}
 }
 </style></head>
 <body>
@@ -57,6 +62,7 @@ h1{font-weight:800;font-size:clamp(32px,3.125vw,60px);line-height:1.05;display:f
 </clipPath>
 </defs>
 </svg></div>
+    <div class="quak" aria-hidden="true">quak</div>
   </div>
   <div class="panel">
     <form class="form" id="f" novalidate>
