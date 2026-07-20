@@ -168,7 +168,7 @@ s { text-decoration: line-through; }
 .marquee-item strong { font-weight: 700; }
 .marquee-item::after {
   content: "•";
-  margin: 0 2.8rem;
+  margin: 0 1.5rem;
   font-weight: 400;
 }
 @keyframes marquee-scroll {
