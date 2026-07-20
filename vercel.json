@@ -1,6 +1,6 @@
 {
-  "rewrites": [
-    { "source": "/", "has": [{ "type": "host", "value": "app.rodrigobondioli.com" }], "destination": "/app/index.html" }
+  "redirects": [
+    { "source": "/", "has": [{ "type": "host", "value": "app.rodrigobondioli.com" }], "destination": "/app/" }
   ],
   "headers": [
     {
