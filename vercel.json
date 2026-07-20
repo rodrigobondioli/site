@@ -1,27 +1,9 @@
 {
-  "redirects": [
-    { "source": "/", "has": [{ "type": "host", "value": "app.rodrigobondioli.com" }], "destination": "/app/" }
-  ],
   "headers": [
-    {
-      "source": "/antipato/assets/img/(.*)",
-      "headers": [{ "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }]
-    },
-    {
-      "source": "/antipato/assets/js/(.*)",
-      "headers": [{ "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }]
-    },
-    {
-      "source": "/antipato/assets/icons/(.*)",
-      "headers": [{ "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }]
-    },
-    {
-      "source": "/shared/fonts/(.*)",
-      "headers": [{ "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }]
-    },
-    {
-      "source": "/app/(.*)",
-      "headers": [{ "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }]
-    }
+    { "source": "/antipato/assets/img/(.*)", "headers": [{ "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }] },
+    { "source": "/antipato/assets/js/(.*)", "headers": [{ "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }] },
+    { "source": "/antipato/assets/icons/(.*)", "headers": [{ "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }] },
+    { "source": "/shared/fonts/(.*)", "headers": [{ "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }] },
+    { "source": "/app/(.*)", "headers": [{ "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }] }
   ]
 }
