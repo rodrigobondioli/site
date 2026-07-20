@@ -368,6 +368,7 @@ s { text-decoration: line-through; }
   top: calc(110px + var(--i, 0) * 40px);
   width: min(920px, 100%);
   margin-inline: auto;
+  overflow: hidden;
   background: rgba(255, 255, 255, 0.55);
   -webkit-backdrop-filter: blur(22px) saturate(1.4);
   backdrop-filter: blur(22px) saturate(1.4);
