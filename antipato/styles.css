@@ -842,6 +842,8 @@ s { text-decoration: line-through; }
   .big-strike-no, .strike-line .tag-lime { font-size: clamp(24px, 7vw, 40px); }
   .strike-line .tag-lime { white-space: normal; }
   .agitation, .pergunto, .steps, .deliver, .audience { padding-block: 40px; }
+  .audience { grid-template-columns: 1fr; column-gap: 0; row-gap: 40px; }
+  .audience-list li .txt { max-width: none; }
   .agitation-body { margin-top: 40px; }
   .versus { margin-top: 40px; }
   .scribble { display: none; }
