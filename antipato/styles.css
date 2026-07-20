@@ -341,7 +341,7 @@ s { text-decoration: line-through; }
 .versus { text-align: left; }
 .diff { margin-inline: auto; }
 .strike-line { margin-top: 32px; }
-.strike-line + .strike-line { margin-top: 11px; }
+.strike-line + .strike-line { margin-top: 4px; }
 .agitation-body { margin-top: 56px; max-width: 1062px; margin-inline: auto; display: flex; flex-direction: column; gap: 26px; }
 .agitation-body p { text-wrap: balance; }
 .scribbled { position: relative; display: inline-block; }
@@ -362,7 +362,7 @@ s { text-decoration: line-through; }
    ============================================================ */
 .pergunto { padding-block: 80px; align-items: start; }
 .pergunto-left { max-width: 587px; display: flex; flex-direction: column; gap: 32px; }
-.stack-tags { display: flex; flex-direction: column; gap: 8px; align-items: flex-start; }
+.stack-tags { display: flex; flex-direction: column; gap: 4px; align-items: flex-start; }
 .pergunto-left .body-20 strong:only-child { display: block; max-width: 426px; }
 .pergunto-right { display: flex; flex-direction: column; gap: 56px; }
 .imagine-list { display: flex; flex-direction: column; gap: 24px; }
