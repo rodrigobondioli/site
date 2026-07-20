@@ -316,7 +316,7 @@ s { text-decoration: line-through; }
 }
 .versus { margin-top: 80px; }
 .versus .checklist li { white-space: nowrap; }
-.diff { margin-top: 56px; max-width: 708px; }
+.diff { margin-top: 56px; max-width: 1040px; text-wrap: balance; }
 
 /* ============================================================
    AGORA TE PERGUNTO / IMAGINA SÓ
@@ -469,7 +469,7 @@ s { text-decoration: line-through; }
 .avista { font-size: 16px; text-decoration: underline; }
 /* Botão pill: vem de /shared/shared.css */
 .guarantee { gap: 32px; }
-.guarantee .body-20 { max-width: 598px; }
+.guarantee .body-20 { max-width: 598px; text-wrap: balance; }
 .trust-bar {
   display: flex;
   justify-content: center;
