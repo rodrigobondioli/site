@@ -75,7 +75,7 @@ s { text-decoration: line-through; }
   text-transform: none;
 }
 .card-sub { font-size: clamp(17px, 1.04vw, 20px); font-style: italic; }
-.body-24 { font-size: clamp(20px, 1.45vw, 24px); line-height: 1.3; }
+.body-24 { font-size: clamp(20px, 1.45vw, 24px); line-height: 1.2; }
 .body-20 { font-size: clamp(17px, 1.04vw, 20px); line-height: 1.3; }
 .body-16 { font-size: 16px; line-height: 1.3; text-wrap: balance; }
 .aside-20 { font-size: clamp(17px, 1.04vw, 20px); font-style: italic; font-family: var(--sans); font-weight: 400; text-transform: none; }
@@ -374,18 +374,18 @@ s { text-decoration: line-through; }
   background: transparent;
   border: none;
   box-shadow: 0 12px 44px rgba(0, 0, 0, 0.07);
-  isolation: isolate;
 }
 .stack .product::before {
   content: "";
   position: absolute;
   inset: 0;
-  z-index: -1;
-  background: rgba(255, 255, 255, 0.55);
+  z-index: 0;
+  background: rgba(255, 255, 255, 0.62);
   -webkit-backdrop-filter: blur(22px) saturate(1.4);
   backdrop-filter: blur(22px) saturate(1.4);
   border: 1px solid rgba(255, 255, 255, 0.65);
 }
+.stack .product > * { position: relative; z-index: 1; }
 .product { justify-content: center; }
 .product-media {
   position: relative;
