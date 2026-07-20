@@ -417,22 +417,24 @@ s { text-decoration: line-through; }
    ============================================================ */
 .audience {
   padding-block: 80px;
-  display: flex;
-  flex-direction: column;
-  gap: 56px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 64px;
 }
-.audience-block { display: flex; flex-direction: column; gap: 32px; }
-.audience-block .h-24-eb { text-align: center; }
-.audience-list { display: flex; flex-direction: column; gap: 8px; }
+.audience-block { display: flex; flex-direction: column; gap: 24px; }
+.audience-block .h-24-eb { text-align: left; }
+.audience-list { display: flex; flex-direction: column; gap: 10px; }
 .audience-list li {
   display: flex;
-  gap: 8px;
-  align-items: center;
-  background: var(--white);
-  border-radius: 8px;
-  padding: 12px;
+  gap: 12px;
+  align-items: flex-start;
+  background: none;
+  border: 1px dashed rgba(16,16,16,0.45);
+  border-radius: 12px;
+  padding: 16px 18px;
   font-size: 16px;
 }
+.audience-list li .txt { line-height: 1.3; }
 
 /* ============================================================
    RECAP + OFERTA
