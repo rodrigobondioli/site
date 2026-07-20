@@ -24,7 +24,7 @@
 
 /* ---------- Reset ---------- */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; }
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
 body {
   background: var(--bg);
   color: var(--ink);
@@ -234,6 +234,7 @@ s { text-decoration: line-through; }
   text-transform: none;
   max-width: 1318px;
   margin-top: 32px;
+  text-wrap: balance;
 }
 .hero-checklist { margin-top: 56px; }
 .circled { position: relative; white-space: nowrap; }
@@ -787,6 +788,8 @@ s { text-decoration: line-through; }
 
 @media (max-width: 1024px) {
   .grid-2, .grid-3 { grid-template-columns: 1fr; }
+  .audience { grid-template-columns: 1fr; column-gap: 0; row-gap: 40px; }
+  .audience-list li .txt { max-width: none; }
   .versus .checklist li, .recap-list li { white-space: normal; }
   .belief-nao { margin-right: 0; }
   .floating-note { margin-top: 24px; }
@@ -871,6 +874,9 @@ s { text-decoration: line-through; }
   .imagine-list li { align-items: flex-start; }
   .audience-list li { align-items: flex-start; }
   .checklist li { align-items: flex-start; }
+  /* card 7 dias centralizado no mobile */
+  .guarantee { align-items: center; text-align: center; }
+  .guarantee .body-20 { max-width: none; }
 }
 
 /* ============================================================
@@ -901,12 +907,12 @@ s { text-decoration: line-through; }
     text-transform: none;
   }
 
-  /* --- PADRÃO de espaçamento entre seções (base 48 / quebra grande 64) --- */
+  /* --- PADRÃO de espaçamento entre seções (base 40 / quebra grande 56) --- */
   .agitation, .pergunto, .steps, .deliver, .audience,
-  .belief, .offer, .choices { padding-block: 48px; }
-  .deliver-now { margin-top: 64px; }
+  .belief, .offer, .choices { padding-block: 40px; }
+  .deliver-now { margin-top: 56px; }
   .choices .deliver-now { margin-top: 0; margin-bottom: 20px; }
-  .faq { padding-top: 64px; }
+  .faq { padding-top: 56px; }
   .footer { padding-top: 64px; padding-bottom: 48px; }
   .bio { margin-top: 48px; padding: 56px 24px 56px; }
 
