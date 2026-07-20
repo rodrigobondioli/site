@@ -441,8 +441,9 @@ s { text-decoration: line-through; }
    RECAP + OFERTA
    ============================================================ */
 .offer { padding-block: 80px; }
-.offer-grid { align-items: start; }
+.offer-grid { grid-template-columns: minmax(0, 1.42fr) minmax(0, 1fr); align-items: stretch; }
 .offer-grid .col { display: flex; flex-direction: column; gap: 24px; }
+.offer-grid .rationale, .offer-grid .guarantee { flex-grow: 1; }
 .recap .stack-tags { gap: 8px; }
 .recap-list li { white-space: nowrap; }
 .recap-total {
@@ -458,7 +459,7 @@ s { text-decoration: line-through; }
   font-family: var(--mono);
   font-weight: 800;
   font-size: clamp(64px, 5.2vw, 100px);
-  line-height: 1.1;
+  line-height: 0.95;
   text-transform: none;
 }
 .price .cur {
@@ -471,9 +472,9 @@ s { text-decoration: line-through; }
 }
 .avista { font-size: 16px; color: rgba(16,16,16,0.62); text-decoration: underline; text-underline-offset: 3px; }
 /* card de oferta: bloco de preco agrupado + lingueta */
-.offer-box { gap: 18px; position: relative; overflow: hidden; }
-.offer-box .offer-head { display: flex; flex-direction: column; gap: 6px; }
-.offer-box .btn-pill--buy { margin-top: 14px; }
+.offer-box { gap: 12px; position: relative; overflow: hidden; }
+.offer-box .offer-head { display: flex; flex-direction: column; gap: 4px; }
+.offer-box .btn-pill--buy { margin-top: 18px; }
 .avista { align-self: center; }
 .ribbon {
   position: absolute;
