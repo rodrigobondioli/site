@@ -626,7 +626,7 @@ s { text-decoration: line-through; }
   height: 86%;
   z-index: 1;
 }
-.bio-photo img { width: 100%; height: 100%; object-fit: cover; }
+.bio-photo img { width: 100%; height: 100%; object-fit: contain; object-position: bottom; }
 .bio-title {
   position: absolute;
   z-index: 2;
