@@ -141,6 +141,39 @@ s { text-decoration: line-through; }
 /* ============================================================
    HEADER
    ============================================================ */
+/* ---------- Marquee (lote fundador) ---------- */
+.marquee {
+  position: sticky;
+  top: 0;
+  z-index: 200;
+  background: var(--bnd-lime, #e7f99a);
+  color: var(--bnd-ink, #101010);
+  overflow: hidden;
+  white-space: nowrap;
+  border-bottom: 1px solid rgba(16, 16, 16, 0.16);
+}
+.marquee-track {
+  display: inline-flex;
+  align-items: center;
+  animation: marquee-scroll 45s linear infinite;
+  will-change: transform;
+}
+.marquee-item {
+  font-family: var(--sans);
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 1;
+  padding-block: 11px;
+  letter-spacing: 0.2px;
+}
+@keyframes marquee-scroll {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .marquee-track { animation: none; }
+}
+
 .topbar {
   display: flex;
   align-items: flex-start;
