@@ -154,7 +154,7 @@ s { text-decoration: line-through; }
 .marquee-track {
   display: inline-flex;
   align-items: center;
-  animation: marquee-scroll 50s linear infinite;
+  animation: marquee-scroll 60s linear infinite;
   will-change: transform;
 }
 .marquee-item {
@@ -167,7 +167,7 @@ s { text-decoration: line-through; }
 }
 .marquee-item strong { font-weight: 700; }
 .marquee-item::after {
-  content: "•";
+  content: "—";
   margin: 0 1.5rem;
   font-weight: 400;
 }
