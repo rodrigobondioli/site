@@ -467,7 +467,35 @@ s { text-decoration: line-through; }
   margin-right: 2px;
   letter-spacing: 0;
 }
-.avista { font-size: 16px; text-decoration: underline; }
+.avista { font-size: 16px; color: rgba(16,16,16,0.62); }
+/* card de oferta: bloco de preco agrupado + lingueta */
+.offer-box { gap: 18px; position: relative; overflow: hidden; }
+.offer-box .offer-head { display: flex; flex-direction: column; gap: 6px; }
+.offer-box .btn-pill--buy { margin-top: 14px; }
+.avista { align-self: center; }
+.ribbon {
+  position: absolute;
+  top: 46px;
+  right: -54px;
+  width: 240px;
+  text-align: center;
+  transform: rotate(45deg);
+  background: var(--bnd-lime, #e7f99a);
+  color: var(--bnd-ink, #101010);
+  font-family: var(--sans);
+  font-weight: 800;
+  font-size: 13px;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  padding: 9px 0 13px;
+  filter: drop-shadow(0 5px 12px rgba(0,0,0,0.18));
+  z-index: 3;
+  -webkit-mask: conic-gradient(from -45deg at bottom, #0000, #000 1deg 89deg, #0000 90deg) 50%/12px 100% repeat-x;
+  mask: conic-gradient(from -45deg at bottom, #0000, #000 1deg 89deg, #0000 90deg) 50%/12px 100% repeat-x;
+}
+/* segunda linha do 'O problema...' em bold */
+.agit-lead strong { font-weight: 800; }
+
 /* Botão pill: vem de /shared/shared.css */
 .guarantee { gap: 32px; }
 .guarantee .body-20 { max-width: 598px; text-wrap: balance; }
@@ -639,7 +667,7 @@ s { text-decoration: line-through; }
   text-align: center;
   gap: 24px;
 }
-.final-cta .body-20 { max-width: 620px; }
+.final-cta .body-20 { max-width: 1040px; text-wrap: balance; }
 
 .footer { padding-top: 100px; padding-bottom: 80px; }
 .footer-row {
@@ -1076,3 +1104,4 @@ html.lenis, html.lenis body { height: auto; }
 .reveal { clip-path: none; transition: none; }
 [data-text-reveal] .w { color: var(--ink); transition: none; }
 .circle-vec path, .scribble path { stroke-dashoffset: 0; transition: none; }
+
