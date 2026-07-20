@@ -434,11 +434,11 @@ s { text-decoration: line-through; }
 }
 .audience-block { display: flex; flex-direction: column; gap: 24px; }
 .audience-block .h-24-eb { text-align: left; }
-.audience-list { display: flex; flex-direction: column; gap: 10px; }
+.audience-list { display: flex; flex-direction: column; gap: 24px; }
 .audience-list li {
   display: flex;
   gap: 12px;
-  align-items: flex-start;
+  align-items: center;
   background: none;
   border: 1px dashed rgba(16,16,16,0.45);
   border-radius: 12px;
