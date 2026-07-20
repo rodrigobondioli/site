@@ -22,7 +22,7 @@ body{font-family:Vinila,system-ui,sans-serif;color:var(--ink);background:var(--b
 .cap{position:absolute;left:8%;bottom:40px;display:flex;gap:12px;align-items:center;font-weight:400;font-size:13px;line-height:1.2;color:rgba(16,16,16,.38)}
 .cap .sep{opacity:.7}
 .form{width:100%;padding:0 9% 0 8%;display:flex;flex-direction:column}
-h1{font-weight:800;font-size:clamp(32px,3.125vw,60px);line-height:1.05;display:flex;align-items:flex-start;gap:14px}
+h1{font-weight:800;font-size:clamp(32px,3.125vw,60px);line-height:1.05}
 .rock{width:auto;height:.6em;flex:none;transform:rotate(8deg);margin-top:.05em}
 .sub{font-weight:400;font-size:clamp(15px,1.15vw,18px);line-height:1.2;margin-top:11px}
 .field{display:flex;align-items:center;gap:10px;border-bottom:1.5px dashed var(--dash);padding:clamp(12px,1.8vh,20px) 0 clamp(12px,1.6vh,16px);margin-top:clamp(14px,2vh,20px)}
@@ -67,9 +67,9 @@ h1{font-weight:800;font-size:clamp(32px,3.125vw,60px);line-height:1.05;display:f
   </div>
   <div class="panel">
     <form class="form" id="f" novalidate>
-      <h1>Bem-vindo (ex) pato.</h1>
+      <h1>Bem-vindo<br>(ex) pato.</h1>
       <p class="sub">Sua ferramenta de posicionamento está pronta.<br>Digite o e-mail exato da compra e comece a usar.</p>
-      <label class="field"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4-8 5-8-5V6l8 5 8-5v2z"/></svg><input id="email" type="email" placeholder="Email que você realmente abre" autocomplete="email" required></label>
+      <label class="field"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4-8 5-8-5V6l8 5 8-5v2z"/></svg><input id="email" type="email" placeholder="email@seuemail.com.br" autocomplete="email" required></label>
       <button class="btn" type="submit">Quero entrar</button>
       <p class="note">Enviamos um link mágico. Sem senha pra decorar.</p>
       <p class="msg" id="msg"></p>
