@@ -674,7 +674,16 @@ s { text-decoration: line-through; }
 .mob-br { display: none; }
 .lbl-mob { display: none; }
 .h1-mob { display: none; }
-.hero-sub { display: none; }
+.hero-sub {
+  display: block;
+  font-family: var(--sans);
+  font-weight: 400;
+  font-size: clamp(17px, 1.25vw, 22px);
+  line-height: 1.4;
+  color: rgba(16,16,16,0.72);
+  max-width: 620px;
+  margin: 20px auto 0;
+}
 .bio-mob { display: none; }
 .bio-name-mob { display: none; }
 
