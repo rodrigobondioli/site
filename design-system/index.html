@@ -12,11 +12,11 @@
     body { background: var(--bnd-bg); color: var(--bnd-ink); font-family: var(--bnd-body); font-size: 16px; line-height: 1.3; -webkit-font-smoothing: antialiased; }
     .wrap { width: min(1200px, 100% - 48px); margin-inline: auto; padding-block: 64px 120px; }
     header.ds { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 24px; }
-    .ds-kicker { font-family: var(--bnd-display); font-weight: 600; font-size: 11px; letter-spacing: 1.1px; text-transform: uppercase; }
-    h1 { font-family: var(--bnd-display); font-weight: 800; font-size: clamp(36px, 5vw, 64px); text-transform: uppercase; line-height: 1.1; margin-bottom: 8px; }
+    .ds-kicker { font-family: var(--bnd-display); font-weight: 600; font-size: 11px; letter-spacing: 1.1px; }
+    h1 { font-family: var(--bnd-display); font-weight: 800; font-size: clamp(36px, 5vw, 64px); line-height: 1.1; margin-bottom: 8px; }
     .lead { font-size: 18px; max-width: 640px; margin-bottom: 72px; }
     section { margin-bottom: 88px; }
-    h2 { font-family: var(--bnd-display); font-weight: 800; font-size: 24px; text-transform: uppercase; margin-bottom: 8px; }
+    h2 { font-family: var(--bnd-display); font-weight: 800; font-size: 24px; margin-bottom: 8px; }
     h2::before { content: "✱ "; }
     .sec-rule { border: 0; border-top: var(--bnd-rule-soft); margin: 16px 0 32px; }
     .hint { color: rgba(16,16,16,.55); font-size: 14px; margin-top: 12px; }
@@ -28,18 +28,18 @@
     .swatch { border-radius: 12px; overflow: hidden; border: 1px solid rgba(16,16,16,.08); background: #fff; }
     .swatch .chip { height: 96px; }
     .swatch .meta { padding: 12px 14px; }
-    .swatch .meta b { display: block; font-family: var(--bnd-display); font-size: 12px; text-transform: uppercase; letter-spacing: .5px; }
+    .swatch .meta b { display: block; font-family: var(--bnd-display); font-size: 12px; letter-spacing: .5px; }
     .swatch .meta span { font-size: 13px; color: rgba(16,16,16,.55); }
 
     /* tipografia */
     .type-row { display: grid; grid-template-columns: 220px 1fr; gap: 24px; align-items: baseline; padding: 20px 0; border-bottom: var(--bnd-rule-soft); }
     .type-row:last-child { border-bottom: 0; }
     .type-meta { font-size: 13px; color: rgba(16,16,16,.55); }
-    .type-meta b { display: block; color: var(--bnd-ink); font-family: var(--bnd-display); font-size: 12px; text-transform: uppercase; letter-spacing: .5px; margin-bottom: 2px; }
-    .t-h1 { font-family: var(--bnd-display); font-weight: 800; font-size: 60px; line-height: 1.2; text-transform: uppercase; }
-    .t-h2 { font-family: var(--bnd-display); font-weight: 800; font-size: 36px; line-height: 1.2; text-transform: uppercase; }
-    .t-h3 { font-family: var(--bnd-display); font-weight: 700; font-size: 24px; line-height: 1.2; text-transform: uppercase; }
-    .t-nav { font-family: var(--bnd-display); font-weight: 600; font-size: 11px; letter-spacing: 1.1px; text-transform: uppercase; }
+    .type-meta b { display: block; color: var(--bnd-ink); font-family: var(--bnd-display); font-size: 12px; letter-spacing: .5px; margin-bottom: 2px; }
+    .t-h1 { font-family: var(--bnd-display); font-weight: 800; font-size: 60px; line-height: 1.2; }
+    .t-h2 { font-family: var(--bnd-display); font-weight: 800; font-size: 36px; line-height: 1.2; }
+    .t-h3 { font-family: var(--bnd-display); font-weight: 700; font-size: 24px; line-height: 1.2; }
+    .t-nav { font-family: var(--bnd-display); font-weight: 600; font-size: 11px; letter-spacing: 1.1px; }
     .t-b24 { font-size: 24px; }
     .t-b20 { font-size: 20px; }
     .t-b16 { font-size: 16px; }
@@ -61,7 +61,7 @@
     .card-dashed { border: var(--bnd-rule); }
     .card-cyan { background: var(--bnd-cyan); }
     .card-white { background: var(--bnd-white); }
-    .card-title { font-family: var(--bnd-display); font-weight: 700; font-size: 24px; line-height: 1.2; text-transform: uppercase; }
+    .card-title { font-family: var(--bnd-display); font-weight: 700; font-size: 24px; line-height: 1.2; }
     .card-rule { width: 100%; border: 0; border-top: var(--bnd-rule-soft); }
 
     /* ícones */
@@ -109,10 +109,10 @@
     <section>
       <h2>Tipografia</h2>
       <hr class="sec-rule">
-      <div class="type-row"><div class="type-meta"><b>Display / H1</b>Aeion Mono · 800 · 60px · caps</div><div class="t-h1">Anti designer pato</div></div>
-      <div class="type-row"><div class="type-meta"><b>Display / H2</b>Aeion Mono · 800 · 36px · caps</div><div class="t-h2">De genérico a especialista</div></div>
-      <div class="type-row"><div class="type-meta"><b>Display / H3</b>Aeion Mono · 700 · 24px · caps</div><div class="t-h3">✱ Título de card</div></div>
-      <div class="type-row"><div class="type-meta"><b>Nav / Label</b>Aeion Mono · 600 · 11px · track 1.1</div><div class="t-nav">Anti designer pato / de genérico a especialista</div></div>
+      <div class="type-row"><div class="type-meta"><b>Display / H1</b>Vinila · 800 · 60px</div><div class="t-h1">Anti designer pato</div></div>
+      <div class="type-row"><div class="type-meta"><b>Display / H2</b>Vinila · 800 · 36px</div><div class="t-h2">De genérico a especialista</div></div>
+      <div class="type-row"><div class="type-meta"><b>Display / H3</b>Vinila · 700 · 24px</div><div class="t-h3">✱ Título de card</div></div>
+      <div class="type-row"><div class="type-meta"><b>Nav / Label</b>Vinila · 600 · 11px · track 1.1</div><div class="t-nav">Anti designer pato / de genérico a especialista</div></div>
       <div class="type-row"><div class="type-meta"><b>Body L</b>Inter · 400 · 24px</div><div class="t-b24">Você estuda. Domina as ferramentas. Faz de tudo.</div></div>
       <div class="type-row"><div class="type-meta"><b>Body M</b>Inter · 400 · 20px</div><div class="t-b20">Quando você faz de tudo, você entra na fila de todo mundo.</div></div>
       <div class="type-row"><div class="type-meta"><b>Body S</b>Inter · 400 · 16px</div><div class="t-b16">Bio, portfólio e proposta prontos pela IA.</div></div>
@@ -129,7 +129,7 @@
         <button class="btn-pill btn-pill--pink" type="button">Enviar mensagem</button>
         <a class="btn-pill btn-pill--buy" href="#">Quero meu novo posicionamento <span class="arrow" aria-hidden="true"><span class="arrow-lottie"></span></span></a>
       </div>
-      <p class="hint">Componente único do domínio: pílula branca, Inter 500 15px, seta Lottie 24px, hover lime→branco. Variantes: <code>--pink</code> pra submit de form · <code>--buy</code> pra CTA de venda (Aeion 700 caps, o único bloco grande pink da página — pop-out por cor reservada). No institucional, peso 500 sempre.</p>
+      <p class="hint">Componente único do domínio: pílula branca, Inter 500 15px, seta Lottie 24px, hover lime→branco. Variantes: <code>--pink</code> pra submit de form · <code>--buy</code> pra CTA de venda (Vinila 700, o único bloco grande pink da página — pop-out por cor reservada). No institucional, peso 500 sempre.</p>
       <pre>&lt;a class="btn-pill" href="…"&gt;Texto do botão
   &lt;span class="arrow"&gt;&lt;span class="arrow-lottie"&gt;&lt;/span&gt;&lt;/span&gt;
 &lt;/a&gt;</pre>
@@ -144,7 +144,7 @@
         <span class="tag-lime tag-36">Agora te pergunto</span>
         <span class="tag-lime tag-64 strike">Você é um anônimo</span>
       </div>
-      <p class="hint">Sobrancelha (14px track 1.4), destaque de seção (36px) e a riscada (64px, <code>.strike</code>) — sempre Aeion caps, padding 4–8px, fundo lime.</p>
+      <p class="hint">Sobrancelha (14px track 1.4), destaque de seção (36px) e a riscada (64px, <code>.strike</code>) — sempre Vinila, padding 4–8px, fundo lime.</p>
     </section>
 
     <!-- CARDS -->
@@ -192,16 +192,16 @@
 
 /* tokens disponíveis */
 color: var(--bnd-ink);        background: var(--bnd-lime);
-font-family: var(--bnd-display);  /* Aeion Mono */
+font-family: var(--bnd-display);  /* Vinila */
 font-family: var(--bnd-body);     /* Inter */
 border: var(--bnd-rule);          /* 1px dashed ink */
 border-radius: var(--bnd-radius); /* 16px */</pre>
-      <p class="hint">Regra de ouro: display = Aeion caps (600/700/800) · corpo = Inter (400/700) · flat sempre — sem gradiente 3D, sem sombra mole, sem card fofo.</p>
+      <p class="hint">Regra de ouro: tudo em Vinila (400/700/800), nada em caixa alta · flat sempre — sem gradiente 3D, sem sombra mole, sem card fofo.</p>
     </section>
 
     <footer class="ds">
       <span>Anti Designer Pato © 2026</span>
-      <span>Aeion Mono + Inter · lime, cyan, pink sobre cinza</span>
+      <span>Vinila + Inter · lime, cyan, pink sobre cinza</span>
     </footer>
   </div>
 

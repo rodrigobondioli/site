@@ -544,7 +544,6 @@ s { text-decoration: line-through; }
   font-weight: 800;
   font-size: 13px;
   letter-spacing: 0.8px;
-  text-transform: uppercase;
   padding: 9px 0 13px;
   filter: drop-shadow(0 5px 12px rgba(0,0,0,0.18));
   z-index: 3;
