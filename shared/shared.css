@@ -4,27 +4,9 @@
    Usado por: / (home) · /antipato · /design-system
    ============================================================ */
 
-/* ---------- Fontes ---------- */
-@font-face {
-  font-family: "Aeion Mono";
-  src: url("/shared/fonts/AeionMono-Regular.woff2") format("woff2");
-  font-weight: 400; font-style: normal; font-display: swap;
-}
-@font-face {
-  font-family: "Aeion Mono";
-  src: url("/shared/fonts/AeionMono-SemiBold.woff2") format("woff2");
-  font-weight: 600; font-style: normal; font-display: swap;
-}
-@font-face {
-  font-family: "Aeion Mono";
-  src: url("/shared/fonts/AeionMono-Bold.woff2") format("woff2");
-  font-weight: 700; font-style: normal; font-display: swap;
-}
-@font-face {
-  font-family: "Aeion Mono";
-  src: url("/shared/fonts/AeionMono-ExtraBold.woff2") format("woff2");
-  font-weight: 800; font-style: normal; font-display: swap;
-}
+/* ---------- Fontes ----------
+   Projeto todo em VINILA. Inter fica só como fallback de glifos
+   (acentos que a Vinila por acaso não cubra). Aeion Mono removida. */
 @font-face {
   font-family: "Inter";
   src: url("/shared/fonts/inter-latin-400-normal.woff2") format("woff2");
@@ -60,32 +42,6 @@
   src: url("/shared/fonts/inter-latin-ext-400-italic.woff2") format("woff2");
   font-weight: 400; font-style: italic; font-display: swap;
   unicode-range: U+0100-024F, U+1E00-1EFF;
-}
-/* Inter Tight — TESTE de display (substitui Aeion Mono) */
-@font-face {
-  font-family: "Inter Tight";
-  src: url("/shared/fonts/inter-tight-latin-400-normal.woff2") format("woff2");
-  font-weight: 400; font-style: normal; font-display: swap;
-}
-@font-face {
-  font-family: "Inter Tight";
-  src: url("/shared/fonts/inter-tight-latin-500-normal.woff2") format("woff2");
-  font-weight: 500; font-style: normal; font-display: swap;
-}
-@font-face {
-  font-family: "Inter Tight";
-  src: url("/shared/fonts/inter-tight-latin-600-normal.woff2") format("woff2");
-  font-weight: 600; font-style: normal; font-display: swap;
-}
-@font-face {
-  font-family: "Inter Tight";
-  src: url("/shared/fonts/inter-tight-latin-700-normal.woff2") format("woff2");
-  font-weight: 700; font-style: normal; font-display: swap;
-}
-@font-face {
-  font-family: "Inter Tight";
-  src: url("/shared/fonts/inter-tight-latin-800-normal.woff2") format("woff2");
-  font-weight: 800; font-style: normal; font-display: swap;
 }
 /* Vinila — fonte padrão da marca (Bondioli + Pato) */
 @font-face {
