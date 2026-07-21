@@ -27,6 +27,8 @@ h1{font-weight:800;font-size:clamp(32px,3.125vw,60px);line-height:1.05}
 .sub{font-weight:400;font-size:clamp(15px,1.15vw,18px);line-height:1.2;margin-top:11px}
 .field{display:flex;align-items:center;gap:10px;border-bottom:1.5px dashed var(--dash);padding:clamp(12px,1.8vh,20px) 0 clamp(12px,1.6vh,16px);margin-top:clamp(14px,2vh,20px)}
 .field svg{width:22px;height:22px;color:var(--ink);flex:none}
+.field .mail-ic{width:28px;height:28px;flex:none;display:block;margin-left:-2px}
+.field .mail-ic svg{width:100%;height:100%}
 .field input{border:none;background:none;outline:none;font-family:Vinila;font-weight:400;font-size:clamp(14px,1.05vw,16px);color:var(--ink);width:100%}
 .field input::placeholder{color:var(--mut)}
 .btn{align-self:flex-start;margin-top:clamp(18px,2.6vh,30px);background:var(--pink);color:#fff;border:none;font-family:Vinila;font-weight:700;font-size:clamp(14px,1.05vw,16px);letter-spacing:1.6px;padding:1.1em 2em;border-radius:999px;cursor:pointer;transition:filter .2s}
@@ -69,7 +71,7 @@ h1{font-weight:800;font-size:clamp(32px,3.125vw,60px);line-height:1.05}
     <form class="form" id="f" novalidate>
       <h1>Bem-vindo<br>(ex) pato.</h1>
       <p class="sub">Sua ferramenta de posicionamento está pronta.<br>Digite o e-mail exato da compra e comece a usar.</p>
-      <label class="field"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4-8 5-8-5V6l8 5 8-5v2z"/></svg><input id="email" type="email" placeholder="email@seuemail.com.br" autocomplete="email" required></label>
+      <label class="field"><span class="mail-ic" id="mailIc" aria-hidden="true"></span><input id="email" type="email" placeholder="email@seuemail.com.br" autocomplete="email" required></label>
       <button class="btn" type="submit">Quero entrar</button>
       <p class="note">Enviamos um link mágico. Sem senha pra decorar.</p>
       <p class="msg" id="msg"></p>
@@ -85,5 +87,15 @@ document.getElementById('f').addEventListener('submit',function(e){
   if(!v||v.indexOf('@')<0){m.textContent='Coloca um e-mail válido.';return;}
   m.textContent='Se esse e-mail comprou, o link mágico tá indo. (login ainda em setup)';
 });
+</script>
+<script src="/antipato/assets/js/lottie_light.min.js"></script>
+<script>
+if(window.lottie){
+  var mailAnim=lottie.loadAnimation({
+    container:document.getElementById('mailIc'),
+    renderer:'svg',loop:true,autoplay:true,
+    path:'/app/mail_lottie.json'
+  });
+}
 </script>
 </body></html>
