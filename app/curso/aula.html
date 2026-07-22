@@ -164,6 +164,22 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .li.lock{color:var(--faint)}
 .li .tt{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 
+/* painel de aulas — preto, e fechável pelo X */
+.panel{background:#101010;border-left:1px solid #101010}
+.panel.hidden{display:none}
+.panel .phead{border-bottom:1px solid rgba(255,255,255,.1)}
+.panel .phead h3{color:#fff}
+.panel .phead .iconbtn{color:rgba(255,255,255,.55)}
+.panel .phead .iconbtn:hover{background:rgba(255,255,255,.1);color:#fff}
+.panel .mod{border-top:1px solid rgba(255,255,255,.08)}
+.panel .mod .mtitle{color:#fff}
+.panel .mod .mtitle svg{stroke:rgba(255,255,255,.5)}
+.panel .li{color:rgba(255,255,255,.55)}
+.panel .li:hover{background:rgba(255,255,255,.06)}
+.panel .li.on{background:rgba(255,255,255,.08);color:#fff}
+.panel .li .st.lock{border-color:rgba(255,255,255,.25)}
+.panel .li .st.lock svg{stroke:rgba(255,255,255,.4)}
+
 @media(max-width:1000px){.panel{display:none}}
 </style>
 </head>
@@ -178,6 +194,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
     <button class="iconbtn" aria-label="Comentários"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H8l-4 4V5a2 2 0 0 1 2-2h13a2 2 0 0 1 2 2z"/></svg></button>
     <button class="iconbtn" aria-label="Anotações"><svg viewBox="0 0 24 24"><path d="M4 4h16v12H8l-4 4z"/><path d="M8 9h8M8 12h5"/></svg></button>
     <button class="iconbtn" aria-label="Salvar"><svg viewBox="0 0 24 24"><path d="M6 3h12v18l-6-4-6 4z"/></svg></button>
+    <button class="iconbtn" aria-label="Mostrar/ocultar aulas" onclick="document.querySelector('.panel').classList.toggle('hidden')"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M15 4v16"/></svg></button>
   </div>
 </header>
 
@@ -191,7 +208,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
   <aside class="panel">
     <div class="phead">
       <h3>Aulas</h3>
-      <button class="iconbtn" aria-label="Fechar" onclick="history.length>1?history.back():location.href='home.html'"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+      <button class="iconbtn" aria-label="Fechar aulas" onclick="document.querySelector('.panel').classList.add('hidden')"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
     </div>
     <div class="plist">
       <div class="mod">

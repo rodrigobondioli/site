@@ -32,11 +32,10 @@
   .adp-ghost:hover{background:#f1f1f1}
   /* perfil foto */
   .adp-photo{display:flex;align-items:center;gap:16px;margin-bottom:8px}
-  .adp-photo .pic{width:66px;height:66px;border-radius:999px;overflow:hidden;box-shadow:0 0 0 1px #ececee;flex:none;background:#f1f1f1}
-  .adp-photo .pic img{width:100%;height:100%;object-fit:cover}
-  .adp-photo .acts{display:flex;gap:8px}
-  .adp-photo .acts button{border:1px solid #d4d4d8;background:#fff;font-weight:700;font-size:13px;padding:7px 14px;border-radius:999px;cursor:pointer;font-family:${VIN}}
-  .adp-photo .acts button:hover{background:#f1f1f1}
+  .adp-photo .pic{width:66px;height:66px;border-radius:999px;overflow:hidden;box-shadow:0 0 0 1px #ececee;flex:none;background:#e6e6e8;cursor:pointer;position:relative}
+  .adp-photo .pic img{width:100%;height:100%;object-fit:cover;display:block}
+  .adp-photo .pic:hover::after{content:"trocar";position:absolute;inset:0;background:rgba(16,16,16,.55);color:#fff;font-size:10.5px;font-weight:700;letter-spacing:.03em;display:grid;place-items:center;text-transform:uppercase}
+  .adp-photo .hint{font-size:12.5px;color:#71717a}
   .adp-signout{margin-top:26px;padding-top:18px;border-top:1px solid #ececee}
   .adp-signout a{font-size:13.5px;color:#71717a;text-decoration:none;font-weight:700}
   .adp-signout a:hover{color:#ff00d7}
@@ -75,6 +74,11 @@
   var c = window.ADP_CONFIG || {};
   function sb(){ return window.__sb || (window.supabase && c.SUPABASE_URL && !String(c.SUPABASE_URL).includes("SEU-PROJETO") ? window.supabase.createClient(c.SUPABASE_URL, c.SUPABASE_ANON_KEY) : null); }
   async function currentUser(){ var s=sb(); if(!s) return null; try{ var r=await s.auth.getUser(); return r.data && r.data.user; }catch(e){ return null; } }
+
+  // avatar unificado: foto do usuário OU placeholder neutro (barra + drawer sempre iguais)
+  var NEUTRAL_AV = '<svg viewBox="0 0 24 24" width="100%" height="100%" style="background:#e6e6e8;display:block" fill="none" stroke="#a1a1aa" stroke-width="1.7"><circle cx="12" cy="9" r="3.4"/><path d="M5.5 20a6.5 6.5 0 0 1 13 0"/></svg>';
+  function avatarHTML(url){ return url ? '<img src="'+url+'" alt="" style="width:100%;height:100%;object-fit:cover;display:block">' : NEUTRAL_AV; }
+  function setAvatars(url){ document.querySelectorAll(".avatar").forEach(function(el){ el.innerHTML = avatarHTML(url); }); }
 
   // ---------- SUPORTE ----------
   function openSuporte() {
@@ -135,11 +139,11 @@
     var meta = (u && u.user_metadata) || {};
     var nome = meta.full_name || meta.name || "";
     var email = (u && u.email) || "";
-    var pic = meta.avatar_url || "/app/eu-login.webp";
     open("Editar perfil", `
       <div class="adp-photo">
-        <span class="pic"><img src="${pic}" alt=""></span>
-        <div class="acts"><button type="button" id="adpFoto">Alterar</button><button type="button" id="adpFotoRm">Remover</button></div>
+        <span class="pic" id="adpPic">${avatarHTML(meta.avatar_url)}</span>
+        <span class="hint">Clica na foto pra trocar</span>
+        <input type="file" id="adpPicFile" accept="image/*" style="display:none">
       </div>
       <form class="adp-f" id="adpPerf">
         <label>Nome completo</label>
@@ -155,8 +159,29 @@
       </form>
       <div class="adp-signout"><a href="#" id="adpSair">Sair da conta</a></div>`);
 
-    dBody.querySelector("#adpFoto").addEventListener("click", ()=>toast("Upload de foto: em breve"));
-    dBody.querySelector("#adpFotoRm").addEventListener("click", ()=>toast("Foto removida (visual)"));
+    // clicar na foto -> escolhe arquivo -> reduz p/ 220px -> salva no perfil (e sincroniza a barra)
+    var picEl = dBody.querySelector("#adpPic"), fileEl = dBody.querySelector("#adpPicFile");
+    picEl.addEventListener("click", function(){ fileEl.click(); });
+    fileEl.addEventListener("change", function(){
+      var file = fileEl.files && fileEl.files[0]; if(!file) return;
+      var reader = new FileReader();
+      reader.onload = function(ev){
+        var img = new Image();
+        img.onload = async function(){
+          var size = 220, cv = document.createElement("canvas"); cv.width = size; cv.height = size;
+          var ctx = cv.getContext("2d");
+          var s = Math.min(img.width, img.height), sx = (img.width - s)/2, sy = (img.height - s)/2;
+          ctx.drawImage(img, sx, sy, s, s, 0, 0, size, size);
+          var dataUrl = cv.toDataURL("image/jpeg", 0.82);
+          picEl.innerHTML = avatarHTML(dataUrl);
+          var sbi = sb(); if(!sbi){ toast("Modo dev — publique pra salvar a foto."); return; }
+          try { var r = await sbi.auth.updateUser({ data:{ avatar_url: dataUrl } }); if(r.error) throw r.error; setAvatars(dataUrl); toast("Foto atualizada ✓"); }
+          catch(err){ toast("Erro ao salvar a foto"); }
+        };
+        img.src = ev.target.result;
+      };
+      reader.readAsDataURL(file);
+    });
     dBody.querySelector("#adpSair").addEventListener("click", async function(e){ e.preventDefault(); var s=sb(); if(s){ await s.auth.signOut(); } location.href = "/"; });
 
     var f = dBody.querySelector("#adpPerf"), msg = dBody.querySelector("#adpPerfMsg");
@@ -193,6 +218,8 @@
   document.querySelectorAll(".search").forEach(function(el){ el.style.cursor="pointer"; el.addEventListener("click", ()=>toast("Busca: em breve")); });
   // avatar -> perfil
   document.querySelectorAll(".avatar").forEach(function(el){ el.style.cursor="pointer"; el.addEventListener("click", openPerfil); });
+  // sincroniza a foto da barra com o perfil (ou placeholder neutro)
+  currentUser().then(function(u){ setAvatars(u && u.user_metadata && u.user_metadata.avatar_url); });
 
   // neutraliza qualquer '#' restante (evita pulo pro topo em links de demo)
   document.querySelectorAll('a[href="#"]').forEach(function(a){ a.addEventListener("click", function(e){ e.preventDefault(); }); });
