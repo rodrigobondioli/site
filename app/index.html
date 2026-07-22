@@ -87,6 +87,13 @@ h1{font-weight:800;font-size:clamp(32px,3.125vw,60px);line-height:1.05}
   var configured = c.SUPABASE_URL && !c.SUPABASE_URL.includes("SEU-PROJETO") && window.supabase;
   var sb = configured ? window.supabase.createClient(c.SUPABASE_URL, c.SUPABASE_ANON_KEY) : null;
   var redirect = (c.APP_ORIGIN || location.origin) + "/curso/home.html";
+  // já logado (ou acabou de clicar no link mágico)? entra direto.
+  if (sb) {
+    sb.auth.getSession().then(function(res){
+      if (res && res.data && res.data.session) location.replace(redirect);
+    });
+    sb.auth.onAuthStateChange(function(evt, session){ if (session) location.replace(redirect); });
+  }
   document.getElementById("f").addEventListener("submit", async function(e){
     e.preventDefault();
     var v = document.getElementById("email").value.trim();
