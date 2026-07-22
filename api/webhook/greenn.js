@@ -6,6 +6,8 @@
 //   https://app.rodrigobondioli.com/api/webhook/greenn?secret=SEU_SEGREDO
 // Config: GREENN_WEBHOOK_SECRET, GREENN_PRODUCT_MAP (JSON: {"<product_id>":"<course_id>"})
 
+import { resolveUserByEmail } from '../_auth.js';
+
 const PAID = ['paid'];
 const REVOKE = ['refunded', 'chargedback'];
 
@@ -32,15 +34,8 @@ export default async function handler(req, res) {
   if (!url || !svc) return res.status(500).json({ error: 'Supabase não configurado.' });
   const H = { apikey: svc, Authorization: `Bearer ${svc}`, 'Content-Type': 'application/json' };
 
-  // acha o usuário por email (admin); cria se não existir
-  async function resolveUser() {
-    const u = await fetch(`${url}/auth/v1/admin/users?email=${encodeURIComponent(email)}`, { headers: H });
-    if (u.ok) { const j = await u.json(); const id = j?.users?.[0]?.id; if (id) return id; }
-    const c = await fetch(`${url}/auth/v1/admin/users`, { method: 'POST', headers: H,
-      body: JSON.stringify({ email, email_confirm: true }) });
-    if (c.ok) { const j = await c.json(); return j?.id || j?.user?.id || null; }
-    return null;
-  }
+  // acha o usuário por email (lookup confiável via função SQL); cria se não existir
+  const resolveUser = () => resolveUserByEmail(email, true);
 
   if (PAID.includes(status)) {
     const userId = await resolveUser();
@@ -53,7 +48,7 @@ export default async function handler(req, res) {
   }
 
   if (REVOKE.includes(status)) {
-    const userId = await resolveUser();
+    const userId = await resolveUserByEmail(email, false);
     if (userId) {
       await fetch(`${url}/rest/v1/course_access?user_id=eq.${userId}&course_id=eq.${courseId}`,
         { method: 'DELETE', headers: H });

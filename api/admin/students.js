@@ -2,7 +2,7 @@
 //   GET    /api/admin/students?course=...            -> lista quem tem acesso (email + granted_at)
 //   POST   /api/admin/students { email, course }      -> libera acesso na mão (cria user se preciso)
 //   DELETE /api/admin/students?email=..&course=..     -> revoga acesso
-import { getUser, isAdmin } from '../_auth.js';
+import { getUser, isAdmin, resolveUserByEmail } from '../_auth.js';
 
 const SB = () => ({ url: process.env.SUPABASE_URL, svc: process.env.SUPABASE_SERVICE_ROLE });
 
@@ -14,15 +14,7 @@ export default async function handler(req, res) {
   const { url, svc } = SB();
   if (!url || !svc) return res.status(500).json({ error: 'Supabase não configurado.' });
   const H = { apikey: svc, Authorization: `Bearer ${svc}`, 'Content-Type': 'application/json' };
-
-  async function resolveUser(email, create) {
-    const u = await fetch(`${url}/auth/v1/admin/users?email=${encodeURIComponent(email)}`, { headers: H });
-    if (u.ok) { const j = await u.json(); const id = j?.users?.[0]?.id; if (id) return id; }
-    if (!create) return null;
-    const c = await fetch(`${url}/auth/v1/admin/users`, { method: 'POST', headers: H, body: JSON.stringify({ email, email_confirm: true }) });
-    if (c.ok) { const j = await c.json(); return j?.id || j?.user?.id || null; }
-    return null;
-  }
+  const resolveUser = (email, create) => resolveUserByEmail(email, create);
 
   if (req.method === 'GET') {
     const course = (req.query?.course) || 'p1-generico-especialista';

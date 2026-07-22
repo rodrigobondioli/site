@@ -16,6 +16,28 @@ export function isAdmin(user) {
   const email = (user?.email || '').toLowerCase();
   return !!email && list.includes(email);
 }
+// Resolve o user_id por e-mail de forma CONFIÁVEL (o filtro ?email= do admin do GoTrue
+// não filtra — retornava o primeiro usuário). Usa a função SQL user_id_by_email.
+// create=true: cria o usuário se não existir (compra sem conta prévia).
+export async function resolveUserByEmail(email, create = false) {
+  const url = process.env.SUPABASE_URL, svc = process.env.SUPABASE_SERVICE_ROLE;
+  if (!url || !svc || !email) return null;
+  const H = { apikey: svc, Authorization: `Bearer ${svc}`, 'Content-Type': 'application/json' };
+  const lookup = async () => {
+    try {
+      const r = await fetch(`${url}/rest/v1/rpc/user_id_by_email`, { method: 'POST', headers: H, body: JSON.stringify({ p_email: email }) });
+      if (r.ok) { const id = await r.json(); if (id) return id; }
+    } catch {}
+    return null;
+  };
+  const found = await lookup();
+  if (found) return found;
+  if (!create) return null;
+  const c = await fetch(`${url}/auth/v1/admin/users`, { method: 'POST', headers: H, body: JSON.stringify({ email, email_confirm: true }) });
+  if (c.ok) { const j = await c.json(); const id = j?.id || j?.user?.id; if (id) return id; }
+  // corrida / já existia: tenta o lookup de novo
+  return await lookup();
+}
 export async function hasAccess(userId, courseId) {
   const url = process.env.SUPABASE_URL, svc = process.env.SUPABASE_SERVICE_ROLE;
   if (!url || !svc) return false;
