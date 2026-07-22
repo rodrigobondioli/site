@@ -200,7 +200,7 @@
   var MAP = {
     "início do curso":"home.html","inicio do curso":"home.html","aulas":"aula.html",
     "meu canvas":"canvas.html","meu posicionamento":"posicionamento.html",
-    "início":"home.html","inicio":"home.html","cursos":"cursos.html"
+    "início":"home.html","inicio":"home.html","cursos":"/cursos"
   };
   function txt(el){ return (el.textContent||"").trim().toLowerCase(); }
 
