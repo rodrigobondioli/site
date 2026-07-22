@@ -9,8 +9,9 @@ window.ADP_CANVAS = (function () {
 
   var BLOCKS = [
     { block: 0, title: 'Sobre você', type: 'fields', fields: [
-      { key: 'quem',   label: 'Quem é você hoje',        ph: 'Designer há quanto tempo, o que você faz, como ganha…' },
-      { key: 'melhor', label: 'No que você é melhor',     ph: 'A coisa que você faz melhor que a média — onde o cliente vê resultado.' }
+      { key: 'quem',        label: 'Quem é você hoje',              ph: 'Designer há quanto tempo, o que você faz, como ganha…' },
+      { key: 'melhor',      label: 'No que você é melhor',           ph: 'A coisa que você faz melhor que a média — onde o cliente vê resultado.' },
+      { key: 'comunidades', label: 'Comunidades que você já vive',   ph: 'Grupos, mercados e mundos que você já frequenta — atalho pro teu nicho.' }
     ]},
     { block: 1, title: 'O inimigo (seus medos)', type: 'fields', fields: [
       { key: 'segura',       label: 'O que te segura no genérico',        ph: 'Qual medo te impede de nichar? Escreve cru — medo escrito perde metade da força.' },
@@ -41,8 +42,8 @@ window.ADP_CANVAS = (function () {
   var STYLE = ''
     + '.adp-fld{margin-top:14px}'
     + '.adp-fld label{display:block;font-size:12.5px;font-weight:700;color:var(--muted,#71717a);margin-bottom:7px}'
-    + '.adp-fld textarea{width:100%;border:1px solid var(--line,#d4d4d8);border-radius:10px;background:#fff;padding:11px 13px;font:inherit;font-size:14.5px;color:var(--ink,#18181b);resize:vertical;min-height:64px;line-height:1.55}'
-    + '.adp-fld textarea:focus{outline:none;border-color:var(--ink,#18181b)}'
+    + '.adp-fld textarea{width:100%;border:none;border-radius:10px;background:#fff;padding:13px 15px;font:inherit;font-size:14.5px;color:var(--ink,#18181b);resize:none;min-height:66px;line-height:1.55}'
+    + '.adp-fld textarea:focus{outline:none}'
     + '.adp-savest{font-size:12px;color:var(--faint,#a1a1aa);margin-top:9px;min-height:1em}'
     + '.adp-mtab{width:100%;border-collapse:collapse;font-size:13.5px;margin-top:8px}'
     + '.adp-mtab th{text-align:center;font-weight:700;color:var(--muted,#71717a);font-size:12px;padding:0 0 10px}'
