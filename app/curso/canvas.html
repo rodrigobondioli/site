@@ -176,75 +176,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
         </div>
       </div>
 
-      <div class="blocks">
-
-        <!-- Bloco 0 -->
-        <div class="block done">
-          <div class="bh">
-            <span class="bn">0</span>
-            <div class="bt"><h3>Sobre você</h3><span class="tag">Aula 0</span></div>
-            <span class="savest" data-savest="0"></span>
-          </div>
-          <div class="fld">
-            <label>Quem é você hoje</label>
-            <textarea data-block="0" data-key="quem" placeholder="Designer há quanto tempo, o que você faz, como ganha…"></textarea>
-          </div>
-          <div class="fld">
-            <label>No que você é melhor</label>
-            <textarea data-block="0" data-key="melhor" placeholder="A coisa que você faz melhor que a média — onde o cliente vê resultado."></textarea>
-          </div>
-        </div>
-
-        <!-- Bloco 1 -->
-        <div class="block done">
-          <div class="bh">
-            <span class="bn">1</span>
-            <div class="bt"><h3>O inimigo (seus medos)</h3><span class="tag">Aula 1</span></div>
-            <span class="savest" data-savest="1"></span>
-          </div>
-          <div class="fld">
-            <label>O que te segura no genérico</label>
-            <textarea data-block="1" data-key="segura" placeholder="Qual medo te impede de nichar? Escreve cru."></textarea>
-          </div>
-        </div>
-
-        <!-- Bloco 2 — Matriz (agora) -->
-        <div class="block now">
-          <div class="bh">
-            <span class="bn">2</span>
-            <div class="bt"><h3>A Matriz do Nicho</h3><span class="tag">Agora · Aula 2</span></div>
-            <span class="savest" data-savest="2"></span>
-          </div>
-          <div class="matrix">
-            <table class="mtab" id="matriz">
-              <thead>
-                <tr><th>Candidato a nicho</th><th>Repert.</th><th>Necess.</th><th>Cresc.</th><th>Poder</th><th>Acesso</th><th>Total</th></tr>
-              </thead>
-              <tbody id="matriz-body"><!-- linhas geradas por JS --></tbody>
-            </table>
-            <p class="champ" id="champ">Preenche os candidatos e pontua de 1 a 5 — o de maior soma ganha, sem achismo.</p>
-          </div>
-        </div>
-
-        <!-- Bloco 3 — lock -->
-        <div class="block lock">
-          <div class="bh">
-            <span class="bn">3</span>
-            <div class="bt"><h3>Quem você atende (a dor)</h3><span class="tag">Libera na Aula 3 · com a Caça à Ruminação</span></div>
-            <span class="locktag"><svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>Bloqueado</span>
-          </div>
-        </div>
-
-        <!-- Bloco 4 — lock -->
-        <div class="block lock">
-          <div class="bh">
-            <span class="bn">4</span>
-            <div class="bt"><h3>Seu monopólio</h3><span class="tag">Libera na Aula 4</span></div>
-            <span class="locktag"><svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>Bloqueado</span>
-          </div>
-        </div>
-
-      </div>
+      <div class="blocks" id="blocksWrap"></div>
     </div>
   </main>
 </div>
@@ -253,83 +185,44 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 <script src="/app/config.js"></script>
 <script src="/app/curso/guard.js"></script>
 <script src="/app/curso/api.js"></script>
+<script src="/app/curso/canvas-blocks.js"></script>
 <script>
 (function(){
-  const CRIT = ["r","n","c","p","a"]; // repertório, necessidade, crescimento, poder, acesso
-  const body = document.getElementById("matriz-body");
-  let rows = [{name:"",r:0,n:0,c:0,p:0,a:0},{name:"",r:0,n:0,c:0,p:0,a:0},{name:"",r:0,n:0,c:0,p:0,a:0}];
+  var wrap = document.getElementById("blocksWrap");
+  var saved = {}; // dados por bloco
+  var DEFS = window.ADP_CANVAS.BLOCKS;
 
-  function opts(sel){ let s=""; for(let i=0;i<=5;i++){ s+=`<option ${i===sel?"selected":""}>${i}</option>`; } return s; }
-  function total(row){ return CRIT.reduce((a,k)=>a+(+row[k]||0),0); }
-  function renderMatriz(){
-    body.innerHTML = rows.map((row,idx)=>{
-      const t = total(row);
-      return `<tr data-i="${idx}">
-        <td class="name-cell"><input class="cand" data-i="${idx}" value="${(row.name||"").replace(/"/g,'&quot;')}" placeholder="Candidato ${idx+1}…"></td>
-        ${CRIT.map(k=>`<td><select class="sc" data-i="${idx}" data-k="${k}">${opts(+row[k]||0)}</select></td>`).join("")}
-        <td class="tot">${t}</td></tr>`;
-    }).join("");
-    // campeão
-    const filled = rows.filter(r=>r.name.trim());
-    const champEl = document.getElementById("champ");
-    if(!filled.length){ champEl.innerHTML = "Preenche os candidatos e pontua de 1 a 5 — o de maior soma ganha, sem achismo."; }
-    else{
-      const win = filled.slice().sort((a,b)=>total(b)-total(a))[0];
-      champEl.innerHTML = `Seu nicho, pelos números: <b>${win.name}</b> — ${total(win)} pontos.`;
-      // marca a linha vencedora
-      [...body.querySelectorAll("tr")].forEach(tr=>{
-        const r = rows[+tr.dataset.i];
-        tr.classList.toggle("win", r.name.trim() && r===win);
+  function updateGauge(){
+    var filled = DEFS.filter(function(d){ return window.ADP_CANVAS.isFilled(d.block, saved[d.block]); }).length;
+    var total = DEFS.length;
+    var g = document.querySelector(".gauge .gt b"); if(g) g.textContent = filled + " de " + total + " blocos";
+    var bar = document.querySelector(".gauge .bar i"); if(bar) bar.style.width = Math.round(filled/total*100) + "%";
+  }
+
+  function buildCards(){
+    wrap.innerHTML = "";
+    DEFS.forEach(function(def){
+      var card = document.createElement("div");
+      card.className = "block";
+      card.innerHTML = '<div class="bh"><span class="bn">'+def.block+'</span>'
+        + '<div class="bt"><h3>'+def.title+'</h3><span class="tag">Aula '+def.block+'</span></div></div>'
+        + '<div class="bfields" style="margin-top:6px"></div>';
+      wrap.appendChild(card);
+      window.ADP_CANVAS.renderBlock(card.querySelector(".bfields"), def.block, saved[def.block]||{}, function(b,data){
+        saved[b] = data; card.classList.toggle("done", window.ADP_CANVAS.isFilled(b, data)); updateGauge();
       });
-    }
+      card.classList.toggle("done", window.ADP_CANVAS.isFilled(def.block, saved[def.block]));
+    });
+    updateGauge();
   }
-  body.addEventListener("input", e=>{
-    if(e.target.classList.contains("cand")){ rows[+e.target.dataset.i].name = e.target.value; renderMatriz(); saveMatriz(); }
-  });
-  body.addEventListener("change", e=>{
-    if(e.target.classList.contains("sc")){ rows[+e.target.dataset.i][e.target.dataset.k] = +e.target.value; renderMatriz(); saveMatriz(); }
-  });
 
-  // salvamento
-  function setSt(block, txt, on){ const el=document.querySelector(`[data-savest="${block}"]`); if(el){ el.textContent=txt; el.classList.toggle("on", !!on); } }
-  const timers = {};
-  function debounceSave(block, getData){
-    setSt(block, "…", true);
-    clearTimeout(timers[block]);
-    timers[block] = setTimeout(async()=>{
-      if(window.ADP.devMode){ setSt(block, "salvo (dev)", false); return; }
-      try{ await window.ADP.saveBlock(block, getData()); setSt(block, "salvo ✓", false); }
-      catch(err){ setSt(block, "erro ao salvar", false); console.error(err); }
-    }, 700);
-  }
-  function saveMatriz(){ debounceSave(2, ()=>({ rows: rows.map(r=>({name:r.name, r:+r.r,n:+r.n,c:+r.c,p:+r.p,a:+r.a, total: total(r)})) })); }
-
-  // textareas dos blocos 0 e 1
-  const texts = [...document.querySelectorAll("textarea[data-block]")];
-  const blockData = {}; // acumula por bloco
-  function gatherText(block){
-    const o = {};
-    texts.filter(t=>t.dataset.block===String(block)).forEach(t=>{ o[t.dataset.key]=t.value; });
-    return o;
-  }
-  texts.forEach(t=>{
-    t.addEventListener("input", ()=> debounceSave(+t.dataset.block, ()=>gatherText(+t.dataset.block)));
-  });
-
-  // carregar o que já existe
   async function load(){
-    renderMatriz();
-    if(window.ADP.devMode) return;
+    if(!(window.ADP && !window.ADP.devMode)){ buildCards(); return; }
     try{
-      const data = await window.ADP.loadCanvas(); // [{block, data}]
-      (data||[]).forEach(row=>{
-        if(row.block===2 && row.data?.rows){ rows = row.data.rows.map(r=>({name:r.name||"",r:+r.r||0,n:+r.n||0,c:+r.c||0,p:+r.p||0,a:+r.a||0})); }
-        else if(row.data){
-          texts.filter(t=>t.dataset.block===String(row.block)).forEach(t=>{ if(row.data[t.dataset.key]!=null) t.value=row.data[t.dataset.key]; });
-        }
-      });
-      renderMatriz();
+      var data = await window.ADP.loadCanvas(); // [{block, data}]
+      (data||[]).forEach(function(row){ if(row && row.block!=null) saved[row.block] = row.data||{}; });
     }catch(err){ console.warn("load canvas:", err.message); }
+    buildCards();
   }
   load();
 })();
