@@ -11,7 +11,12 @@
   window.__sb = sb;
   const { data: { session } } = await sb.auth.getSession();
   if (!session) { location.replace("/"); return; }
-  // opcional (quando o schema existir): checar acesso ao curso
-  // const { data: acc } = await sb.from("course_access").select("course_id").eq("course_id","p1-generico-especialista").maybeSingle();
-  // if (!acc) location.replace("https://www.rodrigobondioli.com/antipato/"); // sem acesso -> LP
+  // checa acesso ao curso (RLS já filtra pro próprio usuário). Fail-open em erro pra não trancar ninguém por bug de rede.
+  try {
+    const { data: acc, error: accErr } = await sb.from("course_access").select("course_id").limit(1);
+    if (!accErr && (!acc || acc.length === 0)) {
+      location.replace("https://rodrigobondioli.com/antipato"); // sem acesso -> página de vendas
+      return;
+    }
+  } catch (e) { /* fail-open: conteúdo já é protegido no servidor */ }
 })();

@@ -106,9 +106,16 @@ h1{font-weight:800;font-size:clamp(32px,3.125vw,60px);line-height:1.05}
 
   async function sendCode(email){
     btn.disabled = true; resend.disabled = true; m.textContent = "Enviando o código…";
-    var r = await sb.auth.signInWithOtp({ email: email });
+    // shouldCreateUser:false -> quem não comprou não recebe código (a conta é criada no webhook da compra)
+    var r = await sb.auth.signInWithOtp({ email: email, options: { shouldCreateUser: false } });
     btn.disabled = false; resend.disabled = false;
-    if(r.error){ m.textContent = "Deu ruim: " + r.error.message; return false; }
+    if(r.error){
+      var em = (r.error.message || "");
+      if(/rate limit|too many|429/i.test(em)) m.textContent = "Calma — muitos pedidos. Espera 1 minuto e tenta de novo.";
+      else if(/not allowed|signups|not found|disabled|user/i.test(em)) m.textContent = "Não achei compra com esse e-mail. Usa o e-mail exato da compra — ou fala com o suporte.";
+      else m.textContent = "Não consegui enviar o código agora. Confere o e-mail e tenta de novo.";
+      return false;
+    }
     theEmail = email; step = "code";
     emailField.style.display = "none";
     codeField.style.display = "flex";

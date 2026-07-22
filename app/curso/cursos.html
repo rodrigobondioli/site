@@ -227,6 +227,10 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
     // topbar: troca avatar/sino/busca por um "Entrar" (pra quem já é aluno)
     var right = document.querySelector(".top .right");
     if(right) right.innerHTML = '<a href="/" style="display:inline-flex;align-items:center;font-weight:700;font-size:14px;padding:9px 20px;border-radius:999px;border:1px solid var(--line);color:var(--ink)">Entrar</a>';
+    // logo do visitante não vai pra área logada (senão cai no muro de login)
+    var logo = document.querySelector(".logo"); if(logo) logo.setAttribute("href", "/");
+    // esconde as abas internas (Início/Comunidade) — visitante só vê a vitrine
+    var tabs = document.querySelector(".tabs"); if(tabs) tabs.style.display = "none";
     // CTA do P1: Adquirir -> página de vendas
     var card = document.querySelector(".card.active");
     if(card) card.setAttribute("href", SALES_URL);

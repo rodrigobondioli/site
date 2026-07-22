@@ -291,7 +291,9 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
       const canvas = await buildCanvas();
       if(!canvas || Object.keys(canvas).length===0){ say("Preenche o Canvas primeiro — sem matéria-prima não tem plano."); btn.disabled=false; return; }
       const out = await window.ADP.estrategista(canvas);
-      render(out.data || out);
+      const d = out.data || out;
+      render(d);
+      window.ADP.savePlan(d).catch(function(){});   // persiste — não some mais ao recarregar
       say("Pronto. Gerado a partir do seu Canvas.");
     }catch(err){ say("Deu ruim: " + err.message); }
     btn.disabled = false;
@@ -305,6 +307,24 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
     const txt = `MEU POSICIONAMENTO\n\n${parts[0]}\n\nNICHO: ${parts[1]}\nMONOPÓLIO: ${parts[2]}\n\nATENDE:\n${atende}\n\nNÃO ATENDE:\n${nao}\n\nDOR: ${parts[3]}\n\nPUV CURTA: ${parts[4]}\nPUV FALADA: ${parts[5]}`;
     navigator.clipboard?.writeText(txt).then(()=>say("Copiado."), ()=>say("Não consegui copiar."));
   });
+
+  // limpa o exemplo e mostra estado vazio (aluno novo, ainda sem posicionamento gerado)
+  function clearExample(){
+    ["f-nicho","f-monopolio","f-dor","f-puvc","f-puvf","f-medos","f-bio","f-portfolio","f-proposta"].forEach(function(id){ var e=$(id); if(e) e.textContent="—"; });
+    ["f-atende","f-naoatende","f-onde","f-d30","f-d60","f-d90"].forEach(function(id){ var e=$(id); if(e) e.innerHTML=""; });
+    var fr=$("f-frase"); if(fr) fr.textContent="Seu posicionamento ainda não foi gerado.";
+  }
+
+  // no boot: recarrega o último posicionamento salvo. Se não existe, mostra estado vazio.
+  async function boot(){
+    if(window.ADP.devMode) return; // dev mantém o exemplo pra prototipar
+    try{
+      const r = await window.ADP.loadPlan();
+      if(r && r.plan){ render(r.plan); say("Gerado a partir do seu Canvas."); }
+      else { clearExample(); say("Preenche os 5 blocos do Canvas e clica em Gerar com o Estrategista — ele lê tua matéria-prima e monta frase, nicho, PUV e o plano de 90 dias."); }
+    }catch(e){ /* se o load falhar, deixa como está */ }
+  }
+  boot();
 })();
 </script>
 <script src="/app/curso/ui.js"></script>

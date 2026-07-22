@@ -46,6 +46,9 @@ window.ADP_CANVAS = (function () {
     + '.adp-fld textarea{width:100%;border:none;border-radius:10px;background:#fff;padding:13px 15px;font:inherit;font-size:14.5px;color:var(--ink,#18181b);resize:none;min-height:66px;line-height:1.55}'
     + '.adp-fld textarea:focus{outline:none}'
     + '.adp-savest{font-size:12px;color:var(--faint,#a1a1aa);margin-top:9px;min-height:1em}'
+    + '.adp-savest.err{color:var(--pink,#ff00d7);font-weight:700}'
+    + '.adp-mscroll{overflow-x:auto;-webkit-overflow-scrolling:touch}'
+    + '@media(max-width:560px){.adp-mtab{min-width:480px}}'
     + '.adp-mtab{width:100%;border-collapse:collapse;font-size:13.5px;margin-top:8px}'
     + '.adp-mtab th{text-align:center;font-weight:700;color:var(--muted,#71717a);font-size:12px;padding:0 0 10px}'
     + '.adp-mtab th:first-child{text-align:left}'
@@ -87,8 +90,8 @@ window.ADP_CANVAS = (function () {
     return debounce(function (getData) {
       var data = getData();
       if (window.ADP && window.ADP.devMode) { if (statusEl) statusEl.textContent = 'salvo (dev)'; if (onSaved) onSaved(block, data); return; }
-      window.ADP.saveBlock(block, data).then(function () { if (statusEl) statusEl.textContent = 'salvo ✓'; if (onSaved) onSaved(block, data); })
-        .catch(function () { if (statusEl) statusEl.textContent = 'erro ao salvar'; });
+      window.ADP.saveBlock(block, data).then(function () { if (statusEl) { statusEl.textContent = 'salvo ✓'; statusEl.classList.remove('err'); } if (onSaved) onSaved(block, data); })
+        .catch(function () { if (statusEl) { statusEl.textContent = 'não salvou — edite qualquer campo pra tentar de novo'; statusEl.classList.add('err'); } });
     }, 700);
   }
 
@@ -109,9 +112,9 @@ window.ADP_CANVAS = (function () {
     var rows = (data && data.rows && data.rows.length)
       ? data.rows.map(function (r) { return { name: r.name || '', r: +r.r || 0, n: +r.n || 0, c: +r.c || 0, p: +r.p || 0, a: +r.a || 0 }; })
       : [{ name: '', r: 0, n: 0, c: 0, p: 0, a: 0 }, { name: '', r: 0, n: 0, c: 0, p: 0, a: 0 }, { name: '', r: 0, n: 0, c: 0, p: 0, a: 0 }];
-    container.innerHTML = '<table class="adp-mtab"><thead><tr><th>Candidato a nicho</th>'
+    container.innerHTML = '<div class="adp-mscroll"><table class="adp-mtab"><thead><tr><th>Candidato a nicho</th>'
       + CRIT.map(function (c) { return '<th>' + c.h + '</th>'; }).join('') + '<th>Total</th></tr></thead>'
-      + '<tbody></tbody></table><p class="adp-champ"></p><div class="adp-savest"></div>';
+      + '<tbody></tbody></table></div><p class="adp-champ"></p><div class="adp-savest"></div>';
     var body = container.querySelector('tbody');
     var champEl = container.querySelector('.adp-champ');
     var st = container.querySelector('.adp-savest');

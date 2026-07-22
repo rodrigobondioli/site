@@ -180,7 +180,11 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .panel .li .st.lock{border-color:rgba(255,255,255,.25)}
 .panel .li .st.lock svg{stroke:rgba(255,255,255,.4)}
 
-@media(max-width:1000px){.panel{display:none}}
+@media(max-width:1000px){
+  .panel{position:fixed;top:0;right:0;bottom:0;width:min(360px,86vw);z-index:60;transform:translateX(100%);transition:transform .22s ease}
+  .panel.hidden{display:flex;transform:translateX(100%)}
+  .panel:not(.hidden){transform:translateX(0);box-shadow:-24px 0 48px rgba(0,0,0,.4)}
+}
 </style>
 </head>
 <body>
@@ -241,7 +245,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
       return '<div class="video"><iframe src="'+src+'" loading="lazy" style="border:0;position:absolute;inset:0;width:100%;height:100%" allow="accelerometer;gyroscope;autoplay;encrypted-media;picture-in-picture;" allowfullscreen></iframe></div>';
     }
     // sem vídeo ainda -> pôster "em breve"
-    var num=(idx<10?'0':'')+idx;
+    var num=(idx+1<10?'0':'')+(idx+1);
     return '<div class="video"><div class="poster">'
       +'<div class="topline"><span>De Genérico a Especialista<br>c/ Rodrigo Bondioli</span><span>anti designer pato</span></div>'
       +'<div class="mid"><div class="pills"><span class="pill">Curso</span><span class="pill">Aula '+num+'</span></div>'
@@ -316,11 +320,11 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
       +(next?'<a href="aula.html?a='+next.id+'" aria-label="Próxima aula">':'<a class="off" aria-label="Próxima aula">')+'<svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></a>'
       +'</div>';
     document.getElementById('lessonRoot').innerHTML =
-      '<p class="eyebrow">Aula '+idx+' de '+(total-1)+'</p>'
+      '<p class="eyebrow">Aula '+(idx+1)+' de '+total+'</p>'
       +'<div class="lhead"><h1>'+esc(l.title)+'</h1>'+nav+'</div>'
       +videoHTML(l)
       +descHTML(l.description)
-      +applyHereHTML(l)
+      +(l.canvas_block!=null ? applyHereHTML(l) : exerciseHTML(l.exercise,l))
       +materialsHTML(l.materials)
       +'<div id="nextStepWrap"></div>';
 
@@ -388,6 +392,8 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
       document.getElementById('lessonRoot').innerHTML='<p class="eyebrow">Não consegui carregar ('+esc(e.message)+').</p>';
     }
   }
+  // no mobile o painel de aulas começa fechado (drawer)
+  if(window.matchMedia('(max-width:1000px)').matches){ var _p=document.querySelector('.panel'); if(_p) _p.classList.add('hidden'); }
   boot();
 })();
 </script>

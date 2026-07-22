@@ -29,6 +29,9 @@ window.ADP = (function () {
     saveBlock: (block, data, course = COURSE) =>
       api("/api/canvas", { method: "POST", body: JSON.stringify({ course, block, data }) }),
     estrategista: (canvas) => api("/api/ai/estrategista", { method: "POST", body: JSON.stringify({ canvas }) }),
+    loadPlan: (course = COURSE) => api("/api/plan?course=" + encodeURIComponent(course)),
+    savePlan: (data, course = COURSE) =>
+      api("/api/plan", { method: "POST", body: JSON.stringify({ course, data }) }),
     ruminacao: (nicho, cliente) => api("/api/ai/ruminacao", { method: "POST", body: JSON.stringify({ nicho, cliente }) }),
     // aulas + progresso
     lessons: (course = COURSE) => api("/api/lessons?course=" + encodeURIComponent(course)),
