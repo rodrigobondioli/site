@@ -72,9 +72,9 @@ h1{font-weight:800;font-size:clamp(32px,3.125vw,60px);line-height:1.05}
       <h1>Bem-vindo<br>(ex) pato.</h1>
       <p class="sub">Sua ferramenta de posicionamento está pronta.<br>Digite o e-mail exato da compra e comece a usar.</p>
       <label class="field" id="emailField"><span class="mail-ic" id="mailIc" aria-hidden="true"></span><input id="email" type="email" placeholder="email@seuemail.com.br" autocomplete="email"></label>
-      <label class="field" id="codeField" style="display:none"><input id="code" type="text" inputmode="numeric" autocomplete="one-time-code" placeholder="000000" maxlength="6" style="letter-spacing:.35em;font-size:19px;font-weight:700"></label>
+      <label class="field" id="codeField" style="display:none"><input id="code" type="text" inputmode="numeric" autocomplete="one-time-code" placeholder="00000000" maxlength="8" style="letter-spacing:.3em;font-size:19px;font-weight:700"></label>
       <button class="btn" id="submitBtn" type="submit">Quero entrar</button>
-      <p class="note" id="note">Enviamos um código de 6 dígitos. Sem senha pra decorar.</p>
+      <p class="note" id="note">Enviamos um código de 8 dígitos. Sem senha pra decorar.</p>
       <p class="msg" id="msg"></p>
       <button type="button" id="resend" style="display:none;align-self:flex-start;background:none;border:none;color:var(--pink);font-family:Vinila;font-weight:400;font-size:13px;cursor:pointer;padding:0;margin-top:2px;text-decoration:underline">Pedir outro código</button>
     </form>
@@ -113,7 +113,7 @@ h1{font-weight:800;font-size:clamp(32px,3.125vw,60px);line-height:1.05}
     emailField.style.display = "none";
     codeField.style.display = "flex";
     resend.style.display = "block";
-    note.textContent = "Enviei um código de 6 dígitos pro seu e-mail. Cola o MAIS RECENTE aqui.";
+    note.textContent = "Enviei um código de 8 dígitos pro seu e-mail. Cola o MAIS RECENTE aqui.";
     btn.textContent = "Entrar";
     m.textContent = "";
     codeInput.value = "";
@@ -135,8 +135,8 @@ h1{font-weight:800;font-size:clamp(32px,3.125vw,60px);line-height:1.05}
       if(!v || v.indexOf("@")<0){ m.textContent="Coloca um e-mail válido."; return; }
       await sendCode(v);
     } else {
-      var code = codeInput.value.trim().replace(/\s/g,"");
-      if(code.length < 6){ m.textContent="O código tem 6 dígitos."; return; }
+      var code = codeInput.value.trim().replace(/\D/g,"");
+      if(code.length < 8){ m.textContent="O código tem 8 dígitos."; return; }
       btn.disabled = true; m.textContent = "Conferindo…";
       var v2 = await sb.auth.verifyOtp({ email: theEmail, token: code, type: "email" });
       if(v2.error){ btn.disabled = false; m.textContent = "Código inválido ou expirado. Toca em “Pedir outro código” e usa o novo."; return; }
