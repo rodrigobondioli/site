@@ -216,5 +216,29 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 <script src="/app/config.js"></script>
 <!-- SEM guard.js: esta página é PÚBLICA (vitrine de vendas). -->
 <script src="/app/curso/ui.js"></script>
+<script>
+(function(){
+  var c = window.ADP_CONFIG || {};
+  var SALES_URL = "https://rodrigobondioli.com/antipato"; // TODO: confirmar a URL da página de vendas / checkout
+  var sb = (window.supabase && c.SUPABASE_URL && !String(c.SUPABASE_URL).includes("SEU-PROJETO"))
+    ? window.supabase.createClient(c.SUPABASE_URL, c.SUPABASE_ANON_KEY) : null;
+
+  function visitante(){
+    // topbar: troca avatar/sino/busca por um "Entrar" (pra quem já é aluno)
+    var right = document.querySelector(".top .right");
+    if(right) right.innerHTML = '<a href="/" style="display:inline-flex;align-items:center;font-weight:700;font-size:14px;padding:9px 20px;border-radius:999px;border:1px solid var(--line);color:var(--ink)">Entrar</a>';
+    // CTA do P1: Adquirir -> página de vendas
+    var card = document.querySelector(".card.active");
+    if(card) card.setAttribute("href", SALES_URL);
+    var enter = document.querySelector(".card.active .enter"); if(enter) enter.textContent = "Adquirir";
+    var prog = document.querySelector(".card.active .prog"); if(prog) prog.style.display = "none";
+  }
+
+  if(!sb){ visitante(); return; }
+  sb.auth.getSession().then(function(r){
+    if(!(r && r.data && r.data.session)) visitante();
+  }).catch(function(){ visitante(); });
+})();
+</script>
 </body>
 </html>
