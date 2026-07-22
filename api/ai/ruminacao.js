@@ -25,7 +25,7 @@ export default async function handler(req, res) {
     const out = await ai(MODEL_FAST(), [
       { role: 'system', content: SYSTEM },
       { role: 'user', content: user_msg },
-    ], 700, 0.8);
+    ], 2048, 0.8);
     const data = extractJSON(out) || { raw: out };
     return res.status(200).json({ ok: true, data });
   } catch (e) {

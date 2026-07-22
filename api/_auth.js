@@ -77,8 +77,8 @@ function extractJSON(text) {
 }
 
 // modelos por tarefa (env override)
-const MODEL_FAST = () => process.env.AI_MODEL_FAST || 'gemini-2.0-flash';
-const MODEL_SMART = () => process.env.AI_MODEL_SMART || 'gemini-2.0-flash';
+const MODEL_FAST = () => process.env.AI_MODEL_FAST || 'gemini-2.5-flash';
+const MODEL_SMART = () => process.env.AI_MODEL_SMART || 'gemini-2.5-flash';
 
 // alias retrocompatível
 const openai = ai;

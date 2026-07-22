@@ -35,7 +35,7 @@ export default async function handler(req, res) {
     const out = await ai(MODEL_SMART(), [
       { role: 'system', content: SYSTEM },
       { role: 'user', content: user_msg },
-    ], 2000, 0.7);
+    ], 4096, 0.7);
     const data = extractJSON(out) || { raw: out };
     // (próximo passo: salvar em plans via Supabase service role)
     return res.status(200).json({ ok: true, data });
