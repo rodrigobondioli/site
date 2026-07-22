@@ -374,8 +374,13 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
     catch(e){ if(willBe){DONE.delete(cur.id);}else{DONE.add(cur.id);} paintNextStep(); renderPanel(); }
   }
 
+  var RETRYBTN='<button id="retryBtn" style="margin-top:14px;font-family:inherit;font-weight:700;font-size:14px;padding:10px 20px;border-radius:999px;border:1.5px solid var(--ink);background:none;color:var(--ink);cursor:pointer">Tentar de novo</button>';
+  function showBootError(inner){
+    var root=document.getElementById('lessonRoot'); root.innerHTML=inner;
+    var rb=document.getElementById('retryBtn'); if(rb) rb.addEventListener('click', boot);
+  }
   async function boot(){
-    if(!window.ADP || window.ADP.devMode){ document.getElementById('lessonRoot').innerHTML='<p class="eyebrow">Login necessário pra carregar a aula.</p>'; return; }
+    if(!window.ADP || window.ADP.devMode){ document.getElementById('lessonRoot').innerHTML='<p class="eyebrow">Você precisa entrar pra ver a aula.</p><a href="/" style="display:inline-block;margin-top:12px;font-weight:700;text-decoration:underline">Entrar →</a>'; return; }
     try{
       var lr=await window.ADP.lessons();
       LESSONS=lr.lessons||[]; LIB=lr.library;
@@ -389,7 +394,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
       cur=LESSONS[idx];
       renderLesson();
     }catch(e){
-      document.getElementById('lessonRoot').innerHTML='<p class="eyebrow">Não consegui carregar ('+esc(e.message)+').</p>';
+      showBootError('<p class="eyebrow">Não consegui carregar a aula agora.</p>'+RETRYBTN);
     }
   }
   // no mobile o painel de aulas começa fechado (drawer)

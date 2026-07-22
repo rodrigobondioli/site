@@ -75,7 +75,9 @@ window.ADP_CANVAS = (function () {
     + '.adp-rum .rchip{display:block;width:100%;text-align:left;border:1px solid var(--line,#d4d4d8);border-radius:10px;padding:11px 14px;margin-bottom:8px;font-size:14px;color:#3f3f46;background:#fff;cursor:pointer;line-height:1.4}'
     + '.adp-rum .rchip:hover{border-color:var(--ink,#18181b)}'
     + '.adp-rum .rcentral{display:block;width:100%;text-align:left;border:1.5px solid var(--pink,#ff00d7);border-radius:10px;padding:12px 14px;font-size:15px;font-weight:700;color:var(--ink,#18181b);background:rgba(255,0,215,.04);cursor:pointer;line-height:1.4}'
-    + '.adp-rum .rmsg{font-size:13px;color:var(--muted,#71717a);margin-top:10px;line-height:1.5}';
+    + '.adp-rum .rmsg{font-size:13px;color:var(--muted,#71717a);margin-top:10px;line-height:1.5}'
+    + '.adp-rum .spin{display:inline-block;width:12px;height:12px;border:2px solid currentColor;border-right-color:transparent;border-radius:50%;animation:adpspin .7s linear infinite;vertical-align:-1px;margin-right:8px}'
+    + '@keyframes adpspin{to{transform:rotate(360deg)}}';
 
   function ensureStyle() {
     if (document.getElementById('adp-canvas-style')) return;
@@ -86,13 +88,13 @@ window.ADP_CANVAS = (function () {
   function debounce(fn, ms) { var t; return function () { var a = arguments, c = this; clearTimeout(t); t = setTimeout(function () { fn.apply(c, a); }, ms); }; }
 
   // salva com feedback visual
+  function doSave(block, data, statusEl, onSaved) {
+    if (window.ADP && window.ADP.devMode) { if (statusEl) statusEl.textContent = 'salvo (dev)'; if (onSaved) onSaved(block, data); return; }
+    window.ADP.saveBlock(block, data).then(function () { if (statusEl) { statusEl.textContent = 'salvo ✓'; statusEl.classList.remove('err'); } if (onSaved) onSaved(block, data); })
+      .catch(function () { if (statusEl) { statusEl.textContent = 'não salvou — edite qualquer campo pra tentar de novo'; statusEl.classList.add('err'); } });
+  }
   function makeSaver(block, statusEl, onSaved) {
-    return debounce(function (getData) {
-      var data = getData();
-      if (window.ADP && window.ADP.devMode) { if (statusEl) statusEl.textContent = 'salvo (dev)'; if (onSaved) onSaved(block, data); return; }
-      window.ADP.saveBlock(block, data).then(function () { if (statusEl) { statusEl.textContent = 'salvo ✓'; statusEl.classList.remove('err'); } if (onSaved) onSaved(block, data); })
-        .catch(function () { if (statusEl) { statusEl.textContent = 'não salvou — edite qualquer campo pra tentar de novo'; statusEl.classList.add('err'); } });
-    }, 700);
+    return debounce(function (getData) { doSave(block, getData(), statusEl, onSaved); }, 700);
   }
 
   function renderFields(container, def, data, onSaved) {
@@ -105,7 +107,10 @@ window.ADP_CANVAS = (function () {
     var st = container.querySelector('.adp-savest');
     var save = makeSaver(def.block, st, onSaved);
     function gather() { var o = {}; tas.forEach(function (t) { o[t.dataset.key] = t.value; }); return o; }
-    tas.forEach(function (t) { t.addEventListener('input', function () { if (st) st.textContent = '…'; save(gather); }); });
+    tas.forEach(function (t) {
+      t.addEventListener('input', function () { if (st) st.textContent = '…'; save(gather); });
+      t.addEventListener('blur', function () { doSave(def.block, gather(), st, onSaved); }); // flush ao sair do campo
+    });
   }
 
   function renderMatrix(container, data, onSaved) {
@@ -135,7 +140,9 @@ window.ADP_CANVAS = (function () {
         Array.prototype.forEach.call(body.querySelectorAll('tr'), function (tr) { var r = rows[+tr.dataset.i]; tr.classList.toggle('win', r.name.trim() && r === win); });
       }
     }
-    function persist() { save(function () { return { rows: rows.map(function (r) { return { name: r.name, r: +r.r, n: +r.n, c: +r.c, p: +r.p, a: +r.a, total: total(r) }; }) }; }); }
+    function matData() { return { rows: rows.map(function (r) { return { name: r.name, r: +r.r, n: +r.n, c: +r.c, p: +r.p, a: +r.a, total: total(r) }; }) }; }
+    function persist() { save(matData); }
+    body.addEventListener('focusout', function () { doSave(2, matData(), st, onSaved); }); // flush ao sair de um campo
     body.addEventListener('input', function (e) { if (e.target.classList.contains('cand')) { rows[+e.target.dataset.i].name = e.target.value; if (st) st.textContent = '…'; paint(); persist(); } });
     body.addEventListener('change', function (e) { if (e.target.classList.contains('sc')) { rows[+e.target.dataset.i][e.target.dataset.k] = +e.target.value; if (st) st.textContent = '…'; paint(); persist(); } });
     paint();
@@ -165,8 +172,8 @@ window.ADP_CANVAS = (function () {
       var idealEl = container.querySelector('textarea[data-key="ideal"]');
       var interEl = container.querySelector('textarea[data-key="intermediario"]');
       var cliente = [idealEl && idealEl.value, interEl && interEl.value].filter(Boolean).join(' | ');
-      if (!nicho) { out.style.display = 'block'; out.innerHTML = '<p class="rmsg">Escolhe teu nicho na Matriz (Bloco 2) primeiro — a Caça precisa saber de qual dono estamos falando.</p>'; return; }
-      btn.disabled = true; out.style.display = 'block'; out.innerHTML = '<p class="rmsg">Caçando as ruminações do dono…</p>';
+      if (!nicho) { out.style.display = 'block'; out.innerHTML = '<p class="rmsg">Escolhe teu nicho na <a href="canvas.html" style="color:var(--pink,#ff00d7);text-decoration:underline">Matriz (Bloco 2)</a> primeiro — a Caça precisa saber de qual dono estamos falando.</p>'; return; }
+      btn.disabled = true; out.style.display = 'block'; out.innerHTML = '<p class="rmsg"><span class="spin"></span>Caçando as ruminações do dono…</p>';
       try {
         var r = await window.ADP.ruminacao(nicho, cliente);
         renderRumResult(out, (r && r.data) ? r.data : r, container);

@@ -33,6 +33,8 @@ h1{font-weight:800;font-size:clamp(32px,3.125vw,60px);line-height:1.05}
 .field input::placeholder{color:var(--mut)}
 .btn{align-self:flex-start;margin-top:clamp(18px,2.6vh,30px);background:var(--pink);color:#fff;border:none;font-family:Vinila;font-weight:700;font-size:clamp(14px,1.05vw,16px);letter-spacing:1.6px;padding:1.1em 2em;border-radius:999px;cursor:pointer;transition:filter .2s}
 .btn:hover{filter:brightness(1.08)}
+.btn:disabled{opacity:.5;cursor:default}
+.btn:disabled:hover{filter:none}
 .note{font-weight:400;font-size:13px;line-height:1.2;color:var(--ink);margin-top:14px}
 .msg{margin-top:10px}
 .msg{font-weight:400;font-size:13px;color:var(--ink);min-height:1em}
@@ -74,7 +76,7 @@ h1{font-weight:800;font-size:clamp(32px,3.125vw,60px);line-height:1.05}
       <label class="field" id="emailField"><span class="mail-ic" id="mailIc" aria-hidden="true"></span><input id="email" type="email" placeholder="email@seuemail.com.br" autocomplete="email"></label>
       <label class="field" id="codeField" style="display:none"><input id="code" type="text" inputmode="numeric" autocomplete="one-time-code" placeholder="00000000" maxlength="8" style="letter-spacing:.3em;font-size:19px;font-weight:700"></label>
       <button class="btn" id="submitBtn" type="submit">Quero entrar</button>
-      <p class="note" id="note">Enviamos um código de 8 dígitos. Sem senha pra decorar.</p>
+      <p class="note" id="note">Vamos te mandar um código de 8 dígitos. Sem senha pra decorar.</p>
       <p class="msg" id="msg"></p>
       <div style="display:flex;gap:16px;align-items:center;margin-top:2px">
         <button type="button" id="resend" style="display:none;background:none;border:none;color:var(--pink);font-family:Vinila;font-weight:400;font-size:13px;cursor:pointer;padding:0;text-decoration:underline">Pedir outro código</button>
@@ -122,7 +124,7 @@ h1{font-weight:800;font-size:clamp(32px,3.125vw,60px);line-height:1.05}
     codeField.style.display = "none"; resend.style.display = "none"; troca.style.display = "none";
     emailField.style.display = "flex";
     btn.textContent = "Quero entrar";
-    note.textContent = "Enviamos um código de 8 dígitos. Sem senha pra decorar.";
+    note.textContent = "Vamos te mandar um código de 8 dígitos. Sem senha pra decorar.";
     m.textContent = ""; emailInput.focus();
   }
   troca.addEventListener("click", toEmailStep);
@@ -143,7 +145,7 @@ h1{font-weight:800;font-size:clamp(32px,3.125vw,60px);line-height:1.05}
     emailField.style.display = "none";
     codeField.style.display = "flex";
     resend.style.display = "inline"; troca.style.display = "inline";
-    note.textContent = "Enviei um código de 8 dígitos pro seu e-mail. Cola o MAIS RECENTE aqui.";
+    note.textContent = "Enviei um código de 8 dígitos pro seu e-mail. Cola o MAIS RECENTE aqui. Não chegou? Confere spam/promoções.";
     btn.textContent = "Entrar";
     m.textContent = "";
     codeInput.value = "";

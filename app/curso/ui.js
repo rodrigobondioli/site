@@ -132,8 +132,9 @@
         var j = await r.json().catch(()=>({}));
         if (!r.ok) throw new Error(j.error || "erro");
         msg.textContent = "Recebido. Valeu! 👊"; f.reset();
-        setTimeout(close, 1200);
-      } catch(err){ msg.textContent = "Deu ruim: " + err.message; }
+        toast("Enviado ✓", "ok");
+        setTimeout(close, 1000);
+      } catch(err){ msg.textContent = "Não consegui enviar agora. Tenta de novo."; }
       btn.disabled = false;
     });
   }

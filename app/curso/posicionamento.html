@@ -68,6 +68,8 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .btn[disabled]{opacity:.55;cursor:not-allowed}
 .genmsg{font-size:13px;color:var(--muted);margin:14px 0 0}
 .gone{display:none}
+.spin{display:inline-block;width:13px;height:13px;border:2px solid currentColor;border-right-color:transparent;border-radius:50%;animation:adpspin .7s linear infinite;vertical-align:-2px;margin-right:8px}
+@keyframes adpspin{to{transform:rotate(360deg)}}
 
 /* frase hero (cyan) */
 .frase{background:var(--cyan);border-radius:16px;padding:38px 40px;margin-bottom:26px}
@@ -286,7 +288,8 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 
   $("gerar").addEventListener("click", async ()=>{
     if(window.ADP.devMode){ say("Modo dev: publique com as chaves (Supabase + OpenAI) pra gerar de verdade."); return; }
-    const btn = $("gerar"); btn.disabled = true; say("O Estrategista está montando seu posicionamento…");
+    const btn = $("gerar"); btn.disabled = true;
+    msg.innerHTML = '<span class="spin"></span>O Estrategista está lendo teu Canvas inteiro… leva uns segundos.'; msg.classList.remove("gone");
     try{
       const canvas = await buildCanvas();
       if(!canvas || Object.keys(canvas).length===0){ say("Preenche o Canvas primeiro — sem matéria-prima não tem plano."); btn.disabled=false; return; }
