@@ -309,7 +309,8 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 
     var ci=document.getElementById('canvasInline');
     if(ci && window.ADP_CANVAS && l.canvas_block!=null){
-      window.ADP_CANVAS.renderBlock(ci, l.canvas_block, CANVAS[l.canvas_block]||{}, function(b,data){ CANVAS[b]=data; });
+      window.ADP_CANVAS.renderBlock(ci, l.canvas_block, CANVAS[l.canvas_block]||{}, function(b,data){ CANVAS[b]=data; },
+        { getNicho:function(){ return window.ADP_CANVAS.nichoFromBlock2(CANVAS[2]); } });
     }
     paintNextStep();
     renderPanel();

@@ -91,8 +91,14 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .puv .pl{font-size:12px;font-weight:700;color:var(--muted);margin-bottom:6px}
 .puv .pv{font-size:16px;font-weight:700;color:var(--ink);line-height:1.4}
 .puv .pv.long{font-weight:400;font-size:15px;color:#3f3f46}
+/* plano 30/60/90 */
+.plano .pcols{display:grid;grid-template-columns:1fr 1fr 1fr;gap:22px;margin-top:8px}
+.plano .pw{font-size:13px;font-weight:700;color:var(--ink);margin-bottom:12px;padding-bottom:8px;border-bottom:2px solid var(--lime)}
+.plano .pcol ul{list-style:none;margin:0}
+.plano .pcol li{font-size:14px;line-height:1.5;color:#3f3f46;padding-left:18px;position:relative;margin-bottom:9px}
+.plano .pcol li::before{content:"";position:absolute;left:2px;top:8px;width:6px;height:6px;border-radius:999px;background:var(--ink)}
 
-@media(max-width:900px){.side{display:none}.tabs{display:none}.top{grid-template-columns:1fr auto}.grid{grid-template-columns:1fr}}
+@media(max-width:900px){.side{display:none}.tabs{display:none}.top{grid-template-columns:1fr auto}.grid{grid-template-columns:1fr}.plano .pcols{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -198,6 +204,29 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
           <p id="f-medos">Nichar não fecha portas — escolhe a certa. Todo especialista bem pago um dia foi generalista com medo. Você não perde cliente: você para de ser esquecível.</p>
         </div>
 
+        <div class="sec wide">
+          <div class="k">Pronto pra colar</div>
+          <div class="puvbox">
+            <div class="puv"><div class="pl">BIO (Instagram / site)</div><div class="pv" id="f-bio">Gere pra preencher a partir do seu Canvas.</div></div>
+            <div class="puv"><div class="pl">TOPO DO PORTFÓLIO</div><div class="pv long" id="f-portfolio">—</div></div>
+            <div class="puv"><div class="pl">ABERTURA DE PROPOSTA</div><div class="pv long" id="f-proposta">—</div></div>
+          </div>
+        </div>
+
+        <div class="sec wide">
+          <div class="k">Onde achar seu cliente</div>
+          <ul id="f-onde"><li>Gere pra ver os 3 movimentos do seu nicho.</li></ul>
+        </div>
+
+        <div class="sec wide plano">
+          <div class="k">Seu plano de 90 dias</div>
+          <div class="pcols">
+            <div class="pcol"><div class="pw">Primeiros 30 dias</div><ul id="f-d30"><li>—</li></ul></div>
+            <div class="pcol"><div class="pw">Até 60 dias</div><ul id="f-d60"><li>—</li></ul></div>
+            <div class="pcol"><div class="pw">Até 90 dias</div><ul id="f-d90"><li>—</li></ul></div>
+          </div>
+        </div>
+
       </div>
     </div>
   </main>
@@ -228,6 +257,11 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
     if(d.puv_curta) $("f-puvc").textContent = d.puv_curta;
     if(d.puv_falada) $("f-puvf").textContent = d.puv_falada;
     if(d.derruba_medos) $("f-medos").textContent = d.derruba_medos;
+    if(d.bio) $("f-bio").textContent = d.bio;
+    if(d.topo_portfolio) $("f-portfolio").textContent = d.topo_portfolio;
+    if(d.abertura_proposta) $("f-proposta").textContent = d.abertura_proposta;
+    fillList($("f-onde"), d.onde_achar);
+    if(d.plano){ fillList($("f-d30"), d.plano.d30); fillList($("f-d60"), d.plano.d60); fillList($("f-d90"), d.plano.d90); }
   }
 
   // monta o objeto canvas a partir do que foi salvo

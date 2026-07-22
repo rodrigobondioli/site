@@ -60,7 +60,19 @@ window.ADP_CANVAS = (function () {
     + '.adp-mtab input.cand:focus{outline:none;border-color:var(--ink,#18181b);background:#fff}'
     + '.adp-mtab select.sc{border:1px solid var(--line,#d4d4d8);border-radius:7px;background:#fff;font:inherit;font-size:13px;padding:5px 6px;color:var(--ink,#18181b);cursor:pointer}'
     + '.adp-mtab select.sc:focus{outline:none;border-color:var(--ink,#18181b)}'
-    + '.adp-champ{margin-top:14px;font-size:14px}.adp-champ b{font-weight:700}';
+    + '.adp-champ{margin-top:14px;font-size:14px}.adp-champ b{font-weight:700}'
+    + '.adp-rum{margin-top:20px;padding-top:20px;border-top:1px solid var(--line,#d4d4d8)}'
+    + '.adp-rum .rh{display:flex;align-items:center;gap:8px;font-weight:700;font-size:14.5px}'
+    + '.adp-rum .rsub{font-size:13px;color:var(--muted,#71717a);margin:6px 0 14px;line-height:1.55;max-width:64ch}'
+    + '.adp-rum .rbtn{display:inline-flex;align-items:center;gap:8px;font-weight:700;font-size:13.5px;padding:10px 18px;border-radius:999px;border:1.5px solid var(--ink,#18181b);color:var(--ink,#18181b);background:none;cursor:pointer}'
+    + '.adp-rum .rbtn:hover{background:var(--ink,#18181b);color:#fff}'
+    + '.adp-rum .rbtn[disabled]{opacity:.5;cursor:not-allowed}'
+    + '.adp-rum .rout{margin-top:14px;display:none}'
+    + '.adp-rum .rlbl{font-size:12px;font-weight:700;color:var(--muted,#71717a);margin:14px 0 8px;letter-spacing:.02em}'
+    + '.adp-rum .rchip{display:block;width:100%;text-align:left;border:1px solid var(--line,#d4d4d8);border-radius:10px;padding:11px 14px;margin-bottom:8px;font-size:14px;color:#3f3f46;background:#fff;cursor:pointer;line-height:1.4}'
+    + '.adp-rum .rchip:hover{border-color:var(--ink,#18181b)}'
+    + '.adp-rum .rcentral{display:block;width:100%;text-align:left;border:1.5px solid var(--pink,#ff00d7);border-radius:10px;padding:12px 14px;font-size:15px;font-weight:700;color:var(--ink,#18181b);background:rgba(255,0,215,.04);cursor:pointer;line-height:1.4}'
+    + '.adp-rum .rmsg{font-size:13px;color:var(--muted,#71717a);margin-top:10px;line-height:1.5}';
 
   function ensureStyle() {
     if (document.getElementById('adp-canvas-style')) return;
@@ -126,15 +138,66 @@ window.ADP_CANVAS = (function () {
     paint();
   }
 
+  // nicho campeão a partir dos dados do Bloco 2 (Matriz)
+  function nichoFromBlock2(data2) {
+    if (!data2 || !data2.rows) return '';
+    var f = data2.rows.filter(function (r) { return (r.name || '').trim(); });
+    if (!f.length) return '';
+    f = f.slice().sort(function (a, b) { return (b.total || 0) - (a.total || 0); });
+    return f[0].name;
+  }
+
+  // 🧠 Caça à Ruminação — anexa ao Bloco 3. Usa o nicho (opts.getNicho) + o cliente digitado.
+  function appendRuminacao(container, opts) {
+    var wrap = document.createElement('div');
+    wrap.className = 'adp-rum';
+    wrap.innerHTML = '<div class="rh">🧠 Caça à Ruminação</div>'
+      + '<p class="rsub">Não sabe a dor do teu cliente? A IA acha as ruminações mais prováveis do dono do teu nicho — em 1ª pessoa. Clica na que mais bate pra jogar no campo da dor. (Depois confirma no campo: reviews 1★, grupos, autocomplete do Google.)</p>'
+      + '<button class="rbtn" type="button">Rodar a Caça à Ruminação</button><div class="rout"></div>';
+    container.appendChild(wrap);
+    var btn = wrap.querySelector('.rbtn');
+    var out = wrap.querySelector('.rout');
+    btn.addEventListener('click', async function () {
+      var nicho = (opts && opts.getNicho && opts.getNicho()) || '';
+      var idealEl = container.querySelector('textarea[data-key="ideal"]');
+      var interEl = container.querySelector('textarea[data-key="intermediario"]');
+      var cliente = [idealEl && idealEl.value, interEl && interEl.value].filter(Boolean).join(' | ');
+      if (!nicho) { out.style.display = 'block'; out.innerHTML = '<p class="rmsg">Escolhe teu nicho na Matriz (Bloco 2) primeiro — a Caça precisa saber de qual dono estamos falando.</p>'; return; }
+      btn.disabled = true; out.style.display = 'block'; out.innerHTML = '<p class="rmsg">Caçando as ruminações do dono…</p>';
+      try {
+        var r = await window.ADP.ruminacao(nicho, cliente);
+        renderRumResult(out, (r && r.data) ? r.data : r, container);
+      } catch (e) { out.innerHTML = '<p class="rmsg">Deu ruim: ' + esc(e.message) + '</p>'; }
+      btn.disabled = false;
+    });
+  }
+
+  function renderRumResult(out, d, container) {
+    if (!d || (!d.ruminacoes && !d.dor_central)) { out.innerHTML = '<p class="rmsg">A IA não devolveu nada útil. Tenta de novo.</p>'; return; }
+    var rums = d.ruminacoes || [];
+    var html = '';
+    if (d.dor_central) html += '<div class="rlbl">A dor central (clica pra usar)</div><button type="button" class="rcentral" data-dor="' + esc(d.dor_central) + '">' + esc(d.dor_central) + '</button>';
+    if (rums.length) html += '<div class="rlbl">Outras ruminações (clica pra usar como a tua)</div>' + rums.map(function (x) { return '<button type="button" class="rchip" data-dor="' + esc(x) + '">' + esc(x) + '</button>'; }).join('');
+    if (d.porque) html += '<p class="rmsg">' + esc(d.porque) + '</p>';
+    out.innerHTML = html;
+    Array.prototype.forEach.call(out.querySelectorAll('[data-dor]'), function (b) {
+      b.addEventListener('click', function () {
+        var dorEl = container.querySelector('textarea[data-key="dor"]');
+        if (dorEl) { dorEl.value = this.getAttribute('data-dor'); dorEl.dispatchEvent(new Event('input', { bubbles: true })); dorEl.focus(); }
+      });
+    });
+  }
+
   // renderiza o editor de UM bloco dentro de container. data = objeto salvo desse bloco (ou {}).
-  function renderBlock(container, blockNum, data, onSaved) {
+  function renderBlock(container, blockNum, data, onSaved, opts) {
     ensureStyle();
     var def = byBlock(blockNum);
     if (!def) { container.innerHTML = ''; return; }
     data = data || {};
-    if (def.type === 'matrix') renderMatrix(container, data, onSaved);
-    else renderFields(container, def, data, onSaved);
+    if (def.type === 'matrix') { renderMatrix(container, data, onSaved); return; }
+    renderFields(container, def, data, onSaved);
+    if (blockNum === 3) appendRuminacao(container, opts || {});
   }
 
-  return { BLOCKS: BLOCKS, byBlock: byBlock, isFilled: isFilled, renderBlock: renderBlock };
+  return { BLOCKS: BLOCKS, byBlock: byBlock, isFilled: isFilled, renderBlock: renderBlock, nichoFromBlock2: nichoFromBlock2 };
 })();
