@@ -266,6 +266,7 @@ function collectMats(){
 function val(id){ const e=document.getElementById(id); return e?e.value.trim():''; }
 
 async function saveAula(){
+  const wasEdit = !!editingId;
   const title=val('f_title');
   if(!title){ toast('Bota um título'); return; }
   const blockRaw=val('f_block');
@@ -293,8 +294,8 @@ async function saveAula(){
     const {lesson}=await api('/api/admin/lessons',{method:'POST',body:JSON.stringify(payload)});
     if(editingId){ const i=LESSONS.findIndex(l=>l.id===editingId); if(i>=0) LESSONS[i]=lesson; }
     else LESSONS.push(lesson);
-    closeForm(); renderLessons(); toast('Salvo ✓');
-  }catch(e){ toast('Erro: '+e.message); }
+    closeForm(); renderLessons(); toast(wasEdit?'Alterações salvas ✓':'Aula criada ✓');
+  }catch(e){ toast(e.message||'Não consegui salvar. Tenta de novo.'); }
 }
 
 async function delAula(id){

@@ -288,7 +288,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
       +'<h3>'+esc(title)+'</h3>'
       +(ex.intro?'<p class="ah-sub">'+esc(ex.intro)+'</p>':'')
       +steps+crit
-      +'<div class="ah-fields"><div id="canvasInline"></div><a class="ah-full" href="canvas.html">ver o Canvas completo →</a></div>'
+      +'<div class="ah-fields"><p style="font-size:12.5px;color:var(--muted);margin:0 0 4px">O que você escreve aqui já entra no seu Canvas — salva sozinho.</p><div id="canvasInline"></div><a class="ah-full" href="canvas.html">ver o Canvas completo →</a></div>'
       +'</div>';
   }
 
@@ -370,6 +370,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
     if(willBe){DONE.add(cur.id);} else {DONE.delete(cur.id);}
     paintNextStep();
     renderPanel();
+    if(willBe){ var nx=document.querySelector('.ns-next'); if(nx) nx.focus(); } // fecha o loop no "próxima aula →"
     try{ await window.ADP.setDone(cur.id, willBe); }
     catch(e){ if(willBe){DONE.delete(cur.id);}else{DONE.add(cur.id);} paintNextStep(); renderPanel(); }
   }

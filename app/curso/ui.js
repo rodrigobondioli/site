@@ -181,7 +181,17 @@
           var dataUrl = cv.toDataURL("image/jpeg", 0.82);
           picEl.innerHTML = avatarHTML(dataUrl);
           var sbi = sb(); if(!sbi){ toast("Modo dev — publique pra salvar a foto."); return; }
-          try { var r = await sbi.auth.updateUser({ data:{ avatar_url: dataUrl } }); if(r.error) throw r.error; setAvatars(dataUrl); toast("Foto atualizada ✓","ok"); }
+          try {
+            var u = await currentUser(); if(!u) throw new Error("sem sessão");
+            var blob = await new Promise(function(res){ cv.toBlob(res, "image/jpeg", 0.82); });
+            var path = u.id + ".jpg";
+            var up = await sbi.storage.from("avatars").upload(path, blob, { upsert:true, contentType:"image/jpeg" });
+            if(up.error) throw up.error;
+            var pub = sbi.storage.from("avatars").getPublicUrl(path);
+            var url = ((pub.data && pub.data.publicUrl) || "") + "?t=" + Date.now();
+            var r = await sbi.auth.updateUser({ data:{ avatar_url: url } }); if(r.error) throw r.error;
+            setAvatars(url); toast("Foto atualizada ✓","ok");
+          }
           catch(err){ toast("Não consegui salvar a foto. Tenta de novo.","erro"); }
         };
         img.src = ev.target.result;
