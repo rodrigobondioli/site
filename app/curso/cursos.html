@@ -53,7 +53,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 /* main */
 .main{padding:40px 40px 90px}
 .inner{max-width:1120px;margin:0 auto}
-.lede{color:var(--muted);font-size:15px;margin:-2px 0 30px}
+.lede{color:var(--muted);font-size:15px;margin:-2px 0 30px;text-wrap:pretty;max-width:78ch}
 .lede b{color:var(--ink);font-weight:700}
 
 .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:26px}
@@ -74,7 +74,8 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .cover .pc{z-index:2}
 .cover .accent{z-index:3}
 /* título da página */
-.ptitle{font-family:Vinila;font-size:clamp(30px,4.2vw,48px);font-weight:800;letter-spacing:-.02em;line-height:1.02;margin:-4px 0 14px;max-width:20ch}
+.ptitle{font-family:Vinila;font-size:clamp(28px,4vw,46px);font-weight:800;letter-spacing:-.02em;line-height:1.05;margin:-4px 0 14px;text-wrap:balance;white-space:nowrap}
+@media(max-width:640px){.ptitle{white-space:normal}}
 
 .card.lock .cover{filter:grayscale(1) brightness(.62)}
 .lockover{position:absolute;inset:0;display:grid;place-items:center;background:rgba(16,16,16,.35);z-index:2}
@@ -82,8 +83,8 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .lockover .lk svg{width:22px;height:22px;fill:none;stroke:#fff;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 
 .body{padding:20px 22px 22px;display:flex;flex-direction:column;flex:1}
-.body h3{font-size:18px;font-weight:700;letter-spacing:-.01em}
-.body .desc{color:var(--muted);font-size:13.5px;margin-top:6px;flex:1}
+.body h3{font-size:18px;font-weight:700;letter-spacing:-.01em;text-wrap:balance}
+.body .desc{color:var(--muted);font-size:13.5px;margin-top:6px;flex:1;text-wrap:pretty}
 .body .foot{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:18px}
 .meta{font-size:13px;color:var(--muted)}
 .soon{display:inline-flex;align-items:center;gap:7px;font-size:12px;font-weight:700;color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:5px 13px}
@@ -122,7 +123,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 <main class="main">
   <div class="inner">
     <h1 class="ptitle">A caça aos patos está aberta</h1>
-    <p class="lede">Se você quer mais um curso teórico de 40 horas pra deixar mofando na aba de favoritos, tá no lugar errado. O mercado já tá cheio de pato colecionador de diploma. Isso aqui é o seu arsenal tático.</p>
+    <p class="lede">Se você quer mais um curso teórico de 40 horas pra deixar mofando na aba de favoritos, tá no lugar errado.<br>O mercado já tá cheio de pato colecionador de diploma. Isso aqui é o seu arsenal tático.</p>
 
     <div class="grid">
 
@@ -213,7 +214,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="/app/config.js"></script>
-<script src="/app/curso/guard.js"></script>
+<!-- SEM guard.js: esta página é PÚBLICA (vitrine de vendas). -->
 <script src="/app/curso/ui.js"></script>
 </body>
 </html>
