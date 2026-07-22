@@ -19,16 +19,39 @@ export async function hasAccess(userId, courseId) {
   const rows = await r.json();
   return Array.isArray(rows) && rows.length > 0;
 }
-async function openai(model, messages, max_tokens = 900, temperature = 0.7) {
-  const key = process.env.OPENAI_API_KEY;
-  if (!key) throw new Error('OPENAI_API_KEY não configurada');
-  const r = await fetch('https://api.openai.com/v1/chat/completions', {
+// Chamada de IA agnóstica de provider (formato OpenAI chat/completions).
+// Default = Google Gemini (tier grátis, endpoint compatível com OpenAI).
+// Trocar de provider = mudar AI_BASE_URL + AI_API_KEY (+ modelos AI_MODEL_*).
+//   OpenAI:  AI_BASE_URL=https://api.openai.com/v1                          · modelo gpt-4o-mini
+//   Gemini:  AI_BASE_URL=https://generativelanguage.googleapis.com/v1beta/openai · modelo gemini-2.0-flash
+async function ai(model, messages, max_tokens = 900, temperature = 0.7) {
+  const key = process.env.AI_API_KEY || process.env.OPENAI_API_KEY;
+  if (!key) throw new Error('AI_API_KEY não configurada');
+  const base = process.env.AI_BASE_URL || 'https://generativelanguage.googleapis.com/v1beta/openai';
+  const r = await fetch(`${base}/chat/completions`, {
     method: 'POST',
     headers: { Authorization: `Bearer ${key}`, 'Content-Type': 'application/json' },
     body: JSON.stringify({ model, messages, max_tokens, temperature }),
   });
-  if (!r.ok) throw new Error('OpenAI: ' + (await r.text()));
+  if (!r.ok) throw new Error('IA: ' + (await r.text()));
   const j = await r.json();
   return j.choices?.[0]?.message?.content?.trim() || '';
 }
-export { openai };
+
+// tira cercas ```json ... ``` que alguns modelos colocam, e extrai o objeto
+function extractJSON(text) {
+  if (!text) return null;
+  let t = text.trim().replace(/^```(?:json)?/i, '').replace(/```$/, '').trim();
+  try { return JSON.parse(t); } catch {}
+  const m = t.match(/\{[\s\S]*\}/);
+  if (m) { try { return JSON.parse(m[0]); } catch {} }
+  return null;
+}
+
+// modelos por tarefa (env override)
+const MODEL_FAST = () => process.env.AI_MODEL_FAST || 'gemini-2.0-flash';
+const MODEL_SMART = () => process.env.AI_MODEL_SMART || 'gemini-2.0-flash';
+
+// alias retrocompatível
+const openai = ai;
+export { ai, openai, extractJSON, MODEL_FAST, MODEL_SMART };

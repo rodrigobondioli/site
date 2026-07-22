@@ -1,5 +1,5 @@
 // 🚀 O Estrategista — pega o Canvas inteiro e cospe o posicionamento pronto (8 seções).
-import { getUser, openai } from '../_auth.js';
+import { getUser, ai, extractJSON, MODEL_SMART } from '../_auth.js';
 
 const SYSTEM = `Você é "O Estrategista", a entrega final do curso De Genérico a Especialista (Rodrigo Bondioli).
 Voz Bondioli: direta, seca, anti-guru, tiozão sem frescura. Sem emoji, sem guru-talk, sem promessa que depende do mercado reagir.
@@ -27,11 +27,11 @@ export default async function handler(req, res) {
 
   const user_msg = `Canvas do aluno (JSON):\n${JSON.stringify(canvas, null, 2)}\n\nGere o posicionamento em JSON.`;
   try {
-    const out = await openai('gpt-4o', [
+    const out = await ai(MODEL_SMART(), [
       { role: 'system', content: SYSTEM },
       { role: 'user', content: user_msg },
     ], 1200, 0.7);
-    let data; try { data = JSON.parse(out); } catch { data = { raw: out }; }
+    const data = extractJSON(out) || { raw: out };
     // (próximo passo: salvar em plans via Supabase service role)
     return res.status(200).json({ ok: true, data });
   } catch (e) {
