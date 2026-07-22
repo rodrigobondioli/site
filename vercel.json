@@ -4,6 +4,7 @@
     { "source": "/antipato/assets/js/(.*)", "headers": [{ "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }] },
     { "source": "/antipato/assets/icons/(.*)", "headers": [{ "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }] },
     { "source": "/shared/fonts/(.*)", "headers": [{ "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }] },
-    { "source": "/app/(.*)", "headers": [{ "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }] }
+    { "source": "/app/(.*)\\.(webp|png|jpg|jpeg|svg|gif|ico|woff2|json)", "headers": [{ "key": "Cache-Control", "value": "public, max-age=86400" }] },
+    { "source": "/app/(.*)", "headers": [{ "key": "Cache-Control", "value": "public, max-age=0, must-revalidate" }] }
   ]
 }
