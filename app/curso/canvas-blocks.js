@@ -9,9 +9,10 @@ window.ADP_CANVAS = (function () {
 
   var BLOCKS = [
     { block: 0, title: 'Sobre você', type: 'fields', fields: [
-      { key: 'quem',        label: 'Quem é você hoje',              ph: 'Designer há quanto tempo, o que você faz, como ganha…' },
-      { key: 'melhor',      label: 'No que você é melhor',           ph: 'A coisa que você faz melhor que a média — onde o cliente vê resultado.' },
-      { key: 'comunidades', label: 'Comunidades que você já vive',   ph: 'Grupos, mercados e mundos que você já frequenta — atalho pro teu nicho.' }
+      { key: 'mundos',   label: 'Mundos que você já conhece por dentro', ph: 'Trampo antigo, negócio da família, hobby, paixão — mercados que você já vive.' },
+      { key: 'forte',    label: 'O que sai fácil e onde você já tem prova', ph: 'O projeto que sai quase no automático — e pra que tipo de cliente você já tem trabalho pra mostrar.' },
+      { key: 'turmas',   label: 'Suas turmas e comunidades',              ph: 'Academia, futebol, RPG, igreja, trampo antigo, pais de pet… onde esse tipo de dono se encontra.' },
+      { key: 'historia', label: 'Sua história',                           ph: 'De onde você veio e por que faz o que faz do jeito que faz. O que só você tem.' }
     ]},
     { block: 1, title: 'O inimigo (seus medos)', type: 'fields', fields: [
       { key: 'segura',       label: 'O que te segura no genérico',        ph: 'Qual medo te impede de nichar? Escreve cru — medo escrito perde metade da força.' },
