@@ -241,25 +241,28 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 
   async function boot(){
     if(!window.ADP || window.ADP.devMode){ document.getElementById('lessonList').innerHTML='<div class="lesson"><span class="tt" style="color:var(--muted)">Login necessário pra carregar as aulas.</span></div>'; return; }
-    try{
-      var me = await window.ADP.me();
+    // saudação em paralelo — não bloqueia o dashboard
+    window.ADP.me().then(function(me){
       var nome = me && me.user_metadata && me.user_metadata.full_name;
       if(nome){ document.getElementById('greet').textContent = 'Boas-vindas, '+String(nome).trim().split(' ')[0]+'.'; }
-    }catch(e){}
+    }).catch(function(){});
     try{
-      var lr = await window.ADP.lessons();
-      var lessons = lr.lessons||[];
-      var pr = await window.ADP.progress().catch(function(){return {done:[]};});
+      // aulas, progresso e canvas em PARALELO (antes eram 3 round-trips em série)
+      var res = await Promise.all([
+        window.ADP.lessons(),
+        window.ADP.progress().catch(function(){return {done:[]};}),
+        window.ADP.loadCanvas().catch(function(){return [];})
+      ]);
+      var lessons = res[0].lessons||[];
+      var pr = res[1];
+      var cv = res[2];
       // evolução do PROJETO = blocos do Canvas preenchidos
       var blockSet = new Set(lessons.map(function(l){return l.canvas_block;}).filter(function(b){return b!=null;}));
       var blocksTotal = blockSet.size || 5;
       var blocksFilled = 0;
-      try{
-        var cv = await window.ADP.loadCanvas();
-        var filled = new Set();
-        (cv||[]).forEach(function(r){ if(r && r.data && Object.keys(r.data).some(function(k){var v=r.data[k];return v && String(v).trim();})) filled.add(r.block); });
-        blocksFilled = Array.from(filled).filter(function(b){return blockSet.has(b);}).length;
-      }catch(e){}
+      var filled = new Set();
+      (cv||[]).forEach(function(r){ if(r && r.data && Object.keys(r.data).some(function(k){var v=r.data[k];return v && String(v).trim();})) filled.add(r.block); });
+      blocksFilled = Array.from(filled).filter(function(b){return blockSet.has(b);}).length;
       render(lessons, new Set(pr.done||[]), blocksFilled, blocksTotal);
     }catch(e){
       document.getElementById('lessonList').innerHTML='<div class="lesson"><span class="tt" style="color:var(--muted)">Não consegui carregar as aulas ('+esc(e.message)+').</span></div>';
