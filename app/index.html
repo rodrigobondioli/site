@@ -71,9 +71,10 @@ h1{font-weight:800;font-size:clamp(32px,3.125vw,60px);line-height:1.05}
     <form class="form" id="f" novalidate>
       <h1>Bem-vindo<br>(ex) pato.</h1>
       <p class="sub">Sua ferramenta de posicionamento está pronta.<br>Digite o e-mail exato da compra e comece a usar.</p>
-      <label class="field"><span class="mail-ic" id="mailIc" aria-hidden="true"></span><input id="email" type="email" placeholder="email@seuemail.com.br" autocomplete="email" required></label>
-      <button class="btn" type="submit">Quero entrar</button>
-      <p class="note">Enviamos um link mágico. Sem senha pra decorar.</p>
+      <label class="field" id="emailField"><span class="mail-ic" id="mailIc" aria-hidden="true"></span><input id="email" type="email" placeholder="email@seuemail.com.br" autocomplete="email"></label>
+      <label class="field" id="codeField" style="display:none"><input id="code" type="text" inputmode="numeric" autocomplete="one-time-code" placeholder="000000" maxlength="6" style="letter-spacing:.35em;font-size:19px;font-weight:700"></label>
+      <button class="btn" id="submitBtn" type="submit">Quero entrar</button>
+      <p class="note" id="note">Enviamos um código de 6 dígitos. Sem senha pra decorar.</p>
       <p class="msg" id="msg"></p>
     </form>
     <div class="cap"><span>Anti Designer Pato</span><span class="sep">/</span><span>Do Genérico ao Especialista</span></div>
@@ -94,15 +95,39 @@ h1{font-weight:800;font-size:clamp(32px,3.125vw,60px);line-height:1.05}
     });
     sb.auth.onAuthStateChange(function(evt, session){ if (session) location.replace(redirect); });
   }
-  document.getElementById("f").addEventListener("submit", async function(e){
+  // login por CÓDIGO de 6 dígitos (à prova de Gmail: sem link pra quebrar/pré-carregar)
+  var f = document.getElementById("f"), m = document.getElementById("msg"), note = document.getElementById("note");
+  var emailField = document.getElementById("emailField"), codeField = document.getElementById("codeField");
+  var emailInput = document.getElementById("email"), codeInput = document.getElementById("code");
+  var btn = document.getElementById("submitBtn");
+  var step = "email", theEmail = "";
+
+  f.addEventListener("submit", async function(e){
     e.preventDefault();
-    var v = document.getElementById("email").value.trim();
-    var m = document.getElementById("msg");
-    if(!v || v.indexOf("@")<0){ m.textContent="Coloca um e-mail válido."; return; }
-    if(!sb){ m.textContent="Se esse e-mail comprou, o link mágico tá indo. (login em setup)"; return; }
-    m.textContent="Enviando o link…";
-    var { error } = await sb.auth.signInWithOtp({ email: v, options: { emailRedirectTo: redirect } });
-    m.textContent = error ? ("Deu ruim: " + error.message) : "Pronto. Se esse e-mail comprou, o link mágico tá na sua caixa.";
+    if(!sb){ m.textContent="Login em setup."; return; }
+    if(step === "email"){
+      var v = emailInput.value.trim();
+      if(!v || v.indexOf("@")<0){ m.textContent="Coloca um e-mail válido."; return; }
+      btn.disabled = true; m.textContent = "Enviando o código…";
+      var r = await sb.auth.signInWithOtp({ email: v });
+      btn.disabled = false;
+      if(r.error){ m.textContent = "Deu ruim: " + r.error.message; return; }
+      theEmail = v; step = "code";
+      emailField.style.display = "none";
+      codeField.style.display = "flex";
+      note.textContent = "Enviei um código de 6 dígitos pro seu e-mail. Cola aqui.";
+      btn.textContent = "Entrar";
+      m.textContent = "";
+      codeInput.focus();
+    } else {
+      var code = codeInput.value.trim().replace(/\s/g,"");
+      if(code.length < 6){ m.textContent="O código tem 6 dígitos."; return; }
+      btn.disabled = true; m.textContent = "Conferindo…";
+      var v2 = await sb.auth.verifyOtp({ email: theEmail, token: code, type: "email" });
+      if(v2.error){ btn.disabled = false; m.textContent = "Código inválido ou expirado. Pede outro."; return; }
+      m.textContent = "Entrando…";
+      location.replace(redirect);
+    }
   });
 })();
 </script>
