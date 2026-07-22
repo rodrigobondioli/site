@@ -76,6 +76,7 @@ h1{font-weight:800;font-size:clamp(32px,3.125vw,60px);line-height:1.05}
       <button class="btn" id="submitBtn" type="submit">Quero entrar</button>
       <p class="note" id="note">Enviamos um código de 6 dígitos. Sem senha pra decorar.</p>
       <p class="msg" id="msg"></p>
+      <button type="button" id="resend" style="display:none;align-self:flex-start;background:none;border:none;color:var(--pink);font-family:Vinila;font-weight:400;font-size:13px;cursor:pointer;padding:0;margin-top:2px;text-decoration:underline">Pedir outro código</button>
     </form>
     <div class="cap"><span>Anti Designer Pato</span><span class="sep">/</span><span>Do Genérico ao Especialista</span></div>
   </div>
@@ -100,7 +101,31 @@ h1{font-weight:800;font-size:clamp(32px,3.125vw,60px);line-height:1.05}
   var emailField = document.getElementById("emailField"), codeField = document.getElementById("codeField");
   var emailInput = document.getElementById("email"), codeInput = document.getElementById("code");
   var btn = document.getElementById("submitBtn");
+  var resend = document.getElementById("resend");
   var step = "email", theEmail = "";
+
+  async function sendCode(email){
+    btn.disabled = true; resend.disabled = true; m.textContent = "Enviando o código…";
+    var r = await sb.auth.signInWithOtp({ email: email });
+    btn.disabled = false; resend.disabled = false;
+    if(r.error){ m.textContent = "Deu ruim: " + r.error.message; return false; }
+    theEmail = email; step = "code";
+    emailField.style.display = "none";
+    codeField.style.display = "flex";
+    resend.style.display = "block";
+    note.textContent = "Enviei um código de 6 dígitos pro seu e-mail. Cola o MAIS RECENTE aqui.";
+    btn.textContent = "Entrar";
+    m.textContent = "";
+    codeInput.value = "";
+    codeInput.focus();
+    return true;
+  }
+
+  resend.addEventListener("click", async function(){
+    if(!theEmail) return;
+    await sendCode(theEmail);
+    m.textContent = "Mandei um código novo. O anterior não vale mais.";
+  });
 
   f.addEventListener("submit", async function(e){
     e.preventDefault();
@@ -108,23 +133,13 @@ h1{font-weight:800;font-size:clamp(32px,3.125vw,60px);line-height:1.05}
     if(step === "email"){
       var v = emailInput.value.trim();
       if(!v || v.indexOf("@")<0){ m.textContent="Coloca um e-mail válido."; return; }
-      btn.disabled = true; m.textContent = "Enviando o código…";
-      var r = await sb.auth.signInWithOtp({ email: v });
-      btn.disabled = false;
-      if(r.error){ m.textContent = "Deu ruim: " + r.error.message; return; }
-      theEmail = v; step = "code";
-      emailField.style.display = "none";
-      codeField.style.display = "flex";
-      note.textContent = "Enviei um código de 6 dígitos pro seu e-mail. Cola aqui.";
-      btn.textContent = "Entrar";
-      m.textContent = "";
-      codeInput.focus();
+      await sendCode(v);
     } else {
       var code = codeInput.value.trim().replace(/\s/g,"");
       if(code.length < 6){ m.textContent="O código tem 6 dígitos."; return; }
       btn.disabled = true; m.textContent = "Conferindo…";
       var v2 = await sb.auth.verifyOtp({ email: theEmail, token: code, type: "email" });
-      if(v2.error){ btn.disabled = false; m.textContent = "Código inválido ou expirado. Pede outro."; return; }
+      if(v2.error){ btn.disabled = false; m.textContent = "Código inválido ou expirado. Toca em “Pedir outro código” e usa o novo."; return; }
       m.textContent = "Entrando…";
       location.replace(redirect);
     }
