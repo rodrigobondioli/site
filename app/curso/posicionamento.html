@@ -295,7 +295,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
       render(d);
       window.ADP.savePlan(d).catch(function(){});   // persiste — não some mais ao recarregar
       say("Pronto. Gerado a partir do seu Canvas.");
-    }catch(err){ say("Deu ruim: " + err.message); }
+    }catch(err){ say(err.message || "Não consegui gerar agora. Tenta de novo."); }
     btn.disabled = false;
   });
 

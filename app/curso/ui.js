@@ -43,6 +43,8 @@
   .adp-toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(20px);background:#18181b;color:#fff;
     font-family:${VIN};font-size:14px;font-weight:600;padding:12px 20px;border-radius:999px;opacity:0;pointer-events:none;transition:.25s;z-index:70}
   .adp-toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
+  .adp-toast.ok{background:#e7f99a;color:#101010}
+  .adp-toast.erro{background:#ff00d7;color:#fff}
   .adp-chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:2px}
   .adp-chip{border:1px solid #d4d4d8;border-radius:999px;padding:8px 14px;font-size:13px;font-weight:700;cursor:pointer;background:#fff;color:#18181b}
   .adp-chip.on{background:#18181b;color:#fff;border-color:#18181b}
@@ -52,10 +54,13 @@
 
   // ---------- toast ----------
   var toastEl;
-  function toast(t) {
-    if (!toastEl) { toastEl = document.createElement("div"); toastEl.className = "adp-toast"; document.body.appendChild(toastEl); }
-    toastEl.textContent = t; toastEl.classList.add("on");
-    clearTimeout(toastEl._t); toastEl._t = setTimeout(function(){ toastEl.classList.remove("on"); }, 2600);
+  function toast(t, kind) {
+    if (!toastEl) { toastEl = document.createElement("div"); toastEl.className = "adp-toast"; toastEl.setAttribute("role","status"); toastEl.setAttribute("aria-live","polite"); document.body.appendChild(toastEl); }
+    toastEl.textContent = t;
+    toastEl.classList.remove("ok","erro");
+    if (kind === "ok" || kind === "erro") toastEl.classList.add(kind);
+    toastEl.classList.add("on");
+    clearTimeout(toastEl._t); toastEl._t = setTimeout(function(){ toastEl.classList.remove("on"); }, kind === "erro" ? 4200 : 2600);
   }
 
   // ---------- drawer shell ----------
@@ -175,8 +180,8 @@
           var dataUrl = cv.toDataURL("image/jpeg", 0.82);
           picEl.innerHTML = avatarHTML(dataUrl);
           var sbi = sb(); if(!sbi){ toast("Modo dev — publique pra salvar a foto."); return; }
-          try { var r = await sbi.auth.updateUser({ data:{ avatar_url: dataUrl } }); if(r.error) throw r.error; setAvatars(dataUrl); toast("Foto atualizada ✓"); }
-          catch(err){ toast("Erro ao salvar a foto"); }
+          try { var r = await sbi.auth.updateUser({ data:{ avatar_url: dataUrl } }); if(r.error) throw r.error; setAvatars(dataUrl); toast("Foto atualizada ✓","ok"); }
+          catch(err){ toast("Não consegui salvar a foto. Tenta de novo.","erro"); }
         };
         img.src = ev.target.result;
       };

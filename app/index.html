@@ -29,7 +29,7 @@ h1{font-weight:800;font-size:clamp(32px,3.125vw,60px);line-height:1.05}
 .field svg{width:22px;height:22px;color:var(--ink);flex:none}
 .field .mail-ic{width:28px;height:28px;flex:none;display:block;margin-left:-2px}
 .field .mail-ic svg{width:100%;height:100%}
-.field input{border:none;background:none;outline:none;font-family:Vinila;font-weight:400;font-size:clamp(14px,1.05vw,16px);color:var(--ink);width:100%}
+.field input{border:none;background:none;outline:none;font-family:Vinila;font-weight:400;font-size:16px;color:var(--ink);width:100%}
 .field input::placeholder{color:var(--mut)}
 .btn{align-self:flex-start;margin-top:clamp(18px,2.6vh,30px);background:var(--pink);color:#fff;border:none;font-family:Vinila;font-weight:700;font-size:clamp(14px,1.05vw,16px);letter-spacing:1.6px;padding:1.1em 2em;border-radius:999px;cursor:pointer;transition:filter .2s}
 .btn:hover{filter:brightness(1.08)}
@@ -76,7 +76,10 @@ h1{font-weight:800;font-size:clamp(32px,3.125vw,60px);line-height:1.05}
       <button class="btn" id="submitBtn" type="submit">Quero entrar</button>
       <p class="note" id="note">Enviamos um código de 8 dígitos. Sem senha pra decorar.</p>
       <p class="msg" id="msg"></p>
-      <button type="button" id="resend" style="display:none;align-self:flex-start;background:none;border:none;color:var(--pink);font-family:Vinila;font-weight:400;font-size:13px;cursor:pointer;padding:0;margin-top:2px;text-decoration:underline">Pedir outro código</button>
+      <div style="display:flex;gap:16px;align-items:center;margin-top:2px">
+        <button type="button" id="resend" style="display:none;background:none;border:none;color:var(--pink);font-family:Vinila;font-weight:400;font-size:13px;cursor:pointer;padding:0;text-decoration:underline">Pedir outro código</button>
+        <button type="button" id="troca" style="display:none;background:none;border:none;color:var(--mut);font-family:Vinila;font-weight:400;font-size:13px;cursor:pointer;padding:0">‹ Trocar e-mail</button>
+      </div>
     </form>
     <div class="cap"><span>Anti Designer Pato</span><span class="sep">/</span><span>Do Genérico ao Especialista</span></div>
   </div>
@@ -102,7 +105,27 @@ h1{font-weight:800;font-size:clamp(32px,3.125vw,60px);line-height:1.05}
   var emailInput = document.getElementById("email"), codeInput = document.getElementById("code");
   var btn = document.getElementById("submitBtn");
   var resend = document.getElementById("resend");
-  var step = "email", theEmail = "";
+  var troca = document.getElementById("troca");
+  var step = "email", theEmail = "", cd = 0, cdTimer = null;
+
+  function startCooldown(sec){
+    cd = sec;
+    clearTimeout(cdTimer);
+    (function tick(){
+      if(cd <= 0){ resend.disabled = false; resend.textContent = "Pedir outro código"; return; }
+      resend.disabled = true; resend.textContent = "Reenviar em " + cd + "s"; cd--; cdTimer = setTimeout(tick, 1000);
+    })();
+  }
+  function toEmailStep(){
+    step = "email";
+    clearTimeout(cdTimer); resend.disabled = false; resend.textContent = "Pedir outro código";
+    codeField.style.display = "none"; resend.style.display = "none"; troca.style.display = "none";
+    emailField.style.display = "flex";
+    btn.textContent = "Quero entrar";
+    note.textContent = "Enviamos um código de 8 dígitos. Sem senha pra decorar.";
+    m.textContent = ""; emailInput.focus();
+  }
+  troca.addEventListener("click", toEmailStep);
 
   async function sendCode(email){
     btn.disabled = true; resend.disabled = true; m.textContent = "Enviando o código…";
@@ -119,12 +142,13 @@ h1{font-weight:800;font-size:clamp(32px,3.125vw,60px);line-height:1.05}
     theEmail = email; step = "code";
     emailField.style.display = "none";
     codeField.style.display = "flex";
-    resend.style.display = "block";
+    resend.style.display = "inline"; troca.style.display = "inline";
     note.textContent = "Enviei um código de 8 dígitos pro seu e-mail. Cola o MAIS RECENTE aqui.";
     btn.textContent = "Entrar";
     m.textContent = "";
     codeInput.value = "";
     codeInput.focus();
+    startCooldown(45);
     return true;
   }
 

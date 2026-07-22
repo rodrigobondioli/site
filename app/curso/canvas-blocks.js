@@ -170,7 +170,7 @@ window.ADP_CANVAS = (function () {
       try {
         var r = await window.ADP.ruminacao(nicho, cliente);
         renderRumResult(out, (r && r.data) ? r.data : r, container);
-      } catch (e) { out.innerHTML = '<p class="rmsg">Deu ruim: ' + esc(e.message) + '</p>'; }
+      } catch (e) { out.innerHTML = '<p class="rmsg">' + esc(e.message || 'Não consegui rodar agora. Tenta de novo.') + '</p>'; }
       btn.disabled = false;
     });
   }

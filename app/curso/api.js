@@ -15,9 +15,12 @@ window.ADP = (function () {
     const t = await token();
     const headers = Object.assign({ "Content-Type": "application/json" }, opts.headers || {},
       t ? { Authorization: "Bearer " + t } : {});
-    const r = await fetch(path, Object.assign({}, opts, { headers }));
+    let r;
+    try { r = await fetch(path, Object.assign({}, opts, { headers })); }
+    catch (e) { throw new Error("Sem conexão. Confere a internet e tenta de novo."); }
+    if (r.status === 401) { try { location.replace("/"); } catch (e) {} throw new Error("Sua sessão expirou. Entra de novo."); }
     let j = {}; try { j = await r.json(); } catch {}
-    if (!r.ok) throw new Error(j.error || ("HTTP " + r.status));
+    if (!r.ok) { const err = new Error(j.error || "Deu ruim aqui. Tenta de novo."); err.status = r.status; throw err; }
     return j;
   }
   const COURSE = "p1-generico-especialista";
