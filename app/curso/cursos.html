@@ -8,6 +8,7 @@
 <style>
 @font-face{font-family:Vinila;src:url(/shared/fonts/vinila-400-normal.woff2) format("woff2");font-weight:400;font-display:swap}
 @font-face{font-family:Vinila;src:url(/shared/fonts/vinila-700-normal.woff2) format("woff2");font-weight:700;font-display:swap}
+@font-face{font-family:Vinila;src:url(/shared/fonts/vinila-800-normal.woff2) format("woff2");font-weight:800;font-display:swap}
 
 :root{
   --surface:#f1f1f1;
@@ -67,6 +68,13 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .cover h2{font-size:clamp(26px,3.4vw,38px);font-weight:700;line-height:.98;letter-spacing:-.03em;text-transform:uppercase}
 .cover .accent{position:absolute;left:0;right:0;bottom:0;height:6px}
 .a-lime{background:var(--lime)} .a-cyan{background:var(--cyan)} .a-pink{background:var(--pink)} .a-ink{background:#3f3f46}
+/* vídeo de fundo (1ª aula) no lugar do título */
+.cover .cvid{position:absolute;inset:0;width:100%;height:100%;border:0}
+.cover .cvov{position:absolute;inset:0;z-index:1;background:linear-gradient(180deg,rgba(16,16,16,.5),rgba(16,16,16,0) 40%,rgba(16,16,16,0) 66%,rgba(16,16,16,.3))}
+.cover .pc{z-index:2}
+.cover .accent{z-index:3}
+/* título da página */
+.ptitle{font-family:Vinila;font-size:clamp(30px,4.2vw,48px);font-weight:800;letter-spacing:-.02em;line-height:1.02;margin:-4px 0 14px;max-width:20ch}
 
 .card.lock .cover{filter:grayscale(1) brightness(.62)}
 .lockover{position:absolute;inset:0;display:grid;place-items:center;background:rgba(16,16,16,.35);z-index:2}
@@ -113,22 +121,24 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 
 <main class="main">
   <div class="inner">
-    <p class="lede">A linha completa do <b>Anti Designer Pato</b> — do posicionamento à escala, um degrau de cada vez.</p>
+    <h1 class="ptitle">A caça aos patos está aberta</h1>
+    <p class="lede">Se você quer mais um curso teórico de 40 horas pra deixar mofando na aba de favoritos, tá no lugar errado. O mercado já tá cheio de pato colecionador de diploma. Isso aqui é o seu arsenal tático.</p>
 
     <div class="grid">
 
       <!-- P1 — ATIVO -->
       <a class="card active" href="home.html">
         <div class="cover">
+          <iframe class="cvid" src="https://iframe.mediadelivery.net/embed/710586/96fb6ead-8cbc-4fe7-8d07-b0664e828ab2?autoplay=true&loop=true&muted=true&preload=true&responsive=true" loading="lazy" allow="autoplay;encrypted-media;" tabindex="-1"></iframe>
+          <div class="cvov"></div>
           <div class="pc">
-            <div class="tagline"><span class="tp">Posicionamento</span><span class="tp">P1</span></div>
-            <h2>De Genérico<br>a Especialista</h2>
+            <div class="tagline"><span class="tp">O Ponto de Partida</span><span class="tp">P1</span></div>
           </div>
           <div class="accent a-lime"></div>
         </div>
         <div class="body">
           <h3>De Genérico a Especialista</h3>
-          <p class="desc">Escolhe o nicho e monta o posicionamento. Sai com a frase, a PUV e o plano — sem achismo.</p>
+          <p class="desc">O fim da briga por preço começa aqui. Numa única tarde, use a nossa IA pra cravar o seu nicho, mapear o seu mercado e sair com a sua frase exata de especialista. Pare de vender telas e construa o posicionamento que te faz cobrar pela sua decisão.</p>
           <div class="prog">
             <div class="bar"><i></i></div>
             <div class="pl"><span>2 de 5 aulas</span><span>40%</span></div>
@@ -145,14 +155,13 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
         <div class="cover">
           <div class="lockover"><span class="lk"><svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></span></div>
           <div class="pc">
-            <div class="tagline"><span class="tp">Conteúdo</span><span class="tp">P2</span></div>
-            <h2>Máquina de<br>Conteúdo</h2>
+            <div class="tagline"><span class="tp">A Atração</span><span class="tp">P2</span></div>
           </div>
           <div class="accent a-cyan"></div>
         </div>
         <div class="body">
-          <h3>Máquina de Conteúdo pro Nicho</h3>
-          <p class="desc">Atrai o cliente do nicho com conteúdo orgânico que trabalha por você — sem virar escravo do feed.</p>
+          <h3>Máquina de Conteúdo</h3>
+          <p class="desc">Pare de ser um anônimo altamente qualificado. O sistema pra criar um ecossistema orgânico que atrai o cliente que já quer comprar de você. Construa a sua autoridade e gere demanda diária, sem fazer dancinha e sem virar escravo do algoritmo.</p>
           <div class="foot">
             <span class="meta">Em produção</span>
             <span class="soon"><svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>Em breve</span>
@@ -165,14 +174,13 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
         <div class="cover">
           <div class="lockover"><span class="lk"><svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></span></div>
           <div class="pc">
-            <div class="tagline"><span class="tp">Aquisição</span><span class="tp">P3</span></div>
-            <h2>Tráfego<br>pro Nicho</h2>
+            <div class="tagline"><span class="tp">A Aceleração</span><span class="tp">P3</span></div>
           </div>
           <div class="accent a-pink"></div>
         </div>
         <div class="body">
-          <h3>Tráfego pro Nicho</h3>
-          <p class="desc">Quando o orgânico não dá conta: colocar dinheiro pra acelerar e trazer o cliente certo, sem queimar grana.</p>
+          <h3>Tráfego inteligente para designers</h3>
+          <p class="desc">Quando o orgânico bate no teto, é hora de comprar a atenção certa. O processo exato pra injetar dinheiro no seu nicho e escalar a sua prospecção de forma previsível. Traga o cliente de alto valor em escala, sem torrar a sua verba fazendo teste cego.</p>
           <div class="foot">
             <span class="meta">Planejado</span>
             <span class="soon"><svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>Em breve</span>
@@ -185,14 +193,13 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
         <div class="cover">
           <div class="lockover"><span class="lk"><svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></span></div>
           <div class="pc">
-            <div class="tagline"><span class="tp">Mentoria</span><span class="tp">Avançado</span></div>
-            <h2>Mentoria<br>Anti Pato</h2>
+            <div class="tagline"><span class="tp">A Escala</span><span class="tp">Mentoria</span></div>
           </div>
           <div class="accent a-ink"></div>
         </div>
         <div class="body">
           <h3>Mentoria Anti Designer Pato</h3>
-          <p class="desc">O acompanhamento de perto pra quem já posicionou e quer escalar. Poucas vagas, alta exigência.</p>
+          <p class="desc">A mesa dos especialistas. Acompanhamento tático, olho no olho e direto ao ponto. Exclusivo pra quem já dominou o posicionamento, validou o nicho e agora quer escalar o faturamento da operação de forma agressiva. Alta exigência e pouquíssimas vagas por vez.</p>
           <div class="foot">
             <span class="meta">Sob convite</span>
             <span class="soon"><svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>Em breve</span>
