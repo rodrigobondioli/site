@@ -85,7 +85,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .lbody{margin-top:38px}
 .lbody h3{font-size:19px;font-weight:700;letter-spacing:-.01em;margin:0 0 12px}
 .lbody h3+h3{margin-top:34px}
-.lbody p{font-size:15.5px;line-height:1.7;color:#3f3f46;margin:0 0 14px;max-width:70ch}
+.lbody p{font-size:15.5px;line-height:1.7;color:#3f3f46;margin:0 0 14px;max-width:820px}
 .lbody p:last-child{margin-bottom:0}
 .lbody .sec{margin-top:36px}
 
@@ -132,15 +132,13 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .applyhere{margin-top:32px;border:1px solid var(--line);border-radius:var(--r);padding:22px 24px}
 .applyhere .ah-tag{display:inline-flex;align-items:center;gap:7px;font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
 .applyhere h3{font-size:18px;font-weight:700;margin-top:7px;letter-spacing:-.01em}
-.applyhere .ah-sub{font-size:14.5px;color:#3f3f46;margin-top:8px;line-height:1.6;max-width:70ch}
+.applyhere .ah-sub{font-size:14.5px;color:#3f3f46;margin-top:8px;line-height:1.6;max-width:820px}
 .applyhere ol{margin:12px 0 0;padding-left:20px}
 .applyhere ol li{font-size:14.5px;line-height:1.6;color:#3f3f46;margin-bottom:5px}
 .applyhere .ah-crit{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
 .applyhere .ah-crit .cl{width:100%;font-size:12.5px;font-weight:700;color:var(--muted);margin-bottom:2px}
 .applyhere .ah-crit span:not(.cl){font-size:13px;font-weight:700;border:1px solid var(--line);border-radius:8px;padding:7px 14px}
 .applyhere .ah-fields{margin-top:20px;padding-top:20px;border-top:1px solid var(--line)}
-.applyhere .ah-full{display:block;text-align:right;margin-top:18px;font-size:13px;font-weight:700;color:var(--muted)}
-.applyhere .ah-full:hover{color:var(--ink)}
 
 /* ---------- painel de aulas ---------- */
 .panel{width:360px;flex:none;border-left:1px solid var(--line);display:flex;flex-direction:column;background:var(--surface)}
@@ -153,7 +151,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .mod .mtitle svg{width:15px;height:15px;fill:none;stroke:var(--muted);stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex:none;margin-top:3px}
 .li{display:flex;align-items:center;gap:12px;padding:10px 20px;font-size:14px;color:var(--muted)}
 .li:hover{background:var(--soft)}
-.li.on{background:var(--soft);color:var(--ink);font-weight:700;box-shadow:inset 3px 0 0 var(--pink)}
+.li.on{background:var(--soft);color:var(--ink);font-weight:700}
 .li .st{width:19px;height:19px;flex:none;border-radius:999px;display:grid;place-items:center}
 .li .st.done{background:var(--lime)}
 .li .st.done svg{width:10px;height:10px;fill:none;stroke:var(--ink);stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}
@@ -288,7 +286,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
       +'<h3>'+esc(title)+'</h3>'
       +(ex.intro?'<p class="ah-sub">'+esc(ex.intro)+'</p>':'')
       +steps+crit
-      +'<div class="ah-fields"><p style="font-size:12.5px;color:var(--muted);margin:0 0 4px">O que você escreve aqui já entra no seu Canvas — salva sozinho.</p><div id="canvasInline"></div><a class="ah-full" href="canvas.html">ver o Canvas completo →</a></div>'
+      +'<div class="ah-fields"><p style="font-size:12.5px;color:var(--muted);margin:0 0 4px">O que você escreve aqui já entra no seu Canvas e salva sozinho.</p><div id="canvasInline"></div></div>'
       +'</div>';
   }
 
