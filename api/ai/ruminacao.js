@@ -7,7 +7,9 @@ Tarefa: a partir do nicho e do que o aluno descreveu do cliente dele, você acha
 aquela frase que gira na cabeça do cliente toda semana, em 1ª PESSOA (como o cliente pensaria).
 Regras:
 - Dor-loop ≠ vitamina. Vitamina é "seria bom ter". Dor-loop tira o sono e faz ele procurar solução AGORA.
-- 4 a 6 ruminações curtas, em 1ª pessoa, específicas do nicho (nada genérico como "quero crescer").
+- 4 a 6 ruminações curtas, em 1ª pessoa, específicas do nicho.
+- CRITÉRIO MÁXIMO: se a ruminação serve pra qualquer negócio, tá errada. Tem que falar do dinheiro, do cliente e da rotina ESPECÍFICOS desse dono — impossível de reutilizar pra outro nicho.
+- Proibido marketingês e clichê: "crescimento", "potencial", "alta performance", "resultado extraordinário", "estratégico". O dono não fala assim.
 - Depois, aponte A DOR CENTRAL: a que mais dói e move dinheiro.
 Responda em JSON: {"ruminacoes":["...","..."],"dor_central":"...","porque":"1 frase seca explicando por que essa é a central"}`;
 

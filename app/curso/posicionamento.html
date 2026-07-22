@@ -260,7 +260,12 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
     if(d.bio) $("f-bio").textContent = d.bio;
     if(d.topo_portfolio) $("f-portfolio").textContent = d.topo_portfolio;
     if(d.abertura_proposta) $("f-proposta").textContent = d.abertura_proposta;
-    fillList($("f-onde"), d.onde_achar);
+    if(Array.isArray(d.onde_achar) && d.onde_achar.length){
+      $("f-onde").innerHTML = d.onde_achar.map(function(o){
+        if(o && typeof o === "object") return "<li><b>"+(o.local||"")+"</b>"+(o.abordagem?" — "+o.abordagem:"")+"</li>";
+        return "<li>"+String(o)+"</li>";
+      }).join("");
+    }
     if(d.plano){ fillList($("f-d30"), d.plano.d30); fillList($("f-d60"), d.plano.d60); fillList($("f-d90"), d.plano.d90); }
   }
 
