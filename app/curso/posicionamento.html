@@ -62,6 +62,11 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .btn{display:inline-flex;align-items:center;gap:8px;font-weight:700;font-size:13.5px;padding:10px 18px;border-radius:999px;border:1px solid var(--line)}
 .btn:hover{background:var(--soft)}
 .btn svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+.btn.prim{background:var(--pink);color:#fff;border-color:var(--pink)}
+.btn.prim:hover{filter:brightness(1.06);background:var(--pink)}
+.btn[disabled]{opacity:.55;cursor:not-allowed}
+.genmsg{font-size:13px;color:var(--muted);margin:14px 0 0}
+.gone{display:none}
 
 /* frase hero (cyan) */
 .frase{background:var(--cyan);border-radius:16px;padding:38px 40px;margin-bottom:26px}
@@ -132,31 +137,33 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
           <span class="gen"><svg viewBox="0 0 24 24"><path d="M12 3l2 5 5 2-5 2-2 5-2-5-5-2 5-2z"/></svg>Gerado pelo Estrategista a partir do seu Canvas</span>
         </div>
         <div class="actions">
-          <button class="btn"><svg viewBox="0 0 24 24"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>Copiar</button>
+          <button class="btn prim" id="gerar"><svg viewBox="0 0 24 24"><path d="M12 3l2 5 5 2-5 2-2 5-2-5-5-2 5-2z"/></svg>Gerar com o Estrategista</button>
+          <button class="btn" id="copiar"><svg viewBox="0 0 24 24"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>Copiar</button>
           <button class="btn"><svg viewBox="0 0 24 24"><path d="M12 3v12M7 11l5 5 5-5M5 21h14"/></svg>Baixar PDF</button>
         </div>
       </div>
+      <p class="genmsg gone" id="genmsg"></p>
 
       <div class="frase">
         <div class="fk">A sua frase de especialista</div>
-        <p>Eu resolvo <span class="hl">a agenda furada nos dias fracos</span> para <span class="hl">barbearias premium que vendem assinatura</span> através de <span class="hl">landing pages que enchem os horários vazios</span>.</p>
+        <p id="f-frase">Eu resolvo <span class="hl">a agenda furada nos dias fracos</span> para <span class="hl">barbearias premium que vendem assinatura</span> através de <span class="hl">landing pages que enchem os horários vazios</span>.</p>
       </div>
 
       <div class="grid">
 
         <div class="sec">
           <div class="k">Seu nicho</div>
-          <p><b>Barbearias premium que vendem assinatura.</b> Ticket alto, recorrência no modelo, dono que já entende que design é investimento — não custo.</p>
+          <p id="f-nicho"><b>Barbearias premium que vendem assinatura.</b> Ticket alto, recorrência no modelo, dono que já entende que design é investimento — não custo.</p>
         </div>
 
         <div class="sec">
           <div class="k">Seu monopólio</div>
-          <p>Você não é "designer de tudo". Você é quem junta <b>landing de alta conversão</b> com quem <b>entende o modelo de assinatura de barbearia</b>. Essa dobra é rara — e é sua.</p>
+          <p id="f-monopolio">Você não é "designer de tudo". Você é quem junta <b>landing de alta conversão</b> com quem <b>entende o modelo de assinatura de barbearia</b>. Essa dobra é rara — e é sua.</p>
         </div>
 
         <div class="sec">
           <div class="k">Quem você atende</div>
-          <ul>
+          <ul id="f-atende">
             <li>Dono de barbearia premium que já fatura e tem cadeira boa.</li>
             <li>Vende (ou quer vender) assinatura mensal.</li>
             <li>Sofre com buraco na agenda em dia de semana.</li>
@@ -165,7 +172,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 
         <div class="sec">
           <div class="k">Quem você NÃO atende</div>
-          <ul>
+          <ul id="f-naoatende">
             <li class="no">Barbeiro solo começando, sem caixa.</li>
             <li class="no">Quem só quer o mais barato.</li>
             <li class="no">Quem não tem processo de assinatura.</li>
@@ -174,16 +181,20 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 
         <div class="sec wide">
           <div class="k">A dor central (a ruminação do cliente)</div>
-          <p class="dor">"Por que minha barbearia lota no sábado e fica vazia na terça?"</p>
-          <p style="margin-top:10px">É a dor que gira na cabeça dele toda semana. Seu posicionamento fala direto com ela — não com "faço design de qualidade".</p>
+          <p class="dor" id="f-dor">"Por que minha barbearia lota no sábado e fica vazia na terça?"</p>
         </div>
 
         <div class="sec wide">
           <div class="k">Sua PUV</div>
           <div class="puvbox">
-            <div class="puv"><div class="pl">CURTA (bio, cartão)</div><div class="pv">Encho os horários vazios da sua barbearia premium.</div></div>
-            <div class="puv"><div class="pl">FALADA (quando perguntarem o que você faz)</div><div class="pv long">"Sabe aquele buraco na agenda da barbearia no meio da semana? Eu faço landing page que transforma quem só segue no Instagram em assinante que aparece na terça-feira."</div></div>
+            <div class="puv"><div class="pl">CURTA (bio, cartão)</div><div class="pv" id="f-puvc">Encho os horários vazios da sua barbearia premium.</div></div>
+            <div class="puv"><div class="pl">FALADA (quando perguntarem o que você faz)</div><div class="pv long" id="f-puvf">"Sabe aquele buraco na agenda da barbearia no meio da semana? Eu faço landing page que transforma quem só segue no Instagram em assinante que aparece na terça-feira."</div></div>
           </div>
+        </div>
+
+        <div class="sec wide">
+          <div class="k">O Estrategista derruba seu medo</div>
+          <p id="f-medos">Nichar não fecha portas — escolhe a certa. Todo especialista bem pago um dia foi generalista com medo. Você não perde cliente: você para de ser esquecível.</p>
         </div>
 
       </div>
@@ -194,5 +205,67 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="/app/config.js"></script>
 <script src="/app/curso/guard.js"></script>
+<script src="/app/curso/api.js"></script>
+<script>
+(function(){
+  const $ = id => document.getElementById(id);
+  const msg = $("genmsg");
+  function say(t){ msg.textContent = t; msg.classList.toggle("gone", !t); }
+  function fillList(el, arr){
+    if(!el || !Array.isArray(arr)) return;
+    const isNo = el.id === "f-naoatende";
+    el.innerHTML = arr.map(x=>`<li class="${isNo?'no':''}">${String(x)}</li>`).join("");
+  }
+  function render(d){
+    if(!d) return;
+    if(d.frase) $("f-frase").textContent = d.frase;
+    if(d.nicho) $("f-nicho").textContent = d.nicho;
+    if(d.monopolio) $("f-monopolio").textContent = d.monopolio;
+    fillList($("f-atende"), d.quem_atende);
+    fillList($("f-naoatende"), d.quem_nao_atende);
+    if(d.dor_central) $("f-dor").textContent = /["'“]/.test(d.dor_central) ? d.dor_central : `"${d.dor_central}"`;
+    if(d.puv_curta) $("f-puvc").textContent = d.puv_curta;
+    if(d.puv_falada) $("f-puvf").textContent = d.puv_falada;
+    if(d.derruba_medos) $("f-medos").textContent = d.derruba_medos;
+  }
+
+  // monta o objeto canvas a partir do que foi salvo
+  async function buildCanvas(){
+    if(window.ADP.devMode) return null;
+    const rows = await window.ADP.loadCanvas(); // [{block,data}]
+    const canvas = {};
+    (rows||[]).forEach(r=>{ canvas["bloco_"+r.block] = r.data; });
+    // nicho campeão da Matriz (bloco 2)
+    const m = (rows||[]).find(r=>r.block===2);
+    if(m?.data?.rows){
+      const win = m.data.rows.filter(x=>x.name && x.name.trim()).sort((a,b)=>(b.total||0)-(a.total||0))[0];
+      if(win) canvas.nicho_escolhido = win.name;
+    }
+    return canvas;
+  }
+
+  $("gerar").addEventListener("click", async ()=>{
+    if(window.ADP.devMode){ say("Modo dev: publique com as chaves (Supabase + OpenAI) pra gerar de verdade."); return; }
+    const btn = $("gerar"); btn.disabled = true; say("O Estrategista está montando seu posicionamento…");
+    try{
+      const canvas = await buildCanvas();
+      if(!canvas || Object.keys(canvas).length===0){ say("Preenche o Canvas primeiro — sem matéria-prima não tem plano."); btn.disabled=false; return; }
+      const out = await window.ADP.estrategista(canvas);
+      render(out.data || out);
+      say("Pronto. Gerado a partir do seu Canvas.");
+    }catch(err){ say("Deu ruim: " + err.message); }
+    btn.disabled = false;
+  });
+
+  // copiar
+  $("copiar").addEventListener("click", ()=>{
+    const parts = ["f-frase","f-nicho","f-monopolio","f-dor","f-puvc","f-puvf","f-medos"].map(id=>$(id)?.textContent?.trim()).filter(Boolean);
+    const atende = [...($("f-atende")?.querySelectorAll("li")||[])].map(li=>"- "+li.textContent).join("\n");
+    const nao = [...($("f-naoatende")?.querySelectorAll("li")||[])].map(li=>"- "+li.textContent).join("\n");
+    const txt = `MEU POSICIONAMENTO\n\n${parts[0]}\n\nNICHO: ${parts[1]}\nMONOPÓLIO: ${parts[2]}\n\nATENDE:\n${atende}\n\nNÃO ATENDE:\n${nao}\n\nDOR: ${parts[3]}\n\nPUV CURTA: ${parts[4]}\nPUV FALADA: ${parts[5]}`;
+    navigator.clipboard?.writeText(txt).then(()=>say("Copiado."), ()=>say("Não consegui copiar."));
+  });
+})();
+</script>
 </body>
 </html>

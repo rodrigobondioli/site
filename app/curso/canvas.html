@@ -104,6 +104,22 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .champ{margin-top:14px;font-size:14px}
 .champ b{font-weight:700}
 
+/* campos editáveis */
+.fld{margin-top:14px}
+.fld:first-child{margin-top:16px;padding-top:16px;border-top:1px solid var(--line)}
+.fld label{display:block;font-size:12.5px;font-weight:700;color:var(--muted);margin-bottom:7px}
+.fld textarea{width:100%;border:1px solid var(--line);border-radius:10px;background:#fff;padding:11px 13px;font:inherit;font-size:14.5px;color:var(--ink);resize:vertical;min-height:64px;line-height:1.55}
+.fld textarea:focus{outline:none;border-color:var(--ink)}
+.savest{font-size:12px;color:var(--faint);margin-left:auto}
+.savest.on{color:var(--muted)}
+.block .bh .savest{flex:none}
+/* matriz editável */
+.mtab td.name-cell{padding:6px 4px}
+.mtab input.cand{width:100%;border:1px solid transparent;border-radius:7px;background:transparent;font:inherit;font-weight:700;font-size:13.5px;color:var(--ink);padding:6px 8px}
+.mtab input.cand:hover{border-color:var(--line)}
+.mtab input.cand:focus{outline:none;border-color:var(--ink);background:#fff}
+.mtab select.sc{border:1px solid var(--line);border-radius:7px;background:#fff;font:inherit;font-size:13px;padding:5px 6px;color:var(--ink);cursor:pointer}
+.mtab select.sc:focus{outline:none;border-color:var(--ink)}
 @media(max-width:900px){.side{display:none}.tabs{display:none}.top{grid-template-columns:1fr auto}.gauge{width:100%}}
 </style>
 </head>
@@ -165,12 +181,16 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
         <div class="block done">
           <div class="bh">
             <span class="bn">0</span>
-            <div class="bt"><h3>Sobre você</h3><span class="tag">Preenchido · Aula 0</span></div>
-            <a class="edit" href="#"><svg viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg>Editar</a>
+            <div class="bt"><h3>Sobre você</h3><span class="tag">Aula 0</span></div>
+            <span class="savest" data-savest="0"></span>
           </div>
-          <div class="preview">
-            <div class="pair"><div class="q">Quem é você hoje</div>Designer há 6 anos. Faço um pouco de tudo — landing, social, identidade. Ganho ok, mas travado.</div>
-            <div class="pair"><div class="q">No que você é melhor</div>Landing page que converte. É onde eu brilho e onde o cliente vê resultado rápido.</div>
+          <div class="fld">
+            <label>Quem é você hoje</label>
+            <textarea data-block="0" data-key="quem" placeholder="Designer há quanto tempo, o que você faz, como ganha…"></textarea>
+          </div>
+          <div class="fld">
+            <label>No que você é melhor</label>
+            <textarea data-block="0" data-key="melhor" placeholder="A coisa que você faz melhor que a média — onde o cliente vê resultado."></textarea>
           </div>
         </div>
 
@@ -178,11 +198,12 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
         <div class="block done">
           <div class="bh">
             <span class="bn">1</span>
-            <div class="bt"><h3>O inimigo (seus medos)</h3><span class="tag">Preenchido · Aula 1</span></div>
-            <a class="edit" href="#"><svg viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg>Editar</a>
+            <div class="bt"><h3>O inimigo (seus medos)</h3><span class="tag">Aula 1</span></div>
+            <span class="savest" data-savest="1"></span>
           </div>
-          <div class="preview">
-            <div class="pair"><div class="q">O que te segura no genérico</div>Medo de nichar e perder cliente. Acho que se eu escolher um, fecho as portas dos outros.</div>
+          <div class="fld">
+            <label>O que te segura no genérico</label>
+            <textarea data-block="1" data-key="segura" placeholder="Qual medo te impede de nichar? Escreve cru."></textarea>
           </div>
         </div>
 
@@ -191,20 +212,16 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
           <div class="bh">
             <span class="bn">2</span>
             <div class="bt"><h3>A Matriz do Nicho</h3><span class="tag">Agora · Aula 2</span></div>
-            <a class="edit" href="aula.html"><svg viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg>Editar</a>
+            <span class="savest" data-savest="2"></span>
           </div>
           <div class="matrix">
-            <table class="mtab">
+            <table class="mtab" id="matriz">
               <thead>
                 <tr><th>Candidato a nicho</th><th>Repert.</th><th>Necess.</th><th>Cresc.</th><th>Poder</th><th>Acesso</th><th>Total</th></tr>
               </thead>
-              <tbody>
-                <tr class="win"><td>Barbearia premium (assinatura)</td><td>5</td><td>4</td><td>4</td><td>4</td><td>5</td><td class="tot">22</td></tr>
-                <tr><td>Clínica de estética</td><td>3</td><td>4</td><td>4</td><td>5</td><td>3</td><td class="tot">19</td></tr>
-                <tr><td>Café de especialidade</td><td>3</td><td>3</td><td>3</td><td>2</td><td>4</td><td class="tot">15</td></tr>
-              </tbody>
+              <tbody id="matriz-body"><!-- linhas geradas por JS --></tbody>
             </table>
-            <p class="champ">Seu nicho, pelos números: <b>Barbearia premium que vende assinatura</b> — ganhou no repertório e no acesso.</p>
+            <p class="champ" id="champ">Preenche os candidatos e pontua de 1 a 5 — o de maior soma ganha, sem achismo.</p>
           </div>
         </div>
 
@@ -234,5 +251,87 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="/app/config.js"></script>
 <script src="/app/curso/guard.js"></script>
+<script src="/app/curso/api.js"></script>
+<script>
+(function(){
+  const CRIT = ["r","n","c","p","a"]; // repertório, necessidade, crescimento, poder, acesso
+  const body = document.getElementById("matriz-body");
+  let rows = [{name:"",r:0,n:0,c:0,p:0,a:0},{name:"",r:0,n:0,c:0,p:0,a:0},{name:"",r:0,n:0,c:0,p:0,a:0}];
+
+  function opts(sel){ let s=""; for(let i=0;i<=5;i++){ s+=`<option ${i===sel?"selected":""}>${i}</option>`; } return s; }
+  function total(row){ return CRIT.reduce((a,k)=>a+(+row[k]||0),0); }
+  function renderMatriz(){
+    body.innerHTML = rows.map((row,idx)=>{
+      const t = total(row);
+      return `<tr data-i="${idx}">
+        <td class="name-cell"><input class="cand" data-i="${idx}" value="${(row.name||"").replace(/"/g,'&quot;')}" placeholder="Candidato ${idx+1}…"></td>
+        ${CRIT.map(k=>`<td><select class="sc" data-i="${idx}" data-k="${k}">${opts(+row[k]||0)}</select></td>`).join("")}
+        <td class="tot">${t}</td></tr>`;
+    }).join("");
+    // campeão
+    const filled = rows.filter(r=>r.name.trim());
+    const champEl = document.getElementById("champ");
+    if(!filled.length){ champEl.innerHTML = "Preenche os candidatos e pontua de 1 a 5 — o de maior soma ganha, sem achismo."; }
+    else{
+      const win = filled.slice().sort((a,b)=>total(b)-total(a))[0];
+      champEl.innerHTML = `Seu nicho, pelos números: <b>${win.name}</b> — ${total(win)} pontos.`;
+      // marca a linha vencedora
+      [...body.querySelectorAll("tr")].forEach(tr=>{
+        const r = rows[+tr.dataset.i];
+        tr.classList.toggle("win", r.name.trim() && r===win);
+      });
+    }
+  }
+  body.addEventListener("input", e=>{
+    if(e.target.classList.contains("cand")){ rows[+e.target.dataset.i].name = e.target.value; renderMatriz(); saveMatriz(); }
+  });
+  body.addEventListener("change", e=>{
+    if(e.target.classList.contains("sc")){ rows[+e.target.dataset.i][e.target.dataset.k] = +e.target.value; renderMatriz(); saveMatriz(); }
+  });
+
+  // salvamento
+  function setSt(block, txt, on){ const el=document.querySelector(`[data-savest="${block}"]`); if(el){ el.textContent=txt; el.classList.toggle("on", !!on); } }
+  const timers = {};
+  function debounceSave(block, getData){
+    setSt(block, "…", true);
+    clearTimeout(timers[block]);
+    timers[block] = setTimeout(async()=>{
+      if(window.ADP.devMode){ setSt(block, "salvo (dev)", false); return; }
+      try{ await window.ADP.saveBlock(block, getData()); setSt(block, "salvo ✓", false); }
+      catch(err){ setSt(block, "erro ao salvar", false); console.error(err); }
+    }, 700);
+  }
+  function saveMatriz(){ debounceSave(2, ()=>({ rows: rows.map(r=>({name:r.name, r:+r.r,n:+r.n,c:+r.c,p:+r.p,a:+r.a, total: total(r)})) })); }
+
+  // textareas dos blocos 0 e 1
+  const texts = [...document.querySelectorAll("textarea[data-block]")];
+  const blockData = {}; // acumula por bloco
+  function gatherText(block){
+    const o = {};
+    texts.filter(t=>t.dataset.block===String(block)).forEach(t=>{ o[t.dataset.key]=t.value; });
+    return o;
+  }
+  texts.forEach(t=>{
+    t.addEventListener("input", ()=> debounceSave(+t.dataset.block, ()=>gatherText(+t.dataset.block)));
+  });
+
+  // carregar o que já existe
+  async function load(){
+    renderMatriz();
+    if(window.ADP.devMode) return;
+    try{
+      const data = await window.ADP.loadCanvas(); // [{block, data}]
+      (data||[]).forEach(row=>{
+        if(row.block===2 && row.data?.rows){ rows = row.data.rows.map(r=>({name:r.name||"",r:+r.r||0,n:+r.n||0,c:+r.c||0,p:+r.p||0,a:+r.a||0})); }
+        else if(row.data){
+          texts.filter(t=>t.dataset.block===String(row.block)).forEach(t=>{ if(row.data[t.dataset.key]!=null) t.value=row.data[t.dataset.key]; });
+        }
+      });
+      renderMatriz();
+    }catch(err){ console.warn("load canvas:", err.message); }
+  }
+  load();
+})();
+</script>
 </body>
 </html>
