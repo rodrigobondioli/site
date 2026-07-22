@@ -56,10 +56,16 @@ async function ai(model, messages, max_tokens = 900, temperature = 0.7) {
   const key = process.env.AI_API_KEY || process.env.OPENAI_API_KEY;
   if (!key) throw new Error('AI_API_KEY não configurada');
   const base = process.env.AI_BASE_URL || 'https://generativelanguage.googleapis.com/v1beta/openai';
+  const payload = { model, messages, max_tokens, temperature };
+  // Gemini 2.5 liga o "thinking" por padrão, e ele consome o max_tokens ANTES de escrever a resposta
+  // (JSON vinha truncado/vazio). reasoning_effort='none' desliga. Sobrescreve com AI_REASONING (low|medium|high),
+  // ou AI_REASONING='off' pra não mandar o campo (ex: se trocar pra um provider que não aceita).
+  const reasoning = process.env.AI_REASONING || 'none';
+  if (reasoning !== 'off') payload.reasoning_effort = reasoning;
   const r = await fetch(`${base}/chat/completions`, {
     method: 'POST',
     headers: { Authorization: `Bearer ${key}`, 'Content-Type': 'application/json' },
-    body: JSON.stringify({ model, messages, max_tokens, temperature }),
+    body: JSON.stringify(payload),
   });
   if (!r.ok) throw new Error('IA: ' + (await r.text()));
   const j = await r.json();
