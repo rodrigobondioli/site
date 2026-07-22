@@ -10,6 +10,12 @@ export async function getUser(req) {
     return await r.json(); // { id, email, ... }
   } catch { return null; }
 }
+// É admin? Compara o e-mail do usuário logado com a lista ADMIN_EMAILS (separada por vírgula).
+export function isAdmin(user) {
+  const list = (process.env.ADMIN_EMAILS || '').toLowerCase().split(',').map(s => s.trim()).filter(Boolean);
+  const email = (user?.email || '').toLowerCase();
+  return !!email && list.includes(email);
+}
 export async function hasAccess(userId, courseId) {
   const url = process.env.SUPABASE_URL, svc = process.env.SUPABASE_SERVICE_ROLE;
   if (!url || !svc) return false;

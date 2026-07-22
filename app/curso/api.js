@@ -23,10 +23,19 @@ window.ADP = (function () {
   const COURSE = "p1-generico-especialista";
   return {
     devMode,
+    api,
+    COURSE,
     loadCanvas: (course = COURSE) => api("/api/canvas?course=" + encodeURIComponent(course)),
     saveBlock: (block, data, course = COURSE) =>
       api("/api/canvas", { method: "POST", body: JSON.stringify({ course, block, data }) }),
     estrategista: (canvas) => api("/api/ai/estrategista", { method: "POST", body: JSON.stringify({ canvas }) }),
     ruminacao: (nicho, cliente) => api("/api/ai/ruminacao", { method: "POST", body: JSON.stringify({ nicho, cliente }) }),
+    // aulas + progresso
+    lessons: (course = COURSE) => api("/api/lessons?course=" + encodeURIComponent(course)),
+    progress: (course = COURSE) => api("/api/progress?course=" + encodeURIComponent(course)),
+    setDone: (lesson_id, done = true, course = COURSE) =>
+      api("/api/progress", { method: "POST", body: JSON.stringify({ course, lesson_id, done }) }),
+    // perfil (do próprio Supabase auth)
+    me: async () => { const s = sb(); if (!s) return null; const { data } = await s.auth.getUser(); return data?.user || null; },
   };
 })();

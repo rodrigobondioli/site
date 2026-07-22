@@ -1,0 +1,327 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Admin — anti designer pato</title>
+<link rel="icon" type="image/png" href="/shared/favicon.png">
+<style>
+@font-face{font-family:Vinila;src:url(/shared/fonts/vinila-400-normal.woff2) format("woff2");font-weight:400;font-display:swap}
+@font-face{font-family:Vinila;src:url(/shared/fonts/vinila-700-normal.woff2) format("woff2");font-weight:700;font-display:swap}
+@font-face{font-family:Vinila;src:url(/shared/fonts/vinila-800-normal.woff2) format("woff2");font-weight:800;font-display:swap}
+:root{--surface:#f1f1f1;--soft:#e6e6e8;--line:#d4d4d8;--ink:#18181b;--muted:#71717a;--faint:#a1a1aa;--lime:#e7f99a;--pink:#ff00d7;--r:12px}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:Vinila,system-ui,sans-serif;background:var(--surface);color:var(--ink);font-size:14.5px;line-height:1.5;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+input,textarea,select{font:inherit;color:var(--ink)}
+.top{height:60px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 26px;position:sticky;top:0;background:var(--surface);z-index:20}
+.brand{display:flex;align-items:center;gap:12px;font-weight:800;font-size:17px}
+.brand .dot{width:26px;height:26px;border-radius:999px;background:var(--pink)}
+.top .who{font-size:13px;color:var(--muted)}
+.top .who b{color:var(--ink);font-weight:700}
+.wrap{max-width:1000px;margin:0 auto;padding:30px 26px 80px}
+.tabs{display:flex;gap:8px;margin-bottom:26px}
+.tabs button{padding:9px 18px;border-radius:999px;border:1px solid var(--line);font-weight:700;font-size:14px}
+.tabs button.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+h1{font-size:26px;font-weight:800;letter-spacing:-.02em}
+.head{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
+.btn{display:inline-flex;align-items:center;gap:8px;font-weight:700;font-size:14px;padding:11px 20px;border-radius:999px;background:var(--pink);color:#fff}
+.btn.ghost{background:none;border:1px solid var(--line);color:var(--ink)}
+.btn.small{padding:7px 14px;font-size:13px}
+.btn:hover{filter:brightness(1.05)}
+.muted{color:var(--muted)}
+/* lista de aulas */
+.lrow{display:flex;align-items:center;gap:14px;padding:15px 18px;border:1px solid var(--line);border-radius:10px;margin-bottom:10px;background:var(--surface)}
+.lrow .pos{width:26px;height:26px;border-radius:8px;background:var(--soft);display:grid;place-items:center;font-weight:700;font-size:13px;flex:none}
+.lrow .grow{flex:1;min-width:0}
+.lrow .t{font-weight:700;font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lrow .m{font-size:12.5px;color:var(--muted);margin-top:2px}
+.badge{font-size:11px;font-weight:700;padding:3px 9px;border-radius:999px;letter-spacing:.03em}
+.badge.pub{background:var(--lime);color:var(--ink)}
+.badge.draft{background:var(--soft);color:var(--muted)}
+.lrow .acts{display:flex;align-items:center;gap:4px;flex:none}
+.iconb{width:32px;height:32px;border-radius:8px;display:grid;place-items:center;color:var(--muted)}
+.iconb:hover{background:var(--soft);color:var(--ink)}
+.iconb svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.iconb.del:hover{color:#dc2626}
+/* form */
+.panel{border:1px solid var(--line);border-radius:var(--r);padding:24px;background:var(--surface);margin-bottom:20px}
+.field{margin-bottom:16px}
+.field label{display:block;font-weight:700;font-size:13px;margin-bottom:6px}
+.field .hint{font-weight:400;color:var(--faint);font-size:12px}
+.field input[type=text],.field textarea,.field select{width:100%;border:1px solid var(--line);border-radius:9px;padding:11px 13px;background:#fff;outline:none}
+.field input:focus,.field textarea:focus,.field select:focus{border-color:var(--ink)}
+.field textarea{resize:vertical;min-height:70px;line-height:1.5}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.check{display:flex;align-items:center;gap:10px;font-weight:700;font-size:14px}
+.check input{width:18px;height:18px;accent-color:var(--pink)}
+.matrow{display:grid;grid-template-columns:1fr 1fr 1.4fr auto;gap:8px;margin-bottom:8px;align-items:center}
+.matrow input{width:100%;border:1px solid var(--line);border-radius:8px;padding:8px 10px;background:#fff;font-size:13px}
+.formacts{display:flex;gap:10px;margin-top:20px;padding-top:18px;border-top:1px solid var(--line)}
+.sec-title{font-weight:800;font-size:13px;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);margin:22px 0 12px}
+/* alunos */
+.srow{display:flex;align-items:center;gap:14px;padding:13px 18px;border:1px solid var(--line);border-radius:10px;margin-bottom:8px}
+.srow .grow{flex:1;min-width:0}
+.srow .e{font-weight:700;font-size:14px}
+.grantbar{display:flex;gap:10px;margin-bottom:20px}
+.grantbar input{flex:1;border:1px solid var(--line);border-radius:9px;padding:11px 14px;background:#fff;outline:none}
+/* estados */
+.center{max-width:520px;margin:16vh auto 0;text-align:center;padding:0 24px}
+.center h2{font-size:24px;font-weight:800;margin-bottom:10px}
+.hidden{display:none!important}
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;padding:12px 22px;border-radius:999px;font-weight:700;font-size:14px;opacity:0;transition:opacity .2s,transform .2s;pointer-events:none;z-index:50}
+.toast.on{opacity:1;transform:translateX(-50%) translateY(-4px)}
+.empty{text-align:center;color:var(--muted);padding:40px 0}
+</style>
+</head>
+<body>
+
+<div id="app" class="hidden">
+  <header class="top">
+    <div class="brand"><span class="dot"></span> Admin · anti designer pato</div>
+    <div class="who">logado como <b id="whoEmail">—</b> · <a href="/curso/home.html" style="color:var(--pink);font-weight:700">ver o app →</a></div>
+  </header>
+  <div class="wrap">
+    <div class="tabs">
+      <button id="tabAulas" class="on" onclick="showTab('aulas')">Aulas</button>
+      <button id="tabAlunos" onclick="showTab('alunos')">Alunos</button>
+    </div>
+
+    <!-- AULAS -->
+    <section id="secAulas">
+      <div class="head">
+        <h1>Aulas</h1>
+        <button class="btn" onclick="novaAula()">+ Nova aula</button>
+      </div>
+      <div id="formWrap"></div>
+      <div id="lessonList"></div>
+    </section>
+
+    <!-- ALUNOS -->
+    <section id="secAlunos" class="hidden">
+      <div class="head"><h1>Alunos</h1></div>
+      <div class="grantbar">
+        <input id="grantEmail" type="email" placeholder="email@doaluno.com — liberar acesso na mão">
+        <button class="btn" onclick="grant()">Liberar acesso</button>
+      </div>
+      <div id="studentList"></div>
+    </section>
+  </div>
+</div>
+
+<div id="gate" class="center">
+  <h2>Carregando…</h2>
+  <p class="muted">Checando permissão.</p>
+</div>
+
+<div id="toast" class="toast"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="/app/config.js"></script>
+<script>
+const C = window.ADP_CONFIG || {};
+const COURSE = "p1-generico-especialista";
+const sb = (C.SUPABASE_URL && window.supabase) ? window.supabase.createClient(C.SUPABASE_URL, C.SUPABASE_ANON_KEY) : null;
+let LESSONS = [];
+let editingId = null;
+
+function toast(msg){ const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('on'); setTimeout(()=>t.classList.remove('on'),2200); }
+async function token(){ if(!sb) return null; const {data}=await sb.auth.getSession(); return data?.session?.access_token||null; }
+async function api(path, opts={}){
+  const t=await token();
+  const headers=Object.assign({'Content-Type':'application/json'},opts.headers||{}, t?{Authorization:'Bearer '+t}:{});
+  const r=await fetch(path, Object.assign({},opts,{headers}));
+  let j={}; try{ j=await r.json(); }catch{}
+  if(!r.ok) throw new Error(j.error||('HTTP '+r.status));
+  return j;
+}
+function esc(s){ return String(s==null?'':s).replace(/[<>&"]/g,c=>({'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;'}[c])); }
+
+// ---------- boot ----------
+(async function(){
+  if(!sb){ gateMsg('Supabase não configurado.','Config faltando.'); return; }
+  const {data:{session}}=await sb.auth.getSession();
+  if(!session){ location.replace('/'); return; }
+  try{
+    const {lessons}=await api('/api/admin/lessons?course='+COURSE); // 403 se não for admin
+    LESSONS=lessons||[];
+    document.getElementById('whoEmail').textContent = session.user?.email || '—';
+    document.getElementById('gate').classList.add('hidden');
+    document.getElementById('app').classList.remove('hidden');
+    renderLessons();
+  }catch(e){
+    gateMsg('Sem permissão', 'Esse e-mail não é admin. Fala com o Rodrigo.');
+  }
+})();
+function gateMsg(h,p){ const g=document.getElementById('gate'); g.innerHTML='<h2>'+esc(h)+'</h2><p class="muted">'+esc(p)+'</p><p style="margin-top:18px"><a class="btn ghost" href="/curso/home.html">← voltar pro app</a></p>'; }
+
+function showTab(t){
+  document.getElementById('secAulas').classList.toggle('hidden', t!=='aulas');
+  document.getElementById('secAlunos').classList.toggle('hidden', t!=='alunos');
+  document.getElementById('tabAulas').classList.toggle('on', t==='aulas');
+  document.getElementById('tabAlunos').classList.toggle('on', t==='alunos');
+  if(t==='alunos') loadStudents();
+}
+
+// ---------- lista de aulas ----------
+function renderLessons(){
+  const el=document.getElementById('lessonList');
+  if(!LESSONS.length){ el.innerHTML='<div class="empty">Nenhuma aula ainda. Clica em <b>+ Nova aula</b> pra começar.</div>'; return; }
+  el.innerHTML = LESSONS.map((l,i)=>`
+    <div class="lrow">
+      <span class="pos">${i}</span>
+      <div class="grow">
+        <div class="t">${esc(l.title)}</div>
+        <div class="m">${l.video_id?('🎬 vídeo ok'):'⚠️ sem vídeo'} ${l.canvas_block!=null?('· bloco '+l.canvas_block+' do Canvas'):''} ${l.duration?('· '+esc(l.duration)):''}</div>
+      </div>
+      <span class="badge ${l.is_published?'pub':'draft'}">${l.is_published?'publicada':'rascunho'}</span>
+      <div class="acts">
+        <button class="iconb" title="Subir" onclick="move(${i},-1)"><svg viewBox="0 0 24 24"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button>
+        <button class="iconb" title="Descer" onclick="move(${i},1)"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12l7 7 7-7"/></svg></button>
+        <button class="iconb" title="Editar" onclick="editAula('${l.id}')"><svg viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg></button>
+        <button class="iconb del" title="Apagar" onclick="delAula('${l.id}','${esc(l.title)}')"><svg viewBox="0 0 24 24"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/></svg></button>
+      </div>
+    </div>`).join('');
+}
+
+async function move(i,dir){
+  const j=i+dir; if(j<0||j>=LESSONS.length) return;
+  const arr=LESSONS.slice(); const tmp=arr[i]; arr[i]=arr[j]; arr[j]=tmp;
+  LESSONS=arr; renderLessons();
+  try{ await api('/api/admin/lessons',{method:'POST',body:JSON.stringify({action:'reorder',ids:arr.map(x=>x.id)})}); }
+  catch(e){ toast('Erro ao reordenar'); }
+}
+
+// ---------- form de aula ----------
+function novaAula(){ editingId=null; openForm({}); }
+function editAula(id){ editingId=id; openForm(LESSONS.find(l=>l.id===id)||{}); }
+
+function openForm(l){
+  const ex=l.exercise||{};
+  const mats=(l.materials&&l.materials.length)?l.materials:[{label:'',meta:'',url:''}];
+  document.getElementById('formWrap').innerHTML = `
+    <div class="panel">
+      <div class="sec-title">Aula</div>
+      <div class="field"><label>Título</label><input id="f_title" type="text" value="${esc(l.title)}" placeholder="Ex: Escolher o seu nicho"></div>
+      <div class="grid2">
+        <div class="field"><label>Frase do pôster <span class="hint">(aparece no vídeo)</span></label><input id="f_tagline" type="text" value="${esc(l.tagline)}" placeholder="nicho não é prisão — é parar de disputar migalha"></div>
+        <div class="field"><label>Duração <span class="hint">(ex 14:00)</span></label><input id="f_duration" type="text" value="${esc(l.duration)}" placeholder="14:00"></div>
+      </div>
+      <div class="grid2">
+        <div class="field"><label>ID do vídeo (Bunny) <span class="hint">o GUID do vídeo</span></label><input id="f_video" type="text" value="${esc(l.video_id)}" placeholder="ex: 8f3a...-...-...-...-..."></div>
+        <div class="field"><label>Library ID (Bunny) <span class="hint">deixa vazio p/ usar o padrão</span></label><input id="f_lib" type="text" value="${esc(l.video_library)}" placeholder="opcional"></div>
+      </div>
+      <div class="field"><label>Descrição (Sobre a aula)</label><textarea id="f_desc" placeholder="Do que trata a aula...">${esc(l.description)}</textarea></div>
+
+      <div class="sec-title">Exercício</div>
+      <div class="field"><label>Título do exercício</label><input id="f_ex_title" type="text" value="${esc(ex.title)}" placeholder="Ex: Rode a Matriz do Nicho"></div>
+      <div class="field"><label>Introdução</label><input id="f_ex_intro" type="text" value="${esc(ex.intro)}" placeholder="Abra o Meu Canvas e faça agora..."></div>
+      <div class="field"><label>Passos <span class="hint">(um por linha)</span></label><textarea id="f_ex_steps" placeholder="Liste seus 3 nichos&#10;Pontue de 1 a 5&#10;Some — o maior vence">${esc((ex.steps||[]).join('\n'))}</textarea></div>
+      <div class="grid2">
+        <div class="field"><label>Rótulo dos critérios</label><input id="f_ex_clabel" type="text" value="${esc(ex.criteria_label)}" placeholder="Os 5 critérios da Matriz"></div>
+        <div class="field"><label>Critérios <span class="hint">(separados por vírgula)</span></label><input id="f_ex_crit" type="text" value="${esc((ex.criteria||[]).join(', '))}" placeholder="Repertório, Necessidade, ..."></div>
+      </div>
+      <div class="grid2">
+        <div class="field"><label>Bloco do Canvas que alimenta <span class="hint">(0 a 4, ou vazio)</span></label><input id="f_block" type="text" value="${l.canvas_block!=null?l.canvas_block:''}" placeholder="2"></div>
+        <div class="field"><label>Texto do botão</label><input id="f_ex_cta" type="text" value="${esc(ex.cta_label||'Abrir Meu Canvas')}" placeholder="Abrir Meu Canvas"></div>
+      </div>
+
+      <div class="sec-title">Materiais <span style="text-transform:none;letter-spacing:0;font-weight:400">(opcional — link, template, PDF)</span></div>
+      <div id="matList">
+        ${mats.map(m=>matRow(m)).join('')}
+      </div>
+      <button class="btn ghost small" onclick="addMat()">+ material</button>
+
+      <div class="field" style="margin-top:22px"><label class="check"><input id="f_pub" type="checkbox" ${l.is_published?'checked':''}> Publicada <span class="hint" style="font-weight:400">(desmarcado = rascunho, aluno não vê)</span></label></div>
+
+      <div class="formacts">
+        <button class="btn" onclick="saveAula()">${editingId?'Salvar alterações':'Criar aula'}</button>
+        <button class="btn ghost" onclick="closeForm()">Cancelar</button>
+      </div>
+    </div>`;
+  document.getElementById('formWrap').scrollIntoView({behavior:'smooth',block:'start'});
+}
+function matRow(m){ m=m||{}; return `<div class="matrow">
+  <input class="mat-label" type="text" value="${esc(m.label)}" placeholder="Nome do material">
+  <input class="mat-meta" type="text" value="${esc(m.meta)}" placeholder="Ex: PDF · 2 páginas">
+  <input class="mat-url" type="text" value="${esc(m.url)}" placeholder="https://... (ou canvas.html)">
+  <button class="iconb del" onclick="this.parentElement.remove()"><svg viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+</div>`; }
+function addMat(){ document.getElementById('matList').insertAdjacentHTML('beforeend', matRow({})); }
+function closeForm(){ document.getElementById('formWrap').innerHTML=''; editingId=null; }
+
+function collectMats(){
+  const rows=[...document.querySelectorAll('#matList .matrow')];
+  return rows.map(r=>({
+    label:r.querySelector('.mat-label').value.trim(),
+    meta:r.querySelector('.mat-meta').value.trim(),
+    url:r.querySelector('.mat-url').value.trim(),
+  })).filter(m=>m.label||m.url);
+}
+function val(id){ const e=document.getElementById(id); return e?e.value.trim():''; }
+
+async function saveAula(){
+  const title=val('f_title');
+  if(!title){ toast('Bota um título'); return; }
+  const blockRaw=val('f_block');
+  const payload={
+    title,
+    tagline:val('f_tagline'),
+    duration:val('f_duration'),
+    video_id:val('f_video'),
+    video_library:val('f_lib'),
+    description:val('f_desc'),
+    canvas_block: blockRaw===''?null:parseInt(blockRaw,10),
+    is_published: document.getElementById('f_pub').checked,
+    exercise:{
+      title:val('f_ex_title'),
+      intro:val('f_ex_intro'),
+      steps:val('f_ex_steps').split('\n').map(s=>s.trim()).filter(Boolean),
+      criteria_label:val('f_ex_clabel'),
+      criteria:val('f_ex_crit').split(',').map(s=>s.trim()).filter(Boolean),
+      cta_label:val('f_ex_cta')||'Abrir Meu Canvas',
+    },
+    materials: collectMats(),
+  };
+  if(editingId) payload.id=editingId;
+  try{
+    const {lesson}=await api('/api/admin/lessons',{method:'POST',body:JSON.stringify(payload)});
+    if(editingId){ const i=LESSONS.findIndex(l=>l.id===editingId); if(i>=0) LESSONS[i]=lesson; }
+    else LESSONS.push(lesson);
+    closeForm(); renderLessons(); toast('Salvo ✓');
+  }catch(e){ toast('Erro: '+e.message); }
+}
+
+async function delAula(id,title){
+  if(!confirm('Apagar a aula "'+title+'"? Não dá pra desfazer.')) return;
+  try{ await api('/api/admin/lessons?id='+id,{method:'DELETE'}); LESSONS=LESSONS.filter(l=>l.id!==id); renderLessons(); toast('Apagada'); }
+  catch(e){ toast('Erro ao apagar'); }
+}
+
+// ---------- alunos ----------
+async function loadStudents(){
+  const el=document.getElementById('studentList'); el.innerHTML='<div class="empty">Carregando…</div>';
+  try{
+    const {students}=await api('/api/admin/students?course='+COURSE);
+    if(!students.length){ el.innerHTML='<div class="empty">Ninguém com acesso ainda.</div>'; return; }
+    el.innerHTML=students.map(s=>`<div class="srow">
+      <div class="grow"><div class="e">${esc(s.email)}</div><div class="m muted" style="font-size:12.5px">liberado ${new Date(s.granted_at).toLocaleDateString('pt-BR')}</div></div>
+      <button class="btn ghost small" onclick="revoke('${esc(s.email)}')">revogar</button>
+    </div>`).join('');
+  }catch(e){ el.innerHTML='<div class="empty">Erro ao carregar.</div>'; }
+}
+async function grant(){
+  const email=document.getElementById('grantEmail').value.trim();
+  if(!email||email.indexOf('@')<0){ toast('E-mail inválido'); return; }
+  try{ await api('/api/admin/students',{method:'POST',body:JSON.stringify({email,course:COURSE})}); document.getElementById('grantEmail').value=''; toast('Acesso liberado ✓'); loadStudents(); }
+  catch(e){ toast('Erro: '+e.message); }
+}
+async function revoke(email){
+  if(!confirm('Revogar o acesso de '+email+'?')) return;
+  try{ await api('/api/admin/students?email='+encodeURIComponent(email)+'&course='+COURSE,{method:'DELETE'}); toast('Revogado'); loadStudents(); }
+  catch(e){ toast('Erro ao revogar'); }
+}
+</script>
+</body>
+</html>

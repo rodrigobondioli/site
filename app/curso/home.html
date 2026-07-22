@@ -136,7 +136,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
   <div class="right">
     <span class="search"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>Pesquisar</span>
     <button class="iconbtn" aria-label="Avisos"><svg viewBox="0 0 24 24"><path d="M6 9a6 6 0 0 1 12 0c0 5 2 6 2 6H4s2-1 2-6"/><path d="M10 19a2.2 2.2 0 0 0 4 0"/></svg></button>
-    <span class="avatar"><img src="/app/eu-login.webp" alt="Rodrigo"></span>
+    <span class="avatar" id="avatarWrap"><svg viewBox="0 0 24 24" width="100%" height="100%" style="background:var(--soft)" fill="none" stroke="#a1a1aa" stroke-width="1.7"><circle cx="12" cy="9" r="3.4"/><path d="M5.5 20a6.5 6.5 0 0 1 13 0"/></svg></span>
   </div>
 </header>
 
@@ -163,57 +163,33 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
     </div>
     <div class="inner">
       <div class="head">
-        <h1>Boas-vindas, Rodrigo.</h1>
-        <a class="btn btn-primary" href="aula.html">Continuar</a>
+        <h1 id="greet">Boas-vindas.</h1>
+        <a class="btn btn-primary" id="continueBtn" href="#">Continuar</a>
       </div>
 
       <div class="sec-label">Progresso do curso</div>
       <div class="progress">
         <div class="row">
-          <span class="t">2 de 5 aulas concluídas</span>
-          <span class="pct">40%</span>
+          <span class="t" id="progText">—</span>
+          <span class="pct" id="progPct">0%</span>
         </div>
-        <div class="bar"><i></i></div>
+        <div class="bar"><i id="progBar" style="width:0%"></i></div>
       </div>
 
       <div class="chead">
         <h2>Conteúdo</h2>
-        <span class="meta">1 seção · 5 aulas · ~50 min</span>
+        <span class="meta" id="contentMeta"></span>
       </div>
 
       <div class="module">
         <div class="mhead">
           <svg class="cv" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg>
           <h3>Trilha do posicionamento</h3>
-          <span class="mm">5 aulas · ~50 min</span>
+          <span class="mm" id="modMeta"></span>
         </div>
-
-        <a class="lesson done" href="aula.html">
-          <span class="st done"><svg viewBox="0 0 24 24"><path d="m5 13 4 4L19 7"/></svg></span>
-          <span class="tt">Aula 0 — Leia isso antes</span>
-          <span class="dur">3 min</span>
-        </a>
-        <a class="lesson done" href="aula.html">
-          <span class="st done"><svg viewBox="0 0 24 24"><path d="m5 13 4 4L19 7"/></svg></span>
-          <span class="tt">Aula 1 — Por que você é genérico (e ganha mal)</span>
-          <span class="dur">11 min</span>
-        </a>
-        <a class="lesson now" href="aula.html">
-          <span class="st now"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span>
-          <span class="tt">Aula 2 — Escolher o seu nicho</span>
-          <span class="tag">agora</span>
-          <span class="dur">14 min</span>
-        </a>
-        <a class="lesson lock" href="#">
-          <span class="st lock"><svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></span>
-          <span class="tt">Aula 3 — Quem você atende (a Caça à Ruminação)</span>
-          <span class="dur">12 min</span>
-        </a>
-        <a class="lesson lock" href="#">
-          <span class="st lock"><svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></span>
-          <span class="tt">Aula 4 — Seu monopólio e a frase do especialista</span>
-          <span class="dur">13 min</span>
-        </a>
+        <div id="lessonList">
+          <div class="lesson"><span class="tt" style="color:var(--muted)">Carregando aulas…</span></div>
+        </div>
       </div>
     </div>
   </main>
@@ -222,6 +198,62 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="/app/config.js"></script>
 <script src="/app/curso/guard.js"></script>
+<script src="/app/curso/api.js"></script>
 <script src="/app/curso/ui.js"></script>
+<script>
+(function(){
+  var ICON_DONE='<svg viewBox="0 0 24 24"><path d="m5 13 4 4L19 7"/></svg>';
+  var ICON_PLAY='<svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>';
+  var ICON_DOT ='<svg viewBox="0 0 24 24" style="width:8px;height:8px"><circle cx="12" cy="12" r="6" fill="#a1a1aa"/></svg>';
+  function esc(s){return String(s==null?'':s).replace(/[<>&]/g,function(c){return {'<':'&lt;','>':'&gt;','&':'&amp;'}[c];});}
+
+  function render(lessons, doneSet){
+    var total=lessons.length, done=0;
+    lessons.forEach(function(l){ if(doneSet.has(l.id)) done++; });
+    var pct= total? Math.round(done/total*100):0;
+    document.getElementById('progText').textContent = done+' de '+total+' aula'+(total===1?'':'s')+' concluída'+(done===1?'':'s');
+    document.getElementById('progPct').textContent = pct+'%';
+    document.getElementById('progBar').style.width = pct+'%';
+    document.getElementById('contentMeta').textContent = '1 seção · '+total+' aula'+(total===1?'':'s');
+    document.getElementById('modMeta').textContent = total+' aula'+(total===1?'':'s');
+
+    // "agora" = primeira não concluída
+    var nowIdx = lessons.findIndex(function(l){ return !doneSet.has(l.id); });
+    if(nowIdx<0) nowIdx = total-1;
+    var cont = document.getElementById('continueBtn');
+    if(total){ cont.href='aula.html?a='+lessons[nowIdx].id; cont.textContent = done? (done<total?'Continuar':'Revisar') : 'Começar'; }
+    else cont.style.display='none';
+
+    var html = lessons.map(function(l,i){
+      var isDone=doneSet.has(l.id), isNow=(i===nowIdx && !isDone);
+      var st = isDone? '<span class="st done">'+ICON_DONE+'</span>'
+             : isNow ? '<span class="st now">'+ICON_PLAY+'</span>'
+             :         '<span class="st lock" style="border-color:var(--line)">'+ICON_DOT+'</span>';
+      var cls = isDone?'lesson done':(isNow?'lesson now':'lesson');
+      var tag = isNow? '<span class="tag">agora</span>':'';
+      var dur = l.duration? '<span class="dur">'+esc(l.duration)+'</span>':'';
+      return '<a class="'+cls+'" href="aula.html?a='+l.id+'">'+st+'<span class="tt">'+esc(l.title)+'</span>'+tag+dur+'</a>';
+    }).join('');
+    document.getElementById('lessonList').innerHTML = html || '<div class="lesson"><span class="tt" style="color:var(--muted)">Nenhuma aula publicada ainda.</span></div>';
+  }
+
+  async function boot(){
+    if(!window.ADP || window.ADP.devMode){ document.getElementById('lessonList').innerHTML='<div class="lesson"><span class="tt" style="color:var(--muted)">Login necessário pra carregar as aulas.</span></div>'; return; }
+    try{
+      var me = await window.ADP.me();
+      var nome = me && me.user_metadata && me.user_metadata.full_name;
+      if(nome){ document.getElementById('greet').textContent = 'Boas-vindas, '+String(nome).trim().split(' ')[0]+'.'; }
+    }catch(e){}
+    try{
+      var lr = await window.ADP.lessons();
+      var pr = await window.ADP.progress().catch(function(){return {done:[]};});
+      render(lr.lessons||[], new Set(pr.done||[]));
+    }catch(e){
+      document.getElementById('lessonList').innerHTML='<div class="lesson"><span class="tt" style="color:var(--muted)">Não consegui carregar as aulas ('+esc(e.message)+').</span></div>';
+    }
+  }
+  boot();
+})();
+</script>
 </body>
 </html>

@@ -158,114 +158,20 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 
 <div class="shell">
   <main class="player">
-    <div class="inner">
-      <p class="eyebrow">Aula 2 de 5</p>
-      <div class="lhead">
-        <h1>Escolher o seu nicho</h1>
-        <div class="nav">
-          <a href="#" aria-label="Aula anterior"><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg></a>
-          <a href="#" aria-label="Próxima aula"><svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></a>
-        </div>
-      </div>
-
-      <div class="video">
-        <div class="poster">
-          <div class="topline">
-            <span>De Genérico a Especialista<br>c/ Rodrigo Bondioli</span>
-            <span>anti designer pato</span>
-          </div>
-          <div class="mid">
-            <div class="pills"><span class="pill">Curso</span><span class="pill">Aula 02</span></div>
-            <h2>Escolher<br>o seu nicho</h2>
-            <p class="tag">nicho não é prisão — é parar de disputar migalha</p>
-          </div>
-        </div>
-        <button class="play" aria-label="Assistir"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></button>
-        <div class="ctrls">
-          <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-          <svg viewBox="0 0 24 24"><path d="M11 5 6 9H2v6h4l5 4zM15.5 8.5a5 5 0 0 1 0 7"/></svg>
-          <span class="time">0:00 / 14:00</span>
-          <div class="track"><i></i></div>
-          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 3v3M12 18v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M3 12h3M18 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1"/></svg>
-          <svg viewBox="0 0 24 24"><rect x="14" y="10" width="7" height="6" rx="1"/><path d="M3 6h13v10H3z"/></svg>
-          <svg viewBox="0 0 24 24"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>
-        </div>
-      </div>
-
-      <div class="lbody">
-        <h3>Sobre a aula</h3>
-        <p>Nicho não é prisão. É parar de disputar migalha com todo designer do planeta e passar a ser a escolha óbvia pra um grupo específico. Nesta aula você para de escolher nicho no chute e passa a decidir com critério.</p>
-        <p>A ferramenta é a Matriz do Nicho: você lista seus candidatos e pontua cada um em cinco critérios que dizem, na prática, se aquele mercado te sustenta ou te afunda. No fim, o nicho de maior nota é por onde você começa — sem achismo, sem paralisia.</p>
-      </div>
-
-      <div class="exercise">
-        <span class="xtag"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg>Exercício</span>
-        <h3>Rode a Matriz do Nicho</h3>
-        <p>Abra o Meu Canvas e faça agora — leva uma tarde, não uma vida.</p>
-        <ol>
-          <li>Liste seus 3 nichos candidatos (aquele cliente que já apareceu, o mercado que você curte, o que paga bem).</li>
-          <li>Pontue cada um de 1 a 5 nos cinco critérios abaixo.</li>
-          <li>Some. O de maior nota é onde você crava a bandeira primeiro.</li>
-        </ol>
-        <div class="xrow">
-          <div class="critwrap">
-            <div class="critlbl">Os 5 critérios da Matriz</div>
-            <div class="crit">
-              <span>Repertório</span><span>Necessidade</span><span>Crescimento</span><span>Poder de compra</span><span>Acesso</span>
-            </div>
-          </div>
-          <a class="go" href="canvas.html">Abrir Meu Canvas</a>
-        </div>
-      </div>
-
-      <div class="materials">
-        <h3 style="font-size:19px;font-weight:700;margin:0 0 14px">Materiais da aula</h3>
-        <a class="mrow" href="#">
-          <span class="fi"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg></span>
-          <div><div class="fn">Matriz do Nicho (template)</div><div class="fm">Canvas · editável</div></div>
-          <svg class="dl" viewBox="0 0 24 24"><path d="M12 3v12M7 11l5 5 5-5M5 21h14"/></svg>
-        </a>
-        <a class="mrow" href="#">
-          <span class="fi"><svg viewBox="0 0 24 24"><path d="M14 3v5h5"/><path d="M14 3H6v18h12V8z"/></svg></span>
-          <div><div class="fn">Resumo da aula (PDF)</div><div class="fm">PDF · 2 páginas</div></div>
-          <svg class="dl" viewBox="0 0 24 24"><path d="M12 3v12M7 11l5 5 5-5M5 21h14"/></svg>
-        </a>
-      </div>
-
-      <div class="done-wrap">
-        <button class="btn-done"><span class="ck"><svg viewBox="0 0 24 24"><path d="m5 13 4 4L19 7"/></svg></span>Concluída</button>
-      </div>
+    <div class="inner" id="lessonRoot">
+      <p class="eyebrow" style="color:var(--muted)">Carregando aula…</p>
     </div>
   </main>
 
   <aside class="panel">
     <div class="phead">
       <h3>Aulas</h3>
-      <button class="iconbtn" aria-label="Fechar"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+      <button class="iconbtn" aria-label="Fechar" onclick="history.length>1?history.back():location.href='home.html'"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
     </div>
     <div class="plist">
       <div class="mod">
         <div class="mtitle"><svg viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg>Trilha do posicionamento</div>
-        <a class="li" href="#">
-          <span class="st done"><svg viewBox="0 0 24 24"><path d="m5 13 4 4L19 7"/></svg></span>
-          <span class="tt">Aula 0 — Leia isso antes</span>
-        </a>
-        <a class="li" href="#">
-          <span class="st done"><svg viewBox="0 0 24 24"><path d="m5 13 4 4L19 7"/></svg></span>
-          <span class="tt">Aula 1 — Por que você é genérico</span>
-        </a>
-        <a class="li on" href="#">
-          <span class="st now"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span>
-          <span class="tt">Aula 2 — Escolher o seu nicho</span>
-        </a>
-        <a class="li lock" href="#">
-          <span class="st lock"><svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></span>
-          <span class="tt">Aula 3 — Quem você atende</span>
-        </a>
-        <a class="li lock" href="#">
-          <span class="st lock"><svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></span>
-          <span class="tt">Aula 4 — Seu monopólio e a frase</span>
-        </a>
+        <div id="panelList"></div>
       </div>
     </div>
   </aside>
@@ -274,6 +180,136 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="/app/config.js"></script>
 <script src="/app/curso/guard.js"></script>
+<script src="/app/curso/api.js"></script>
 <script src="/app/curso/ui.js"></script>
+<script>
+(function(){
+  var ICON_DONE='<svg viewBox="0 0 24 24"><path d="m5 13 4 4L19 7"/></svg>';
+  var ICON_PLAY='<svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>';
+  function esc(s){return String(s==null?'':s).replace(/[<>&]/g,function(c){return {'<':'&lt;','>':'&gt;','&':'&amp;'}[c];});}
+  function qs(k){return new URLSearchParams(location.search).get(k);}
+
+  var LESSONS=[], DONE=new Set(), LIB=null, cur=null, idx=-1;
+
+  function videoHTML(l){
+    var lib = l.video_library || LIB;
+    if(l.video_id && lib){
+      var src='https://iframe.mediadelivery.net/embed/'+encodeURIComponent(lib)+'/'+encodeURIComponent(l.video_id)+'?autoplay=false&preload=true&responsive=true';
+      return '<div class="video"><iframe src="'+src+'" loading="lazy" style="border:0;position:absolute;inset:0;width:100%;height:100%" allow="accelerometer;gyroscope;autoplay;encrypted-media;picture-in-picture;" allowfullscreen></iframe></div>';
+    }
+    // sem vídeo ainda -> pôster "em breve"
+    var num=(idx<10?'0':'')+idx;
+    return '<div class="video"><div class="poster">'
+      +'<div class="topline"><span>De Genérico a Especialista<br>c/ Rodrigo Bondioli</span><span>anti designer pato</span></div>'
+      +'<div class="mid"><div class="pills"><span class="pill">Curso</span><span class="pill">Aula '+num+'</span></div>'
+      +'<h2>'+esc(l.title)+'</h2>'
+      +(l.tagline?'<p class="tag">'+esc(l.tagline)+'</p>':'')
+      +'<p class="tag" style="opacity:.7;font-size:13px">vídeo em breve</p></div></div></div>';
+  }
+
+  function exerciseHTML(ex, l){
+    if(!ex || (!ex.title && !ex.intro && !(ex.steps&&ex.steps.length))) return '';
+    var href = (l.canvas_block!=null) ? ('canvas.html?b='+l.canvas_block) : 'canvas.html';
+    var steps = (ex.steps&&ex.steps.length)? '<ol>'+ex.steps.map(function(s){return '<li>'+esc(s)+'</li>';}).join('')+'</ol>':'';
+    var crit='';
+    if(ex.criteria&&ex.criteria.length){
+      crit='<div class="critwrap"><div class="critlbl">'+esc(ex.criteria_label||'Critérios')+'</div><div class="crit">'
+        +ex.criteria.map(function(c){return '<span>'+esc(c)+'</span>';}).join('')+'</div></div>';
+    }
+    var cta='<a class="go" href="'+href+'">'+esc(ex.cta_label||'Abrir Meu Canvas')+'</a>';
+    var xrow = (crit||cta)? '<div class="xrow">'+(crit||'<div class="critwrap"></div>')+cta+'</div>':'';
+    return '<div class="exercise">'
+      +'<span class="xtag"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg>Exercício</span>'
+      +(ex.title?'<h3>'+esc(ex.title)+'</h3>':'')
+      +(ex.intro?'<p>'+esc(ex.intro)+'</p>':'')
+      +steps+xrow+'</div>';
+  }
+
+  function materialsHTML(mats){
+    if(!mats||!mats.length) return '';
+    var rows=mats.map(function(m){
+      var href=m.url||'#';
+      return '<a class="mrow" href="'+esc(href)+'"'+(/^https?:/.test(href)?' target="_blank" rel="noopener"':'')+'>'
+        +'<span class="fi"><svg viewBox="0 0 24 24"><path d="M14 3v5h5"/><path d="M14 3H6v18h12V8z"/></svg></span>'
+        +'<div><div class="fn">'+esc(m.label||'Material')+'</div>'+(m.meta?'<div class="fm">'+esc(m.meta)+'</div>':'')+'</div>'
+        +'<svg class="dl" viewBox="0 0 24 24"><path d="M12 3v12M7 11l5 5 5-5M5 21h14"/></svg></a>';
+    }).join('');
+    return '<div class="materials"><h3 style="font-size:19px;font-weight:700;margin:0 0 14px">Materiais da aula</h3>'+rows+'</div>';
+  }
+
+  function descHTML(desc){
+    if(!desc) return '';
+    var paras=String(desc).split(/\n\s*\n/).map(function(p){return '<p>'+esc(p.trim()).replace(/\n/g,'<br>')+'</p>';}).join('');
+    return '<div class="lbody"><h3>Sobre a aula</h3>'+paras+'</div>';
+  }
+
+  function renderLesson(){
+    var l=cur, total=LESSONS.length;
+    var prev=idx>0?LESSONS[idx-1]:null, next=idx<total-1?LESSONS[idx+1]:null;
+    var isDone=DONE.has(l.id);
+    document.title=(l.title||'Aula')+' — anti designer pato';
+    var nav='<div class="nav">'
+      +(prev?'<a href="aula.html?a='+prev.id+'" aria-label="Aula anterior">':'<a class="off" aria-label="Aula anterior">')+'<svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg></a>'
+      +(next?'<a href="aula.html?a='+next.id+'" aria-label="Próxima aula">':'<a class="off" aria-label="Próxima aula">')+'<svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></a>'
+      +'</div>';
+    var doneBtn='<div class="done-wrap"><button class="btn-done" id="doneBtn">'
+      +'<span class="ck" style="'+(isDone?'':'background:var(--soft)')+'">'+ICON_DONE+'</span>'
+      +'<span id="doneLbl">'+(isDone?'Concluída':'Marcar como concluída')+'</span></button></div>';
+
+    document.getElementById('lessonRoot').innerHTML =
+      '<p class="eyebrow">Aula '+idx+' de '+(total-1)+'</p>'
+      +'<div class="lhead"><h1>'+esc(l.title)+'</h1>'+nav+'</div>'
+      +videoHTML(l)
+      +descHTML(l.description)
+      +exerciseHTML(l.exercise, l)
+      +materialsHTML(l.materials)
+      +doneBtn;
+
+    var btn=document.getElementById('doneBtn');
+    if(btn) btn.addEventListener('click', toggleDone);
+    renderPanel();
+  }
+
+  function renderPanel(){
+    document.getElementById('panelList').innerHTML = LESSONS.map(function(l,i){
+      var isDone=DONE.has(l.id), on=(l.id===cur.id);
+      var st = isDone? '<span class="st done">'+ICON_DONE+'</span>'
+             : on ?    '<span class="st now">'+ICON_PLAY+'</span>'
+             :         '<span class="st lock" style="border-color:var(--line)"><svg viewBox="0 0 24 24" style="width:8px;height:8px"><circle cx="12" cy="12" r="6" fill="#a1a1aa"/></svg></span>';
+      return '<a class="li'+(on?' on':'')+'" href="aula.html?a='+l.id+'">'+st+'<span class="tt">'+esc(l.title)+'</span></a>';
+    }).join('');
+  }
+
+  async function toggleDone(){
+    var willBe=!DONE.has(cur.id);
+    var lbl=document.getElementById('doneLbl'), ck=document.querySelector('#doneBtn .ck');
+    if(willBe){DONE.add(cur.id);} else {DONE.delete(cur.id);}
+    if(lbl) lbl.textContent = willBe?'Concluída':'Marcar como concluída';
+    if(ck) ck.style.background = willBe?'var(--lime)':'var(--soft)';
+    renderPanel();
+    try{ await window.ADP.setDone(cur.id, willBe); }
+    catch(e){ /* reverte visual se falhar */ if(willBe){DONE.delete(cur.id);}else{DONE.add(cur.id);} if(lbl) lbl.textContent=willBe?'Marcar como concluída':'Concluída'; renderPanel(); }
+  }
+
+  async function boot(){
+    if(!window.ADP || window.ADP.devMode){ document.getElementById('lessonRoot').innerHTML='<p class="eyebrow">Login necessário pra carregar a aula.</p>'; return; }
+    try{
+      var lr=await window.ADP.lessons();
+      LESSONS=lr.lessons||[]; LIB=lr.library;
+      var pr=await window.ADP.progress().catch(function(){return {done:[]};});
+      DONE=new Set(pr.done||[]);
+      if(!LESSONS.length){ document.getElementById('lessonRoot').innerHTML='<p class="eyebrow">Nenhuma aula publicada ainda.</p>'; return; }
+      var want=qs('a');
+      idx = want? LESSONS.findIndex(function(l){return l.id===want;}) : -1;
+      if(idx<0){ idx = LESSONS.findIndex(function(l){return !DONE.has(l.id);}); if(idx<0) idx=0; }
+      cur=LESSONS[idx];
+      renderLesson();
+    }catch(e){
+      document.getElementById('lessonRoot').innerHTML='<p class="eyebrow">Não consegui carregar ('+esc(e.message)+').</p>';
+    }
+  }
+  boot();
+})();
+</script>
 </body>
 </html>
