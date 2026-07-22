@@ -116,18 +116,18 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .btn-done:hover{background:var(--soft)}
 .btn-done .ck{width:20px;height:20px;border-radius:999px;background:var(--lime);display:grid;place-items:center;flex:none}
 .btn-done .ck svg{width:11px;height:11px;fill:none;stroke:var(--ink);stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}
-/* próximo passo (sempre óbvio) — à direita, sem linha */
-.nextstep{margin-top:30px;display:flex;flex-direction:column;gap:13px;align-items:flex-end;text-align:right}
+/* próximo passo — centralizado; botão vira rosa+check quando concluído */
+.nextstep{margin-top:34px;display:flex;flex-direction:column;gap:14px;align-items:center;text-align:center}
 .nextstep .ns-kicker{font-size:12px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--muted)}
-.ns-cta{display:inline-flex;align-items:center;gap:12px;background:var(--pink);color:#fff;font-weight:700;font-size:16px;padding:15px 26px;border-radius:999px;transition:filter .15s;line-height:1.15}
-.ns-cta:hover{filter:brightness(1.07)}
-.ns-cta .arw{font-size:18px}
-.ns-cta .ck{display:inline-flex;align-items:center}
-.ns-cta .ck svg{width:17px;height:17px;fill:none;stroke:#fff;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}
-.nextstep .ns-skip{font-size:13.5px;color:var(--muted);font-weight:700}
-.nextstep .ns-skip:hover{color:var(--ink)}
-.nextstep .ns-undo{font-size:13px;color:var(--faint);font-weight:700;padding:0}
-.nextstep .ns-undo:hover{color:var(--muted)}
+.ns-toggle{display:inline-flex;align-items:center;gap:9px;font-weight:700;font-size:15px;padding:13px 28px;border-radius:999px;border:1.5px solid var(--line);color:var(--ink);background:none;transition:background .15s,border-color .15s,color .15s}
+.ns-toggle:hover{background:var(--soft)}
+.ns-toggle.done{background:var(--pink);border-color:var(--pink);color:#fff}
+.ns-toggle.done:hover{filter:brightness(1.06);background:var(--pink)}
+.ns-toggle .ck{display:none;align-items:center}
+.ns-toggle.done .ck{display:inline-flex}
+.ns-toggle .ck svg{width:16px;height:16px;fill:none;stroke:#fff;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}
+.nextstep .ns-next{font-size:14px;color:var(--muted);font-weight:700}
+.nextstep .ns-next:hover{color:var(--ink)}
 /* aplique aqui (bloco do Canvas embaixo do vídeo) */
 .applyhere{margin-top:32px;border:1px solid var(--line);border-radius:var(--r);padding:22px 24px}
 .applyhere .ah-tag{display:inline-flex;align-items:center;gap:7px;font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
@@ -139,7 +139,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .applyhere .ah-crit .cl{width:100%;font-size:12.5px;font-weight:700;color:var(--muted);margin-bottom:2px}
 .applyhere .ah-crit span:not(.cl){font-size:13px;font-weight:700;border:1px solid var(--line);border-radius:8px;padding:7px 14px}
 .applyhere .ah-fields{margin-top:20px;padding-top:20px;border-top:1px solid var(--line)}
-.applyhere .ah-full{display:inline-block;margin-top:18px;font-size:13px;font-weight:700;color:var(--muted)}
+.applyhere .ah-full{display:block;text-align:right;margin-top:18px;font-size:13px;font-weight:700;color:var(--muted)}
 .applyhere .ah-full:hover{color:var(--ink)}
 
 /* ---------- painel de aulas ---------- */
@@ -322,17 +322,10 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
     var isDone=DONE.has(cur.id);
     var nextHref = next? ('aula.html?a='+next.id) : 'posicionamento.html';
     var nextLabel = next? ('Próxima aula: '+esc(next.title)) : 'Montar meu posicionamento com a IA';
-    var h;
-    if(!isDone){
-      h='<div class="ns-kicker">Aplicou o exercício acima? Salva o progresso</div>'
-        +'<button class="ns-cta" id="doneBtn"><span class="ck">'+ICON_DONE+'</span>Marcar aula como concluída</button>'
-        +'<a class="ns-skip" href="'+nextHref+'">ou pular pra próxima →</a>';
-    } else {
-      h='<div class="ns-kicker">Aula concluída ✓</div>'
-        +'<a class="ns-cta" href="'+nextHref+'">'+nextLabel+'<span class="arw">→</span></a>'
-        +'<button class="ns-undo" id="doneBtn">desmarcar como concluída</button>';
-    }
-    return '<div class="nextstep">'+h+'</div>';
+    var kicker = isDone ? '' : '<div class="ns-kicker">Aplicou o exercício acima? Salva o progresso</div>';
+    var btn = '<button class="ns-toggle'+(isDone?' done':'')+'" id="doneBtn"><span class="ck">'+ICON_DONE+'</span>'+(isDone?'Concluída':'Marcar aula como concluída')+'</button>';
+    var link = '<a class="ns-next" href="'+nextHref+'">'+(isDone? (nextLabel+' →') : 'ou pular pra próxima →')+'</a>';
+    return '<div class="nextstep">'+kicker+btn+link+'</div>';
   }
   function paintNextStep(){
     var w=document.getElementById('nextStepWrap'); if(!w) return;
