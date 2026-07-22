@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Meu Posicionamento — anti designer pato</title>
+<style>
+@font-face{font-family:Vinila;src:url(/shared/fonts/vinila-400-normal.woff2) format("woff2");font-weight:400;font-display:swap}
+@font-face{font-family:Vinila;src:url(/shared/fonts/vinila-700-normal.woff2) format("woff2");font-weight:700;font-display:swap}
+
+:root{
+  --surface:#f1f1f1;--card:transparent;--soft:#e6e6e8;--line:#d4d4d8;
+  --ink:#18181b;--muted:#71717a;--faint:#a1a1aa;
+  --lime:#e7f99a;--pink:#ff00d7;--cyan:#00fff6;--r:12px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:Vinila,-apple-system,"Segoe UI",system-ui,sans-serif;background:var(--surface);color:var(--ink);font-size:14.5px;line-height:1.5;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+.mk{display:inline-flex}.mk svg{width:100%;height:100%;display:block}
+
+/* topbar */
+.top{height:60px;background:var(--surface);border-bottom:1px solid var(--line);display:grid;grid-template-columns:1fr auto 1fr;align-items:center;padding:0 22px;position:sticky;top:0;z-index:20}
+.logo{display:flex;align-items:center;gap:9px;font-weight:700;font-size:15.5px;justify-self:start}
+.logo .m{width:28px;height:28px}
+.tabs{display:flex;align-items:center;gap:2px;justify-self:center}
+.tabs a{padding:7px 15px;border-radius:8px;color:var(--muted);font-weight:400;font-size:14px}
+.tabs a:hover{background:var(--soft);color:var(--ink)}
+.tabs a.on{background:var(--soft);color:var(--ink);font-weight:700}
+.top .right{justify-self:end;display:flex;align-items:center;gap:4px}
+.search{display:flex;align-items:center;gap:8px;border:1px solid var(--line);border-radius:999px;padding:8px 16px;color:var(--muted);font-size:13.5px;margin-right:6px}
+.search svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round}
+.iconbtn{width:36px;height:36px;border-radius:999px;display:grid;place-items:center;color:var(--muted)}
+.iconbtn:hover{background:var(--soft);color:var(--ink)}
+.iconbtn svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.avatar{width:32px;height:32px;border-radius:999px;overflow:hidden;margin-left:6px;box-shadow:0 0 0 1px var(--line)}
+.avatar img{width:100%;height:100%;object-fit:cover}
+
+/* shell + sidebar */
+.shell{display:flex;align-items:flex-start}
+.side{width:250px;flex:none;background:var(--surface);border-right:1px solid var(--line);min-height:calc(100vh - 60px);padding:20px 12px;position:sticky;top:60px;display:flex;flex-direction:column}
+.side nav{display:flex;flex-direction:column;gap:1px}
+.side .nav-bottom{margin-top:auto}
+.side nav a{display:flex;align-items:center;gap:11px;padding:8px 12px;border-radius:8px;color:var(--muted);font-weight:400;font-size:14px}
+.side nav a:hover{background:var(--soft);color:var(--ink)}
+.side nav a.on{background:var(--soft);color:var(--ink);font-weight:700}
+.side nav a svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.side .sep{height:1px;background:var(--line);margin:14px 8px}
+
+/* pagehead */
+.pagehead{border-bottom:1px solid var(--line)}
+.pagehead .ph-in{padding:19px 40px;font-weight:700;font-size:16px}
+
+/* main */
+.main{flex:1;min-width:0}
+.inner{max-width:1120px;margin:0 auto;padding:36px 40px 90px}
+.head{display:flex;align-items:flex-start;justify-content:space-between;gap:24px;flex-wrap:wrap;margin-bottom:26px}
+.head h1{font-size:27px;font-weight:700;letter-spacing:-.02em}
+.head .gen{display:inline-flex;align-items:center;gap:8px;font-size:13px;color:var(--muted);margin-top:8px}
+.head .gen svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.actions{display:flex;gap:10px;flex:none}
+.btn{display:inline-flex;align-items:center;gap:8px;font-weight:700;font-size:13.5px;padding:10px 18px;border-radius:999px;border:1px solid var(--line)}
+.btn:hover{background:var(--soft)}
+.btn svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+
+/* frase hero (cyan) */
+.frase{background:var(--cyan);border-radius:16px;padding:38px 40px;margin-bottom:26px}
+.frase .fk{font-size:12px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:rgba(16,16,16,.55);margin-bottom:16px}
+.frase p{font-size:clamp(24px,2.9vw,34px);font-weight:700;line-height:1.24;letter-spacing:-.02em;color:#101010}
+.frase .hl{border-bottom:3px solid rgba(16,16,16,.9);padding-bottom:1px}
+
+/* grid seções */
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.sec{border:1px solid var(--line);border-radius:var(--r);padding:22px 24px}
+.sec.wide{grid-column:1/-1}
+.sec .k{font-size:12px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+.sec p{font-size:15px;line-height:1.6;color:#3f3f46}
+.sec p b{color:var(--ink);font-weight:700}
+.sec .dor{font-size:18px;font-weight:700;color:var(--ink);line-height:1.4;letter-spacing:-.01em}
+.sec ul{list-style:none;margin-top:4px}
+.sec li{font-size:15px;line-height:1.6;color:#3f3f46;padding-left:20px;position:relative;margin-bottom:4px}
+.sec li::before{content:"";position:absolute;left:2px;top:10px;width:7px;height:7px;border-radius:999px;background:var(--ink)}
+.sec li.no::before{background:none;content:"×";left:0;top:0;font-weight:700;color:var(--faint)}
+.puvbox{display:flex;flex-direction:column;gap:16px}
+.puv .pl{font-size:12px;font-weight:700;color:var(--muted);margin-bottom:6px}
+.puv .pv{font-size:16px;font-weight:700;color:var(--ink);line-height:1.4}
+.puv .pv.long{font-weight:400;font-size:15px;color:#3f3f46}
+
+@media(max-width:900px){.side{display:none}.tabs{display:none}.top{grid-template-columns:1fr auto}.grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <a class="logo" href="home.html">
+    <span class="m mk"><svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg"><g clip-path="url(#c0)"><rect width="64" height="64" rx="32" fill="#E7F99A"/><path fill-rule="evenodd" clip-rule="evenodd" d="M20.5867 34.7487L20.5867 17.9659L28.1653 22.3413C28.1961 22.6142 28.211 22.8796 28.211 23.1312L28.211 34.7487C28.211 36.8541 29.9172 38.5603 32.0226 38.5603C34.128 38.5603 35.8352 36.853 35.8352 34.7487C35.8352 33.0541 34.73 31.6187 33.2021 31.1218C32.1776 30.7884 31.0553 30.9042 30.1178 31.4456L30.1178 23.4688C31.4896 23.2374 32.8996 23.2618 34.2639 23.5325C39.5077 24.5741 43.4606 29.199 43.4606 34.7497C43.4606 41.0659 38.3409 46.1867 32.0236 46.1867C30.6869 46.1867 29.4043 45.9573 28.212 45.5358C23.7697 43.9655 20.5877 39.7292 20.5877 34.7497L20.5867 34.7487Z" fill="#18181b"/></g><defs><clipPath id="c0"><rect width="64" height="64" rx="32" fill="white"/></clipPath></defs></svg></span>
+    anti designer pato
+  </a>
+  <nav class="tabs">
+    <a href="home.html" class="on">Início</a>
+    <a href="cursos.html">Cursos</a>
+    <a href="#">Comunidade</a>
+  </nav>
+  <div class="right">
+    <span class="search"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>Pesquisar</span>
+    <button class="iconbtn" aria-label="Avisos"><svg viewBox="0 0 24 24"><path d="M6 9a6 6 0 0 1 12 0c0 5 2 6 2 6H4s2-1 2-6"/><path d="M10 19a2.2 2.2 0 0 0 4 0"/></svg></button>
+    <span class="avatar"><img src="/app/eu-login.webp" alt="Rodrigo"></span>
+  </div>
+</header>
+
+<div class="shell">
+  <aside class="side">
+    <nav>
+      <a href="home.html"><svg viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V20h14V9.5"/></svg>Início do curso</a>
+      <a href="aula.html"><svg viewBox="0 0 24 24"><path d="m22 8-10 5L2 8l10-5 10 5Z"/><path d="M6 10.5V16c0 1 2.5 2.5 6 2.5s6-1.5 6-2.5v-5.5"/></svg>Aulas</a>
+      <a href="canvas.html"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>Meu canvas</a>
+      <a href="posicionamento.html" class="on"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4.5"/><circle cx="12" cy="12" r="1"/></svg>Meu posicionamento</a>
+    </nav>
+    <nav class="nav-bottom">
+      <div class="sep"></div>
+      <a href="#"><svg viewBox="0 0 24 24"><path d="M4 5h16v11H8l-4 4z"/></svg>Suporte</a>
+      <a href="#"><svg viewBox="0 0 24 24"><path d="M15 14c.2-1 .7-1.7 1.5-2.5A5 5 0 1 0 7 8"/><path d="M9 18h6M10 21h4"/></svg>Sugestão</a>
+    </nav>
+  </aside>
+
+  <main class="main">
+    <div class="pagehead"><div class="ph-in">De Genérico a Especialista</div></div>
+    <div class="inner">
+      <div class="head">
+        <div>
+          <h1>Meu Posicionamento</h1>
+          <span class="gen"><svg viewBox="0 0 24 24"><path d="M12 3l2 5 5 2-5 2-2 5-2-5-5-2 5-2z"/></svg>Gerado pelo Estrategista a partir do seu Canvas</span>
+        </div>
+        <div class="actions">
+          <button class="btn"><svg viewBox="0 0 24 24"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>Copiar</button>
+          <button class="btn"><svg viewBox="0 0 24 24"><path d="M12 3v12M7 11l5 5 5-5M5 21h14"/></svg>Baixar PDF</button>
+        </div>
+      </div>
+
+      <div class="frase">
+        <div class="fk">A sua frase de especialista</div>
+        <p>Eu resolvo <span class="hl">a agenda furada nos dias fracos</span> para <span class="hl">barbearias premium que vendem assinatura</span> através de <span class="hl">landing pages que enchem os horários vazios</span>.</p>
+      </div>
+
+      <div class="grid">
+
+        <div class="sec">
+          <div class="k">Seu nicho</div>
+          <p><b>Barbearias premium que vendem assinatura.</b> Ticket alto, recorrência no modelo, dono que já entende que design é investimento — não custo.</p>
+        </div>
+
+        <div class="sec">
+          <div class="k">Seu monopólio</div>
+          <p>Você não é "designer de tudo". Você é quem junta <b>landing de alta conversão</b> com quem <b>entende o modelo de assinatura de barbearia</b>. Essa dobra é rara — e é sua.</p>
+        </div>
+
+        <div class="sec">
+          <div class="k">Quem você atende</div>
+          <ul>
+            <li>Dono de barbearia premium que já fatura e tem cadeira boa.</li>
+            <li>Vende (ou quer vender) assinatura mensal.</li>
+            <li>Sofre com buraco na agenda em dia de semana.</li>
+          </ul>
+        </div>
+
+        <div class="sec">
+          <div class="k">Quem você NÃO atende</div>
+          <ul>
+            <li class="no">Barbeiro solo começando, sem caixa.</li>
+            <li class="no">Quem só quer o mais barato.</li>
+            <li class="no">Quem não tem processo de assinatura.</li>
+          </ul>
+        </div>
+
+        <div class="sec wide">
+          <div class="k">A dor central (a ruminação do cliente)</div>
+          <p class="dor">"Por que minha barbearia lota no sábado e fica vazia na terça?"</p>
+          <p style="margin-top:10px">É a dor que gira na cabeça dele toda semana. Seu posicionamento fala direto com ela — não com "faço design de qualidade".</p>
+        </div>
+
+        <div class="sec wide">
+          <div class="k">Sua PUV</div>
+          <div class="puvbox">
+            <div class="puv"><div class="pl">CURTA (bio, cartão)</div><div class="pv">Encho os horários vazios da sua barbearia premium.</div></div>
+            <div class="puv"><div class="pl">FALADA (quando perguntarem o que você faz)</div><div class="pv long">"Sabe aquele buraco na agenda da barbearia no meio da semana? Eu faço landing page que transforma quem só segue no Instagram em assinante que aparece na terça-feira."</div></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </main>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="/app/config.js"></script>
+<script src="/app/curso/guard.js"></script>
+</body>
+</html>

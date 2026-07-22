@@ -1,0 +1,210 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cursos — anti designer pato</title>
+<style>
+@font-face{font-family:Vinila;src:url(/shared/fonts/vinila-400-normal.woff2) format("woff2");font-weight:400;font-display:swap}
+@font-face{font-family:Vinila;src:url(/shared/fonts/vinila-700-normal.woff2) format("woff2");font-weight:700;font-display:swap}
+
+:root{
+  --surface:#f1f1f1;
+  --card:transparent;
+  --soft:#e6e6e8;
+  --line:#d4d4d8;
+  --ink:#18181b;
+  --muted:#71717a;
+  --faint:#a1a1aa;
+  --lime:#e7f99a;
+  --pink:#ff00d7;
+  --cyan:#00fff6;
+  --r:12px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:Vinila,-apple-system,"Segoe UI",system-ui,sans-serif;background:var(--surface);color:var(--ink);font-size:14.5px;line-height:1.5;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+.mk{display:inline-flex}.mk svg{width:100%;height:100%;display:block}
+
+/* topbar */
+.top{height:60px;background:var(--surface);border-bottom:1px solid var(--line);display:grid;grid-template-columns:1fr auto 1fr;align-items:center;padding:0 22px;position:sticky;top:0;z-index:20}
+.logo{display:flex;align-items:center;gap:9px;font-weight:700;font-size:15.5px;justify-self:start}
+.logo .m{width:28px;height:28px}
+.tabs{display:flex;align-items:center;gap:2px;justify-self:center}
+.tabs a{padding:7px 15px;border-radius:8px;color:var(--muted);font-weight:400;font-size:14px}
+.tabs a:hover{background:var(--soft);color:var(--ink)}
+.tabs a.on{background:var(--soft);color:var(--ink);font-weight:700}
+.top .right{justify-self:end;display:flex;align-items:center;gap:4px}
+.search{display:flex;align-items:center;gap:8px;border:1px solid var(--line);border-radius:999px;padding:8px 16px;color:var(--muted);font-size:13.5px;margin-right:6px}
+.search svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round}
+.iconbtn{width:36px;height:36px;border-radius:999px;display:grid;place-items:center;color:var(--muted)}
+.iconbtn:hover{background:var(--soft);color:var(--ink)}
+.iconbtn svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.avatar{width:32px;height:32px;border-radius:999px;overflow:hidden;margin-left:6px;box-shadow:0 0 0 1px var(--line)}
+.avatar img{width:100%;height:100%;object-fit:cover}
+
+/* pagehead */
+.pagehead{border-bottom:1px solid var(--line)}
+.pagehead .ph-in{padding:19px 40px;font-weight:700;font-size:16px}
+
+/* main */
+.main{padding:40px 40px 90px}
+.inner{max-width:1120px;margin:0 auto}
+.lede{color:var(--muted);font-size:15px;margin:-2px 0 30px}
+.lede b{color:var(--ink);font-weight:700}
+
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:26px}
+
+.card{border:1px solid var(--line);border-radius:16px;overflow:hidden;display:flex;flex-direction:column;transition:transform .14s,box-shadow .14s}
+.card.active:hover{transform:translateY(-2px);box-shadow:0 12px 30px -18px rgba(0,0,0,.35)}
+
+.cover{position:relative;aspect-ratio:16/9;background:#101010;overflow:hidden}
+.cover .pc{position:absolute;inset:0;padding:26px 28px;display:flex;flex-direction:column;justify-content:space-between;color:#fff}
+.cover .tagline{display:flex;gap:8px}
+.cover .tp{font-size:10.5px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;border:1px solid rgba(255,255,255,.45);border-radius:999px;padding:4px 12px}
+.cover h2{font-size:clamp(26px,3.4vw,38px);font-weight:700;line-height:.98;letter-spacing:-.03em;text-transform:uppercase}
+.cover .accent{position:absolute;left:0;right:0;bottom:0;height:6px}
+.a-lime{background:var(--lime)} .a-cyan{background:var(--cyan)} .a-pink{background:var(--pink)} .a-ink{background:#3f3f46}
+
+.card.lock .cover{filter:grayscale(1) brightness(.62)}
+.lockover{position:absolute;inset:0;display:grid;place-items:center;background:rgba(16,16,16,.35);z-index:2}
+.lockover .lk{width:52px;height:52px;border-radius:999px;background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.4);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);display:grid;place-items:center}
+.lockover .lk svg{width:22px;height:22px;fill:none;stroke:#fff;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+
+.body{padding:20px 22px 22px;display:flex;flex-direction:column;flex:1}
+.body h3{font-size:18px;font-weight:700;letter-spacing:-.01em}
+.body .desc{color:var(--muted);font-size:13.5px;margin-top:6px;flex:1}
+.body .foot{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:18px}
+.meta{font-size:13px;color:var(--muted)}
+.soon{display:inline-flex;align-items:center;gap:7px;font-size:12px;font-weight:700;color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:5px 13px}
+.soon svg{width:13px;height:13px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.enter{display:inline-flex;align-items:center;font-weight:700;font-size:13.5px;padding:9px 18px;border-radius:999px;background:var(--pink);color:#fff}
+
+.prog{margin-top:16px}
+.prog .bar{height:6px;border-radius:999px;background:var(--soft);overflow:hidden}
+.prog .bar i{display:block;height:100%;width:40%;background:var(--ink);border-radius:999px}
+.prog .pl{display:flex;justify-content:space-between;font-size:12.5px;color:var(--muted);margin-top:8px}
+
+@media(max-width:820px){.grid{grid-template-columns:1fr}.tabs{display:none}.top{grid-template-columns:1fr auto}}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <a class="logo" href="home.html">
+    <span class="m mk"><svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg"><g clip-path="url(#l0)"><rect width="64" height="64" rx="32" fill="#E7F99A"/><path fill-rule="evenodd" clip-rule="evenodd" d="M20.5867 34.7487L20.5867 17.9659L28.1653 22.3413C28.1961 22.6142 28.211 22.8796 28.211 23.1312L28.211 34.7487C28.211 36.8541 29.9172 38.5603 32.0226 38.5603C34.128 38.5603 35.8352 36.853 35.8352 34.7487C35.8352 33.0541 34.73 31.6187 33.2021 31.1218C32.1776 30.7884 31.0553 30.9042 30.1178 31.4456L30.1178 23.4688C31.4896 23.2374 32.8996 23.2618 34.2639 23.5325C39.5077 24.5741 43.4606 29.199 43.4606 34.7497C43.4606 41.0659 38.3409 46.1867 32.0236 46.1867C30.6869 46.1867 29.4043 45.9573 28.212 45.5358C23.7697 43.9655 20.5877 39.7292 20.5877 34.7497L20.5867 34.7487Z" fill="#18181b"/></g><defs><clipPath id="l0"><rect width="64" height="64" rx="32" fill="white"/></clipPath></defs></svg></span>
+    anti designer pato
+  </a>
+  <nav class="tabs">
+    <a href="home.html">Início</a>
+    <a href="#" class="on">Cursos</a>
+    <a href="#">Comunidade</a>
+  </nav>
+  <div class="right">
+    <span class="search"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>Pesquisar</span>
+    <button class="iconbtn" aria-label="Avisos"><svg viewBox="0 0 24 24"><path d="M6 9a6 6 0 0 1 12 0c0 5 2 6 2 6H4s2-1 2-6"/><path d="M10 19a2.2 2.2 0 0 0 4 0"/></svg></button>
+    <span class="avatar"><img src="/app/eu-login.webp" alt="Rodrigo"></span>
+  </div>
+</header>
+
+<div class="pagehead"><div class="ph-in">Cursos</div></div>
+
+<main class="main">
+  <div class="inner">
+    <p class="lede">A linha completa do <b>Anti Designer Pato</b> — do posicionamento à escala, um degrau de cada vez.</p>
+
+    <div class="grid">
+
+      <!-- P1 — ATIVO -->
+      <a class="card active" href="home.html">
+        <div class="cover">
+          <div class="pc">
+            <div class="tagline"><span class="tp">Posicionamento</span><span class="tp">P1</span></div>
+            <h2>De Genérico<br>a Especialista</h2>
+          </div>
+          <div class="accent a-lime"></div>
+        </div>
+        <div class="body">
+          <h3>De Genérico a Especialista</h3>
+          <p class="desc">Escolhe o nicho e monta o posicionamento. Sai com a frase, a PUV e o plano — sem achismo.</p>
+          <div class="prog">
+            <div class="bar"><i></i></div>
+            <div class="pl"><span>2 de 5 aulas</span><span>40%</span></div>
+          </div>
+          <div class="foot">
+            <span class="meta">5 aulas · ~50 min</span>
+            <span class="enter">Continuar</span>
+          </div>
+        </div>
+      </a>
+
+      <!-- P2 — LOCK -->
+      <div class="card lock">
+        <div class="cover">
+          <div class="lockover"><span class="lk"><svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></span></div>
+          <div class="pc">
+            <div class="tagline"><span class="tp">Conteúdo</span><span class="tp">P2</span></div>
+            <h2>Máquina de<br>Conteúdo</h2>
+          </div>
+          <div class="accent a-cyan"></div>
+        </div>
+        <div class="body">
+          <h3>Máquina de Conteúdo pro Nicho</h3>
+          <p class="desc">Atrai o cliente do nicho com conteúdo orgânico que trabalha por você — sem virar escravo do feed.</p>
+          <div class="foot">
+            <span class="meta">Em produção</span>
+            <span class="soon"><svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>Em breve</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- P3 — LOCK -->
+      <div class="card lock">
+        <div class="cover">
+          <div class="lockover"><span class="lk"><svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></span></div>
+          <div class="pc">
+            <div class="tagline"><span class="tp">Aquisição</span><span class="tp">P3</span></div>
+            <h2>Tráfego<br>pro Nicho</h2>
+          </div>
+          <div class="accent a-pink"></div>
+        </div>
+        <div class="body">
+          <h3>Tráfego pro Nicho</h3>
+          <p class="desc">Quando o orgânico não dá conta: colocar dinheiro pra acelerar e trazer o cliente certo, sem queimar grana.</p>
+          <div class="foot">
+            <span class="meta">Planejado</span>
+            <span class="soon"><svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>Em breve</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- MENTORIA — LOCK -->
+      <div class="card lock">
+        <div class="cover">
+          <div class="lockover"><span class="lk"><svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></span></div>
+          <div class="pc">
+            <div class="tagline"><span class="tp">Mentoria</span><span class="tp">Avançado</span></div>
+            <h2>Mentoria<br>Anti Pato</h2>
+          </div>
+          <div class="accent a-ink"></div>
+        </div>
+        <div class="body">
+          <h3>Mentoria Anti Designer Pato</h3>
+          <p class="desc">O acompanhamento de perto pra quem já posicionou e quer escalar. Poucas vagas, alta exigência.</p>
+          <div class="foot">
+            <span class="meta">Sob convite</span>
+            <span class="soon"><svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>Em breve</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="/app/config.js"></script>
+<script src="/app/curso/guard.js"></script>
+</body>
+</html>

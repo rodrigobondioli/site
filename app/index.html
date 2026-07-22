@@ -79,14 +79,25 @@ h1{font-weight:800;font-size:clamp(32px,3.125vw,60px);line-height:1.05}
     <div class="cap"><span>Anti Designer Pato</span><span class="sep">/</span><span>Do Genérico ao Especialista</span></div>
   </div>
 </main>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="/app/config.js"></script>
 <script>
-document.getElementById('f').addEventListener('submit',function(e){
-  e.preventDefault();
-  var v=document.getElementById('email').value.trim();
-  var m=document.getElementById('msg');
-  if(!v||v.indexOf('@')<0){m.textContent='Coloca um e-mail válido.';return;}
-  m.textContent='Se esse e-mail comprou, o link mágico tá indo. (login ainda em setup)';
-});
+(function(){
+  var c = window.ADP_CONFIG || {};
+  var configured = c.SUPABASE_URL && !c.SUPABASE_URL.includes("SEU-PROJETO") && window.supabase;
+  var sb = configured ? window.supabase.createClient(c.SUPABASE_URL, c.SUPABASE_ANON_KEY) : null;
+  var redirect = (c.APP_ORIGIN || location.origin) + "/curso/home.html";
+  document.getElementById("f").addEventListener("submit", async function(e){
+    e.preventDefault();
+    var v = document.getElementById("email").value.trim();
+    var m = document.getElementById("msg");
+    if(!v || v.indexOf("@")<0){ m.textContent="Coloca um e-mail válido."; return; }
+    if(!sb){ m.textContent="Se esse e-mail comprou, o link mágico tá indo. (login em setup)"; return; }
+    m.textContent="Enviando o link…";
+    var { error } = await sb.auth.signInWithOtp({ email: v, options: { emailRedirectTo: redirect } });
+    m.textContent = error ? ("Deu ruim: " + error.message) : "Pronto. Se esse e-mail comprou, o link mágico tá na sua caixa.";
+  });
+})();
 </script>
 <script src="/antipato/assets/js/lottie_light.min.js"></script>
 <script>

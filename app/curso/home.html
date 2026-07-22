@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>De Genérico a Especialista — anti designer pato</title>
+<style>
+@font-face{font-family:Vinila;src:url(/shared/fonts/vinila-400-normal.woff2) format("woff2");font-weight:400;font-display:swap}
+@font-face{font-family:Vinila;src:url(/shared/fonts/vinila-700-normal.woff2) format("woff2");font-weight:700;font-display:swap}
+
+:root{
+  --surface:#f1f1f1;   /* fundo único em tudo (mesmo do login) */
+  --card:transparent;  /* cards sem preenchimento */
+  --soft:#e6e6e8;      /* hover / header de módulo / item ativo */
+  --line:#d4d4d8;      /* hairlines mais visíveis */
+  --ink:#18181b;       /* texto e estrutura (30%) */
+  --muted:#71717a;
+  --faint:#a1a1aa;
+  --lime:#e7f99a;      /* destaque: concluído (10%) */
+  --pink:#ff00d7;      /* destaque: ação (10%) */
+  --r:12px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{
+  font-family:Vinila,-apple-system,"Segoe UI",system-ui,sans-serif;
+  background:var(--surface);color:var(--ink);
+  font-size:14.5px;line-height:1.5;-webkit-font-smoothing:antialiased;
+}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+.mk{display:inline-flex}.mk svg{width:100%;height:100%;display:block}
+
+/* ---------- topbar ---------- */
+.top{
+  height:60px;background:var(--surface);border-bottom:1px solid var(--line);
+  display:grid;grid-template-columns:1fr auto 1fr;align-items:center;
+  padding:0 22px;position:sticky;top:0;z-index:20;
+}
+.logo{display:flex;align-items:center;gap:9px;font-weight:700;font-size:15.5px;justify-self:start}
+.logo .m{width:28px;height:28px}
+.tabs{display:flex;align-items:center;gap:2px;justify-self:center}
+.tabs a{padding:7px 15px;border-radius:8px;color:var(--muted);font-weight:400;font-size:14px}
+.tabs a:hover{background:var(--soft);color:var(--ink)}
+.tabs a.on{background:var(--soft);color:var(--ink);font-weight:700}
+.top .right{justify-self:end;display:flex;align-items:center;gap:4px}
+.search{display:flex;align-items:center;gap:8px;border:1px solid var(--line);border-radius:999px;padding:8px 16px;color:var(--muted);font-size:13.5px;margin-right:6px}
+.search svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round}
+.iconbtn{width:36px;height:36px;border-radius:999px;display:grid;place-items:center;color:var(--muted)}
+.iconbtn:hover{background:var(--soft);color:var(--ink)}
+.iconbtn svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.avatar{width:32px;height:32px;border-radius:999px;overflow:hidden;margin-left:6px;box-shadow:0 0 0 1px var(--line)}
+.avatar img{width:100%;height:100%;object-fit:cover}
+
+/* ---------- shell ---------- */
+.shell{display:flex;align-items:flex-start}
+.side{
+  width:250px;flex:none;background:var(--surface);border-right:1px solid var(--line);
+  min-height:calc(100vh - 60px);padding:20px 12px;position:sticky;top:60px;
+  display:flex;flex-direction:column;
+}
+.side nav{display:flex;flex-direction:column;gap:1px}
+.side .nav-bottom{margin-top:auto}
+.side nav a{
+  display:flex;align-items:center;gap:11px;padding:8px 12px;border-radius:8px;
+  color:var(--muted);font-weight:400;font-size:14px;
+}
+.side nav a:hover{background:var(--soft);color:var(--ink)}
+.side nav a.on{background:var(--soft);color:var(--ink);font-weight:700}
+.side nav a svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.side .sep{height:1px;background:var(--line);margin:14px 8px}
+
+/* ---------- main ---------- */
+.main{flex:1;min-width:0}
+.pagehead{border-bottom:1px solid var(--line)}
+.pagehead .ph-in{display:flex;align-items:center;gap:10px;padding:19px 40px;font-weight:700;font-size:16px}
+.inner{max-width:1120px;margin:0 auto;padding:40px 88px 90px}
+.head{display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap}
+.head h1{font-size:27px;font-weight:700;letter-spacing:-.02em}
+.btn{display:inline-flex;align-items:center;gap:7px;font-weight:700;font-size:14px;padding:9px 18px;border-radius:999px;white-space:nowrap;transition:filter .15s,background .15s}
+.btn svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.btn-primary{background:var(--pink);color:#fff}
+.btn-primary:hover{filter:brightness(1.06)}
+
+.sec-label{font-size:19px;font-weight:700;letter-spacing:-.01em;margin:36px 0 14px}
+
+/* progresso — card sutil, barra escura */
+.progress{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:20px 22px}
+.progress .row{display:flex;align-items:center;justify-content:space-between;gap:16px}
+.progress .row .t{font-weight:400;color:var(--muted);font-size:14px}
+.progress .row .pct{font-weight:700;font-size:16px}
+.progress .bar{margin-top:14px;height:7px;border-radius:999px;background:var(--soft);overflow:hidden}
+.progress .bar i{display:block;height:100%;width:40%;border-radius:999px;background:var(--ink)}
+
+/* conteúdo */
+.chead{display:flex;align-items:baseline;justify-content:space-between;gap:16px;margin:36px 0 14px}
+.chead h2{font-size:19px;font-weight:700;letter-spacing:-.01em}
+.chead .meta{font-size:13px;color:var(--muted)}
+
+.module{background:var(--card);border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+.module .mhead{display:flex;align-items:center;gap:12px;padding:14px 18px;background:var(--soft)}
+.module .mhead .cv{width:15px;height:15px;fill:none;stroke:var(--muted);stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.module .mhead h3{font-size:14.5px;font-weight:700;flex:1}
+.module .mhead .mm{font-size:13px;color:var(--muted)}
+
+.lesson{display:flex;align-items:center;gap:13px;padding:14px 18px;border-top:1px solid var(--line);transition:background .12s}
+.lesson:hover{background:var(--soft)}
+.lesson .st{width:20px;height:20px;flex:none;border-radius:999px;display:grid;place-items:center}
+.lesson .st.done{background:var(--lime)}
+.lesson .st.done svg{width:11px;height:11px;fill:none;stroke:var(--ink);stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}
+.lesson .st.now{background:var(--pink)}
+.lesson .st.now svg{width:10px;height:10px;fill:#fff;margin-left:1px}
+.lesson .st.lock{border:1.5px solid var(--line)}
+.lesson .st.lock svg{width:10px;height:10px;fill:none;stroke:var(--faint);stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.lesson .tt{flex:1;min-width:0;font-weight:400;font-size:14px}
+.lesson.now .tt{font-weight:700}
+.lesson.lock .tt{color:var(--faint)}
+.lesson .tag{font-size:11px;font-weight:700;color:var(--muted);border:1px solid var(--line);padding:2px 8px;border-radius:999px}
+.lesson .dur{font-size:13px;color:var(--muted);flex:none;min-width:42px;text-align:right}
+
+@media(max-width:900px){.side{display:none}.tabs{display:none}.top{grid-template-columns:1fr auto}}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <a class="logo" href="#">
+    <span class="m mk"><svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg"><g clip-path="url(#c0)"><rect width="64" height="64" rx="32" fill="#E7F99A"/><path fill-rule="evenodd" clip-rule="evenodd" d="M20.5867 34.7487L20.5867 17.9659L28.1653 22.3413C28.1961 22.6142 28.211 22.8796 28.211 23.1312L28.211 34.7487C28.211 36.8541 29.9172 38.5603 32.0226 38.5603C34.128 38.5603 35.8352 36.853 35.8352 34.7487C35.8352 33.0541 34.73 31.6187 33.2021 31.1218C32.1776 30.7884 31.0553 30.9042 30.1178 31.4456L30.1178 23.4688C31.4896 23.2374 32.8996 23.2618 34.2639 23.5325C39.5077 24.5741 43.4606 29.199 43.4606 34.7497C43.4606 41.0659 38.3409 46.1867 32.0236 46.1867C30.6869 46.1867 29.4043 45.9573 28.212 45.5358C23.7697 43.9655 20.5877 39.7292 20.5877 34.7497L20.5867 34.7487Z" fill="#18181b"/></g><defs><clipPath id="c0"><rect width="64" height="64" rx="32" fill="white"/></clipPath></defs></svg></span>
+    anti designer pato
+  </a>
+  <nav class="tabs">
+    <a href="#" class="on">Início</a>
+    <a href="cursos.html">Cursos</a>
+    <a href="#">Comunidade</a>
+  </nav>
+  <div class="right">
+    <span class="search"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>Pesquisar</span>
+    <button class="iconbtn" aria-label="Avisos"><svg viewBox="0 0 24 24"><path d="M6 9a6 6 0 0 1 12 0c0 5 2 6 2 6H4s2-1 2-6"/><path d="M10 19a2.2 2.2 0 0 0 4 0"/></svg></button>
+    <span class="avatar"><img src="/app/eu-login.webp" alt="Rodrigo"></span>
+  </div>
+</header>
+
+<div class="shell">
+  <aside class="side">
+    <nav>
+      <a href="#" class="on"><svg viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V20h14V9.5"/></svg>Início do curso</a>
+      <a href="aula.html"><svg viewBox="0 0 24 24"><path d="m22 8-10 5L2 8l10-5 10 5Z"/><path d="M6 10.5V16c0 1 2.5 2.5 6 2.5s6-1.5 6-2.5v-5.5"/></svg>Aulas</a>
+      <a href="#"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>Meu canvas</a>
+      <a href="#"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4.5"/><circle cx="12" cy="12" r="1"/></svg>Meu posicionamento</a>
+    </nav>
+    <nav class="nav-bottom">
+      <div class="sep"></div>
+      <a href="#"><svg viewBox="0 0 24 24"><path d="M4 5h16v11H8l-4 4z"/></svg>Suporte</a>
+      <a href="#"><svg viewBox="0 0 24 24"><path d="M15 14c.2-1 .7-1.7 1.5-2.5A5 5 0 1 0 7 8"/><path d="M9 18h6M10 21h4"/></svg>Sugestão</a>
+    </nav>
+  </aside>
+
+  <main class="main">
+    <div class="pagehead">
+      <div class="ph-in">
+        De Genérico a Especialista
+      </div>
+    </div>
+    <div class="inner">
+      <div class="head">
+        <h1>Boas-vindas, Rodrigo.</h1>
+        <a class="btn btn-primary" href="aula.html">Continuar</a>
+      </div>
+
+      <div class="sec-label">Progresso do curso</div>
+      <div class="progress">
+        <div class="row">
+          <span class="t">2 de 5 aulas concluídas</span>
+          <span class="pct">40%</span>
+        </div>
+        <div class="bar"><i></i></div>
+      </div>
+
+      <div class="chead">
+        <h2>Conteúdo</h2>
+        <span class="meta">1 seção · 5 aulas · ~50 min</span>
+      </div>
+
+      <div class="module">
+        <div class="mhead">
+          <svg class="cv" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg>
+          <h3>Trilha do posicionamento</h3>
+          <span class="mm">5 aulas · ~50 min</span>
+        </div>
+
+        <a class="lesson done" href="aula.html">
+          <span class="st done"><svg viewBox="0 0 24 24"><path d="m5 13 4 4L19 7"/></svg></span>
+          <span class="tt">Aula 0 — Leia isso antes</span>
+          <span class="dur">3 min</span>
+        </a>
+        <a class="lesson done" href="aula.html">
+          <span class="st done"><svg viewBox="0 0 24 24"><path d="m5 13 4 4L19 7"/></svg></span>
+          <span class="tt">Aula 1 — Por que você é genérico (e ganha mal)</span>
+          <span class="dur">11 min</span>
+        </a>
+        <a class="lesson now" href="aula.html">
+          <span class="st now"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span>
+          <span class="tt">Aula 2 — Escolher o seu nicho</span>
+          <span class="tag">agora</span>
+          <span class="dur">14 min</span>
+        </a>
+        <a class="lesson lock" href="#">
+          <span class="st lock"><svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></span>
+          <span class="tt">Aula 3 — Quem você atende (a Caça à Ruminação)</span>
+          <span class="dur">12 min</span>
+        </a>
+        <a class="lesson lock" href="#">
+          <span class="st lock"><svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></span>
+          <span class="tt">Aula 4 — Seu monopólio e a frase do especialista</span>
+          <span class="dur">13 min</span>
+        </a>
+      </div>
+    </div>
+  </main>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="/app/config.js"></script>
+<script src="/app/curso/guard.js"></script>
+</body>
+</html>
