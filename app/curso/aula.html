@@ -116,6 +116,16 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .btn-done:hover{background:var(--soft)}
 .btn-done .ck{width:20px;height:20px;border-radius:999px;background:var(--lime);display:grid;place-items:center;flex:none}
 .btn-done .ck svg{width:11px;height:11px;fill:none;stroke:var(--ink);stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}
+/* próximo passo (sempre óbvio) */
+.nextstep{margin-top:46px;padding-top:30px;border-top:1px solid var(--line);display:flex;flex-direction:column;gap:16px;align-items:flex-start}
+.nextstep .ns-kicker{font-size:12px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--muted)}
+.ns-cta{display:inline-flex;align-items:center;gap:12px;background:var(--pink);color:#fff;font-weight:700;font-size:16px;padding:15px 26px;border-radius:999px;transition:filter .15s;line-height:1.15}
+.ns-cta:hover{filter:brightness(1.07)}
+.ns-cta .arw{font-size:18px}
+.ns-done{display:inline-flex;align-items:center;gap:9px;font-weight:700;font-size:14px;color:var(--muted);padding:2px 0}
+.ns-done:hover{color:var(--ink)}
+.ns-done .ck{width:20px;height:20px;border-radius:999px;display:grid;place-items:center;flex:none}
+.ns-done .ck svg{width:11px;height:11px;fill:none;stroke:var(--ink);stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}
 
 /* ---------- painel de aulas ---------- */
 .panel{width:360px;flex:none;border-left:1px solid var(--line);display:flex;flex-direction:column;background:var(--surface)}
@@ -252,10 +262,6 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
       +(prev?'<a href="aula.html?a='+prev.id+'" aria-label="Aula anterior">':'<a class="off" aria-label="Aula anterior">')+'<svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg></a>'
       +(next?'<a href="aula.html?a='+next.id+'" aria-label="Próxima aula">':'<a class="off" aria-label="Próxima aula">')+'<svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></a>'
       +'</div>';
-    var doneBtn='<div class="done-wrap"><button class="btn-done" id="doneBtn">'
-      +'<span class="ck" style="'+(isDone?'':'background:var(--soft)')+'">'+ICON_DONE+'</span>'
-      +'<span id="doneLbl">'+(isDone?'Concluída':'Marcar como concluída')+'</span></button></div>';
-
     document.getElementById('lessonRoot').innerHTML =
       '<p class="eyebrow">Aula '+idx+' de '+(total-1)+'</p>'
       +'<div class="lhead"><h1>'+esc(l.title)+'</h1>'+nav+'</div>'
@@ -263,11 +269,33 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
       +descHTML(l.description)
       +exerciseHTML(l.exercise, l)
       +materialsHTML(l.materials)
-      +doneBtn;
+      +'<div id="nextStepWrap"></div>';
 
-    var btn=document.getElementById('doneBtn');
-    if(btn) btn.addEventListener('click', toggleDone);
+    paintNextStep();
     renderPanel();
+  }
+
+  // "Seu próximo passo" — sempre óbvio. Calibrado: guia, nunca trava.
+  function buildNextStep(){
+    var l=cur, total=LESSONS.length;
+    var next=idx<total-1?LESSONS[idx+1]:null;
+    var isDone=DONE.has(l.id);
+    var kicker = isDone ? 'Aula concluída ✓' : 'Seu próximo passo';
+    var cta;
+    if(!isDone && l.canvas_block!=null){
+      cta='<a class="ns-cta" href="canvas.html?b='+l.canvas_block+'">Fazer o exercício — abrir o Bloco '+l.canvas_block+' do Canvas<span class="arw">→</span></a>';
+    } else if(next){
+      cta='<a class="ns-cta" href="aula.html?a='+next.id+'">'+(isDone?'Próxima aula: '+esc(next.title):'Ir pra próxima aula')+'<span class="arw">→</span></a>';
+    } else {
+      cta='<a class="ns-cta" href="posicionamento.html">Montar meu posicionamento com a IA<span class="arw">→</span></a>';
+    }
+    var done='<button class="ns-done" id="doneBtn"><span class="ck" style="background:'+(isDone?'var(--lime)':'var(--soft)')+'">'+ICON_DONE+'</span>'+(isDone?'Concluída — desmarcar':'Marcar como concluída')+'</button>';
+    return '<div class="nextstep"><div class="ns-kicker">'+kicker+'</div>'+cta+done+'</div>';
+  }
+  function paintNextStep(){
+    var w=document.getElementById('nextStepWrap'); if(!w) return;
+    w.innerHTML=buildNextStep();
+    var b=document.getElementById('doneBtn'); if(b) b.addEventListener('click', toggleDone);
   }
 
   function renderPanel(){
@@ -282,13 +310,11 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 
   async function toggleDone(){
     var willBe=!DONE.has(cur.id);
-    var lbl=document.getElementById('doneLbl'), ck=document.querySelector('#doneBtn .ck');
     if(willBe){DONE.add(cur.id);} else {DONE.delete(cur.id);}
-    if(lbl) lbl.textContent = willBe?'Concluída':'Marcar como concluída';
-    if(ck) ck.style.background = willBe?'var(--lime)':'var(--soft)';
+    paintNextStep();
     renderPanel();
     try{ await window.ADP.setDone(cur.id, willBe); }
-    catch(e){ /* reverte visual se falhar */ if(willBe){DONE.delete(cur.id);}else{DONE.add(cur.id);} if(lbl) lbl.textContent=willBe?'Marcar como concluída':'Concluída'; renderPanel(); }
+    catch(e){ if(willBe){DONE.delete(cur.id);}else{DONE.add(cur.id);} paintNextStep(); renderPanel(); }
   }
 
   async function boot(){

@@ -90,7 +90,8 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .progress .row .t{font-weight:400;color:var(--muted);font-size:14px}
 .progress .row .pct{font-weight:700;font-size:16px}
 .progress .bar{margin-top:14px;height:7px;border-radius:999px;background:var(--soft);overflow:hidden}
-.progress .bar i{display:block;height:100%;width:40%;border-radius:999px;background:var(--ink)}
+.progress .bar i{display:block;height:100%;width:40%;border-radius:999px;background:var(--ink);transition:width .3s}
+.progress .psub{margin-top:12px;font-size:13px;color:var(--muted)}
 
 /* conteúdo */
 .chead{display:flex;align-items:baseline;justify-content:space-between;gap:16px;margin:36px 0 14px}
@@ -167,13 +168,14 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
         <a class="btn btn-primary" id="continueBtn" href="#">Continuar</a>
       </div>
 
-      <div class="sec-label">Progresso do curso</div>
+      <div class="sec-label">Seu projeto</div>
       <div class="progress">
         <div class="row">
-          <span class="t" id="progText">—</span>
+          <span class="t" id="progText">Posicionamento montado</span>
           <span class="pct" id="progPct">0%</span>
         </div>
         <div class="bar"><i id="progBar" style="width:0%"></i></div>
+        <div class="psub" id="progSub"></div>
       </div>
 
       <div class="chead">
@@ -207,13 +209,13 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
   var ICON_DOT ='<svg viewBox="0 0 24 24" style="width:8px;height:8px"><circle cx="12" cy="12" r="6" fill="#a1a1aa"/></svg>';
   function esc(s){return String(s==null?'':s).replace(/[<>&]/g,function(c){return {'<':'&lt;','>':'&gt;','&':'&amp;'}[c];});}
 
-  function render(lessons, doneSet){
+  function render(lessons, doneSet, blocksFilled, blocksTotal){
     var total=lessons.length, done=0;
     lessons.forEach(function(l){ if(doneSet.has(l.id)) done++; });
-    var pct= total? Math.round(done/total*100):0;
-    document.getElementById('progText').textContent = done+' de '+total+' aula'+(total===1?'':'s')+' concluída'+(done===1?'':'s');
-    document.getElementById('progPct').textContent = pct+'%';
-    document.getElementById('progBar').style.width = pct+'%';
+    var projPct = blocksTotal? Math.round(blocksFilled/blocksTotal*100):0;
+    document.getElementById('progPct').textContent = projPct+'%';
+    document.getElementById('progBar').style.width = projPct+'%';
+    document.getElementById('progSub').textContent = blocksFilled+' de '+blocksTotal+' blocos do Canvas preenchidos · '+done+' de '+total+' aula'+(total===1?'':'s')+' concluída'+(done===1?'':'s');
     document.getElementById('contentMeta').textContent = '1 seção · '+total+' aula'+(total===1?'':'s');
     document.getElementById('modMeta').textContent = total+' aula'+(total===1?'':'s');
 
@@ -246,8 +248,19 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
     }catch(e){}
     try{
       var lr = await window.ADP.lessons();
+      var lessons = lr.lessons||[];
       var pr = await window.ADP.progress().catch(function(){return {done:[]};});
-      render(lr.lessons||[], new Set(pr.done||[]));
+      // evolução do PROJETO = blocos do Canvas preenchidos
+      var blockSet = new Set(lessons.map(function(l){return l.canvas_block;}).filter(function(b){return b!=null;}));
+      var blocksTotal = blockSet.size || 5;
+      var blocksFilled = 0;
+      try{
+        var cv = await window.ADP.loadCanvas();
+        var filled = new Set();
+        (cv||[]).forEach(function(r){ if(r && r.data && Object.keys(r.data).some(function(k){var v=r.data[k];return v && String(v).trim();})) filled.add(r.block); });
+        blocksFilled = Array.from(filled).filter(function(b){return blockSet.has(b);}).length;
+      }catch(e){}
+      render(lessons, new Set(pr.done||[]), blocksFilled, blocksTotal);
     }catch(e){
       document.getElementById('lessonList').innerHTML='<div class="lesson"><span class="tt" style="color:var(--muted)">Não consegui carregar as aulas ('+esc(e.message)+').</span></div>';
     }
