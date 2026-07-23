@@ -343,10 +343,22 @@ window.ADP_CANVAS = (function () {
     var d = data || {};
     function has(v) { return v != null && String(v).trim() !== ''; }
     if (block === 0) {
-      if (!has(d.forte) && !has(d.mundos)) res.gate = { sev: 'critico', label: 'sem matéria-prima' };
-      else if (!has(d.forte)) res.gate = { sev: 'importante', label: 'sem prova concreta' };
-      else if (!has(d.historia)) res.gate = { sev: 'aviso', label: 'história fraca' };
-      else res.gate = { sev: 'ok', label: 'matéria-prima ok' };
+      // formato rico (Escavador) distingue PROVA de competência; formato antigo (campos planos) não dá — cai no fallback
+      var rich = Array.isArray(d.comunidades) || Array.isArray(d.competencias) || Array.isArray(d.provas);
+      if (rich) {
+        var hasComu = (d.comunidades || []).some(function (c) { return c && has(c.nome); });
+        var hasComp = (d.competencias || []).some(function (c) { return c && has(c.o_que); });
+        var hasProva = (d.provas || []).some(function (p) { return p && (has(p.consequencia) || has(p.situacao)); });
+        if (!hasComu && !hasComp && !hasProva) res.gate = { sev: 'critico', label: 'sem matéria-prima' };
+        else if (!hasProva) res.gate = { sev: 'importante', label: 'falta prova concreta' };
+        else if (!has(d.historia)) res.gate = { sev: 'aviso', label: 'história fraca' };
+        else res.gate = { sev: 'ok', label: 'matéria-prima com prova' };
+      } else {
+        if (!has(d.forte) && !has(d.mundos)) res.gate = { sev: 'critico', label: 'sem matéria-prima' };
+        else if (!has(d.forte)) res.gate = { sev: 'importante', label: 'sem prova concreta' };
+        else if (!has(d.historia)) res.gate = { sev: 'aviso', label: 'história fraca' };
+        else res.gate = { sev: 'ok', label: 'matéria-prima ok' };
+      }
     } else if (block === 2) {
       var rows = (d.rows || []).map(normRow).filter(function (r) { return (r.name || '').trim(); });
       if (!rows.length) res.gate = { sev: 'critico', label: 'sem candidato a nicho' };
