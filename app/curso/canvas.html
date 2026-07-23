@@ -78,6 +78,15 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .block .bt{flex:1;min-width:0}
 .block .bt h3{font-size:16px;font-weight:700}
 .block .bt .tag{font-size:12.5px;color:var(--muted)}
+/* 3 infos do bloco — MESMAS classes/cores do dashboard (Conclusão · Gate · Validação) */
+.block .bt .binfo{margin-top:7px}
+.linfo{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.pill{font-size:11px;font-weight:700;padding:2px 8px;border-radius:999px;border:1px solid var(--line);color:var(--muted);white-space:nowrap}
+.pill.dots{letter-spacing:1.5px;font-size:10px;color:var(--ink)}
+.pill.g-critico{background:var(--ink);color:#fff;border-color:var(--ink)}
+.pill.g-importante,.pill.g-aviso{background:rgba(255,0,215,.08);color:var(--ink);border-color:var(--pink)}
+.pill.g-ok{background:var(--lime);color:var(--ink);border-color:var(--lime)}
+.pill.val .vdot{width:7px;height:7px;border-radius:999px;display:inline-block;margin-right:5px;vertical-align:0;background:#e8b93a}
 /* NB: os campos e a matriz do Canvas são estilizados em runtime pelo canvas-blocks.js (classes .adp-*) */
 .handoff{margin-top:28px;text-align:center;min-height:1px}
 .handoff .ho-cta{display:inline-flex;align-items:center;gap:8px;background:var(--pink);color:#fff;font-weight:700;font-size:15px;padding:14px 28px;border-radius:999px}
@@ -156,6 +165,17 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
   var saved = {}; // dados por bloco
   var DEFS = window.ADP_CANVAS.BLOCKS;
 
+  function esc(s){return String(s==null?'':s).replace(/[<>&]/g,function(c){return {'<':'&lt;','>':'&gt;','&':'&amp;'}[c];});}
+  function dots(r){var n=Math.max(0,Math.min(5,Math.round((r||0)*5)));var s='';for(var i=0;i<5;i++)s+=i<n?'●':'○';return s;}
+  // consome o MESMO gateForBlock do dashboard — o Canvas é a visão detalhada do mesmo estado (não recalcula nada aqui)
+  function blockInfoHTML(block, data){
+    var g = window.ADP_CANVAS.gateForBlock(block, data);
+    if(!g.preenchido) return '<span class="pill">bloco não preenchido</span>';
+    var gp = g.gate.sev!=='nenhum' ? '<span class="pill g-'+g.gate.sev+'">'+esc(g.gate.label)+'</span>' : '';
+    return '<span class="pill dots">'+dots(g.completion)+'</span>'+gp+'<span class="pill val"><i class="vdot"></i>hipótese</span>';
+  }
+  function paintInfo(card, block, data){ var el=card.querySelector('.binfo'); if(el) el.innerHTML = blockInfoHTML(block, data); }
+
   function updateHandoff(filled, total){
     var el = document.getElementById("handoff"); if(!el) return;
     if(filled >= total){
@@ -181,13 +201,14 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
       var card = document.createElement("div");
       card.className = "block";
       card.innerHTML = '<div class="bh"><span class="bn">'+def.block+'</span>'
-        + '<div class="bt"><h3>'+def.title+'</h3><span class="tag">Aula '+def.block+'</span></div></div>'
+        + '<div class="bt"><h3>'+esc(def.title)+'</h3><span class="binfo linfo"></span></div></div>'
         + '<div class="bfields" style="margin-top:6px"></div>';
       wrap.appendChild(card);
       window.ADP_CANVAS.renderBlock(card.querySelector(".bfields"), def.block, saved[def.block]||{}, function(b,data){
-        saved[b] = data; card.classList.toggle("done", window.ADP_CANVAS.isFilled(b, data)); updateGauge();
+        saved[b] = data; card.classList.toggle("done", window.ADP_CANVAS.isFilled(b, data)); paintInfo(card, b, data); updateGauge();
       }, { getNicho:function(){ return window.ADP_CANVAS.nichoFromBlock2(saved[2]); } });
       card.classList.toggle("done", window.ADP_CANVAS.isFilled(def.block, saved[def.block]));
+      paintInfo(card, def.block, saved[def.block]||{});
     });
     updateGauge();
   }
