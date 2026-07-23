@@ -155,85 +155,63 @@ window.ADP_CANVAS = (function () {
     + '.adp-fld textarea:focus{outline:none;border-color:var(--line,#d4d4d8)}'
     + '.adp-savest{font-size:12px;color:var(--faint,#a1a1aa);margin-top:9px;min-height:1em}'
     + '.adp-savest.err{color:var(--pink,#ff00d7);font-weight:700}'
-    // --- Matriz v3 (blocos brancos por critério, 2 eixos, chips) ---
+    // --- Matriz v4 (superfície única por candidato, critérios em linhas — registro da HOME) ---
     + '.adp-mx{margin-top:8px;display:flex;flex-direction:column;gap:12px}'
-    + '.mx-cbar{display:flex;align-items:center;gap:12px;background:#fff;border-radius:12px;padding:14px 16px;box-shadow:0 1px 2px rgba(16,16,16,.05);cursor:pointer}'
-    + '.mx-cbar:hover{box-shadow:0 2px 7px rgba(16,16,16,.08)}'
+    + '.mx-cbar{display:flex;align-items:center;gap:12px;border:1px solid var(--line,#d4d4d8);border-radius:12px;padding:14px 18px;cursor:pointer}'
+    + '.mx-cbar:hover{background:var(--soft,#e6e6e8)}'
     + '.mx-cbtitle{font-weight:700;font-size:14px;color:var(--ink,#18181b);flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}'
     + '.mx-cbread{font-size:12.5px;color:var(--muted,#71717a);flex:none}'
     + '.mx-cbar .chev{width:16px;height:16px;fill:none;stroke:var(--muted,#71717a);stroke-width:2;flex:none}'
-    + '.mx-cand{border-radius:14px;background:transparent;padding:2px 0}'
-    + '.mx-cand-h{display:flex;align-items:center;gap:11px;margin-bottom:16px;flex-wrap:wrap}'
-    + '.mx-badge{width:30px;height:30px;border-radius:9px;background:var(--soft,#e6e6e8);display:grid;place-items:center;flex:none;color:var(--ink,#18181b)}'
-    + '.mx-badge svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}'
-    + '.mx-badge.sm{width:26px;height:26px;border-radius:8px}.mx-badge.sm svg{width:15px;height:15px}'
-    + '.mx-lead{font-weight:700;font-size:15px;flex:none;color:var(--ink,#18181b)}'
-    + '.mx-name{flex:1;min-width:140px;border:none;border-bottom:1.5px solid var(--line,#d4d4d8);background:transparent;font:inherit;font-weight:700;font-size:14.5px;color:var(--ink,#18181b);padding:4px 2px}'
+    + '.mx-cand{border:1px solid var(--line,#d4d4d8);border-radius:12px;overflow:hidden;background:var(--card,transparent)}'
+    + '.mx-cand-h{display:flex;align-items:center;gap:11px;padding:14px 18px;border-bottom:1px solid var(--line,#d4d4d8)}'
+    + '.mx-lead{font-weight:700;font-size:14px;flex:none;color:var(--ink,#18181b)}'
+    + '.mx-name{flex:1;min-width:110px;border:none;border-bottom:1px solid var(--line,#d4d4d8);background:transparent;font:inherit;font-weight:700;font-size:14px;color:var(--ink,#18181b);padding:3px 2px}'
     + '.mx-name:focus{outline:none;border-color:var(--ink,#18181b)}'
-    + '.mx-state{flex:none;font-size:11px;font-weight:700;padding:5px 12px;border-radius:999px}'
+    + '.mx-state{flex:none;font-size:11px;font-weight:700;padding:4px 11px;border-radius:999px}'
     + '.mx-state.s-ok{background:var(--lime,#e7f99a);color:var(--ink,#18181b)}'
     + '.mx-state.s-mid{background:var(--soft,#e6e6e8);color:var(--muted,#71717a)}'
     + '.mx-state.s-bad{background:var(--ink,#18181b);color:#fff}'
     + '.mx-del{flex:none;font-size:12px;color:var(--muted,#71717a);text-decoration:underline;cursor:pointer;background:none;border:none;padding:2px}'
     + '.mx-del:hover{color:var(--ink,#18181b)}'
-    + '.mx-cols{display:grid;grid-template-columns:1fr 1fr;gap:22px}'
-    + '@media(max-width:760px){.mx-cols{grid-template-columns:1fr;gap:18px}}'
-    + '.mx-colhead{margin-bottom:11px}'
-    + '.mx-colhead .ct{font-size:13.5px;font-weight:700;color:var(--ink,#18181b)}'
-    + '.mx-colhead .cx{font-size:11.5px;color:var(--muted,#71717a);margin-top:2px}'
-    + '.mx-colhead .cbar{display:flex;align-items:center;gap:9px;margin-top:9px}'
-    + '.mx-colhead .cnum{font-size:12.5px;font-weight:700;color:var(--ink,#18181b);flex:none;min-width:40px}'
-    + '.mx-colhead .ctrack{flex:1;height:6px;border-radius:999px;background:var(--soft,#e6e6e8);overflow:hidden}'
-    + '.mx-colhead .ctrack i{display:block;height:100%;background:var(--lime,#e7f99a);border-radius:999px;transition:width .3s}'
-    + '.mx-list{display:flex;flex-direction:column;gap:10px}'
-    + '.mx-crit{background:#fff;border-radius:12px;padding:12px 13px;box-shadow:0 1px 2px rgba(16,16,16,.05)}'
-    + '.mx-crit-top{display:flex;align-items:flex-start;gap:9px}'
-    + '.mx-ic{flex:none;width:26px;height:26px;border-radius:7px;background:var(--surface,#f1f1f1);display:grid;place-items:center;color:var(--muted,#71717a)}'
-    + '.mx-ic svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}'
-    + '.mx-cmid{flex:1;min-width:0}'
-    + '.mx-ch{font-size:13px;font-weight:700;color:var(--ink,#18181b);line-height:1.2}'
-    + '.mx-cq{font-size:11.5px;color:var(--muted,#71717a);margin-top:1px;line-height:1.3}'
-    + '.mx-crit-ctrl{display:flex;align-items:center;gap:9px;margin-top:11px;flex-wrap:wrap}'
-    + '.mx-nlab{font-size:10.5px;font-weight:700;letter-spacing:.03em;text-transform:uppercase;color:var(--faint,#a1a1aa)}'
-    + '.mx-nota{display:inline-flex;gap:4px}'
-    + '.mx-nn{width:26px;height:28px;border:1px solid var(--line,#d4d4d8);border-radius:8px;background:var(--surface,#f1f1f1);font:inherit;font-weight:700;font-size:12.5px;color:var(--muted,#71717a);cursor:pointer;transition:.12s}'
+    + '.mx-eixo+.mx-eixo{border-top:1px solid var(--line,#d4d4d8)}'
+    + '.mx-eixo-h{padding:15px 18px 13px}'
+    + '.mx-eixo-h .et{font-size:13.5px;font-weight:700;color:var(--ink,#18181b)}'
+    + '.mx-eixo-h .et .ex{font-weight:400;color:var(--muted,#71717a)}'
+    + '.mx-eixo-h .ebar{display:flex;align-items:center;gap:10px;margin-top:9px}'
+    + '.mx-eixo-h .en{font-size:12px;font-weight:700;color:var(--ink,#18181b);flex:none;min-width:38px}'
+    + '.mx-eixo-h .etrack{flex:1;height:5px;border-radius:999px;background:var(--soft,#e6e6e8);overflow:hidden}'
+    + '.mx-eixo-h .etrack i{display:block;height:100%;background:var(--lime,#e7f99a);border-radius:999px;transition:width .3s}'
+    + '.mx-row{padding:12px 18px;border-top:1px solid var(--line,#d4d4d8)}'
+    + '.mx-rtop{display:flex;align-items:center;gap:14px}'
+    + '.mx-rname{flex:1;min-width:0}'
+    + '.mx-rname .n{font-size:13.5px;font-weight:700;color:var(--ink,#18181b);line-height:1.25}'
+    + '.mx-rname .q{font-size:11.5px;color:var(--muted,#71717a);margin-top:1px;line-height:1.3}'
+    + '.mx-rctrl{flex:none;display:flex;align-items:center;gap:12px}'
+    + '.mx-nota{display:inline-flex;gap:3px}'
+    + '.mx-nn{width:24px;height:26px;border:1px solid var(--line,#d4d4d8);border-radius:7px;background:transparent;font:inherit;font-weight:700;font-size:12px;color:var(--muted,#71717a);cursor:pointer;transition:.12s}'
     + '.mx-nn:hover{border-color:var(--ink,#18181b);color:var(--ink,#18181b)}'
-    + '.mx-nn.on{background:var(--pink,#ff00d7);border-color:var(--pink,#ff00d7);color:#fff}'
-    + '.mx-conf{display:inline-flex;border:1px solid var(--line,#d4d4d8);border-radius:8px;overflow:hidden}'
-    + '.mx-cc{padding:6px 11px;font:inherit;font-size:11.5px;font-weight:700;color:var(--muted,#71717a);background:#fff;cursor:pointer;border-left:1px solid var(--line,#d4d4d8)}'
-    + '.mx-cc:first-child{border-left:none}'
+    + '.mx-nn.on{background:var(--ink,#18181b);border-color:var(--ink,#18181b);color:#fff}'
+    + '.mx-conf{display:inline-flex;gap:1px}'
+    + '.mx-cc{padding:4px 8px;font:inherit;font-size:10.5px;font-weight:700;color:var(--faint,#a1a1aa);background:transparent;border:none;border-radius:6px;cursor:pointer}'
     + '.mx-cc:hover{color:var(--ink,#18181b)}'
-    + '.mx-cc.on{background:var(--ink,#18181b);color:#fff}'
-    + '.mx-evline{margin-top:10px;padding-top:9px;border-top:1px solid #f0f0f2}'
-    + '.mx-evbtn{display:inline-flex;align-items:center;gap:6px;max-width:100%;font:inherit;font-size:12px;color:var(--muted,#71717a);background:none;border:none;cursor:pointer;text-align:left;padding:0}'
-    + '.mx-evbtn .ei{width:12px;height:12px;flex:none;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}'
+    + '.mx-cc.on{color:var(--ink,#18181b);background:var(--soft,#e6e6e8)}'
+    + '.mx-evline{margin-top:8px}'
+    + '.mx-evbtn{display:inline-flex;align-items:center;gap:6px;max-width:100%;font:inherit;font-size:11.5px;color:var(--faint,#a1a1aa);background:none;border:none;cursor:pointer;text-align:left;padding:0}'
+    + '.mx-evbtn .ei{width:11px;height:11px;flex:none;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}'
     + '.mx-evbtn:hover{color:var(--ink,#18181b)}'
-    + '.mx-evbtn.has{display:flex;min-width:0}'
+    + '.mx-evbtn.has{display:flex;min-width:0;color:var(--muted,#71717a)}'
     + '.mx-evbtn.has b{color:var(--ink,#18181b);font-weight:700;flex:none}'
     + '.mx-evbtn.has .tx{color:#3f3f46;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}'
-    + '.mx-ev{width:100%;border:1px solid var(--line,#d4d4d8);border-radius:8px;background:var(--surface,#f1f1f1);font:inherit;font-size:12px;padding:8px 9px;color:#3f3f46;resize:none;min-height:42px;line-height:1.4}'
+    + '.mx-ev{width:100%;border:1px solid var(--line,#d4d4d8);border-radius:8px;background:transparent;font:inherit;font-size:12px;padding:8px 9px;color:#3f3f46;resize:none;min-height:40px;line-height:1.4}'
     + '.mx-ev::placeholder{color:var(--faint,#a1a1aa)}'
-    + '.mx-ev:focus{outline:none;border-color:var(--ink,#18181b);background:#fff}'
-    + '.mx-obswrap{margin-top:16px}'
-    + '.mx-obswrap label{display:block;font-size:11px;font-weight:700;color:var(--muted,#71717a);margin-bottom:6px}'
-    + '.mx-obs{width:100%;border:none;border-radius:10px;background:#fff;box-shadow:0 1px 2px rgba(16,16,16,.05);font:inherit;font-size:13px;padding:11px 13px;color:#3f3f46;resize:none;min-height:50px;line-height:1.45}'
-    + '.mx-obs:focus{outline:none;box-shadow:0 0 0 1.5px var(--ink,#18181b)}'
-    + '.mx-vd{margin-top:16px;display:flex;align-items:flex-start;gap:12px;padding:14px 16px;border-radius:12px;background:rgba(231,249,154,.32);line-height:1.4}'
-    + '.mx-vd.v-todo{background:var(--soft,#e6e6e8)}'
-    + '.mx-vd.v-alerta,.mx-vd.v-construcao,.mx-vd.v-confortavel{background:var(--soft,#e6e6e8)}'
-    + '.mx-vd.v-inviavel{background:var(--ink,#18181b);color:#fff}'
-    + '.mx-vd .vs{flex:none;width:26px;height:26px;border-radius:999px;background:var(--ink,#18181b);display:grid;place-items:center;margin-top:1px}'
-    + '.mx-vd.v-inviavel .vs{background:#fff}'
-    + '.mx-vd .vs svg{width:14px;height:14px;fill:var(--lime,#e7f99a)}'
-    + '.mx-vd.v-inviavel .vs svg{fill:var(--ink,#18181b)}'
-    + '.mx-vd .vt{font-size:13px;min-width:0}'
-    + '.mx-vd .vt>b{font-weight:700}'
-    + '.mx-vp{margin-top:5px;font-size:12.5px;line-height:1.4}'
-    + '.mx-vp span{display:inline-block;min-width:96px;padding-right:10px;font-weight:700;color:var(--muted,#71717a)}'
-    + '.mx-vd.v-inviavel .mx-vp span{color:rgba(255,255,255,.7)}'
-    + '.adp-addcand{margin-top:12px;font-size:13px;font-weight:700;color:var(--ink,#18181b);border:1.5px dashed var(--line,#d4d4d8);border-radius:10px;padding:11px 14px;width:100%;cursor:pointer;background:none}'
-    + '.adp-addcand:hover{border-color:var(--ink,#18181b)}'
-    + '.adp-champ{margin-top:16px;font-size:14px;line-height:1.6;padding:14px 16px;border:1.5px solid var(--pink,#ff00d7);border-radius:12px;background:rgba(255,0,215,.04)}.adp-champ b{font-weight:700}'
+    + '.mx-ev:focus{outline:none;border-color:var(--ink,#18181b)}'
+    + '.mx-vd{padding:13px 18px;border-top:1px solid var(--line,#d4d4d8);font-size:13px;color:var(--ink,#18181b);display:flex;align-items:baseline;gap:9px;line-height:1.45}'
+    + '.mx-vd .dot{width:7px;height:7px;border-radius:999px;flex:none;align-self:center}'
+    + '.mx-vd .dot.ok{background:var(--lime,#e7f99a)}.mx-vd .dot.mid{background:var(--faint,#a1a1aa)}.mx-vd .dot.bad{background:var(--ink,#18181b)}'
+    + '.mx-vd .vl{font-weight:700;flex:none}'
+    + '.mx-vd .vx{color:#3f3f46;min-width:0}'
+    + '.adp-addcand{margin-top:4px;font-size:13px;font-weight:700;color:var(--ink,#18181b);border:1px solid var(--line,#d4d4d8);border-radius:10px;padding:11px 14px;width:100%;cursor:pointer;background:none}'
+    + '.adp-addcand:hover{background:var(--soft,#e6e6e8)}'
     // --- Caça à Ruminação ---
     + '.adp-rum{margin-top:20px;padding-top:20px;border-top:1px solid var(--line,#d4d4d8)}'
     + '.adp-rum .rh{display:flex;align-items:center;gap:8px;font-weight:700;font-size:14.5px}'
@@ -289,9 +267,8 @@ window.ADP_CANVAS = (function () {
     var openIdx = 0; // acordeão: só um candidato aberto por vez
     container.innerHTML = '<div class="adp-mx"></div>'
       + '<button type="button" class="adp-addcand">+ candidato a nicho</button>'
-      + '<div class="adp-champ"></div><div class="adp-savest"></div>';
+      + '<div class="adp-savest" style="display:none"></div>';
     var mx = container.querySelector('.adp-mx');
-    var champEl = container.querySelector('.adp-champ');
     var st = container.querySelector('.adp-savest');
     var save = makeSaver(2, st, onSaved);
 
@@ -323,26 +300,24 @@ window.ADP_CANVAS = (function () {
       }
       return '<button type="button" class="mx-evbtn" data-i="' + i + '" data-k="' + k + '"><svg viewBox="0 0 24 24" class="ei"><path d="M12 5v14M5 12h14"/></svg>Adicionar evidência</button>';
     }
-    // bloco branco por critério: nota em chips 1–5 + confiança segmentada
-    function critBlockHTML(row, i, k) {
+    // critério = LINHA (sem card, sem ícone): nome+pergunta à esquerda, nota (chips pretos) + confiança secundária à direita
+    function critRowHTML(row, i, k) {
       var c = CRITDEF[k], cell = row.cells[k], n = '';
       for (var v = 1; v <= 5; v++) n += '<button type="button" class="mx-nn' + (cell.nota === v ? ' on' : '') + '" data-i="' + i + '" data-k="' + k + '" data-v="' + v + '">' + v + '</button>';
-      var conf = [['baixa', 'Baixa'], ['media', 'Média'], ['alta', 'Alta']].map(function (x) {
+      var conf = [['baixa', 'baixa'], ['media', 'média'], ['alta', 'alta']].map(function (x) {
         return '<button type="button" class="mx-cc' + (cell.conf === x[0] ? ' on' : '') + '" data-i="' + i + '" data-k="' + k + '" data-c="' + x[0] + '">' + x[1] + '</button>';
       }).join('');
-      return '<div class="mx-crit">'
-        + '<div class="mx-crit-top"><span class="mx-ic"><svg viewBox="0 0 24 24">' + CRIT_ICON[k] + '</svg></span>'
-        +   '<div class="mx-cmid"><div class="mx-ch">' + esc(c.h) + '</div><div class="mx-cq">' + esc(c.hint) + '</div></div></div>'
-        + '<div class="mx-crit-ctrl"><span class="mx-nlab">nota</span><span class="mx-nota">' + n + '</span><span class="mx-conf">' + conf + '</span></div>'
+      return '<div class="mx-row">'
+        + '<div class="mx-rtop"><div class="mx-rname"><div class="n">' + esc(c.h) + '</div><div class="q">' + esc(c.hint) + '</div></div>'
+        +   '<div class="mx-rctrl"><span class="mx-nota">' + n + '</span><span class="mx-conf">' + conf + '</span></div></div>'
         + '<div class="mx-evline" data-i="' + i + '" data-k="' + k + '">' + evLineHTML(i, k, cell) + '</div>'
         + '</div>';
     }
-    function colHTML(row, i, eixo) {
+    function eixoHTML(row, i, eixo) {
       var m = COL_META[eixo.key], soma = somaEixo(row, eixo.key), pct = Math.round(soma / eixo.max * 100);
-      return '<div class="mx-col">'
-        + '<div class="mx-colhead"><div class="ct">' + m.label + '</div><div class="cx">' + m.hint + '</div>'
-        +   '<div class="cbar"><span class="cnum">' + soma + '/' + eixo.max + '</span><span class="ctrack"><i style="width:' + pct + '%"></i></span></div></div>'
-        + '<div class="mx-list">' + eixo.crit.map(function (c) { return critBlockHTML(row, i, c.k); }).join('') + '</div>'
+      return '<div class="mx-eixo"><div class="mx-eixo-h"><div class="et">' + m.label + ' <span class="ex">— ' + m.hint.toLowerCase() + '</span></div>'
+        + '<div class="ebar"><span class="en">' + soma + '/' + eixo.max + '</span><span class="etrack"><i style="width:' + pct + '%"></i></span></div></div>'
+        + eixo.crit.map(function (c) { return critRowHTML(row, i, c.k); }).join('')
         + '</div>';
     }
     // estado resumido do candidato (chip do header)
@@ -354,15 +329,11 @@ window.ADP_CANVAS = (function () {
       if (t === 'todo') return { cls: 's-mid', txt: 'em avaliação' };
       return { cls: 's-mid', txt: 'precisa validar' };
     }
-    // veredito: 1 força · 1 risco · 1 próximo passo
+    // veredito em UMA linha
     function vereditoHTML(row) {
-      if (!anyScore(row)) return '<div class="mx-vd v-todo"><span class="vs">' + STAR + '</span><div class="vt"><b>Veredito rápido</b><br>Pontua os critérios pra ver a leitura.</div></div>';
-      var v = verdict(row), sm = somaEixo(row, 'mercado'), sv = somaEixo(row, 'voce');
-      var forca = (sm / 20 >= sv / 15) ? 'o mercado puxa (dor, urgência, poder de compra)' : 'você encaixa bem (repertório, acesso, prova)';
-      return '<div class="mx-vd v-' + v.tag + '"><span class="vs">' + STAR + '</span><div class="vt"><b>Veredito rápido</b>'
-        + '<div class="mx-vp"><span>Força</span>' + esc(forca) + '</div>'
-        + '<div class="mx-vp"><span>Risco</span>' + esc(menorDimensao(row)) + '</div>'
-        + '<div class="mx-vp"><span>Próximo passo</span>' + esc(primeiroTeste(row)) + '</div></div></div>';
+      if (!anyScore(row)) return '<div class="mx-vd"><span class="dot mid"></span><span class="vl">Veredito:</span><span class="vx">pontua os critérios pra ver a leitura.</span></div>';
+      var v = verdict(row), d = v.tag === 'ok' ? 'ok' : (v.tag === 'inviavel' ? 'bad' : 'mid');
+      return '<div class="mx-vd"><span class="dot ' + d + '"></span><span class="vl">Veredito:</span><span class="vx">' + esc(v.txt) + '</span></div>';
     }
     function verdictHTML(row) {
       var v = verdict(row), em = evMissing(row);
@@ -377,13 +348,12 @@ window.ADP_CANVAS = (function () {
         + 'Risco: ' + esc(hp.risco) + '<br>'
         + 'Primeiro teste: ' + esc(hp.primeiro_teste);
     }
-    var CANDBADGE = '<svg viewBox="0 0 24 24"><path d="M3 6l9-3 9 3-9 3z"/><path d="M3 6v6l9 3 9-3V6"/></svg>';
     function paint() {
       mx.innerHTML = rows.map(function (row, i) {
         var sm = somaEixo(row, 'mercado'), sv = somaEixo(row, 'voce');
-        // candidato colapsado (acordeão) — barra resumida clicável
+        // candidato colapsado (acordeão) — linha resumida clicável
         if (i !== openIdx && rows.length > 1) {
-          return '<div class="mx-cbar" data-i="' + i + '"><span class="mx-badge sm">' + CANDBADGE + '</span>'
+          return '<div class="mx-cbar" data-i="' + i + '">'
             + '<span class="mx-cbtitle">Candidato ' + (i + 1) + (row.name ? ' · ' + esc(row.name) : '') + '</span>'
             + '<span class="mx-cbread">Mercado ' + sm + '/20 · Você ' + sv + '/15</span>'
             + '<svg class="chev" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></div>';
@@ -391,17 +361,14 @@ window.ADP_CANVAS = (function () {
         var stt = stateChip(row);
         return '<div class="mx-cand" data-i="' + i + '">'
           + '<div class="mx-cand-h">'
-          +   '<span class="mx-badge">' + CANDBADGE + '</span>'
           +   '<span class="mx-lead">Candidato ' + (i + 1) + '</span>'
           +   '<input class="mx-name" data-i="' + i + '" value="' + esc(row.name) + '" placeholder="dá um nome (ex: clínicas de estética premium)">'
           +   '<span class="mx-state ' + stt.cls + '">' + stt.txt + '</span>'
           +   (rows.length > 1 ? '<button type="button" class="mx-del" data-i="' + i + '">remover</button>' : '')
           + '</div>'
-          + '<div class="mx-cols">' + EIXOS.map(function (e) { return colHTML(row, i, e); }).join('') + '</div>'
-          + '<div class="mx-obswrap"><label>Observação rápida (opcional)</label><textarea class="mx-obs" data-i="' + i + '" rows="2" placeholder="Ex: mercado valioso, acesso ok, falta prova pública.">' + esc(row.obs || '') + '</textarea></div>'
+          + EIXOS.map(function (e) { return eixoHTML(row, i, e); }).join('')
           + vereditoHTML(row) + '</div>';
       }).join('');
-      champEl.innerHTML = champHTML();
     }
     function matData() {
       return {
@@ -416,8 +383,7 @@ window.ADP_CANVAS = (function () {
     // digitar o nome não deve re-renderizar (perderia o foco) — só atualiza o campeão
     container.addEventListener('input', function (e) {
       var t = e.target, i = +t.dataset.i;
-      if (t.classList.contains('mx-name')) { rows[i].name = t.value; champEl.innerHTML = champHTML(); persist(); }
-      else if (t.classList.contains('mx-obs')) { rows[i].obs = t.value; persist(); }
+      if (t.classList.contains('mx-name')) { rows[i].name = t.value; persist(); }
       else if (t.classList.contains('mx-ev')) { rows[i].cells[t.dataset.k].ev = t.value; persist(); }
     });
     container.addEventListener('click', function (e) {
