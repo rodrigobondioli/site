@@ -88,11 +88,10 @@ export function mergeVoce(prev, modelV) {
 export async function escavadorTurn(body) {
   var voce = normalizeVoce(body && body.voce);
   var history = arr(body && body.history).slice(-8);
-  var msgs = [
-    { role: 'system', content: SYSTEM },
-    { role: 'system', content: 'ESTADO ATUAL do voce (JSON — já captado; atualize e devolva completo):\n' + JSON.stringify(voce) }
-  ];
-  if (!history.length) msgs.push({ role: 'user', content: '(início) Começa a entrevista — abre com UMA pergunta.' });
+  // UMA system só (Gemini engasga com múltiplas system) — o estado do voce entra no fim do system.
+  var sys = SYSTEM + '\n\n## ESTADO ATUAL DO voce (JSON já captado — atualize e devolva COMPLETO):\n' + JSON.stringify(voce);
+  var msgs = [{ role: 'system', content: sys }];
+  if (!history.length) msgs.push({ role: 'user', content: 'Começa a entrevista — abre com UMA pergunta curta.' });
   else history.forEach(function (m) { if (m && m.role && m.content) msgs.push({ role: m.role === 'assistant' ? 'assistant' : 'user', content: str(m.content) }); });
 
   var out = await ai(MODEL_FAST(), msgs, 2048, 0.5);
