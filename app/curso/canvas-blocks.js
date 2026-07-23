@@ -189,9 +189,16 @@ window.ADP_CANVAS = (function () {
     + '.mx-nota{border:1px solid var(--line,#d4d4d8);border-radius:8px;background:#fff;font:inherit;font-weight:700;font-size:13px;padding:6px 4px;color:var(--ink,#18181b);cursor:pointer;width:44px;text-align:center}'
     + '.mx-conf{border:1px solid var(--line,#d4d4d8);border-radius:8px;background:#fff;font:inherit;font-size:11.5px;padding:6px 5px;color:var(--ink,#18181b);cursor:pointer;max-width:88px}'
     + '.mx-nota:focus,.mx-conf:focus{outline:none;border-color:var(--ink,#18181b)}'
-    + '.mx-ev{width:100%;margin-top:9px;border:1px solid var(--line,#d4d4d8);border-radius:8px;background:var(--surface,#f1f1f1);font:inherit;font-size:12px;padding:8px 9px;color:#3f3f46;resize:none;min-height:40px;line-height:1.4}'
+    + '.mx-evline{margin-top:8px}'
+    + '.mx-evbtn{display:inline-flex;align-items:center;gap:6px;max-width:100%;font:inherit;font-size:12px;color:var(--muted,#71717a);background:none;border:none;cursor:pointer;text-align:left;padding:3px 0}'
+    + '.mx-evbtn .ei{width:12px;height:12px;flex:none;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}'
+    + '.mx-evbtn:hover{color:var(--ink,#18181b)}'
+    + '.mx-evbtn.has{display:flex;min-width:0}'
+    + '.mx-evbtn.has b{color:var(--ink,#18181b);font-weight:700;flex:none}'
+    + '.mx-evbtn.has .tx{color:#3f3f46;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}'
+    + '.mx-ev{width:100%;margin-top:2px;border:1px solid var(--line,#d4d4d8);border-radius:8px;background:#fff;font:inherit;font-size:12px;padding:8px 9px;color:#3f3f46;resize:none;min-height:44px;line-height:1.4}'
     + '.mx-ev::placeholder{color:var(--faint,#a1a1aa)}'
-    + '.mx-ev:focus{outline:none;border-color:var(--ink,#18181b);background:#fff}'
+    + '.mx-ev:focus{outline:none;border-color:var(--ink,#18181b)}'
     + '.mx-obswrap{margin-top:16px}'
     + '.mx-obswrap label{display:block;font-size:11px;font-weight:700;color:var(--muted,#71717a);margin-bottom:6px}'
     + '.mx-obs{width:100%;border:1px solid var(--line,#d4d4d8);border-radius:10px;background:var(--surface,#f1f1f1);font:inherit;font-size:13px;padding:10px 12px;color:#3f3f46;resize:none;min-height:50px;line-height:1.45}'
@@ -269,7 +276,7 @@ window.ADP_CANVAS = (function () {
 
     function notaOpts(sel) { var s = '<option value="">—</option>'; for (var i = 1; i <= 5; i++) s += '<option ' + (i === sel ? 'selected' : '') + '>' + i + '</option>'; return s; }
     function confOpts(sel) {
-      return [['', 'confiança?'], ['baixa', 'baixa'], ['media', 'média'], ['alta', 'alta']]
+      return [['', 'conf.'], ['baixa', 'baixa'], ['media', 'média'], ['alta', 'alta']]
         .map(function (x) { return '<option value="' + x[0] + '"' + (x[0] === sel ? ' selected' : '') + '>' + x[1] + '</option>'; }).join('');
     }
     // ordem de exibição (mercado/você intercalados) + ícone de cada critério
@@ -284,6 +291,13 @@ window.ADP_CANVAS = (function () {
       aderencia: '<path d="M7 4h10v4a5 5 0 0 1-10 0z"/><path d="M7 6H4.5v.8a3 3 0 0 0 3 3M17 6h2.5v.8a3 3 0 0 1-3 3M9.5 15h5M10.5 20h3M12 15v5"/>'
     };
     var COL_LABEL = { mercado: 'O mercado vale a pena?', voce: 'Você tem vantagem aqui?' };
+    // evidência = linha compacta que abre pra editar (nada de caixão cinza sempre aberto)
+    function evLineHTML(i, k, cell) {
+      if (cell.ev && cell.ev.trim()) {
+        return '<button type="button" class="mx-evbtn has" data-i="' + i + '" data-k="' + k + '"><svg viewBox="0 0 24 24" class="ei"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg><b>Evidência:</b>&nbsp;<span class="tx">' + esc(cell.ev) + '</span></button>';
+      }
+      return '<button type="button" class="mx-evbtn" data-i="' + i + '" data-k="' + k + '"><svg viewBox="0 0 24 24" class="ei"><path d="M12 5v14M5 12h14"/></svg>Adicionar evidência</button>';
+    }
     function critRowHTML(row, i, k) {
       var c = CRITDEF[k], cell = row.cells[k];
       return '<div class="mx-row">'
@@ -293,7 +307,7 @@ window.ADP_CANVAS = (function () {
         +   '<div class="mx-rctrl"><span class="mx-notawrap"><select class="mx-nota" data-i="' + i + '" data-k="' + k + '">' + notaOpts(cell.nota) + '</select>/5</span>'
         +     '<select class="mx-conf" data-i="' + i + '" data-k="' + k + '">' + confOpts(cell.conf) + '</select></div>'
         + '</div>'
-        + '<textarea class="mx-ev" data-i="' + i + '" data-k="' + k + '" rows="1" placeholder="Evidência: o fato, não a torcida. Sem ela a nota não vale.">' + esc(cell.ev) + '</textarea>'
+        + '<div class="mx-evline" data-i="' + i + '" data-k="' + k + '">' + evLineHTML(i, k, cell) + '</div>'
         + '</div>';
     }
     function colHTML(row, i, eixo) {
@@ -357,6 +371,15 @@ window.ADP_CANVAS = (function () {
       else if (t.classList.contains('mx-conf')) { rows[i].cells[t.dataset.k].conf = t.value; paint(); persist(); }
     });
     container.addEventListener('click', function (e) {
+      // abrir editor de evidência inline
+      var evbtn = e.target.closest && e.target.closest('.mx-evbtn');
+      if (evbtn) {
+        var ei = +evbtn.dataset.i, ek = evbtn.dataset.k, line = evbtn.parentNode;
+        line.innerHTML = '<textarea class="mx-ev" data-i="' + ei + '" data-k="' + ek + '" rows="2" placeholder="O fato, não a torcida. Sem ela a nota não vale.">' + esc(rows[ei].cells[ek].ev || '') + '</textarea>';
+        var ta = line.querySelector('textarea');
+        if (ta) { ta.focus(); ta.addEventListener('blur', function () { rows[ei].cells[ek].ev = ta.value; persist(); line.innerHTML = evLineHTML(ei, ek, rows[ei].cells[ek]); }); }
+        return;
+      }
       if (e.target.classList.contains('adp-addcand')) { rows.push(normRow()); paint(); persist(); return; }
       var del = e.target.closest && e.target.closest('.mx-del');
       if (del) { rows.splice(+del.dataset.i, 1); if (!rows.length) rows.push(normRow()); paint(); persist(); }
