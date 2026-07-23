@@ -227,16 +227,16 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .esc-bh .prog{margin-left:auto;font-size:12px;color:var(--muted)}
 .esc-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
 @media(max-width:680px){.esc-cards{grid-template-columns:repeat(2,1fr)}}
-.esc-c{border:1px solid var(--line);border-radius:11px;padding:12px 13px;background:#fff;min-height:74px}
-.esc-c.empty{background:var(--surface);border-style:dashed;opacity:.75}
+.esc-c{border:none;border-radius:12px;padding:12px 13px;background:#fff;min-height:74px;box-shadow:0 1px 2px rgba(16,16,16,.04)}
+.esc-c.empty{background:var(--surface);border:1px dashed var(--line);box-shadow:none;opacity:.85}
 .esc-c .ctop{display:flex;align-items:center;gap:8px;margin-bottom:6px}
 .esc-c .ic{flex:none;color:var(--muted);display:flex}
 .esc-c .ic svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 .esc-c .ct{font-size:12.5px;font-weight:700;color:var(--ink);flex:1;min-width:0}
-.esc-c .st{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.03em;padding:2px 7px;border-radius:999px;flex:none}
-.esc-c .st.ok{background:var(--lime);color:var(--ink)}
-.esc-c .st.fraco{background:rgba(255,0,215,.12);color:var(--ink)}
-.esc-c .st.vazio{background:var(--soft);color:var(--faint)}
+.esc-c .st{flex:none;display:inline-flex;align-items:center}
+.esc-c .st.ok{width:18px;height:18px;justify-content:center;border-radius:999px;background:var(--lime);color:var(--ink)}
+.esc-c .st.ok svg{width:11px;height:11px;fill:none;stroke:var(--ink);stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}
+.esc-c .st.fraco{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.03em;padding:2px 8px;border-radius:999px;background:rgba(255,0,215,.1);color:var(--ink)}
 .esc-c .cs{font-size:12px;color:var(--muted);line-height:1.4}
 /* fecho — barra calma (não alarme rosa) */
 .esc-done{margin-top:22px;padding:15px 18px;border:1.5px solid var(--lime);background:rgba(231,249,154,.28);border-radius:12px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
@@ -413,7 +413,8 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
         input=container.querySelector('#escInput'), send=container.querySelector('#escSend'),
         typing=container.querySelector('#escTyping'), chips=container.querySelector('#escChips'),
         cardsEl=container.querySelector('#escCards'), stepEl=container.querySelector('#escStep'),
-        doneEl=container.querySelector('#escDone'), progEl=container.querySelector('#escProgTxt');
+        doneEl=container.querySelector('#escDone'), progEl=container.querySelector('#escProgTxt'),
+        inbar=container.querySelector('.esc-inbar');
     var qCount = history.filter(function(m){return m.role==='assistant';}).length;
 
     function setBusy(b){ send.disabled=b; typing.classList.toggle('gone', !b); }
@@ -443,7 +444,9 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
     function renderCards(){
       cardsEl.innerHTML=ESC_CARDS.map(function(c){
         var d=cardData(c.k), s=cardStatus(c.k);
-        return '<div class="esc-c'+(d.n===0?' empty':'')+'"><div class="ctop"><span class="ic">'+c.ic+'</span><span class="ct">'+c.t+'</span><span class="st '+s.st+'">'+esc(s.label)+'</span></div>'
+        var stHTML = s.st==='ok' ? '<span class="st ok"><svg viewBox="0 0 24 24"><path d="m5 13 4 4L19 7"/></svg></span>'
+                   : s.st==='fraco' ? '<span class="st fraco">'+esc(s.label)+'</span>' : '';
+        return '<div class="esc-c'+(d.n===0?' empty':'')+'"><div class="ctop"><span class="ic">'+c.ic+'</span><span class="ct">'+c.t+'</span>'+stHTML+'</div>'
           +'<div class="cs">'+(d.s?esc(d.s):'—')+'</div></div>';
       }).join('');
       stepEl.textContent = qCount ? ('· pergunta '+Math.min(qCount,5)+' de ~5') : '';
@@ -455,15 +458,19 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
       chips.classList.remove('gone');
     }
     function renderDone(){
-      if(filledCount()<3 && !done){ doneEl.classList.add('gone'); return; }
+      // só aparece quando o Escavador FECHA (done) — nada de CTA no meio da conversa
+      if(!done){ doneEl.classList.add('gone'); if(inbar) inbar.classList.remove('gone'); return; }
+      if(inbar) inbar.classList.add('gone'); if(chips) chips.classList.add('gone');
       var g=window.ADP_CANVAS.gateForBlock(0, voce);
       var next=(LESSONS[idx+1])?('aula.html?a='+LESSONS[idx+1].id):'canvas.html';
       var msg;
-      if(g.gate.sev==='ok') msg='<b>Bloco forte.</b> Matéria-prima com prova. Bora pro Território.';
-      else if(g.gate.sev==='importante'||g.gate.sev==='aviso') msg='<b>Já dá pra seguir.</b> Falta reforçar: '+esc(g.gate.label)+' — dá pra melhorar ao longo do curso.';
-      else msg='<b>Bloco tomando forma.</b> Já dá pra seguir quando quiser.';
-      doneEl.innerHTML='<div class="dt">'+msg+'</div><a class="esc-cont" href="'+next+'">Continuar para Território →</a>';
+      if(g.gate.sev==='ok') msg='<b>Pronto — tua matéria-prima tá forte.</b> Tem comunidade, competência e prova. Já dá pra montar teu posicionamento.';
+      else if(g.gate.sev==='importante'||g.gate.sev==='aviso') msg='<b>Pronto — já dá pra seguir.</b> Só falta reforçar: '+esc(g.gate.label)+'. Dá pra melhorar mais pra frente.';
+      else msg='<b>Pronto.</b> Tua matéria-prima tá montada.';
+      doneEl.innerHTML='<div class="dt">'+msg+'</div><a class="esc-cont" id="escCont" href="'+next+'">Continuar →</a>';
       doneEl.classList.remove('gone');
+      var cont=doneEl.querySelector('#escCont');
+      if(cont) cont.addEventListener('click', function(){ try{ if(cur && !DONE.has(cur.id)){ DONE.add(cur.id); window.ADP.setDone(cur.id,true).catch(function(){}); } }catch(e){} });
     }
     function persist(){ voce._chat=history.slice(-16); CANVAS[0]=voce; window.ADP.saveBlock(0, voce).catch(function(){}); }
 
@@ -537,13 +544,15 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
     var isDone=DONE.has(cur.id);
     var nextHref = next? ('aula.html?a='+next.id) : 'posicionamento.html';
     var nextLabel = next? ('Próxima aula: '+esc(next.title)) : 'Montar meu posicionamento com a IA';
-    var kicker = isDone ? '' : '<div class="ns-kicker">Aplicou o exercício acima? Salva o progresso</div>';
-    var btn = '<button class="ns-toggle'+(isDone?' done':'')+'" id="doneBtn"><span class="ck">'+ICON_DONE+'</span>'+(isDone?'Concluída':'Marcar aula como concluída')+'</button>';
-    var link = '<a class="ns-next" href="'+nextHref+'">'+(isDone? (nextLabel+' →') : 'ou pular pra próxima →')+'</a>';
+    var kicker = isDone ? '' : '<div class="ns-kicker">Terminou? Salva e segue</div>';
+    var btn = '<button class="ns-toggle'+(isDone?' done':'')+'" id="doneBtn"><span class="ck">'+ICON_DONE+'</span>'+(isDone?'Aula concluída':'Concluir aula')+'</button>';
+    var link = '<a class="ns-next" href="'+nextHref+'">'+(isDone? (nextLabel+' →') : 'ir pra próxima →')+'</a>';
     return '<div class="nextstep">'+kicker+btn+link+'</div>';
   }
   function paintNextStep(){
     var w=document.getElementById('nextStepWrap'); if(!w) return;
+    // na aula do Escavador (bloco 0) o CTA é o "Continuar" da ferramenta — não duplica
+    if(cur && cur.canvas_block===0){ w.innerHTML=''; return; }
     w.innerHTML=buildNextStep();
     var b=document.getElementById('doneBtn'); if(b) b.addEventListener('click', toggleDone);
   }
