@@ -270,10 +270,15 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .applyhere-form .adp-fld{margin-top:0;position:relative}
 .applyhere-form .adp-fld label{display:none}          /* a pergunta aparece grande no #fwQ */
 .applyhere-form .adp-fld.fw-hide{display:none}         /* só o passo atual aparece */
-/* input idêntico ao composer do Escavador: sparkle na esquerda + altura compacta */
-.applyhere-form .adp-fld textarea{min-height:54px;padding:15px 16px 15px 44px}
+/* input idêntico ao composer do Escavador: sparkle na esquerda + botão enviar dentro + altura compacta */
+.applyhere-form .adp-fld textarea{min-height:54px;padding:15px 58px 15px 44px}
 .applyhere-form .adp-fld:not(.fw-hide)::before{content:"";position:absolute;left:17px;top:18px;width:18px;height:18px;opacity:.55;pointer-events:none;background:no-repeat center/contain url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23a1a1aa' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 3l1.7 4.8L18.5 9.5l-4.8 1.7L12 16l-1.7-4.8L5.5 9.5l4.8-1.7z'/%3E%3C/svg%3E")}
+.applyhere-form .adp-savest{display:none}
+.fw-send{position:absolute;right:8px;bottom:8px;width:40px;height:40px;border-radius:13px;background:var(--pink);border:none;display:grid;place-items:center;cursor:pointer}
+.fw-send svg{width:18px;height:18px;fill:none;stroke:#fff;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.fw-send:hover{filter:brightness(1.06)}
 .esc-formfoot{margin-top:24px;padding-top:20px;border-top:1px solid var(--line);display:flex;align-items:center;justify-content:flex-end}
+.esc-formfoot.gone{display:none}
 .fw-back{font-size:13px;color:var(--muted);text-decoration:underline;margin-right:auto;cursor:pointer}
 .fw-back:hover{color:var(--ink)}
 .fw-back.gone{display:none}
@@ -380,7 +385,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
       +(ex.intro?'<p class="esc-formsub" id="fwIntro">'+esc(ex.intro)+'</p>':'')
       +'<div class="esc-q" id="fwQ"></div>'
       +'<div id="canvasInline" class="esc-fieldwrap"></div>'
-      +'<div class="esc-formfoot"><button class="fw-back gone" id="fwBack">← voltar</button><button class="esc-cont" id="fwNext">Próxima →</button></div>'
+      +'<div class="esc-formfoot gone" id="fwFoot"><button class="esc-cont" id="fwNext">Continuar →</button></div>'
       +'</div>';
   }
 
@@ -545,7 +550,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
     var def = window.ADP_CANVAS && window.ADP_CANVAS.byBlock(l.canvas_block);
     var card = document.querySelector('.applyhere-form'); if(!card || !def) return;
     var qEl=card.querySelector('#fwQ'), bar=card.querySelector('#fwBar'), stepEl=card.querySelector('#fwStep'),
-        intro=card.querySelector('#fwIntro'), back=card.querySelector('#fwBack'), next=card.querySelector('#fwNext'),
+        intro=card.querySelector('#fwIntro'), foot=card.querySelector('#fwFoot'), nextBtn=card.querySelector('#fwNext'),
         qbar=card.querySelector('.esc-qbar');
     var nextHref=(LESSONS[idx+1])?('aula.html?a='+LESSONS[idx+1].id):'canvas.html';
     function finish(){ try{ if(cur && !DONE.has(cur.id)){ DONE.add(cur.id); window.ADP.setDone(cur.id,true).catch(function(){}); } }catch(e){} location.href=nextHref; }
@@ -555,26 +560,31 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
       if(qEl) qEl.style.display='none';
       if(qbar) qbar.style.display='none';
       if(intro) intro.style.display='none';
-      if(back) back.classList.add('gone');
-      if(next){ next.textContent='Continuar →'; next.addEventListener('click', finish); }
+      if(foot){ foot.classList.remove('gone'); }
+      if(nextBtn) nextBtn.addEventListener('click', finish);
       return;
     }
+    // MESMO comportamento do Escavador: botão enviar (aviãozinho rosa) DENTRO do campo; Enter envia; a pergunta troca na hora.
     var rum = card.querySelector('.adp-rum'); // só no bloco 3 (aparece no passo da "dor")
     var dorIdx = def.fields.findIndex(function(f){return f.key==='dor';});
     var step=0;
+    function advance(){ if(step<fields.length-1){ step++; render(); } else { finish(); } }
+    var SEND='<svg viewBox="0 0 24 24"><path d="M22 2 11 13"/><path d="M22 2 15 22l-4-9-9-4z"/></svg>';
+    fields.forEach(function(f){
+      var b=document.createElement('button'); b.type='button'; b.className='fw-send'; b.setAttribute('aria-label','Próxima'); b.innerHTML=SEND;
+      b.addEventListener('click', advance); f.appendChild(b);
+      var ta=f.querySelector('textarea');
+      if(ta) ta.addEventListener('keydown', function(e){ if(e.key==='Enter' && !e.shiftKey){ e.preventDefault(); advance(); } });
+    });
     function render(){
       fields.forEach(function(f,i){ f.classList.toggle('fw-hide', i!==step); });
       if(qEl) qEl.textContent = def.fields[step].label;
       if(bar) bar.style.width = ((step+1)/fields.length*100)+'%';
       if(stepEl) stepEl.textContent = '· pergunta '+(step+1)+' de '+fields.length;
       if(intro) intro.style.display = step===0 ? '' : 'none';
-      if(back) back.classList.toggle('gone', step===0);
-      if(next) next.textContent = step<fields.length-1 ? 'Próxima →' : 'Continuar →';
       if(rum) rum.style.display = (step===dorIdx) ? '' : 'none';
       var ta=fields[step].querySelector('textarea'); if(ta) setTimeout(function(){ try{ta.focus();}catch(e){} },0);
     }
-    if(next) next.addEventListener('click', function(){ if(step<fields.length-1){ step++; render(); } else { finish(); } });
-    if(back) back.addEventListener('click', function(){ if(step>0){ step--; render(); } });
     render();
   }
 
