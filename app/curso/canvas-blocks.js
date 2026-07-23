@@ -283,8 +283,8 @@ window.ADP_CANVAS = (function () {
     function barsHTML(row) {
       var sm = somaEixo(row, 'mercado'), sv = somaEixo(row, 'voce');
       return '<div class="mx-bars">'
-        + '<div class="mx-bar"><div class="mx-bl"><span>Mercado</span><b>' + sm + '/20</b></div><div class="mx-track"><i style="width:' + Math.round(sm / 20 * 100) + '%"></i></div></div>'
-        + '<div class="mx-bar"><div class="mx-bl"><span>Você (fit)</span><b>' + sv + '/15</b></div><div class="mx-track"><i style="width:' + Math.round(sv / 15 * 100) + '%"></i></div></div>'
+        + '<div class="mx-bar"><div class="mx-bl"><span>O mercado vale a pena?</span><b>' + sm + '/20</b></div><div class="mx-track"><i style="width:' + Math.round(sm / 20 * 100) + '%"></i></div></div>'
+        + '<div class="mx-bar"><div class="mx-bl"><span>Você tem vantagem aqui?</span><b>' + sv + '/15</b></div><div class="mx-track"><i style="width:' + Math.round(sv / 15 * 100) + '%"></i></div></div>'
         + '</div>';
     }
     function critCardHTML(row, i, k) {
