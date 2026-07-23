@@ -195,10 +195,13 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .esc-head .step{font-size:12.5px;color:var(--muted)}
 .esc-reset{margin-left:auto;font-size:12px;color:var(--muted);text-decoration:underline;cursor:pointer;flex:none}
 .esc-reset:hover{color:var(--ink)}
+/* barra de progresso das perguntas (embaixo do header) */
+.esc-qbar{height:4px;border-radius:999px;background:var(--soft);overflow:hidden;margin:0 0 18px}
+.esc-qbar i{display:block;height:100%;width:0;background:var(--ink);border-radius:999px;transition:width .35s}
 /* pergunta atual (só ela — sem histórico rolando) */
-.esc-last{font-size:12.5px;color:var(--faint);margin-bottom:10px;line-height:1.4}
+.esc-last{font-size:12.5px;color:var(--faint);margin-bottom:14px;line-height:1.6}
 .esc-last b{color:var(--muted);font-weight:700}
-.esc-q{font-size:19px;font-weight:700;line-height:1.4;letter-spacing:-.01em;color:var(--ink);margin-bottom:16px;min-height:1.4em}
+.esc-q{font-size:19px;font-weight:700;line-height:1.55;letter-spacing:-.01em;color:var(--ink);margin-bottom:20px;min-height:1.55em}
 .esc-typing{font-size:13px;color:var(--muted);margin-bottom:12px}
 .esc-typing.gone{display:none}
 .esc-spin{display:inline-block;width:12px;height:12px;border:2px solid currentColor;border-right-color:transparent;border-radius:50%;animation:aspin .7s linear infinite;vertical-align:-1px;margin-right:7px}
@@ -215,11 +218,11 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .esc-send svg{width:18px;height:18px;fill:none;stroke:#fff;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .esc-send:hover{filter:brightness(1.06)}
 .esc-send[disabled]{opacity:.45;cursor:not-allowed}
-.esc-chips{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin-top:8px;padding:9px 6px 3px;border-top:1px solid var(--line)}
+.esc-chips{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-top:9px;padding:11px 6px 4px;border-top:1px solid var(--line)}
 .esc-chips.gone{display:none}
 .esc-chlbl{font-size:11px;color:var(--faint);font-weight:600;margin-right:2px}
-.esc-chip{font-size:11.5px;font-weight:600;color:var(--ink);border:none;border-radius:999px;padding:5px 12px;cursor:pointer;background:linear-gradient(90deg,rgba(231,249,154,.75),rgba(231,249,154,.28));transition:filter .12s}
-.esc-chip:hover{filter:brightness(1.04) saturate(1.15)}
+.esc-chip{font-size:11.5px;font-weight:600;color:var(--ink);border:1px solid var(--line);border-radius:999px;padding:6px 13px;cursor:pointer;background:#fff;transition:background .12s}
+.esc-chip:hover{background:var(--surface)}
 /* bloco VOCÊ — o hero (sempre visível, enchendo) */
 .esc-block{margin-top:26px;padding-top:22px;border-top:1px solid var(--line)}
 .esc-bh{display:flex;align-items:baseline;gap:10px;margin-bottom:14px}
@@ -397,6 +400,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
     var done = false;
     container.innerHTML = '<div class="esc">'
       + '<div class="esc-head"><span class="ex"><svg viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg>Exercício</span><span class="sep">·</span><span class="nm">O Escavador</span><span class="step" id="escStep"></span><span class="esc-reset" id="escReset">reiniciar</span></div>'
+      + '<div class="esc-qbar"><i id="escQbar"></i></div>'
       + '<div class="esc-ask">'
       +   '<div class="esc-last gone" id="escLast"></div>'
       +   '<div class="esc-q" id="escQ"></div>'
@@ -450,6 +454,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
           +'<div class="cs">'+(d.s?esc(d.s):'—')+'</div></div>';
       }).join('');
       stepEl.textContent = qCount ? ('· pergunta '+Math.min(qCount,5)+' de ~5') : '';
+      var qb=container.querySelector('#escQbar'); if(qb) qb.style.width = (done?100:Math.min(qCount,5)/5*100)+'%';
       progEl.textContent = filledCount()+' de 9 itens';
     }
     function renderChips(){
