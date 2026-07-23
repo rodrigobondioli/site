@@ -97,7 +97,7 @@ export async function escavadorTurn(body) {
   var out = await ai(MODEL_FAST(), msgs, 2048, 0.5);
   var data = extractJSON(out) || {};
   return {
-    reply: data.reply || 'Não peguei direito. Me dá um exemplo concreto: um mercado ou lugar que você já viveu por dentro — e um problema que você viu lá.',
+    reply: data.reply || 'Me conta um exemplo concreto: um mercado ou lugar que você já viveu por dentro — e um problema que você viu lá.',
     voce: mergeVoce(voce, data.voce),
     campo_atual: data.campo_atual || 'comunidades',
     done: !!data.done,
