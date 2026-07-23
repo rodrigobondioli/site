@@ -185,77 +185,57 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
   .panel:not(.hidden){transform:translateX(0);box-shadow:-24px 0 48px rgba(0,0,0,.4)}
 }
 
-/* ---------- Escavador (chat da Aula 1 / VOCÊ) — coluna única ---------- */
+/* ---------- Escavador — extração guiada com preview estrutural ---------- */
 .esc .gone{display:none}
-.esc-head{display:flex;align-items:center;gap:9px;margin-bottom:14px}
+.esc-head{display:flex;align-items:center;gap:9px;margin-bottom:18px}
 .esc-head .dot{width:8px;height:8px;border-radius:999px;background:var(--pink);flex:none}
 .esc-head .nm{font-weight:700;font-size:13.5px;color:var(--ink)}
-.esc-head .sb{font-size:12.5px;color:var(--muted)}
+.esc-head .step{font-size:12.5px;color:var(--muted)}
 .esc-reset{margin-left:auto;font-size:12px;color:var(--muted);text-decoration:underline;cursor:pointer;flex:none}
 .esc-reset:hover{color:var(--ink)}
-/* prévia ao vivo — faixa horizontal em cima */
-.esc-prevbar{border:1px solid var(--line);border-radius:12px;background:var(--surface);margin-bottom:16px}
-.esc-ph{display:flex;align-items:center;gap:9px;padding:11px 14px;cursor:pointer;user-select:none}
-.esc-ph b{font-size:13px;font-weight:700}
-.esc-ph .live{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--pink)}
-.esc-ph .prog{margin-left:auto;font-size:11.5px;color:var(--muted)}
-.esc-ph .caret{font-size:12px;font-weight:700;color:var(--muted);transition:transform .15s;flex:none;margin-left:2px}
-.esc-prevbar.open .esc-ph .caret{transform:rotate(90deg)}
-.esc-prevbody{display:none;padding:0 14px 14px}
-.esc-prevbar.open .esc-prevbody{display:block}
-.esc-cards{display:flex;flex-wrap:wrap;gap:8px}
-.esc-c{flex:1 1 140px;min-width:128px;display:flex;align-items:center;gap:9px;border:1px solid var(--line);border-radius:10px;padding:9px 11px;background:#fff}
-.esc-c.empty{opacity:.5}
-.esc-c .ic{flex:none;color:var(--muted);display:flex}
-.esc-c .ic svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
-.esc-c .cbody{min-width:0}
-.esc-c .ct{font-size:12px;font-weight:700;color:var(--ink)}
-.esc-c .cn{color:var(--pink);margin-left:2px}
-.esc-c .cs{font-size:11px;color:var(--muted);line-height:1.3;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:100%}
-.esc-progbar{height:5px;border-radius:999px;background:var(--soft);overflow:hidden;margin-top:12px}
-.esc-progbar i{display:block;height:100%;background:var(--ink);border-radius:999px;transition:width .3s}
-/* chat */
-.esc-log{display:flex;flex-direction:column;gap:13px;min-height:120px;max-height:340px;overflow-y:auto;padding:2px 8px 8px 2px;scrollbar-width:thin;scrollbar-color:var(--line) transparent}
-.esc-log::-webkit-scrollbar{width:5px}
-.esc-log::-webkit-scrollbar-thumb{background:var(--line);border-radius:999px}
-.esc-log::-webkit-scrollbar-thumb:hover{background:var(--faint)}
-.esc-log::-webkit-scrollbar-track{background:transparent}
-.esc-row{display:flex;gap:9px;align-items:flex-start;max-width:86%}
-.esc-row.ai{align-self:flex-start}
-.esc-row.me{align-self:flex-end}
-.esc-av{width:30px;height:30px;border-radius:999px;flex:none;overflow:hidden;display:grid;place-items:center;font-size:10.5px;font-weight:700}
-.esc-av.ai{background:var(--lime)}
-.esc-av.ai svg{width:19px;height:19px}
-.esc-av.me{background:var(--soft);color:var(--muted);box-shadow:inset 0 0 0 1px var(--line)}
-.esc-av img{width:100%;height:100%;object-fit:cover}
-.esc-b{font-size:14.5px;line-height:1.55;white-space:pre-wrap;min-width:0}
-.esc-b.ai{color:var(--ink)}
-.esc-b.ai .who{display:block;font-size:11px;font-weight:700;color:var(--muted);margin-bottom:3px;letter-spacing:.02em}
-.esc-b.me{background:var(--ink);color:#fff;padding:10px 14px;border-radius:14px;border-bottom-right-radius:5px}
-.esc-typing{font-size:13px;color:var(--muted);padding:6px 2px}
+/* pergunta atual (só ela — sem histórico rolando) */
+.esc-last{font-size:12.5px;color:var(--faint);margin-bottom:10px;line-height:1.4}
+.esc-last b{color:var(--muted);font-weight:700}
+.esc-q{font-size:19px;font-weight:700;line-height:1.4;letter-spacing:-.01em;color:var(--ink);margin-bottom:16px;min-height:1.4em}
+.esc-typing{font-size:13px;color:var(--muted);margin-bottom:12px}
 .esc-typing.gone{display:none}
 .esc-spin{display:inline-block;width:12px;height:12px;border:2px solid currentColor;border-right-color:transparent;border-radius:50%;animation:aspin .7s linear infinite;vertical-align:-1px;margin-right:7px}
 @keyframes aspin{to{transform:rotate(360deg)}}
-.esc-chips{display:flex;flex-wrap:wrap;gap:7px;margin-top:14px}
-.esc-chips.gone{display:none}
-.esc-chip{font-size:12.5px;font-weight:600;color:var(--ink);background:#fff;border:none;border-radius:999px;padding:8px 14px;cursor:pointer}
-.esc-chip:hover{background:var(--soft)}
 /* input: barra única, botão dentro */
-.esc-inbar{display:flex;align-items:center;gap:8px;margin-top:14px;background:#fff;border-radius:999px;padding:6px 7px 6px 20px;box-shadow:0 1px 2px rgba(16,16,16,.05)}
+.esc-inbar{display:flex;align-items:center;gap:8px;background:#fff;border-radius:999px;padding:6px 7px 6px 20px;box-shadow:0 1px 2px rgba(16,16,16,.05)}
 .esc-inbar textarea{flex:1;min-width:0;border:none;background:none;padding:8px 0;font:inherit;font-size:14.5px;resize:none;max-height:120px;line-height:1.5;color:var(--ink)}
 .esc-inbar textarea::placeholder{color:var(--faint)}
 .esc-inbar textarea:focus{outline:none}
 .esc-send{flex:none;background:var(--pink);color:#fff;font-weight:700;font-size:14px;padding:10px 24px;border-radius:999px;cursor:pointer}
 .esc-send:hover{filter:brightness(1.06)}
 .esc-send[disabled]{opacity:.5;cursor:not-allowed}
-/* gate */
-.esc-gate{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:18px;padding:12px 15px;border:1px solid var(--line);border-radius:10px;background:#fff}
-.esc-gate.gone{display:none}
-.esc-gate.g-critico{border-color:var(--ink)}
-.esc-gate.g-importante,.esc-gate.g-aviso{border-color:var(--pink);background:rgba(255,0,215,.05)}
-.esc-gate .gtxt{font-size:13px;color:var(--ink);flex:1;min-width:180px;line-height:1.45}
-.esc-gate .gtxt b{font-weight:700}
-.esc-gate .gv{font-size:12px;color:var(--muted)}
+.esc-chips{display:flex;flex-wrap:wrap;gap:7px;margin-top:12px}
+.esc-chips.gone{display:none}
+.esc-chip{font-size:12.5px;font-weight:600;color:var(--ink);background:#fff;border:none;border-radius:999px;padding:8px 14px;cursor:pointer}
+.esc-chip:hover{background:var(--soft)}
+/* bloco VOCÊ — o hero (sempre visível, enchendo) */
+.esc-block{margin-top:26px;padding-top:22px;border-top:1px solid var(--line)}
+.esc-bh{display:flex;align-items:baseline;gap:10px;margin-bottom:14px}
+.esc-bh b{font-size:14px;font-weight:700}
+.esc-bh .prog{margin-left:auto;font-size:12px;color:var(--muted)}
+.esc-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+@media(max-width:680px){.esc-cards{grid-template-columns:repeat(2,1fr)}}
+.esc-c{border:1px solid var(--line);border-radius:11px;padding:12px 13px;background:#fff;min-height:74px}
+.esc-c.empty{background:var(--surface);border-style:dashed;opacity:.75}
+.esc-c .ctop{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+.esc-c .ic{flex:none;color:var(--muted);display:flex}
+.esc-c .ic svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.esc-c .ct{font-size:12.5px;font-weight:700;color:var(--ink);flex:1;min-width:0}
+.esc-c .st{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.03em;padding:2px 7px;border-radius:999px;flex:none}
+.esc-c .st.ok{background:var(--lime);color:var(--ink)}
+.esc-c .st.fraco{background:rgba(255,0,215,.12);color:var(--ink)}
+.esc-c .st.vazio{background:var(--soft);color:var(--faint)}
+.esc-c .cs{font-size:12px;color:var(--muted);line-height:1.4}
+/* fecho — barra calma (não alarme rosa) */
+.esc-done{margin-top:22px;padding:15px 18px;border:1.5px solid var(--lime);background:rgba(231,249,154,.28);border-radius:12px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.esc-done.gone{display:none}
+.esc-done .dt{font-size:14px;flex:1;min-width:200px;line-height:1.5}
+.esc-done .dt b{font-weight:700}
 .esc-cont{font-weight:700;font-size:14px;padding:11px 22px;border-radius:999px;background:var(--pink);color:#fff;white-space:nowrap}
 .esc-cont:hover{filter:brightness(1.06)}
 </style>
@@ -410,119 +390,108 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
   function mountEscavador(container){
     var voce = CANVAS[0] || {};
     var history = Array.isArray(voce._chat) ? voce._chat.slice() : [];
-    var ME={initials:'EU', img:null};
-    if(window.ADP && window.ADP.me){ window.ADP.me().then(function(u){ if(!u)return; var n=(u.user_metadata&&(u.user_metadata.full_name||u.user_metadata.name))||u.email||''; if(n){ ME.initials=(n.trim().split(/\s+/).map(function(x){return x[0]||'';}).slice(0,2).join('')||'EU').toUpperCase(); } var av=u.user_metadata&&(u.user_metadata.avatar_url||u.user_metadata.picture); if(av)ME.img=av; }).catch(function(){}); }
+    var done = false;
     container.innerHTML = '<div class="esc">'
-      + '<div class="esc-head"><span class="dot"></span><span class="nm">O Escavador</span><span class="sb">conversa guiada pra montar teu bloco VOCÊ</span><span class="esc-reset" id="escReset">reiniciar</span></div>'
-      + '<div class="esc-prevbar gone" id="escPrev">'
-      +   '<div class="esc-ph" id="escPhToggle"><b>Seu bloco VOCÊ</b><span class="live">prévia</span><span class="prog" id="escProgTxt">0 de 9 itens</span><span class="caret">▸</span></div>'
-      +   '<div class="esc-prevbody">'
-      +     '<div class="esc-cards" id="escCards"></div>'
-      +     '<div class="esc-progbar"><i id="escProgBar" style="width:0%"></i></div>'
-      +   '</div>'
+      + '<div class="esc-head"><span class="dot"></span><span class="nm">O Escavador</span><span class="step" id="escStep"></span><span class="esc-reset" id="escReset">reiniciar</span></div>'
+      + '<div class="esc-ask">'
+      +   '<div class="esc-last gone" id="escLast"></div>'
+      +   '<div class="esc-q" id="escQ"></div>'
+      +   '<div class="esc-typing gone" id="escTyping"><span class="esc-spin"></span>O Escavador está montando teu bloco…</div>'
+      +   '<div class="esc-inbar"><textarea id="escInput" rows="1" placeholder="Responde aqui…  (Enter envia)"></textarea><button class="esc-send" id="escSend">Enviar</button></div>'
+      +   '<div class="esc-chips gone" id="escChips"></div>'
       + '</div>'
-      + '<div class="esc-log" id="escLog"></div>'
-      + '<div class="esc-typing gone" id="escTyping"><span class="esc-spin"></span>O Escavador está pensando…</div>'
-      + '<div class="esc-chips gone" id="escChips"></div>'
-      + '<div class="esc-inbar"><textarea id="escInput" rows="1" placeholder="Responde aqui…  (Enter envia · Shift+Enter quebra linha)"></textarea><button class="esc-send" id="escSend">Enviar</button></div>'
-      + '<div class="esc-gate gone" id="escGate"></div>'
+      + '<div class="esc-block">'
+      +   '<div class="esc-bh"><b>Seu bloco VOCÊ</b><span class="prog" id="escProgTxt">0 de 9 itens</span></div>'
+      +   '<div class="esc-cards" id="escCards"></div>'
+      + '</div>'
+      + '<div class="esc-done gone" id="escDone"></div>'
       + '</div>';
-    var log=container.querySelector('#escLog'), input=container.querySelector('#escInput'),
-        send=container.querySelector('#escSend'), typing=container.querySelector('#escTyping'),
-        chips=container.querySelector('#escChips'), cardsEl=container.querySelector('#escCards'),
-        prevbar=container.querySelector('#escPrev'), gate=container.querySelector('#escGate');
+    var qEl=container.querySelector('#escQ'), lastEl=container.querySelector('#escLast'),
+        input=container.querySelector('#escInput'), send=container.querySelector('#escSend'),
+        typing=container.querySelector('#escTyping'), chips=container.querySelector('#escChips'),
+        cardsEl=container.querySelector('#escCards'), stepEl=container.querySelector('#escStep'),
+        doneEl=container.querySelector('#escDone'), progEl=container.querySelector('#escProgTxt');
+    var qCount = history.filter(function(m){return m.role==='assistant';}).length;
 
-    function avatarHTML(role){
-      if(role==='assistant') return '<span class="esc-av ai">'+DUCK+'</span>';
-      if(ME.img) return '<span class="esc-av me"><img src="'+esc(ME.img)+'" alt=""></span>';
-      return '<span class="esc-av me">'+esc(ME.initials)+'</span>';
-    }
-    function bubble(role, text){
-      var ai=role==='assistant';
-      var row=document.createElement('div'); row.className='esc-row '+(ai?'ai':'me');
-      var bub='<div class="esc-b '+(ai?'ai':'me')+'">'+(ai?'<span class="who">Escavador</span>':'')+'<span class="bt"></span></div>';
-      row.innerHTML = ai ? (avatarHTML(role)+bub) : (bub+avatarHTML(role));
-      row.querySelector('.bt').textContent = text||'';
-      log.appendChild(row); log.scrollTop=log.scrollHeight;
-    }
     function setBusy(b){ send.disabled=b; typing.classList.toggle('gone', !b); }
-    function cap(s){ return s?s.charAt(0).toUpperCase()+s.slice(1):s; }
-
-    function cardData(v,k){
-      v=v||{};
+    function cardData(k){
+      var v=voce||{};
       if(k==='comunidades'){ var a=(v.comunidades||[]).filter(function(c){return c&&c.nome;}); return {n:a.length,s:a.map(function(c){return c.nome;}).join(', ')}; }
-      if(k==='competencias'){ var a=(v.competencias||[]).filter(function(c){return c&&c.o_que;}); return {n:a.length,s:a.map(function(c){return c.o_que;}).join(', ')}; }
-      if(k==='provas'){ var a=(v.provas||[]).filter(function(p){return p&&(p.consequencia||p.situacao);}); return {n:a.length,s:a.map(function(p){return p.consequencia||p.situacao;}).join(' · ')}; }
+      if(k==='competencias'){ var b=(v.competencias||[]).filter(function(c){return c&&c.o_que;}); return {n:b.length,s:b.map(function(c){return c.o_que;}).join(', ')}; }
+      if(k==='provas'){ var p=(v.provas||[]).filter(function(x){return x&&(x.consequencia||x.situacao);}); return {n:p.length,s:p.map(function(x){return x.consequencia||x.situacao;}).join(' · ')}; }
       if(k==='historia'){ return {n:v.historia?1:0,s:v.historia||''}; }
       if(k==='preferencias'){ var pr=v.preferencias||{},ss=[]; if((pr.ama||[]).length)ss.push('ama '+pr.ama.join(', ')); if((pr.odeia||[]).length)ss.push('odeia '+pr.odeia.join(', ')); return {n:(pr.ama||[]).length+(pr.odeia||[]).length,s:ss.join(' · ')}; }
       if(k==='medos'){ return {n:v.medos?1:0,s:v.medos||''}; }
       return {n:0,s:''};
     }
-    function hasAny(){ return ESC_CARDS.some(function(c){return cardData(voce,c.k).n>0;}); }
+    function hasAny(){ return ESC_CARDS.some(function(c){return cardData(c.k).n>0;}); }
+    function filledCount(){ var v=voce||{};
+      return Math.min((v.comunidades||[]).filter(function(c){return c&&c.nome;}).length,3)
+        + Math.min((v.competencias||[]).filter(function(c){return c&&c.o_que;}).length,3)
+        + Math.min((v.provas||[]).filter(function(x){return x&&(x.consequencia||x.situacao);}).length,2)
+        + (v.historia?1:0); }
+    function cardStatus(k){
+      var d=cardData(k);
+      if(d.n===0) return {st:'vazio',label:'—'};
+      if(k==='provas'){ var ok=(voce.provas||[]).some(function(x){return x&&(x.consequencia||'').trim();}); return ok?{st:'ok',label:'ok'}:{st:'fraco',label:'fraco'}; }
+      if(k==='competencias'){ var ok2=(voce.competencias||[]).some(function(c){return c&&(c.exemplo||'').trim();}); return ok2?{st:'ok',label:'ok'}:{st:'fraco',label:'sem exemplo'}; }
+      return {st:'ok',label:'ok'};
+    }
     function renderCards(){
-      prevbar.classList.toggle('gone', !hasAny());
       cardsEl.innerHTML=ESC_CARDS.map(function(c){
-        var d=cardData(voce,c.k), empty=d.n===0;
-        return '<div class="esc-c'+(empty?' empty':'')+'"><span class="ic">'+c.ic+'</span><div class="cbody">'
-          +'<div class="ct">'+c.t+(d.n?' <span class="cn">'+d.n+'</span>':'')+'</div>'
-          +'<div class="cs">'+(d.s?esc(d.s):'—')+'</div></div></div>';
+        var d=cardData(c.k), s=cardStatus(c.k);
+        return '<div class="esc-c'+(d.n===0?' empty':'')+'"><div class="ctop"><span class="ic">'+c.ic+'</span><span class="ct">'+c.t+'</span><span class="st '+s.st+'">'+esc(s.label)+'</span></div>'
+          +'<div class="cs">'+(d.s?esc(d.s):'—')+'</div></div>';
       }).join('');
-      var v=voce||{};
-      var filled=Math.min((v.comunidades||[]).filter(function(c){return c&&c.nome;}).length,3)
-        +Math.min((v.competencias||[]).filter(function(c){return c&&c.o_que;}).length,3)
-        +Math.min((v.provas||[]).filter(function(p){return p&&(p.consequencia||p.situacao);}).length,2)
-        +(v.historia?1:0);
-      var pct=Math.round(filled/9*100);
-      var bar=container.querySelector('#escProgBar'), txt=container.querySelector('#escProgTxt');
-      if(bar)bar.style.width=pct+'%'; if(txt)txt.textContent=filled+' de 9 itens';
+      stepEl.textContent = qCount ? ('· pergunta '+Math.min(qCount,5)+' de ~5') : '';
+      progEl.textContent = filledCount()+' de 9 itens';
     }
     function renderChips(){
       if(hasAny()){ chips.classList.add('gone'); chips.innerHTML=''; return; }
       chips.innerHTML=ESC_CHIPS.map(function(c,i){return '<button type="button" class="esc-chip" data-i="'+i+'">'+esc(c.label)+'</button>';}).join('');
       chips.classList.remove('gone');
     }
-    function renderGate(){
+    function renderDone(){
+      if(filledCount()<3 && !done){ doneEl.classList.add('gone'); return; }
       var g=window.ADP_CANVAS.gateForBlock(0, voce);
-      if(!g.preenchido){ gate.className='esc-gate gone'; gate.innerHTML=''; return; }
-      var next=(LESSONS[idx+1]) ? ('aula.html?a='+LESSONS[idx+1].id) : 'canvas.html';
-      var sev=(g.gate.sev==='nenhum')?'ok':g.gate.sev, msg;
-      if(g.gate.sev==='critico') msg='<b>'+esc(cap(g.gate.label))+'.</b> Falta o essencial pra montar teu posicionamento depois.';
-      else if(g.gate.sev==='importante') msg='<b>'+esc(cap(g.gate.label))+'.</b> Dá pra seguir carimbado, mas teu posicionamento perde força.';
-      else if(g.gate.sev==='aviso') msg='<b>'+esc(cap(g.gate.label))+'.</b> Dá pra reforçar, mas já pode seguir.';
-      else msg='<b>Matéria-prima com prova.</b> Base sólida pro resto.';
-      gate.className='esc-gate g-'+sev;
-      gate.innerHTML='<span class="gtxt">'+msg+'</span><span class="gv">Validação: hipótese</span><a class="esc-cont" href="'+next+'">Continuar para Território →</a>';
+      var next=(LESSONS[idx+1])?('aula.html?a='+LESSONS[idx+1].id):'canvas.html';
+      var msg;
+      if(g.gate.sev==='ok') msg='<b>Bloco forte.</b> Matéria-prima com prova. Bora pro Território.';
+      else if(g.gate.sev==='importante'||g.gate.sev==='aviso') msg='<b>Já dá pra seguir.</b> Falta reforçar: '+esc(g.gate.label)+' — dá pra melhorar ao longo do curso.';
+      else msg='<b>Bloco tomando forma.</b> Já dá pra seguir quando quiser.';
+      doneEl.innerHTML='<div class="dt">'+msg+'</div><a class="esc-cont" href="'+next+'">Continuar para Território →</a>';
+      doneEl.classList.remove('gone');
     }
-    function persist(){ voce._chat=history.slice(-24); CANVAS[0]=voce; window.ADP.saveBlock(0, voce).catch(function(){}); }
+    function persist(){ voce._chat=history.slice(-16); CANVAS[0]=voce; window.ADP.saveBlock(0, voce).catch(function(){}); }
 
     async function turn(userText){
-      if(userText){ history.push({role:'user', content:userText}); bubble('user', userText); }
+      if(userText){ history.push({role:'user',content:userText}); lastEl.innerHTML='<b>Você:</b> '+esc(userText); lastEl.classList.remove('gone'); }
       setBusy(true);
       try{
         var r=await window.ADP.escavador({ history: history.slice(-8), voce: voce });
         var d=(r&&r.data)?r.data:r;
-        if(d && d.voce) voce=d.voce;
-        history.push({role:'assistant', content:d.reply});
-        bubble('assistant', d.reply);
-        renderCards(); renderChips(); renderGate(); persist();
-      }catch(e){ bubble('assistant', 'Deu ruim aqui ('+(e.message||'erro')+'). Manda de novo.'); }
+        if(d&&d.voce) voce=d.voce;
+        if(d&&d.done) done=true;
+        history.push({role:'assistant',content:(d&&d.reply)||''}); qCount++;
+        qEl.textContent = (d&&d.reply) || '';
+        renderCards(); renderChips(); renderDone(); persist();
+      }catch(e){ qEl.textContent='Deu ruim aqui. Manda de novo.'; }
       setBusy(false);
     }
     function submit(){ var t=input.value.trim(); if(!t) return; input.value=''; turn(t); }
     send.addEventListener('click', submit);
     input.addEventListener('keydown', function(e){ if(e.key==='Enter' && !e.shiftKey){ e.preventDefault(); submit(); } });
     chips.addEventListener('click', function(e){ var b=e.target.closest('.esc-chip'); if(!b) return; var lead=ESC_CHIPS[+b.dataset.i].lead; input.value=lead; input.focus(); try{ input.setSelectionRange(lead.length,lead.length); }catch(err){} });
-    var phToggle=container.querySelector('#escPhToggle');
-    if(phToggle) phToggle.addEventListener('click', function(){ prevbar.classList.toggle('open'); });
     var resetBtn=container.querySelector('#escReset');
     if(resetBtn) resetBtn.addEventListener('click', function(){
-      if(!window.confirm('Reiniciar a conversa? Isso apaga o que o Escavador montou até agora no teu bloco VOCÊ.')) return;
-      voce={}; history=[]; log.innerHTML=''; persist(); renderCards(); renderChips(); renderGate(); turn(null);
+      if(!window.confirm('Reiniciar? Isso apaga o que o Escavador montou até agora no teu bloco VOCÊ.')) return;
+      voce={}; history=[]; qCount=0; done=false; lastEl.classList.add('gone'); lastEl.innerHTML=''; persist(); renderCards(); renderChips(); renderDone(); turn(null);
     });
 
-    history.forEach(function(m){ bubble(m.role, m.content); });
-    renderCards(); renderChips(); renderGate();
-    if(!history.length){ turn(null); } // abertura do Escavador
+    renderCards(); renderChips(); renderDone();
+    var lastAssistant=''; for(var i=history.length-1;i>=0;i--){ if(history[i].role==='assistant'){ lastAssistant=history[i].content; break; } }
+    if(lastAssistant){ qEl.textContent=lastAssistant; }
+    else { turn(null); }
   }
 
   function renderLesson(){
