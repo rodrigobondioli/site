@@ -75,6 +75,16 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .gate.block{background:#18181b;color:#fff}
 .gate.block a{color:#e7f99a;text-decoration:underline}
 .gate.stamp{background:rgba(255,0,215,.07);border:1.5px solid #ff00d7;color:#18181b}
+.selo{display:flex;align-items:center;gap:10px;font-size:13.5px;color:var(--ink);background:rgba(232,185,58,.10);border:1px solid rgba(232,185,58,.55);border-radius:10px;padding:10px 14px;margin:14px 0 0}
+.selo .sdot{width:9px;height:9px;border-radius:999px;background:#e8b93a;flex:none}
+.cadeia{border:1px solid var(--line);border-radius:12px;padding:18px 20px;margin:16px 0 0}
+.cadeia h3{font-size:14px;font-weight:700;margin-bottom:6px}
+.cadeia .crow{display:flex;gap:12px;padding:9px 0;border-top:1px solid var(--line)}
+.cadeia .crow:first-of-type{border-top:none}
+.cadeia .cl{font-size:12px;font-weight:700;color:var(--muted);min-width:98px;flex:none;padding-top:1px}
+.cadeia .cvv{font-size:14px;color:var(--ink);min-width:0}
+.cadeia .cvv.miss{color:var(--faint)}
+.cadeia .warn{margin-top:13px;font-size:13px;line-height:1.5;color:var(--ink);background:rgba(255,0,215,.06);border:1px solid #ff00d7;border-radius:9px;padding:10px 13px}
 .spin{display:inline-block;width:13px;height:13px;border:2px solid currentColor;border-right-color:transparent;border-radius:50%;animation:adpspin .7s linear infinite;vertical-align:-2px;margin-right:8px}
 @keyframes adpspin{to{transform:rotate(360deg)}}
 
@@ -165,6 +175,9 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
         <div class="fk">A sua frase de especialista</div>
         <p id="f-frase">Eu resolvo <span class="hl">a agenda furada nos dias fracos</span> para <span class="hl">barbearias premium que vendem assinatura</span> através de <span class="hl">landing pages que enchem os horários vazios</span>.</p>
       </div>
+
+      <div class="selo gone" id="f-selo"></div>
+      <div class="cadeia gone" id="f-cadeia"></div>
 
       <div class="grid">
 
@@ -274,6 +287,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
       }
       if(frase) frase.classList.add("gone");
       if(grid) grid.classList.add("gone");
+      ["f-selo","f-cadeia"].forEach(function(id){ var e=$(id); if(e) e.classList.add("gone"); });
       return false;
     }
     if(frase) frase.classList.remove("gone");
@@ -289,9 +303,37 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
     }
     return true;
   }
+  function esc(s){ return String(s==null?"":s).replace(/[<>&]/g,function(c){return {"<":"&lt;",">":"&gt;","&":"&amp;"}[c];}); }
+  // selo de hipótese + cadeia "por que essa frase é sua" (a partir dos metadados do Estrategista)
+  function renderExtras(d){
+    var selo = $("f-selo");
+    if(selo){
+      var nv = (d.nivel_prova && d.nivel_prova.nivel) ? " · Prova " + esc(d.nivel_prova.nivel) : "";
+      selo.innerHTML = '<span class="sdot"></span><span>' + esc(d.selo || "Hipótese estratégica pra testar nos próximos 30 dias — não é veredito.") + nv + "</span>";
+      selo.classList.remove("gone");
+    }
+    var cad = $("f-cadeia");
+    if(cad){
+      function row(l,v){ var miss=!v||!String(v).trim(); return '<div class="crow"><div class="cl">'+l+'</div><div class="cvv'+(miss?' miss':'')+'">'+(miss?"[faltou preencher no Canvas]":esc(v))+'</div></div>'; }
+      var metodo = (Array.isArray(d.metodo_fases)&&d.metodo_fases.length) ? d.metodo_fases.join(" → ") : "";
+      var prova = d.nivel_prova ? ((d.nivel_prova.nivel||"") + (d.nivel_prova.porque?" — "+d.nivel_prova.porque:"")) : "";
+      var cliente = (Array.isArray(d.quem_atende)&&d.quem_atende.length) ? d.quem_atende[0] : "";
+      var html = "<h3>Por que essa frase é sua</h3>"
+        + row("Território", d.nicho)
+        + row("Cliente ideal", cliente)
+        + row("Dor", d.dor_central)
+        + row("Diferencial", d.monopolio)
+        + row("Método", metodo)
+        + row("Prova", prova);
+      if(Array.isArray(d.missing) && d.missing.length) html += '<div class="warn"><b>Ainda falta pra ficar forte:</b> ' + d.missing.map(esc).join(" · ") + '</div>';
+      if(d.diagnostico) html += '<div class="warn">' + esc(d.diagnostico) + '</div>';
+      cad.innerHTML = html; cad.classList.remove("gone");
+    }
+  }
   function render(d){
     if(!d) return;
     if(!showGate(d)) return;
+    renderExtras(d);
     if(d.frase) $("f-frase").textContent = d.frase;
     if(d.nicho) $("f-nicho").textContent = d.nicho;
     if(d.monopolio) $("f-monopolio").textContent = d.monopolio;
