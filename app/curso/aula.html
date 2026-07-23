@@ -214,10 +214,18 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .esc-log::-webkit-scrollbar-thumb{background:var(--line);border-radius:999px}
 .esc-log::-webkit-scrollbar-thumb:hover{background:var(--faint)}
 .esc-log::-webkit-scrollbar-track{background:transparent}
-.esc-b{font-size:14.5px;line-height:1.55;white-space:pre-wrap;max-width:82%}
-.esc-b.ai{align-self:flex-start;color:var(--ink)}
+.esc-row{display:flex;gap:9px;align-items:flex-start;max-width:86%}
+.esc-row.ai{align-self:flex-start}
+.esc-row.me{align-self:flex-end}
+.esc-av{width:30px;height:30px;border-radius:999px;flex:none;overflow:hidden;display:grid;place-items:center;font-size:10.5px;font-weight:700}
+.esc-av.ai{background:var(--lime)}
+.esc-av.ai svg{width:19px;height:19px}
+.esc-av.me{background:var(--soft);color:var(--muted);box-shadow:inset 0 0 0 1px var(--line)}
+.esc-av img{width:100%;height:100%;object-fit:cover}
+.esc-b{font-size:14.5px;line-height:1.55;white-space:pre-wrap;min-width:0}
+.esc-b.ai{color:var(--ink)}
 .esc-b.ai .who{display:block;font-size:11px;font-weight:700;color:var(--muted);margin-bottom:3px;letter-spacing:.02em}
-.esc-b.me{align-self:flex-end;background:var(--ink);color:#fff;padding:10px 14px;border-radius:14px;border-bottom-right-radius:5px}
+.esc-b.me{background:var(--ink);color:#fff;padding:10px 14px;border-radius:14px;border-bottom-right-radius:5px}
 .esc-typing{font-size:13px;color:var(--muted);padding:6px 2px}
 .esc-typing.gone{display:none}
 .esc-spin{display:inline-block;width:12px;height:12px;border:2px solid currentColor;border-right-color:transparent;border-radius:50%;animation:aspin .7s linear infinite;vertical-align:-1px;margin-right:7px}
@@ -377,6 +385,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
   }
 
   // 🛠️ Escavador — chat da Aula 1 (bloco 0/VOCÊ). Cliente guarda o estado (voce + history); Gate 1 oficial = gateForBlock(0,voce).
+  var DUCK='<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M20.5867 34.7487L20.5867 17.9659L28.1653 22.3413C28.1961 22.6142 28.211 22.8796 28.211 23.1312L28.211 34.7487C28.211 36.8541 29.9172 38.5603 32.0226 38.5603C34.128 38.5603 35.8352 36.853 35.8352 34.7487C35.8352 33.0541 34.73 31.6187 33.2021 31.1218C32.1776 30.7884 31.0553 30.9042 30.1178 31.4456L30.1178 23.4688C31.4896 23.2374 32.8996 23.2618 34.2639 23.5325C39.5077 24.5741 43.4606 29.199 43.4606 34.7497C43.4606 41.0659 38.3409 46.1867 32.0236 46.1867C30.6869 46.1867 29.4043 45.9573 28.212 45.5358C23.7697 43.9655 20.5877 39.7292 20.5877 34.7497L20.5867 34.7487Z" fill="#18181b"/></svg>';
   var ESC_CARDS=[
     {k:'comunidades',t:'Comunidades',ic:'<svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.2"/><path d="M3.5 19a5.5 5.5 0 0 1 11 0"/><path d="M16 8.6a3 3 0 0 1 0 5.8"/><path d="M17.8 19a5 5 0 0 0-2.6-4.1"/></svg>'},
     {k:'competencias',t:'Competências',ic:'<svg viewBox="0 0 24 24"><path d="M12 3.5l2.5 5 5.5.8-4 3.9.9 5.5L12 16.2 7.1 18.7l.9-5.5-4-3.9 5.5-.8z"/></svg>'},
@@ -395,6 +404,8 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
   function mountEscavador(container){
     var voce = CANVAS[0] || {};
     var history = Array.isArray(voce._chat) ? voce._chat.slice() : [];
+    var ME={initials:'EU', img:null};
+    if(window.ADP && window.ADP.me){ window.ADP.me().then(function(u){ if(!u)return; var n=(u.user_metadata&&(u.user_metadata.full_name||u.user_metadata.name))||u.email||''; if(n){ ME.initials=(n.trim().split(/\s+/).map(function(x){return x[0]||'';}).slice(0,2).join('')||'EU').toUpperCase(); } var av=u.user_metadata&&(u.user_metadata.avatar_url||u.user_metadata.picture); if(av)ME.img=av; }).catch(function(){}); }
     container.innerHTML = '<div class="esc">'
       + '<div class="esc-head"><span class="dot"></span><span class="nm">O Escavador</span><span class="sb">conversa guiada pra montar teu bloco VOCÊ</span></div>'
       + '<div class="esc-prevbar gone" id="escPrev">'
@@ -413,11 +424,18 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
         chips=container.querySelector('#escChips'), cardsEl=container.querySelector('#escCards'),
         prevbar=container.querySelector('#escPrev'), gate=container.querySelector('#escGate');
 
+    function avatarHTML(role){
+      if(role==='assistant') return '<span class="esc-av ai">'+DUCK+'</span>';
+      if(ME.img) return '<span class="esc-av me"><img src="'+esc(ME.img)+'" alt=""></span>';
+      return '<span class="esc-av me">'+esc(ME.initials)+'</span>';
+    }
     function bubble(role, text){
-      var d=document.createElement('div'); d.className='esc-b '+(role==='assistant'?'ai':'me');
-      if(role==='assistant'){ d.innerHTML='<span class="who">Escavador</span>'; d.appendChild(document.createTextNode(text||'')); }
-      else d.textContent=text||'';
-      log.appendChild(d); log.scrollTop=log.scrollHeight;
+      var ai=role==='assistant';
+      var row=document.createElement('div'); row.className='esc-row '+(ai?'ai':'me');
+      var bub='<div class="esc-b '+(ai?'ai':'me')+'">'+(ai?'<span class="who">Escavador</span>':'')+'<span class="bt"></span></div>';
+      row.innerHTML = ai ? (avatarHTML(role)+bub) : (bub+avatarHTML(role));
+      row.querySelector('.bt').textContent = text||'';
+      log.appendChild(row); log.scrollTop=log.scrollHeight;
     }
     function setBusy(b){ send.disabled=b; typing.classList.toggle('gone', !b); }
     function cap(s){ return s?s.charAt(0).toUpperCase()+s.slice(1):s; }
