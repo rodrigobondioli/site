@@ -186,15 +186,15 @@ window.ADP_CANVAS = (function () {
     + '.mx-rname{flex:1;min-width:0}'
     + '.mx-rname .n{font-size:13.5px;font-weight:700;color:var(--ink,#18181b);line-height:1.25}'
     + '.mx-rname .q{font-size:11.5px;color:var(--muted,#71717a);margin-top:1px;line-height:1.3}'
-    + '.mx-rctrl{flex:none;display:flex;align-items:center;gap:12px}'
-    + '.mx-nota{display:inline-flex;gap:3px}'
-    + '.mx-nn{width:24px;height:26px;border:1px solid var(--line,#d4d4d8);border-radius:7px;background:transparent;font:inherit;font-weight:700;font-size:12px;color:var(--muted,#71717a);cursor:pointer;transition:.12s}'
-    + '.mx-nn:hover{border-color:var(--ink,#18181b);color:var(--ink,#18181b)}'
-    + '.mx-nn.on{background:var(--ink,#18181b);border-color:var(--ink,#18181b);color:#fff}'
-    + '.mx-conf{display:inline-flex;gap:1px}'
-    + '.mx-cc{padding:4px 8px;font:inherit;font-size:10.5px;font-weight:700;color:var(--faint,#a1a1aa);background:transparent;border:none;border-radius:6px;cursor:pointer}'
-    + '.mx-cc:hover{color:var(--ink,#18181b)}'
-    + '.mx-cc.on{color:var(--ink,#18181b);background:var(--soft,#e6e6e8)}'
+    + '.mx-rctrl{flex:none;display:flex;align-items:center;gap:18px}'
+    + '.mx-nota{display:inline-flex;align-items:center;gap:9px}'
+    + '.mx-nlab{font-size:10.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--faint,#a1a1aa)}'
+    + '.mx-nn{width:22px;text-align:center;border:none;background:none;font:inherit;font-weight:700;font-size:13px;color:var(--faint,#a1a1aa);cursor:pointer;line-height:1;padding:0;transition:color .12s,font-size .12s}'
+    + '.mx-nn:hover{color:var(--muted,#71717a)}'
+    + '.mx-nn.on{font-size:20px;color:var(--ink,#18181b)}'
+    + '.mx-confw{display:inline-flex;align-items:center;gap:5px;font-size:11px;color:var(--faint,#a1a1aa)}'
+    + '.mx-confsel{font:inherit;font-size:11.5px;font-weight:700;color:var(--muted,#71717a);background:none;border:none;border-bottom:1px solid var(--line,#d4d4d8);padding:2px 1px;cursor:pointer}'
+    + '.mx-confsel:focus{outline:none;border-color:var(--ink,#18181b)}'
     + '.mx-evline{margin-top:8px}'
     + '.mx-evbtn{display:inline-flex;align-items:center;gap:6px;max-width:100%;font:inherit;font-size:11.5px;color:var(--faint,#a1a1aa);background:none;border:none;cursor:pointer;text-align:left;padding:0}'
     + '.mx-evbtn .ei{width:11px;height:11px;flex:none;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}'
@@ -303,13 +303,18 @@ window.ADP_CANVAS = (function () {
     // critério = LINHA (sem card, sem ícone): nome+pergunta à esquerda, nota (chips pretos) + confiança secundária à direita
     function critRowHTML(row, i, k) {
       var c = CRITDEF[k], cell = row.cells[k], n = '';
+      // nota: 1–5 discretos, o escolhido cresce e fica preto (é o próprio seletor, sem caixa)
       for (var v = 1; v <= 5; v++) n += '<button type="button" class="mx-nn' + (cell.nota === v ? ' on' : '') + '" data-i="' + i + '" data-k="' + k + '" data-v="' + v + '">' + v + '</button>';
-      var conf = [['baixa', 'baixa'], ['media', 'média'], ['alta', 'alta']].map(function (x) {
-        return '<button type="button" class="mx-cc' + (cell.conf === x[0] ? ' on' : '') + '" data-i="' + i + '" data-k="' + k + '" data-c="' + x[0] + '">' + x[1] + '</button>';
+      // confiança: seletor pequeno e secundário
+      var conf = [['', '—'], ['baixa', 'baixa'], ['media', 'média'], ['alta', 'alta']].map(function (x) {
+        return '<option value="' + x[0] + '"' + (cell.conf === x[0] ? ' selected' : '') + '>' + x[1] + '</option>';
       }).join('');
       return '<div class="mx-row">'
         + '<div class="mx-rtop"><div class="mx-rname"><div class="n">' + esc(c.h) + '</div><div class="q">' + esc(c.hint) + '</div></div>'
-        +   '<div class="mx-rctrl"><span class="mx-nota">' + n + '</span><span class="mx-conf">' + conf + '</span></div></div>'
+        +   '<div class="mx-rctrl">'
+        +     '<span class="mx-nota"><span class="mx-nlab">nota</span>' + n + '</span>'
+        +     '<span class="mx-confw">confiança <select class="mx-confsel" data-i="' + i + '" data-k="' + k + '">' + conf + '</select></span>'
+        +   '</div></div>'
         + '<div class="mx-evline" data-i="' + i + '" data-k="' + k + '">' + evLineHTML(i, k, cell) + '</div>'
         + '</div>';
     }
@@ -386,14 +391,16 @@ window.ADP_CANVAS = (function () {
       if (t.classList.contains('mx-name')) { rows[i].name = t.value; persist(); }
       else if (t.classList.contains('mx-ev')) { rows[i].cells[t.dataset.k].ev = t.value; persist(); }
     });
+    // confiança = select secundário
+    container.addEventListener('change', function (e) {
+      var t = e.target;
+      if (t.classList.contains('mx-confsel')) { rows[+t.dataset.i].cells[t.dataset.k].conf = t.value; paint(); persist(); }
+    });
     container.addEventListener('click', function (e) {
       var C = e.target.closest ? e.target.closest.bind(e.target) : function () { return null; };
-      // nota em chips (1–5)
+      // nota (1–5): clica o número, o escolhido cresce/fica preto
       var nn = C('.mx-nn');
       if (nn) { var ni = +nn.dataset.i, nk = nn.dataset.k, nv = +nn.dataset.v; rows[ni].cells[nk].nota = (rows[ni].cells[nk].nota === nv ? 0 : nv); paint(); persist(); return; }
-      // confiança segmentada
-      var cc = C('.mx-cc');
-      if (cc) { var ci = +cc.dataset.i, ck = cc.dataset.k, cv = cc.dataset.c; rows[ci].cells[ck].conf = (rows[ci].cells[ck].conf === cv ? '' : cv); paint(); persist(); return; }
       // abrir editor de evidência inline
       var evbtn = C('.mx-evbtn');
       if (evbtn) {
