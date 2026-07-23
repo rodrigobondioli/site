@@ -574,7 +574,12 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
       var b=document.createElement('button'); b.type='button'; b.className='fw-send'; b.setAttribute('aria-label','Próxima'); b.innerHTML=SEND;
       b.addEventListener('click', advance); f.appendChild(b);
       var ta=f.querySelector('textarea');
-      if(ta) ta.addEventListener('keydown', function(e){ if(e.key==='Enter' && !e.shiftKey){ e.preventDefault(); advance(); } });
+      if(ta){
+        ta.rows=1; // começa 1 linha (igual ao composer) e cresce conforme digita
+        ta.__grow=function(){ ta.style.height='auto'; ta.style.height=Math.min(ta.scrollHeight,140)+'px'; };
+        ta.addEventListener('input', ta.__grow);
+        ta.addEventListener('keydown', function(e){ if(e.key==='Enter' && !e.shiftKey){ e.preventDefault(); advance(); } });
+      }
     });
     function render(){
       fields.forEach(function(f,i){ f.classList.toggle('fw-hide', i!==step); });
@@ -583,7 +588,8 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
       if(stepEl) stepEl.textContent = '· pergunta '+(step+1)+' de '+fields.length;
       if(intro) intro.style.display = step===0 ? '' : 'none';
       if(rum) rum.style.display = (step===dorIdx) ? '' : 'none';
-      var ta=fields[step].querySelector('textarea'); if(ta) setTimeout(function(){ try{ta.focus();}catch(e){} },0);
+      var ta=fields[step].querySelector('textarea');
+      if(ta){ if(ta.__grow) ta.__grow(); setTimeout(function(){ try{ta.focus();}catch(e){} },0); }
     }
     render();
   }
