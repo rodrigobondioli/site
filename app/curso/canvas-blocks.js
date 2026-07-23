@@ -28,8 +28,8 @@ window.ADP_CANVAS = (function () {
       { key: 'historia', label: 'Sua história',                           ph: 'De onde você veio e por que faz o que faz do jeito que faz. O que só você tem.' }
     ]},
     { block: 1, title: 'O inimigo (seus medos)', type: 'fields', fields: [
-      { key: 'segura',       label: 'O que te segura no genérico',        ph: 'Qual medo te impede de nichar? Escreve cru — medo escrito perde metade da força.' },
-      { key: 'visibilidade', label: 'Como teu cliente ideal te acharia hoje?', ph: 'Quantos cliques até chegar em você? Escreve honesto.' }
+      { key: 'segura',       label: 'O que te segura no genérico',        ph: 'Qual medo te trava pra nichar? Manda sem filtro — medo no papel encolhe.' },
+      { key: 'visibilidade', label: 'Como teu cliente ideal te acharia hoje?', ph: 'Hoje, quantos cliques até alguém chegar em você? Sem maquiar.' }
     ]},
     { block: 2, title: 'A Matriz do Nicho', type: 'matrix' },
     { block: 3, title: 'Quem você atende (a dor)', type: 'fields', fields: [
@@ -149,7 +149,7 @@ window.ADP_CANVAS = (function () {
 
   var STYLE = ''
     + '.adp-fld{margin-top:18px}'
-    + '.adp-fld label{display:block;font-size:14.5px;font-weight:700;color:var(--ink,#18181b);margin-bottom:8px;letter-spacing:-.01em;line-height:1.4}'
+    + '.adp-fld label{display:block;font-size:16px;font-weight:700;color:var(--ink,#18181b);margin-bottom:9px;letter-spacing:-.01em;line-height:1.4}'
     + '.adp-fld textarea{width:100%;border:1px solid var(--line,#d4d4d8);border-radius:16px;background:none;padding:13px 15px;font:inherit;font-size:14.5px;color:var(--ink,#18181b);resize:none;min-height:70px;line-height:1.55;transition:border-color .15s}'
     + '.adp-fld textarea::placeholder{color:var(--faint,#a1a1aa)}'
     + '.adp-fld textarea:focus{outline:none;border-color:var(--ink,#18181b)}'
