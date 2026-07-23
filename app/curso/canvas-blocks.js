@@ -124,7 +124,7 @@ window.ADP_CANVAS = (function () {
       cells = {};
       Object.keys(old).forEach(function (k) { cells[k] = { nota: +old[k] || 0, ev: '', conf: '' }; });
     }
-    var out = { name: r.name || '', cells: {} };
+    var out = { name: r.name || '', obs: r.obs || '', cells: {} };
     CRIT7.forEach(function (c) { var cc = cells[c.k] || {}; out.cells[c.k] = { nota: +cc.nota || 0, ev: cc.ev || '', conf: cc.conf || '' }; });
     return out;
   }
@@ -155,51 +155,55 @@ window.ADP_CANVAS = (function () {
     + '.adp-fld textarea:focus{outline:none;border-color:var(--line,#d4d4d8)}'
     + '.adp-savest{font-size:12px;color:var(--faint,#a1a1aa);margin-top:9px;min-height:1em}'
     + '.adp-savest.err{color:var(--pink,#ff00d7);font-weight:700}'
-    // --- Matriz v2 (grid de cards por critério) ---
+    // --- Matriz v2 (linhas em 2 colunas — mercado | você) ---
     + '.adp-mx{margin-top:8px;display:flex;flex-direction:column;gap:16px}'
-    + '.mx-cand{border:1px solid var(--line,#d4d4d8);border-radius:14px;padding:18px 18px 16px;background:#fff}'
-    + '.mx-cand-h{display:flex;align-items:center;gap:12px;margin-bottom:16px}'
-    + '.mx-name{flex:1;min-width:0;border:none;border-bottom:1.5px solid var(--line,#d4d4d8);background:transparent;font:inherit;font-weight:700;font-size:15.5px;color:var(--ink,#18181b);padding:5px 2px}'
+    + '.mx-cand{border:1px solid var(--line,#d4d4d8);border-radius:14px;padding:18px 20px 16px;background:#fff}'
+    + '.mx-cand-h{display:flex;align-items:center;gap:12px;margin-bottom:16px;flex-wrap:wrap}'
+    + '.mx-badge{width:30px;height:30px;border-radius:9px;background:var(--soft,#e6e6e8);display:grid;place-items:center;flex:none;color:var(--ink,#18181b)}'
+    + '.mx-badge svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}'
+    + '.mx-lead{font-weight:700;font-size:14px;flex:none;color:var(--ink,#18181b)}'
+    + '.mx-name{flex:1;min-width:130px;border:none;border-bottom:1.5px solid var(--line,#d4d4d8);background:transparent;font:inherit;font-weight:700;font-size:14.5px;color:var(--ink,#18181b);padding:4px 2px}'
     + '.mx-name:focus{outline:none;border-color:var(--ink,#18181b)}'
-    + '.mx-cand-r{display:flex;align-items:center;gap:12px;flex:none}'
-    + '.mx-del{display:inline-flex;align-items:center;gap:5px;font-size:12.5px;color:var(--muted,#71717a);cursor:pointer}'
-    + '.mx-del:hover{color:var(--pink,#ff00d7)}'
+    + '.mx-htotal{display:flex;align-items:center;gap:9px;flex:none}'
+    + '.mx-htotal .lbl{font-size:12px;color:var(--muted,#71717a)}'
+    + '.mx-htotal b{font-size:14px;font-weight:700;color:var(--ink,#18181b)}'
+    + '.mx-hbar{width:96px;height:7px;border-radius:999px;background:var(--soft,#e6e6e8);overflow:hidden}'
+    + '.mx-hbar i{display:block;height:100%;background:var(--pink,#ff00d7);border-radius:999px;transition:width .3s}'
+    + '.mx-del{display:inline-flex;align-items:center;gap:5px;font-size:12.5px;color:var(--muted,#71717a);cursor:pointer;flex:none;border:1px solid var(--line,#d4d4d8);border-radius:999px;padding:6px 12px}'
+    + '.mx-del:hover{color:var(--pink,#ff00d7);border-color:var(--pink,#ff00d7)}'
     + '.mx-del svg{width:13px;height:13px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;pointer-events:none}'
-    + '.mx-total{font-size:12px;font-weight:700;padding:5px 11px;border-radius:999px;background:var(--soft,#e6e6e8);color:var(--ink,#18181b);white-space:nowrap}'
-    + '.mx-total.hi{background:var(--lime,#e7f99a)}'
-    + '.mx-bars{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}'
-    + '@media(max-width:560px){.mx-bars{grid-template-columns:1fr}}'
-    + '.mx-bar .mx-bl{display:flex;justify-content:space-between;align-items:baseline;font-size:12.5px;color:var(--muted,#71717a);margin-bottom:6px}'
-    + '.mx-bar .mx-bl b{color:var(--ink,#18181b);font-weight:700}'
-    + '.mx-track{height:7px;border-radius:999px;background:var(--soft,#e6e6e8);overflow:hidden}'
-    + '.mx-track i{display:block;height:100%;background:var(--pink,#ff00d7);border-radius:999px;transition:width .3s}'
-    + '.mx-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}'
-    + '@media(max-width:1080px){.mx-grid{grid-template-columns:repeat(3,1fr)}}'
-    + '@media(max-width:760px){.mx-grid{grid-template-columns:repeat(2,1fr)}}'
-    + '@media(max-width:480px){.mx-grid{grid-template-columns:1fr}}'
-    + '.mx-crit{border:1px solid var(--line,#d4d4d8);border-radius:12px;padding:13px;display:flex;flex-direction:column;gap:9px}'
-    + '.mx-crit-top{display:flex;align-items:flex-start;gap:8px}'
-    + '.mx-crit-top .ic{flex:none;color:var(--muted,#71717a);display:flex;margin-top:1px}'
-    + '.mx-crit-top .ic svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}'
-    + '.mx-crit-h{font-size:13px;font-weight:700;color:var(--ink,#18181b);line-height:1.25}'
-    + '.mx-crit-q{font-size:11.5px;color:var(--faint,#a1a1aa);line-height:1.35;flex:1;min-height:2.4em}'
-    + '.mx-crit-ctrl{display:flex;gap:6px}'
-    + '.mx-nota,.mx-conf{border:1px solid var(--line,#d4d4d8);border-radius:8px;background:#fff;font:inherit;font-size:12.5px;padding:6px 7px;color:var(--ink,#18181b);cursor:pointer}'
-    + '.mx-nota{font-weight:700;flex:none;width:52px}'
-    + '.mx-conf{flex:1;min-width:0}'
+    + '.mx-cols{display:grid;grid-template-columns:1fr 1fr;gap:0 30px}'
+    + '@media(max-width:720px){.mx-cols{grid-template-columns:1fr;gap:0}}'
+    + '.mx-colhead{display:flex;justify-content:space-between;align-items:baseline;gap:8px;padding-bottom:8px;margin-bottom:2px;border-bottom:1.5px solid var(--ink,#18181b)}'
+    + '.mx-colhead .ct{font-size:13px;font-weight:700;color:var(--ink,#18181b)}'
+    + '.mx-colhead .cs{font-size:12.5px;font-weight:700;color:var(--muted,#71717a)}'
+    + '.mx-row{padding:13px 0;border-bottom:1px solid var(--soft,#e6e6e8)}'
+    + '.mx-rtop{display:flex;align-items:flex-start;gap:10px}'
+    + '.mx-ic{flex:none;width:28px;height:28px;border-radius:8px;background:var(--surface,#f1f1f1);display:grid;place-items:center;color:var(--muted,#71717a)}'
+    + '.mx-ic svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}'
+    + '.mx-rmid{flex:1;min-width:0}'
+    + '.mx-rh{font-size:13px;font-weight:700;color:var(--ink,#18181b);line-height:1.25}'
+    + '.mx-rq{font-size:11.5px;color:var(--faint,#a1a1aa);line-height:1.3;margin-top:2px}'
+    + '.mx-rctrl{flex:none;display:flex;align-items:center;gap:7px}'
+    + '.mx-notawrap{display:flex;align-items:center;gap:3px;font-size:12px;color:var(--muted,#71717a)}'
+    + '.mx-nota{border:1px solid var(--line,#d4d4d8);border-radius:8px;background:#fff;font:inherit;font-weight:700;font-size:13px;padding:6px 4px;color:var(--ink,#18181b);cursor:pointer;width:44px;text-align:center}'
+    + '.mx-conf{border:1px solid var(--line,#d4d4d8);border-radius:8px;background:#fff;font:inherit;font-size:11.5px;padding:6px 5px;color:var(--ink,#18181b);cursor:pointer;max-width:88px}'
     + '.mx-nota:focus,.mx-conf:focus{outline:none;border-color:var(--ink,#18181b)}'
-    + '.mx-evlbl{font-size:11px;font-weight:700;color:var(--muted,#71717a);margin-bottom:5px}'
-    + '.mx-ev{width:100%;border:1px solid var(--line,#d4d4d8);border-radius:8px;background:var(--surface,#f1f1f1);font:inherit;font-size:12px;padding:8px 9px;color:#3f3f46;resize:none;min-height:62px;line-height:1.4}'
+    + '.mx-ev{width:100%;margin-top:9px;border:1px solid var(--line,#d4d4d8);border-radius:8px;background:var(--surface,#f1f1f1);font:inherit;font-size:12px;padding:8px 9px;color:#3f3f46;resize:none;min-height:40px;line-height:1.4}'
+    + '.mx-ev::placeholder{color:var(--faint,#a1a1aa)}'
     + '.mx-ev:focus{outline:none;border-color:var(--ink,#18181b);background:#fff}'
-    + '.mx-dica{border:1px solid rgba(231,249,154,.85);background:rgba(231,249,154,.3);border-radius:12px;padding:14px}'
-    + '.mx-dica .dh{display:flex;align-items:center;gap:7px;font-size:12.5px;font-weight:700;color:var(--ink,#18181b);margin-bottom:8px}'
-    + '.mx-dica .dh svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}'
-    + '.mx-dica p{font-size:12px;color:#3f3f46;line-height:1.5}'
-    + '.adp-verdict{margin-top:14px;font-size:12.5px;font-weight:700;padding:11px 14px;border-radius:10px;line-height:1.4}'
+    + '.mx-obswrap{margin-top:16px}'
+    + '.mx-obswrap label{display:block;font-size:11px;font-weight:700;color:var(--muted,#71717a);margin-bottom:6px}'
+    + '.mx-obs{width:100%;border:1px solid var(--line,#d4d4d8);border-radius:10px;background:var(--surface,#f1f1f1);font:inherit;font-size:13px;padding:10px 12px;color:#3f3f46;resize:none;min-height:50px;line-height:1.45}'
+    + '.mx-obs:focus{outline:none;border-color:var(--ink,#18181b);background:#fff}'
+    + '.adp-verdict{margin-top:16px;display:flex;align-items:flex-start;gap:11px;font-size:13px;padding:13px 15px;border-radius:12px;line-height:1.45}'
+    + '.adp-verdict .vs{flex:none;width:26px;height:26px;border-radius:999px;background:var(--ink,#18181b);display:grid;place-items:center;margin-top:1px}'
+    + '.adp-verdict .vs svg{width:14px;height:14px;fill:#e7f99a}'
+    + '.adp-verdict .vt b{font-weight:700}'
     + '.v-todo{background:var(--soft,#e6e6e8);color:var(--muted,#71717a)}'
-    + '.v-ok{background:var(--lime,#e7f99a);color:var(--ink,#18181b)}'
-    + '.v-alerta,.v-construcao,.v-confortavel{background:rgba(255,0,215,.08);color:var(--ink,#18181b)}'
-    + '.v-inviavel{background:var(--ink,#18181b);color:#fff}'
+    + '.v-ok{background:rgba(231,249,154,.35);color:var(--ink,#18181b)}'
+    + '.v-alerta,.v-construcao,.v-confortavel{background:rgba(255,0,215,.07);color:var(--ink,#18181b)}'
+    + '.v-inviavel{background:var(--ink,#18181b);color:#fff}.v-inviavel .vs{background:#fff}.v-inviavel .vs svg{fill:var(--ink,#18181b)}'
     + '.adp-addcand{margin-top:2px;font-size:13px;font-weight:700;color:var(--ink,#18181b);border:1.5px dashed var(--line,#d4d4d8);border-radius:10px;padding:11px 14px;width:100%;cursor:pointer}'
     + '.adp-addcand:hover{border-color:var(--ink,#18181b)}'
     + '.adp-champ{margin-top:16px;font-size:14px;line-height:1.6;padding:14px 16px;border:1.5px solid var(--pink,#ff00d7);border-radius:12px;background:rgba(255,0,215,.04)}.adp-champ b{font-weight:700}'
@@ -279,28 +283,30 @@ window.ADP_CANVAS = (function () {
       poder: '<circle cx="12" cy="12" r="8.5"/><path d="M12 7v10M14.4 9.3A2.4 2 0 0 0 12 8.4c-1.4 0-2.4.7-2.4 1.8s1 1.6 2.4 1.8 2.4.7 2.4 1.8-1 1.8-2.4 1.8a2.4 2 0 0 1-2.4-1"/>',
       aderencia: '<path d="M7 4h10v4a5 5 0 0 1-10 0z"/><path d="M7 6H4.5v.8a3 3 0 0 0 3 3M17 6h2.5v.8a3 3 0 0 1-3 3M9.5 15h5M10.5 20h3M12 15v5"/>'
     };
-    var DICA_HTML = '<div class="mx-dica"><div class="dh"><svg viewBox="0 0 24 24"><path d="M12 3l7.5 3.5V12c0 4.2-3.2 7.2-7.5 8.5C7.7 19.2 4.5 16.2 4.5 12V6.5z"/></svg>Dica do Escavador</div><p>Sem prova ainda? Tudo bem. Marca a nota baixa e vai atrás de 1 caso real pra validar — nota sem evidência é torcida, não nicho.</p></div>';
-    function barsHTML(row) {
-      var sm = somaEixo(row, 'mercado'), sv = somaEixo(row, 'voce');
-      return '<div class="mx-bars">'
-        + '<div class="mx-bar"><div class="mx-bl"><span>O mercado vale a pena?</span><b>' + sm + '/20</b></div><div class="mx-track"><i style="width:' + Math.round(sm / 20 * 100) + '%"></i></div></div>'
-        + '<div class="mx-bar"><div class="mx-bl"><span>Você tem vantagem aqui?</span><b>' + sv + '/15</b></div><div class="mx-track"><i style="width:' + Math.round(sv / 15 * 100) + '%"></i></div></div>'
+    var COL_LABEL = { mercado: 'O mercado vale a pena?', voce: 'Você tem vantagem aqui?' };
+    function critRowHTML(row, i, k) {
+      var c = CRITDEF[k], cell = row.cells[k];
+      return '<div class="mx-row">'
+        + '<div class="mx-rtop">'
+        +   '<span class="mx-ic"><svg viewBox="0 0 24 24">' + CRIT_ICON[k] + '</svg></span>'
+        +   '<div class="mx-rmid"><div class="mx-rh">' + esc(c.h) + '</div><div class="mx-rq">' + esc(c.hint) + '</div></div>'
+        +   '<div class="mx-rctrl"><span class="mx-notawrap"><select class="mx-nota" data-i="' + i + '" data-k="' + k + '">' + notaOpts(cell.nota) + '</select>/5</span>'
+        +     '<select class="mx-conf" data-i="' + i + '" data-k="' + k + '">' + confOpts(cell.conf) + '</select></div>'
+        + '</div>'
+        + '<textarea class="mx-ev" data-i="' + i + '" data-k="' + k + '" rows="1" placeholder="Evidência: o fato, não a torcida. Sem ela a nota não vale.">' + esc(cell.ev) + '</textarea>'
         + '</div>';
     }
-    function critCardHTML(row, i, k) {
-      var c = CRITDEF[k], cell = row.cells[k];
-      return '<div class="mx-crit">'
-        + '<div class="mx-crit-top"><span class="ic"><svg viewBox="0 0 24 24">' + CRIT_ICON[k] + '</svg></span><span class="mx-crit-h">' + esc(c.h) + '</span></div>'
-        + '<div class="mx-crit-q">' + esc(c.hint) + '</div>'
-        + '<div class="mx-crit-ctrl"><select class="mx-nota" data-i="' + i + '" data-k="' + k + '">' + notaOpts(cell.nota) + '</select>'
-        + '<select class="mx-conf" data-i="' + i + '" data-k="' + k + '">' + confOpts(cell.conf) + '</select></div>'
-        + '<div><div class="mx-evlbl">Evidência</div><textarea class="mx-ev" data-i="' + i + '" data-k="' + k + '" rows="2" placeholder="O fato, não a torcida. Sem ele, a nota não vale.">' + esc(cell.ev) + '</textarea></div>'
+    function colHTML(row, i, eixo) {
+      var soma = somaEixo(row, eixo.key);
+      return '<div class="mx-col">'
+        + '<div class="mx-colhead"><span class="ct">' + COL_LABEL[eixo.key] + '</span><span class="cs">' + soma + '/' + eixo.max + '</span></div>'
+        + eixo.crit.map(function (c) { return critRowHTML(row, i, c.k); }).join('')
         + '</div>';
     }
     function verdictHTML(row) {
       var v = verdict(row), em = evMissing(row);
       var extra = em ? ' · falta evidência em ' + em + ' nota' + (em > 1 ? 's' : '') : '';
-      return '<div class="adp-verdict v-' + v.tag + '">' + esc(v.txt + extra) + '</div>';
+      return '<div class="adp-verdict v-' + v.tag + '"><span class="vs"><svg viewBox="0 0 24 24"><path d="M12 3l2.5 5.5L20 9.3l-4 3.9.9 5.8L12 16.2 7.1 19l.9-5.8-4-3.9 5.5-.8z"/></svg></span><div class="vt"><b>Veredito rápido</b><br>' + esc(v.txt + extra) + '</div></div>';
     }
     function champHTML() {
       var hp = hipotesePrincipal(rows);
@@ -312,14 +318,17 @@ window.ADP_CANVAS = (function () {
     }
     function paint() {
       mx.innerHTML = rows.map(function (row, i) {
-        var sm = somaEixo(row, 'mercado'), sv = somaEixo(row, 'voce'), total = sm + sv;
-        var crits = CRIT_ORDER.map(function (k) { return critCardHTML(row, i, k); }).join('');
+        var sm = somaEixo(row, 'mercado'), sv = somaEixo(row, 'voce'), total = sm + sv, pct = Math.round(total / 35 * 100);
         return '<div class="mx-cand" data-i="' + i + '">'
-          + '<div class="mx-cand-h"><input class="mx-name" data-i="' + i + '" value="' + esc(row.name) + '" placeholder="Candidato ' + (i + 1) + ' — vertical + horizontal (ex: clínicas saindo de convênio)">'
-          + '<div class="mx-cand-r">' + (rows.length > 1 ? '<button type="button" class="mx-del" data-i="' + i + '"><svg viewBox="0 0 24 24"><path d="M4 7h16M9 7V5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2M6 7l1 13h10l1-13"/></svg>remover</button>' : '')
-          + '<span class="mx-total' + (total >= 24 ? ' hi' : '') + '">Total: ' + total + '/35</span></div></div>'
-          + barsHTML(row)
-          + '<div class="mx-grid">' + crits + DICA_HTML + '</div>'
+          + '<div class="mx-cand-h">'
+          +   '<span class="mx-badge"><svg viewBox="0 0 24 24"><path d="M3 6l9-3 9 3-9 3z"/><path d="M3 6v6l9 3 9-3V6"/></svg></span>'
+          +   '<span class="mx-lead">Candidato ' + (i + 1) + '</span>'
+          +   '<input class="mx-name" data-i="' + i + '" value="' + esc(row.name) + '" placeholder="dá um nome (ex: clínicas de estética premium)">'
+          +   '<span class="mx-htotal"><span class="lbl">Total</span><b>' + total + '/35</b><span class="mx-hbar"><i style="width:' + pct + '%"></i></span><span class="lbl">' + pct + '%</span></span>'
+          +   (rows.length > 1 ? '<button type="button" class="mx-del" data-i="' + i + '"><svg viewBox="0 0 24 24"><path d="M4 7h16M9 7V5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2M6 7l1 13h10l1-13"/></svg>Remover</button>' : '')
+          + '</div>'
+          + '<div class="mx-cols">' + EIXOS.map(function (e) { return colHTML(row, i, e); }).join('') + '</div>'
+          + '<div class="mx-obswrap"><label>Observação rápida sobre esse nicho (opcional)</label><textarea class="mx-obs" data-i="' + i + '" rows="2" placeholder="Ex: mercado valioso, acesso ok, falta mais prova pública.">' + esc(row.obs || '') + '</textarea></div>'
           + verdictHTML(row) + '</div>';
       }).join('');
       champEl.innerHTML = champHTML();
@@ -327,7 +336,7 @@ window.ADP_CANVAS = (function () {
     function matData() {
       return {
         rows: rows.map(function (r) {
-          return { name: r.name, cells: r.cells, soma_mercado: somaEixo(r, 'mercado'), soma_voce: somaEixo(r, 'voce'), total: somaEixo(r, 'mercado') + somaEixo(r, 'voce'), veredito: verdict(r).txt };
+          return { name: r.name, obs: r.obs, cells: r.cells, soma_mercado: somaEixo(r, 'mercado'), soma_voce: somaEixo(r, 'voce'), total: somaEixo(r, 'mercado') + somaEixo(r, 'voce'), veredito: verdict(r).txt };
         }),
         hipotese_principal: hipotesePrincipal(rows)
       };
@@ -338,6 +347,7 @@ window.ADP_CANVAS = (function () {
     container.addEventListener('input', function (e) {
       var t = e.target, i = +t.dataset.i;
       if (t.classList.contains('mx-name')) { rows[i].name = t.value; champEl.innerHTML = champHTML(); persist(); }
+      else if (t.classList.contains('mx-obs')) { rows[i].obs = t.value; persist(); }
       else if (t.classList.contains('mx-ev')) { rows[i].cells[t.dataset.k].ev = t.value; persist(); }
     });
     // selects (nota/confiança) disparam no blur — re-render é seguro
