@@ -307,7 +307,8 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
       (cv||[]).forEach(function(r){
         if(!r || r.block==null) return;
         blockData[r.block] = r.data||{};
-        if(r.data && Object.keys(r.data).some(function(k){var v=r.data[k];return v && String(v).trim();})) filled.add(r.block);
+        // MESMA fonte de verdade do Meu Canvas e dos selos (ignora _chat/_done e estruturas vazias)
+        if(window.ADP_CANVAS && window.ADP_CANVAS.isFilled(r.block, r.data)) filled.add(r.block);
       });
       blocksFilled = Array.from(filled).filter(function(b){return blockSet.has(b);}).length;
       render(lessons, new Set(pr.done||[]), blocksFilled, blocksTotal, blockData);
