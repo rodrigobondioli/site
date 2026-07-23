@@ -130,8 +130,8 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .nextstep .ns-next:hover{color:var(--ink)}
 /* aplique aqui (bloco do Canvas embaixo do vídeo) */
 .applyhere{position:relative;margin-top:44px;border:1px solid var(--line);border-radius:var(--r);padding:26px 24px 22px}
-.applyhere .ah-tag{position:absolute;top:-13px;left:22px;display:inline-flex;align-items:center;gap:6px;background:var(--ink);color:#fff;font-size:10.5px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;padding:6px 12px;border-radius:8px}
-.applyhere .ah-tag svg{stroke:#fff}
+.applyhere .ah-tag{position:absolute;top:-12px;left:22px;display:inline-flex;align-items:center;gap:6px;background:var(--surface);border:1px solid var(--line);color:var(--ink);font-size:10.5px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;padding:5px 11px;border-radius:8px}
+.applyhere .ah-tag svg{stroke:var(--ink)}
 .applyhere h3{font-size:18px;font-weight:700;margin-top:7px;letter-spacing:-.01em}
 .applyhere .ah-sub{font-size:14.5px;color:#3f3f46;margin-top:8px;line-height:1.6;max-width:820px}
 .applyhere ol{margin:12px 0 0;padding-left:20px}
@@ -195,11 +195,17 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .esc-typing.gone{display:none}
 .esc-spin{display:inline-block;width:12px;height:12px;border:2px solid currentColor;border-right-color:transparent;border-radius:50%;animation:aspin .7s linear infinite;vertical-align:-1px;margin-right:7px}
 @keyframes aspin{to{transform:rotate(360deg)}}
-.esc-row{display:flex;gap:10px;align-items:flex-end;margin-top:12px}
-.esc-row textarea{flex:1;border:none;border-radius:12px;background:#fff;padding:14px 16px;font:inherit;font-size:14.5px;resize:none;min-height:50px;max-height:140px;line-height:1.5;color:var(--ink)}
-.esc-row textarea::placeholder{color:var(--faint)}
-.esc-row textarea:focus{outline:none}
-.esc-send{flex:none;background:var(--pink);color:#fff;font-weight:700;font-size:14px;padding:12px 22px;border-radius:999px;cursor:pointer}
+.esc-head{display:flex;align-items:center;gap:9px;margin-bottom:16px}
+.esc-head .dot{width:8px;height:8px;border-radius:999px;background:var(--pink);flex:none}
+.esc-head .nm{font-weight:700;font-size:13.5px;color:var(--ink)}
+.esc-head .sb{font-size:12.5px;color:var(--muted)}
+.esc-input{margin-top:16px}
+.esc-input textarea{width:100%;border:none;border-radius:12px;background:#fff;padding:14px 16px;font:inherit;font-size:14.5px;resize:none;min-height:56px;max-height:160px;line-height:1.5;color:var(--ink);box-shadow:0 1px 2px rgba(16,16,16,.04)}
+.esc-input textarea::placeholder{color:var(--faint)}
+.esc-input textarea:focus{outline:none}
+.esc-sendrow{display:flex;justify-content:flex-end;margin-top:10px}
+.esc-send{background:var(--pink);color:#fff;font-weight:700;font-size:14px;padding:11px 28px;border-radius:999px;cursor:pointer}
+.esc-send:hover{filter:brightness(1.06)}
 .esc-send[disabled]{opacity:.5;cursor:not-allowed}
 .esc-prev{margin-top:20px;padding-top:16px;border-top:1px solid var(--line)}
 .esc-prev.gone{display:none}
@@ -348,9 +354,10 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
     var voce = CANVAS[0] || {};
     var history = Array.isArray(voce._chat) ? voce._chat.slice() : [];
     container.innerHTML = '<div class="esc">'
+      + '<div class="esc-head"><span class="dot"></span><span class="nm">O Escavador</span><span class="sb">vai montando teu bloco VOCÊ</span></div>'
       + '<div class="esc-log" id="escLog"></div>'
       + '<div class="esc-typing gone" id="escTyping"><span class="esc-spin"></span>O Escavador está pensando…</div>'
-      + '<div class="esc-row"><textarea id="escInput" placeholder="Responde aqui… (Enter envia, Shift+Enter quebra linha)"></textarea><button class="esc-send" id="escSend">Enviar</button></div>'
+      + '<div class="esc-input"><textarea id="escInput" placeholder="Responde aqui… (Enter envia · Shift+Enter quebra linha)"></textarea><div class="esc-sendrow"><button class="esc-send" id="escSend">Enviar</button></div></div>'
       + '<div class="esc-prev gone" id="escPrev"></div>'
       + '<div class="esc-gate gone" id="escGate"></div>'
       + '</div>';
