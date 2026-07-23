@@ -68,6 +68,13 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .btn[disabled]{opacity:.55;cursor:not-allowed}
 .genmsg{font-size:13px;color:var(--muted);margin:14px 0 0}
 .gone{display:none}
+.gate{border-radius:12px;padding:16px 18px;margin:16px 0 4px;font-size:14.5px;line-height:1.55}
+.gate h4{font-size:15px;font-weight:700;margin-bottom:8px}
+.gate ul{margin:9px 0 0;padding-left:18px}
+.gate li{margin:5px 0}
+.gate.block{background:#18181b;color:#fff}
+.gate.block a{color:#e7f99a;text-decoration:underline}
+.gate.stamp{background:rgba(255,0,215,.07);border:1.5px solid #ff00d7;color:#18181b}
 .spin{display:inline-block;width:13px;height:13px;border:2px solid currentColor;border-right-color:transparent;border-radius:50%;animation:adpspin .7s linear infinite;vertical-align:-2px;margin-right:8px}
 @keyframes adpspin{to{transform:rotate(360deg)}}
 
@@ -152,6 +159,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
         </div>
       </div>
       <p class="genmsg gone" id="genmsg"></p>
+      <div class="gate gone" id="gate"></div>
 
       <div class="frase">
         <div class="fk">A sua frase de especialista</div>
@@ -248,8 +256,42 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
     const isNo = el.id === "f-naoatende";
     el.innerHTML = arr.map(x=>`<li class="${isNo?'no':''}">${String(x)}</li>`).join("");
   }
+  // GATE FINAL — decide se mostra o posicionamento, um bloqueio, ou um carimbo de baixa confiança.
+  function showGate(d){
+    var g = $("gate");
+    var gate = d && d.gate;
+    var frase = document.querySelector(".frase"), grid = document.querySelector(".grid");
+    // resposta determinística do servidor vem sem frase → tratar como bloqueio
+    var blocked = gate ? gate.status === "bloqueado" : (d && !d.frase && !d.nicho);
+    if(blocked){
+      var crit = (gate && gate.criticos) || [];
+      if(g){
+        g.className = "gate block";
+        g.innerHTML = "<h4>🚫 Ainda não dá pra gerar</h4><p>"
+          + ((gate && gate.mensagem) || "Tem gate crítico aberto. Resolve e volta.") + "</p>"
+          + (crit.length ? "<ul>" + crit.map(function(x){ return "<li>" + String(x) + "</li>"; }).join("") + "</ul>" : "")
+          + '<p style="margin-top:11px"><a href="canvas.html">Voltar pro Canvas →</a></p>';
+      }
+      if(frase) frase.classList.add("gone");
+      if(grid) grid.classList.add("gone");
+      return false;
+    }
+    if(frase) frase.classList.remove("gone");
+    if(grid) grid.classList.remove("gone");
+    if(g){
+      if(gate && gate.status === "carimbado"){
+        var imp = (gate.importantes || []).concat(gate.avisos || []);
+        g.className = "gate stamp";
+        g.innerHTML = "<h4>⚠️ Gerado como hipótese de baixa confiança</h4><p>"
+          + (gate.mensagem || "Teu Canvas passou com pendências. O posicionamento sai carimbado — trata como aposta pros 30 dias, não como veredito.") + "</p>"
+          + (imp.length ? "<ul>" + imp.map(function(x){ return "<li>" + String(x) + "</li>"; }).join("") + "</ul>" : "");
+      } else { g.className = "gate gone"; g.innerHTML = ""; }
+    }
+    return true;
+  }
   function render(d){
     if(!d) return;
+    if(!showGate(d)) return;
     if(d.frase) $("f-frase").textContent = d.frase;
     if(d.nicho) $("f-nicho").textContent = d.nicho;
     if(d.monopolio) $("f-monopolio").textContent = d.monopolio;
