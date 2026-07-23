@@ -36,6 +36,8 @@ window.ADP = (function () {
     savePlan: (data, course = COURSE) =>
       api("/api/plan", { method: "POST", body: JSON.stringify({ course, data }) }),
     ruminacao: (nicho, cliente) => api("/api/ai/ruminacao", { method: "POST", body: JSON.stringify({ nicho, cliente }) }),
+    // 🛠️ Escavador (Aula 1 — VOCÊ): 1 turno da conversa. Cliente guarda o estado (history + voce) e manda a cada chamada.
+    escavador: (payload) => api("/api/ai/escavador", { method: "POST", body: JSON.stringify(payload || {}) }),
     // aulas + progresso
     lessons: (course = COURSE) => api("/api/lessons?course=" + encodeURIComponent(course)),
     progress: (course = COURSE) => api("/api/progress?course=" + encodeURIComponent(course)),
