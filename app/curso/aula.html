@@ -201,19 +201,23 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .esc-typing.gone{display:none}
 .esc-spin{display:inline-block;width:12px;height:12px;border:2px solid currentColor;border-right-color:transparent;border-radius:50%;animation:aspin .7s linear infinite;vertical-align:-1px;margin-right:7px}
 @keyframes aspin{to{transform:rotate(360deg)}}
-/* input: composer branco com os chips DENTRO */
-.esc-inbar{background:#fff;border-radius:20px;padding:9px;box-shadow:0 1px 2px rgba(16,16,16,.05)}
-.esc-chips{display:flex;flex-wrap:wrap;gap:6px;margin:2px 4px 9px 6px}
-.esc-chips.gone{display:none}
-.esc-chip{font-size:11.5px;font-weight:600;color:var(--ink);border:none;border-radius:999px;padding:5px 12px;cursor:pointer;background:linear-gradient(90deg,rgba(231,249,154,.75),rgba(231,249,154,.28));transition:filter .12s}
-.esc-chip:hover{filter:brightness(1.04) saturate(1.15)}
-.esc-inrow{display:flex;align-items:center;gap:8px}
-.esc-inrow textarea{flex:1;min-width:0;border:none;background:none;padding:7px 0 7px 12px;font:inherit;font-size:14.5px;resize:none;max-height:120px;line-height:1.5;color:var(--ink)}
+/* input: composer branco (sparkle + placeholder rotativo + botão aviãozinho) */
+.esc-inbar{background:#fff;border-radius:20px;padding:8px;box-shadow:0 1px 2px rgba(16,16,16,.05)}
+.esc-inrow{display:flex;align-items:center;gap:9px;padding:2px 2px 2px 12px}
+.esc-spark{flex:none;display:flex;color:var(--faint)}
+.esc-spark svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.esc-inrow textarea{flex:1;min-width:0;border:none;background:none;padding:8px 0;font:inherit;font-size:14.5px;resize:none;max-height:120px;line-height:1.5;color:var(--ink)}
 .esc-inrow textarea::placeholder{color:var(--faint)}
 .esc-inrow textarea:focus{outline:none}
-.esc-send{flex:none;background:var(--pink);color:#fff;font-weight:700;font-size:14px;padding:10px 24px;border-radius:999px;cursor:pointer}
+.esc-send{flex:none;width:40px;height:40px;border-radius:13px;background:var(--pink);border:none;display:grid;place-items:center;cursor:pointer}
+.esc-send svg{width:18px;height:18px;fill:none;stroke:#fff;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .esc-send:hover{filter:brightness(1.06)}
-.esc-send[disabled]{opacity:.5;cursor:not-allowed}
+.esc-send[disabled]{opacity:.45;cursor:not-allowed}
+.esc-chips{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin-top:8px;padding:9px 6px 3px;border-top:1px solid var(--line)}
+.esc-chips.gone{display:none}
+.esc-chlbl{font-size:11px;color:var(--faint);font-weight:600;margin-right:2px}
+.esc-chip{font-size:11.5px;font-weight:600;color:var(--ink);border:none;border-radius:999px;padding:5px 12px;cursor:pointer;background:linear-gradient(90deg,rgba(231,249,154,.75),rgba(231,249,154,.28));transition:filter .12s}
+.esc-chip:hover{filter:brightness(1.04) saturate(1.15)}
 /* bloco VOCÊ — o hero (sempre visível, enchendo) */
 .esc-block{margin-top:26px;padding-top:22px;border-top:1px solid var(--line)}
 .esc-bh{display:flex;align-items:baseline;gap:10px;margin-bottom:14px}
@@ -398,7 +402,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
       +   '<div class="esc-last gone" id="escLast"></div>'
       +   '<div class="esc-q" id="escQ"></div>'
       +   '<div class="esc-typing gone" id="escTyping"><span class="esc-spin"></span>O Escavador está montando teu bloco…</div>'
-      +   '<div class="esc-inbar"><div class="esc-chips gone" id="escChips"></div><div class="esc-inrow"><textarea id="escInput" rows="1" placeholder="Responde aqui…  (Enter envia)"></textarea><button class="esc-send" id="escSend">Enviar</button></div></div>'
+      +   '<div class="esc-inbar"><div class="esc-inrow"><span class="esc-spark"><svg viewBox="0 0 24 24"><path d="M12 3l1.7 4.8L18.5 9.5l-4.8 1.7L12 16l-1.7-4.8L5.5 9.5l4.8-1.7z"/></svg></span><textarea id="escInput" rows="1"></textarea><button class="esc-send" id="escSend" aria-label="Enviar"><svg viewBox="0 0 24 24"><path d="M22 2 11 13"/><path d="M22 2 15 22l-4-9-9-4z"/></svg></button></div><div class="esc-chips gone" id="escChips"></div></div>'
       + '</div>'
       + '<div class="esc-block">'
       +   '<div class="esc-bh"><b>Sua matéria-prima</b><span class="prog" id="escProgTxt">0 de 9 itens</span></div>'
@@ -448,7 +452,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
     }
     function renderChips(){
       if(hasAny()){ chips.classList.add('gone'); chips.innerHTML=''; return; }
-      chips.innerHTML=ESC_CHIPS.map(function(c,i){return '<button type="button" class="esc-chip" data-i="'+i+'">'+esc(c.label)+'</button>';}).join('');
+      chips.innerHTML='<span class="esc-chlbl">sugestões:</span>'+ESC_CHIPS.map(function(c,i){return '<button type="button" class="esc-chip" data-i="'+i+'">'+esc(c.label)+'</button>';}).join('');
       chips.classList.remove('gone');
     }
     function renderDone(){
@@ -487,6 +491,11 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
       if(!window.confirm('Reiniciar? Isso apaga o que o Escavador montou até agora no teu bloco VOCÊ.')) return;
       voce={}; history=[]; qCount=0; done=false; lastEl.classList.add('gone'); lastEl.innerHTML=''; persist(); renderCards(); renderChips(); renderDone(); turn(null);
     });
+
+    // placeholder que fica trocando a frase (exemplos que guiam), só quando vazio e sem foco
+    var PH=['Ex: trabalhei 4 anos em agência atendendo e-commerce…','Ex: tenho um negócio de família de autopeças…','Ex: faço parte de uma cena de tatuagem premium…','Ex: já atendi várias clínicas de estética…','Ex: cresci no meio de food trucks…','Ex: dou aula de música há 8 anos…'];
+    var phi=0; input.placeholder=PH[0];
+    setInterval(function(){ if(document.activeElement===input || input.value) return; phi=(phi+1)%PH.length; input.placeholder=PH[phi]; }, 3200);
 
     renderCards(); renderChips(); renderDone();
     var lastAssistant=''; for(var i=history.length-1;i>=0;i--){ if(history[i].role==='assistant'){ lastAssistant=history[i].content; break; } }
