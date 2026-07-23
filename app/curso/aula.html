@@ -305,6 +305,8 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
     var def = window.ADP_CANVAS.byBlock(l.canvas_block);
     if(!def) return '';
     var ex = l.exercise||{};
+    // bloco 0 (VOCÊ) é conversa, não formulário — ignora a copy antiga do banco ("4 perguntas")
+    if(l.canvas_block===0){ ex = { title:'Sobre você', intro:'Sem formulário. O Escavador pergunta, você responde cru — e ele monta teu bloco VOCÊ, de onde vai sair teu nicho.' }; }
     var steps = (ex.steps&&ex.steps.length)? '<ol>'+ex.steps.map(function(s){return '<li>'+esc(s)+'</li>';}).join('')+'</ol>':'';
     var crit='';
     if(ex.criteria&&ex.criteria.length){
@@ -317,7 +319,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
       +'<h3>'+esc(title)+'</h3>'
       +(ex.intro?'<p class="ah-sub">'+esc(ex.intro)+'</p>':'')
       +steps+crit
-      +'<div class="ah-fields"><p style="font-size:12.5px;color:var(--muted);margin:0 0 4px">'+(l.canvas_block===0?'Conversa com o Escavador — ele monta e salva teu bloco VOCÊ sozinho.':'O que você escreve aqui já entra no seu Canvas e salva sozinho.')+'</p><div id="canvasInline"></div></div>'
+      +'<div class="ah-fields">'+(l.canvas_block===0?'':'<p style="font-size:12.5px;color:var(--muted);margin:0 0 4px">O que você escreve aqui já entra no seu Canvas e salva sozinho.</p>')+'<div id="canvasInline"></div></div>'
       +'</div>';
   }
 

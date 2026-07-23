@@ -130,10 +130,21 @@ window.ADP_CANVAS = (function () {
   }
 
   // um bloco "preenchido" = tem pelo menos um valor não-vazio
+  function hasContent(v) {
+    if (v == null) return false;
+    if (Array.isArray(v)) return v.some(function (it) {
+      if (it == null) return false;
+      if (typeof it === 'object') return Object.keys(it).some(function (kk) { return String(it[kk] == null ? '' : it[kk]).trim(); });
+      return String(it).trim();
+    });
+    if (typeof v === 'object') return Object.keys(v).some(function (kk) { return hasContent(v[kk]); });
+    return String(v).trim();
+  }
   function isFilled(block, data) {
     if (!data) return false;
     if (block === 2) return !!(data.rows && data.rows.some(function (r) { return (r.name || '').trim(); }));
-    return Object.keys(data).some(function (k) { var v = data[k]; return v && String(v).trim(); });
+    // ignora chaves meta (_chat etc.) e vazios reais (arrays/objetos vazios, strings em branco)
+    return Object.keys(data).some(function (k) { return k.charAt(0) !== '_' && hasContent(data[k]); });
   }
 
   var STYLE = ''
