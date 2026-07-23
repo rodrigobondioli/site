@@ -194,11 +194,15 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .esc-reset{margin-left:auto;font-size:12px;color:var(--muted);text-decoration:underline;cursor:pointer;flex:none}
 .esc-reset:hover{color:var(--ink)}
 /* prévia ao vivo — faixa horizontal em cima */
-.esc-prevbar{border:1px solid var(--line);border-radius:12px;padding:12px 14px 14px;background:var(--surface);margin-bottom:16px}
-.esc-ph{display:flex;align-items:center;gap:10px;margin-bottom:11px}
+.esc-prevbar{border:1px solid var(--line);border-radius:12px;background:var(--surface);margin-bottom:16px}
+.esc-ph{display:flex;align-items:center;gap:9px;padding:11px 14px;cursor:pointer;user-select:none}
 .esc-ph b{font-size:13px;font-weight:700}
 .esc-ph .live{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--pink)}
 .esc-ph .prog{margin-left:auto;font-size:11.5px;color:var(--muted)}
+.esc-ph .caret{font-size:12px;font-weight:700;color:var(--muted);transition:transform .15s;flex:none;margin-left:2px}
+.esc-prevbar.open .esc-ph .caret{transform:rotate(90deg)}
+.esc-prevbody{display:none;padding:0 14px 14px}
+.esc-prevbar.open .esc-prevbody{display:block}
 .esc-cards{display:flex;flex-wrap:wrap;gap:8px}
 .esc-c{flex:1 1 140px;min-width:128px;display:flex;align-items:center;gap:9px;border:1px solid var(--line);border-radius:10px;padding:9px 11px;background:#fff}
 .esc-c.empty{opacity:.5}
@@ -406,14 +410,16 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
   function mountEscavador(container){
     var voce = CANVAS[0] || {};
     var history = Array.isArray(voce._chat) ? voce._chat.slice() : [];
-    var ME={initials:'EU', img:'/app/eu-login.webp'};
+    var ME={initials:'EU', img:null};
     if(window.ADP && window.ADP.me){ window.ADP.me().then(function(u){ if(!u)return; var n=(u.user_metadata&&(u.user_metadata.full_name||u.user_metadata.name))||u.email||''; if(n){ ME.initials=(n.trim().split(/\s+/).map(function(x){return x[0]||'';}).slice(0,2).join('')||'EU').toUpperCase(); } var av=u.user_metadata&&(u.user_metadata.avatar_url||u.user_metadata.picture); if(av)ME.img=av; }).catch(function(){}); }
     container.innerHTML = '<div class="esc">'
       + '<div class="esc-head"><span class="dot"></span><span class="nm">O Escavador</span><span class="sb">conversa guiada pra montar teu bloco VOCÊ</span><span class="esc-reset" id="escReset">reiniciar</span></div>'
       + '<div class="esc-prevbar gone" id="escPrev">'
-      +   '<div class="esc-ph"><b>Seu bloco VOCÊ</b><span class="live">prévia ao vivo</span><span class="prog" id="escProgTxt">0 de 9 itens</span></div>'
-      +   '<div class="esc-cards" id="escCards"></div>'
-      +   '<div class="esc-progbar"><i id="escProgBar" style="width:0%"></i></div>'
+      +   '<div class="esc-ph" id="escPhToggle"><b>Seu bloco VOCÊ</b><span class="live">prévia</span><span class="prog" id="escProgTxt">0 de 9 itens</span><span class="caret">▸</span></div>'
+      +   '<div class="esc-prevbody">'
+      +     '<div class="esc-cards" id="escCards"></div>'
+      +     '<div class="esc-progbar"><i id="escProgBar" style="width:0%"></i></div>'
+      +   '</div>'
       + '</div>'
       + '<div class="esc-log" id="escLog"></div>'
       + '<div class="esc-typing gone" id="escTyping"><span class="esc-spin"></span>O Escavador está pensando…</div>'
@@ -506,6 +512,8 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
     send.addEventListener('click', submit);
     input.addEventListener('keydown', function(e){ if(e.key==='Enter' && !e.shiftKey){ e.preventDefault(); submit(); } });
     chips.addEventListener('click', function(e){ var b=e.target.closest('.esc-chip'); if(!b) return; var lead=ESC_CHIPS[+b.dataset.i].lead; input.value=lead; input.focus(); try{ input.setSelectionRange(lead.length,lead.length); }catch(err){} });
+    var phToggle=container.querySelector('#escPhToggle');
+    if(phToggle) phToggle.addEventListener('click', function(){ prevbar.classList.toggle('open'); });
     var resetBtn=container.querySelector('#escReset');
     if(resetBtn) resetBtn.addEventListener('click', function(){
       if(!window.confirm('Reiniciar a conversa? Isso apaga o que o Escavador montou até agora no teu bloco VOCÊ.')) return;
