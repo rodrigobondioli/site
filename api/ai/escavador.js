@@ -95,10 +95,10 @@ export async function escavadorTurn(body) {
   if (!history.length) msgs.push({ role: 'user', content: '(início) Começa a entrevista — abre com UMA pergunta.' });
   else history.forEach(function (m) { if (m && m.role && m.content) msgs.push({ role: m.role === 'assistant' ? 'assistant' : 'user', content: str(m.content) }); });
 
-  var out = await ai(MODEL_FAST(), msgs, 1200, 0.5);
+  var out = await ai(MODEL_FAST(), msgs, 2048, 0.5);
   var data = extractJSON(out) || {};
   return {
-    reply: data.reply || 'Me conta: onde você já circulou por dentro — trampo antigo, negócio de família, cena, hobby? E que problema você viu ali?',
+    reply: data.reply || 'Não peguei direito. Me dá um exemplo concreto: um mercado ou lugar que você já viveu por dentro — e um problema que você viu lá.',
     voce: mergeVoce(voce, data.voce),
     campo_atual: data.campo_atual || 'comunidades',
     done: !!data.done,
