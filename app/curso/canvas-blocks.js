@@ -148,10 +148,11 @@ window.ADP_CANVAS = (function () {
   }
 
   var STYLE = ''
-    + '.adp-fld{margin-top:14px}'
-    + '.adp-fld label{display:block;font-size:12.5px;font-weight:700;color:var(--muted,#71717a);margin-bottom:7px}'
-    + '.adp-fld textarea{width:100%;border:none;border-radius:10px;background:#fff;padding:13px 15px;font:inherit;font-size:14.5px;color:var(--ink,#18181b);resize:none;min-height:66px;line-height:1.55}'
-    + '.adp-fld textarea:focus{outline:none}'
+    + '.adp-fld{margin-top:18px}'
+    + '.adp-fld label{display:block;font-size:14.5px;font-weight:700;color:var(--ink,#18181b);margin-bottom:8px;letter-spacing:-.01em;line-height:1.4}'
+    + '.adp-fld textarea{width:100%;border:1px solid var(--line,#d4d4d8);border-radius:16px;background:none;padding:13px 15px;font:inherit;font-size:14.5px;color:var(--ink,#18181b);resize:none;min-height:70px;line-height:1.55;transition:border-color .15s}'
+    + '.adp-fld textarea::placeholder{color:var(--faint,#a1a1aa)}'
+    + '.adp-fld textarea:focus{outline:none;border-color:var(--ink,#18181b)}'
     + '.adp-savest{font-size:12px;color:var(--faint,#a1a1aa);margin-top:9px;min-height:1em}'
     + '.adp-savest.err{color:var(--pink,#ff00d7);font-weight:700}'
     // --- Matriz v2 (cards por candidato) ---
