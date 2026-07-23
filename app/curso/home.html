@@ -113,11 +113,20 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .lesson .st.now svg{width:10px;height:10px;fill:#fff;margin-left:1px}
 .lesson .st.lock{border:1.5px solid var(--line)}
 .lesson .st.lock svg{width:10px;height:10px;fill:none;stroke:var(--faint);stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
-.lesson .tt{flex:1;min-width:0;font-weight:400;font-size:14px}
+.lesson .lcol{flex:1;min-width:0;display:flex;flex-direction:column;gap:5px}
+.lesson .tt{font-weight:400;font-size:14px}
 .lesson.now .tt{font-weight:700}
 .lesson.lock .tt{color:var(--faint)}
-.lesson .tag{font-size:11px;font-weight:700;color:var(--muted);border:1px solid var(--line);padding:2px 8px;border-radius:999px}
+.lesson .tag{font-size:11px;font-weight:700;color:var(--muted);border:1px solid var(--line);padding:2px 8px;border-radius:999px;flex:none}
 .lesson .dur{font-size:13px;color:var(--muted);flex:none;min-width:42px;text-align:right}
+/* 3 infos por card: Conclusão · Gate · Validação — nunca um selo só */
+.linfo{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.pill{font-size:11px;font-weight:700;padding:2px 8px;border-radius:999px;border:1px solid var(--line);color:var(--muted);white-space:nowrap}
+.pill.dots{letter-spacing:1.5px;font-size:10px;color:var(--ink)}
+.pill.g-critico{background:var(--ink);color:#fff;border-color:var(--ink)}
+.pill.g-importante,.pill.g-aviso{background:rgba(255,0,215,.08);color:var(--ink);border-color:var(--pink)}
+.pill.g-ok{background:var(--lime);color:var(--ink);border-color:var(--lime)}
+.pill.val .vdot{width:7px;height:7px;border-radius:999px;display:inline-block;margin-right:5px;vertical-align:0;background:#e8b93a}
 
 @media(max-width:900px){.side{display:none}.tabs{display:none}.top{grid-template-columns:1fr auto}}
 </style>
@@ -202,6 +211,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 <script src="/app/curso/guard.js"></script>
 <script src="/app/curso/api.js"></script>
 <script src="/app/curso/ui.js"></script>
+<script src="/app/curso/canvas-blocks.js"></script>
 <script>
 (function(){
   var ICON_DONE='<svg viewBox="0 0 24 24"><path d="m5 13 4 4L19 7"/></svg>';
@@ -209,13 +219,44 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
   var ICON_DOT ='<svg viewBox="0 0 24 24" style="width:8px;height:8px"><circle cx="12" cy="12" r="6" fill="#a1a1aa"/></svg>';
   function esc(s){return String(s==null?'':s).replace(/[<>&]/g,function(c){return {'<':'&lt;','>':'&gt;','&':'&amp;'}[c];});}
 
-  function render(lessons, doneSet, blocksFilled, blocksTotal){
+  function dots(ratio){ var n=Math.max(0,Math.min(5,Math.round((ratio||0)*5))); var s=''; for(var i=0;i<5;i++) s+= i<n?'●':'○'; return s; }
+  var GATE=window.ADP_CANVAS && window.ADP_CANVAS.gateForBlock;
+  // 3 infos do bloco de uma aula (ou '' se a aula não tem bloco — ex: intro/Aula 0)
+  function blockInfo(l, blockData){
+    if(l.canvas_block==null || !GATE) return '';
+    var g = GATE(l.canvas_block, blockData[l.canvas_block]);
+    if(!g.preenchido) return '<span class="linfo"><span class="pill">bloco não preenchido</span></span>';
+    var gatePill = g.gate.sev!=='nenhum' ? '<span class="pill g-'+g.gate.sev+'">'+esc(g.gate.label)+'</span>' : '';
+    return '<span class="linfo">'
+      + '<span class="pill dots">'+dots(g.completion)+'</span>'
+      + gatePill
+      + '<span class="pill val"><i class="vdot"></i>hipótese</span>'
+      + '</span>';
+  }
+  // primeira pendência aberta (crítico > importante > aviso), na ordem da trilha — pro resumo global
+  function firstPend(lessons, blockData){
+    var ordem=['critico','importante','aviso'];
+    for(var s=0;s<ordem.length;s++) for(var i=0;i<lessons.length;i++){
+      var b=lessons[i].canvas_block; if(b==null||!GATE) continue;
+      var g=GATE(b, blockData[b]);
+      if(g.preenchido && g.gate.sev===ordem[s]) return {lesson:lessons[i], g:g};
+    }
+    return null;
+  }
+
+  function render(lessons, doneSet, blocksFilled, blocksTotal, blockData){
     var total=lessons.length, done=0;
     lessons.forEach(function(l){ if(doneSet.has(l.id)) done++; });
     var projPct = blocksTotal? Math.round(blocksFilled/blocksTotal*100):0;
     document.getElementById('progPct').textContent = projPct+'%';
     document.getElementById('progBar').style.width = projPct+'%';
-    document.getElementById('progSub').textContent = blocksFilled+' de '+blocksTotal+' blocos do Canvas preenchidos · '+done+' de '+total+' aula'+(total===1?'':'s')+' concluída'+(done===1?'':'s');
+    // resumo global: % estruturado · status · próxima pendência (o dashboard só representa estados)
+    var status = blocksFilled ? 'hipótese (nada validado em campo ainda)' : 'sem dados ainda';
+    var pend = firstPend(lessons, blockData||{});
+    var pendTxt = pend
+      ? 'Próxima pendência: '+esc(pend.g.gate.label)+' — '+esc(pend.lesson.title)
+      : (blocksFilled ? 'Nenhuma pendência crítica — dá pra gerar o posicionamento.' : 'Preenche o Canvas pra começar.');
+    document.getElementById('progSub').textContent = projPct+'% estruturado · Status: '+status+' · '+pendTxt;
     document.getElementById('contentMeta').textContent = '1 seção · '+total+' aula'+(total===1?'':'s');
     document.getElementById('modMeta').textContent = total+' aula'+(total===1?'':'s');
 
@@ -234,7 +275,8 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
       var cls = isDone?'lesson done':(isNow?'lesson now':'lesson');
       var tag = isNow? '<span class="tag">agora</span>':'';
       var dur = l.duration? '<span class="dur">'+esc(l.duration)+'</span>':'';
-      return '<a class="'+cls+'" href="aula.html?a='+l.id+'">'+st+'<span class="tt">'+esc(l.title)+'</span>'+tag+dur+'</a>';
+      var info = blockInfo(l, blockData||{});
+      return '<a class="'+cls+'" href="aula.html?a='+l.id+'">'+st+'<span class="lcol"><span class="tt">'+esc(l.title)+'</span>'+info+'</span>'+tag+dur+'</a>';
     }).join('');
     document.getElementById('lessonList').innerHTML = html || '<div class="lesson"><span class="tt" style="color:var(--muted)">Nenhuma aula publicada ainda.</span></div>';
   }
@@ -261,9 +303,14 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
       var blocksTotal = blockSet.size || 5;
       var blocksFilled = 0;
       var filled = new Set();
-      (cv||[]).forEach(function(r){ if(r && r.data && Object.keys(r.data).some(function(k){var v=r.data[k];return v && String(v).trim();})) filled.add(r.block); });
+      var blockData = {};
+      (cv||[]).forEach(function(r){
+        if(!r || r.block==null) return;
+        blockData[r.block] = r.data||{};
+        if(r.data && Object.keys(r.data).some(function(k){var v=r.data[k];return v && String(v).trim();})) filled.add(r.block);
+      });
       blocksFilled = Array.from(filled).filter(function(b){return blockSet.has(b);}).length;
-      render(lessons, new Set(pr.done||[]), blocksFilled, blocksTotal);
+      render(lessons, new Set(pr.done||[]), blocksFilled, blocksTotal, blockData);
     }catch(e){
       document.getElementById('lessonList').innerHTML='<div class="lesson"><span class="tt" style="color:var(--muted)">Não consegui carregar as aulas ('+esc(e.message)+').</span></div>';
     }

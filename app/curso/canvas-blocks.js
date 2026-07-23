@@ -319,6 +319,57 @@ window.ADP_CANVAS = (function () {
     return pool[0].name;
   }
 
+  // quão preenchido está um bloco (0..1) — pros pontinhos ●●●○○ do dashboard/cards
+  function blockCompletion(block, data) {
+    if (!data) return 0;
+    if (block === 2) {
+      var rows = (data.rows || []).map(normRow).filter(function (r) { return (r.name || '').trim(); });
+      if (!rows.length) return 0;
+      var ratios = rows.map(function (r) { return CRIT7.filter(function (c) { return nota(r, c.k) >= 1; }).length / CRIT7.length; });
+      return Math.max.apply(null, ratios);
+    }
+    var def = byBlock(block);
+    if (!def || !def.fields) return isFilled(block, data) ? 1 : 0;
+    var filled = def.fields.filter(function (f) { var v = data[f.key]; return v && String(v).trim(); }).length;
+    return filled / def.fields.length;
+  }
+
+  // estado de UM bloco pro dashboard/cards: Conclusão (preenchido+completion) · Gate (severidade) · Validação.
+  // Os 3 eixos separados — nunca um selo só (ver ARQ 1/ARQ 3).
+  function gateForBlock(block, data) {
+    var preenchido = isFilled(block, data);
+    var res = { preenchido: preenchido, completion: blockCompletion(block, data), gate: { sev: 'nenhum', label: '' }, validacao: preenchido ? 'hipotese' : '' };
+    if (!preenchido) return res;
+    var d = data || {};
+    function has(v) { return v != null && String(v).trim() !== ''; }
+    if (block === 0) {
+      if (!has(d.forte) && !has(d.mundos)) res.gate = { sev: 'critico', label: 'sem matéria-prima' };
+      else if (!has(d.forte)) res.gate = { sev: 'importante', label: 'sem prova concreta' };
+      else if (!has(d.historia)) res.gate = { sev: 'aviso', label: 'história fraca' };
+      else res.gate = { sev: 'ok', label: 'matéria-prima ok' };
+    } else if (block === 2) {
+      var rows = (d.rows || []).map(normRow).filter(function (r) { return (r.name || '').trim(); });
+      if (!rows.length) res.gate = { sev: 'critico', label: 'sem candidato a nicho' };
+      else {
+        var anyEv = rows.some(function (r) { return CRIT7.some(function (c) { return (r.cells[c.k].ev || '').trim(); }); });
+        var champ = champion(rows);
+        if (!anyEv) res.gate = { sev: 'critico', label: 'matriz sem evidência' };
+        else if (!champ) res.gate = { sev: 'importante', label: 'nenhum nicho fecha os 2 eixos' };
+        else if (avgConf(champ) < 1) res.gate = { sev: 'importante', label: 'confiança baixa' };
+        else res.gate = { sev: 'ok', label: 'nicho com evidência' };
+      }
+    } else if (block === 3) {
+      if (!has(d.ideal) || !has(d.dor)) res.gate = { sev: 'critico', label: !has(d.ideal) ? 'sem cliente ideal' : 'sem dor' };
+      else if (!has(d.desejo)) res.gate = { sev: 'aviso', label: 'sem desejo do cliente' };
+      else res.gate = { sev: 'ok', label: 'cliente e dor definidos' };
+    } else if (block === 4) {
+      if (!has(d.diferencial) && !has(d.frase)) res.gate = { sev: 'critico', label: 'sem diferencial nem frase' };
+      else if (!has(d.metodo) || !has(d.prova)) res.gate = { sev: 'importante', label: !has(d.metodo) ? 'sem método' : 'sem prova' };
+      else res.gate = { sev: 'ok', label: 'monopólio sustentado' };
+    }
+    return res;
+  }
+
   // 🧠 Caça à Ruminação — anexa ao Bloco 3. Usa o nicho (opts.getNicho) + o cliente digitado.
   function appendRuminacao(container, opts) {
     var wrap = document.createElement('div');
@@ -371,5 +422,5 @@ window.ADP_CANVAS = (function () {
     if (blockNum === 3) appendRuminacao(container, opts || {});
   }
 
-  return { BLOCKS: BLOCKS, byBlock: byBlock, isFilled: isFilled, renderBlock: renderBlock, nichoFromBlock2: nichoFromBlock2 };
+  return { BLOCKS: BLOCKS, byBlock: byBlock, isFilled: isFilled, renderBlock: renderBlock, nichoFromBlock2: nichoFromBlock2, gateForBlock: gateForBlock, blockCompletion: blockCompletion };
 })();
