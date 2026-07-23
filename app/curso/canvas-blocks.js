@@ -2,10 +2,23 @@
 // Cada bloco = matéria-prima que o Estrategista lê no final.
 // Salva via window.ADP.saveBlock(block, data) e carrega via window.ADP.loadCanvas().
 window.ADP_CANVAS = (function () {
-  var CRIT = [
-    { k: 'r', h: 'Repert.' }, { k: 'n', h: 'Necess.' }, { k: 'c', h: 'Cresc.' },
-    { k: 'p', h: 'Poder' }, { k: 'a', h: 'Acesso' }
+  // Matriz v2 — 2 eixos, 7 critérios. Cada nota (1-5) leva EVIDÊNCIA + CONFIANÇA. Sem soma ponderada: dois totais por eixo + regras de inviabilidade.
+  var EIXOS = [
+    { key: 'mercado', h: 'Mercado', max: 20, crit: [
+      { k: 'intensidade', h: 'Intensidade',      hint: 'A dor é forte de verdade — ou só "seria bom ter"?' },
+      { k: 'urgencia',    h: 'Urgência',         hint: 'Resolve AGORA ou dá pra empurrar? Sem urgência, o mercado elogia e não compra.' },
+      { k: 'crescimento', h: 'Crescimento',      hint: 'Esse mercado cresce, estabiliza ou encolhe?' },
+      { k: 'poder',       h: 'Poder de compra',  hint: 'Tem verba e decide gastar com isso? Sem poder de compra, mata o nicho.' }
+    ]},
+    { key: 'voce', h: 'Você', max: 15, crit: [
+      { k: 'repertorio', h: 'Repertório',       hint: 'Você já conhece esse mundo por dentro?' },
+      { k: 'acesso',     h: 'Acesso',           hint: 'Consegue chegar no decisor em 30 dias (rede, conteúdo, prospecção)?' },
+      { k: 'aderencia',  h: 'Aderência / Prova', hint: 'Você já tem caso ou prova que gruda nesse nicho?' }
+    ]}
   ];
+  var CRIT7 = EIXOS.reduce(function (a, e) { return a.concat(e.crit.map(function (c) { return { k: c.k, eixo: e.key, h: c.h, hint: c.hint }; })); }, []);
+  var CRITDEF = {}; CRIT7.forEach(function (c) { CRITDEF[c.k] = c; });
+  var CONF_W = { alta: 2, media: 1, baixa: 0 };
 
   var BLOCKS = [
     { block: 0, title: 'Sobre você', type: 'fields', fields: [
@@ -36,6 +49,86 @@ window.ADP_CANVAS = (function () {
 
   function byBlock(n) { for (var i = 0; i < BLOCKS.length; i++) if (BLOCKS[i].block === n) return BLOCKS[i]; return null; }
   function esc(s) { return String(s == null ? '' : s).replace(/[<>&"]/g, function (c) { return { '<': '&lt;', '>': '&gt;', '&': '&amp;', '"': '&quot;' }[c]; }); }
+
+  // ---------- Matriz v2: lógica pura (evidência + confiança + inviabilidade) ----------
+  function cellOf(row, k) { var c = row && row.cells && row.cells[k]; return c || { nota: 0, ev: '', conf: '' }; }
+  function nota(row, k) { return +(cellOf(row, k).nota) || 0; }
+  function somaEixo(row, eixoKey) {
+    var e = EIXOS.filter(function (x) { return x.key === eixoKey; })[0];
+    return e.crit.reduce(function (s, c) { return s + nota(row, c.k); }, 0);
+  }
+  function anyScore(row) { return CRIT7.some(function (c) { return nota(row, c.k) >= 1; }); }
+  function isScored(row) { return CRIT7.every(function (c) { return nota(row, c.k) >= 1; }); }
+  function avgConf(row) {
+    var vals = CRIT7.map(function (c) { var w = CONF_W[cellOf(row, c.k).conf]; return w != null ? w : 0; });
+    return vals.reduce(function (a, b) { return a + b; }, 0) / (vals.length || 1);
+  }
+  function evMissing(row) {
+    return CRIT7.filter(function (c) { return nota(row, c.k) >= 1 && !(cellOf(row, c.k).ev || '').trim(); }).length;
+  }
+  // veredito qualitativo do candidato (substitui os pesos) — ver ARQ 3
+  function verdict(row) {
+    if (!anyScore(row)) return { tag: 'todo', txt: 'Pontua os 7 critérios (1–5) com evidência.' };
+    var p = nota(row, 'poder'), u = nota(row, 'urgencia'), ac = nota(row, 'acesso'), ad = nota(row, 'aderencia');
+    if (p >= 1 && p <= 2) return { tag: 'inviavel', txt: 'Poder de compra no chão — mata o nicho, não importa o resto.' };
+    if (u >= 1 && u <= 2) return { tag: 'alerta', txt: 'Sem urgência: mercado que elogia e não compra.' };
+    if (ac >= 1 && ac <= 2 && ad >= 1 && ad <= 2) return { tag: 'alerta', txt: 'Acesso e prova baixos — hipótese cara de testar.' };
+    if (!isScored(row)) return { tag: 'todo', txt: 'Falta pontuar critério — completa os 7 pra fechar.' };
+    var sm = somaEixo(row, 'mercado'), sv = somaEixo(row, 'voce');
+    if (sm >= 14 && sv <= 6) return { tag: 'construcao', txt: 'Mercado forte, você fraco — aposta de construção. 1º movimento: construir prova/acesso.' };
+    if (sm <= 8 && sv >= 11) return { tag: 'confortavel', txt: 'Você forte, mercado fraco — zona confortável sem negócio.' };
+    return { tag: 'ok', txt: 'Passa nos dois eixos — viável pra testar 30 dias.' };
+  }
+  function menorDimensao(row) {
+    return somaEixo(row, 'voce') < somaEixo(row, 'mercado')
+      ? 'Teu lado (repertório/acesso/prova) é o elo fraco — reforça a prova.'
+      : 'O mercado é o elo fraco — confirma urgência e poder de compra.';
+  }
+  function primeiroTeste(row) {
+    var scored = CRIT7.filter(function (c) { return nota(row, c.k) >= 1; }).slice();
+    scored.sort(function (a, b) { return (CONF_W[cellOf(row, a.k).conf] || 0) - (CONF_W[cellOf(row, b.k).conf] || 0); });
+    var alvo = scored[0];
+    if (alvo && (CONF_W[cellOf(row, alvo.k).conf] || 0) <= 0) return 'Validar ' + CRITDEF[alvo.k].h + ': ' + CRITDEF[alvo.k].hint;
+    return 'Confirmar a dor com 2–3 donos reais do nicho.';
+  }
+  // campeão = melhor candidato viável (fecha os 2 eixos, não-inviável); desempate por confiança e aderência, nunca por nota nua
+  function champion(rows) {
+    var viable = (rows || []).filter(function (r) { return (r.name || '').trim() && isScored(r) && verdict(r).tag !== 'inviavel'; });
+    if (!viable.length) return null;
+    viable.sort(function (a, b) {
+      var ta = somaEixo(a, 'mercado') + somaEixo(a, 'voce'), tb = somaEixo(b, 'mercado') + somaEixo(b, 'voce');
+      if (tb !== ta) return tb - ta;
+      if (avgConf(b) !== avgConf(a)) return avgConf(b) - avgConf(a);
+      return nota(b, 'aderencia') - nota(a, 'aderencia');
+    });
+    return viable[0];
+  }
+  function hipotesePrincipal(rows) {
+    var w = champion(rows); if (!w) return null;
+    var v = verdict(w);
+    return {
+      nicho: w.name,
+      soma_mercado: somaEixo(w, 'mercado'),
+      soma_voce: somaEixo(w, 'voce'),
+      veredito: v.txt,
+      risco: v.tag === 'ok' ? menorDimensao(w) : v.txt,
+      primeiro_teste: primeiroTeste(w)
+    };
+  }
+  function normRow(r) {
+    r = r || {};
+    var cells = r.cells || {};
+    // migração leve do formato antigo (r,n,c,p,a) → cells v2 (pré-lançamento; sem dados reais, mas não perde o que tiver)
+    if (!r.cells && (r.r != null || r.n != null || r.c != null || r.p != null || r.a != null)) {
+      var old = { intensidade: r.n, crescimento: r.c, poder: r.p, repertorio: r.r, acesso: r.a };
+      cells = {};
+      Object.keys(old).forEach(function (k) { cells[k] = { nota: +old[k] || 0, ev: '', conf: '' }; });
+    }
+    var out = { name: r.name || '', cells: {} };
+    CRIT7.forEach(function (c) { var cc = cells[c.k] || {}; out.cells[c.k] = { nota: +cc.nota || 0, ev: cc.ev || '', conf: cc.conf || '' }; });
+    return out;
+  }
+
   // um bloco "preenchido" = tem pelo menos um valor não-vazio
   function isFilled(block, data) {
     if (!data) return false;
@@ -50,23 +143,37 @@ window.ADP_CANVAS = (function () {
     + '.adp-fld textarea:focus{outline:none}'
     + '.adp-savest{font-size:12px;color:var(--faint,#a1a1aa);margin-top:9px;min-height:1em}'
     + '.adp-savest.err{color:var(--pink,#ff00d7);font-weight:700}'
-    + '.adp-mscroll{overflow-x:auto;-webkit-overflow-scrolling:touch}'
-    + '@media(max-width:560px){.adp-mtab{min-width:480px}}'
-    + '.adp-mtab{width:100%;border-collapse:collapse;font-size:13.5px;margin-top:8px}'
-    + '.adp-mtab th{text-align:center;font-weight:700;color:var(--muted,#71717a);font-size:12px;padding:0 0 10px}'
-    + '.adp-mtab th:first-child{text-align:left}'
-    + '.adp-mtab td{padding:9px 4px;border-top:1px solid var(--line,#d4d4d8);text-align:center;color:#3f3f46}'
-    + '.adp-mtab td:first-child{text-align:left}'
-    + '.adp-mtab td.tot{font-weight:700;color:var(--ink,#18181b)}'
-    + '.adp-mtab tr.win td{background:var(--lime,#e7f99a)}'
-    + '.adp-mtab tr.win td:first-child{border-radius:8px 0 0 8px}'
-    + '.adp-mtab tr.win td:last-child{border-radius:0 8px 8px 0}'
-    + '.adp-mtab input.cand{width:100%;border:1px solid transparent;border-radius:7px;background:transparent;font:inherit;font-weight:700;font-size:13.5px;color:var(--ink,#18181b);padding:6px 8px}'
-    + '.adp-mtab input.cand:hover{border-color:var(--line,#d4d4d8)}'
-    + '.adp-mtab input.cand:focus{outline:none;border-color:var(--ink,#18181b);background:#fff}'
-    + '.adp-mtab select.sc{border:1px solid var(--line,#d4d4d8);border-radius:7px;background:#fff;font:inherit;font-size:13px;padding:5px 6px;color:var(--ink,#18181b);cursor:pointer}'
-    + '.adp-mtab select.sc:focus{outline:none;border-color:var(--ink,#18181b)}'
-    + '.adp-champ{margin-top:14px;font-size:14px}.adp-champ b{font-weight:700}'
+    // --- Matriz v2 (cards por candidato) ---
+    + '.adp-mx{margin-top:8px;display:flex;flex-direction:column;gap:14px}'
+    + '.adp-cand{border:1px solid var(--line,#d4d4d8);border-radius:12px;padding:14px 15px;background:#fff}'
+    + '.adp-cand-h{display:flex;align-items:center;gap:10px;margin-bottom:12px}'
+    + '.mx-name{flex:1;min-width:0;border:none;border-bottom:1.5px solid var(--line,#d4d4d8);background:transparent;font:inherit;font-weight:700;font-size:15px;color:var(--ink,#18181b);padding:5px 2px}'
+    + '.mx-name:focus{outline:none;border-color:var(--ink,#18181b)}'
+    + '.mx-del{font-size:12px;color:var(--muted,#71717a);text-decoration:underline;flex:none;cursor:pointer}'
+    + '.adp-eixos{display:grid;grid-template-columns:1fr 1fr;gap:18px}'
+    + '@media(max-width:640px){.adp-eixos{grid-template-columns:1fr}}'
+    + '.eixo-t{font-size:12px;font-weight:700;letter-spacing:.02em;color:var(--muted,#71717a);margin-bottom:8px;display:flex;justify-content:space-between;align-items:baseline}'
+    + '.eixo-sum{font-weight:700;color:var(--ink,#18181b);font-size:13px}'
+    + '.adp-crit{padding:10px 0;border-top:1px solid var(--soft,#e6e6e8)}'
+    + '.adp-crit:first-of-type{border-top:none}'
+    + '.crit-top{display:flex;align-items:center;justify-content:space-between;gap:8px}'
+    + '.crit-h{font-weight:700;font-size:13.5px;color:var(--ink,#18181b)}'
+    + '.crit-ctrl{display:flex;gap:6px;flex:none}'
+    + '.mx-nota,.mx-conf{border:1px solid var(--line,#d4d4d8);border-radius:7px;background:#fff;font:inherit;font-size:12.5px;padding:4px 6px;color:var(--ink,#18181b);cursor:pointer}'
+    + '.mx-nota{font-weight:700}'
+    + '.mx-nota:focus,.mx-conf:focus{outline:none;border-color:var(--ink,#18181b)}'
+    + '.crit-hint{font-size:11.5px;color:var(--faint,#a1a1aa);margin:4px 0 7px;line-height:1.4}'
+    + '.mx-ev{width:100%;border:1px solid var(--line,#d4d4d8);border-radius:8px;background:var(--surface,#f1f1f1);font:inherit;font-size:12.5px;padding:7px 9px;color:#3f3f46}'
+    + '.mx-ev:focus{outline:none;border-color:var(--ink,#18181b);background:#fff}'
+    + '.adp-verdict{margin-top:12px;font-size:12.5px;font-weight:700;padding:8px 11px;border-radius:8px;line-height:1.4}'
+    + '.v-todo{background:var(--soft,#e6e6e8);color:var(--muted,#71717a)}'
+    + '.v-ok{background:var(--lime,#e7f99a);color:var(--ink,#18181b)}'
+    + '.v-alerta,.v-construcao,.v-confortavel{background:rgba(255,0,215,.08);color:var(--ink,#18181b)}'
+    + '.v-inviavel{background:var(--ink,#18181b);color:#fff}'
+    + '.adp-addcand{margin-top:14px;font-size:13px;font-weight:700;color:var(--ink,#18181b);border:1.5px dashed var(--line,#d4d4d8);border-radius:9px;padding:9px 14px;width:100%;cursor:pointer}'
+    + '.adp-addcand:hover{border-color:var(--ink,#18181b)}'
+    + '.adp-champ{margin-top:16px;font-size:14px;line-height:1.6;padding:13px 15px;border:1.5px solid var(--pink,#ff00d7);border-radius:10px;background:rgba(255,0,215,.04)}.adp-champ b{font-weight:700}'
+    // --- Caça à Ruminação ---
     + '.adp-rum{margin-top:20px;padding-top:20px;border-top:1px solid var(--line,#d4d4d8)}'
     + '.adp-rum .rh{display:flex;align-items:center;gap:8px;font-weight:700;font-size:14.5px}'
     + '.adp-rum .rsub{font-size:13px;color:var(--muted,#71717a);margin:6px 0 14px;line-height:1.55;max-width:64ch}'
@@ -117,47 +224,99 @@ window.ADP_CANVAS = (function () {
   }
 
   function renderMatrix(container, data, onSaved) {
-    var rows = (data && data.rows && data.rows.length)
-      ? data.rows.map(function (r) { return { name: r.name || '', r: +r.r || 0, n: +r.n || 0, c: +r.c || 0, p: +r.p || 0, a: +r.a || 0 }; })
-      : [{ name: '', r: 0, n: 0, c: 0, p: 0, a: 0 }, { name: '', r: 0, n: 0, c: 0, p: 0, a: 0 }, { name: '', r: 0, n: 0, c: 0, p: 0, a: 0 }];
-    container.innerHTML = '<div class="adp-mscroll"><table class="adp-mtab"><thead><tr><th>Candidato a nicho</th>'
-      + CRIT.map(function (c) { return '<th>' + c.h + '</th>'; }).join('') + '<th>Total</th></tr></thead>'
-      + '<tbody></tbody></table></div><p class="adp-champ"></p><div class="adp-savest"></div>';
-    var body = container.querySelector('tbody');
+    var rows = (data && data.rows && data.rows.length) ? data.rows.map(normRow) : [normRow(), normRow()];
+    container.innerHTML = '<div class="adp-mx"></div>'
+      + '<button type="button" class="adp-addcand">+ candidato a nicho</button>'
+      + '<div class="adp-champ"></div><div class="adp-savest"></div>';
+    var mx = container.querySelector('.adp-mx');
     var champEl = container.querySelector('.adp-champ');
     var st = container.querySelector('.adp-savest');
     var save = makeSaver(2, st, onSaved);
-    function total(row) { return CRIT.reduce(function (a, c) { return a + (+row[c.k] || 0); }, 0); }
-    function opts(sel) { var s = ''; for (var i = 0; i <= 5; i++) s += '<option ' + (i === sel ? 'selected' : '') + '>' + i + '</option>'; return s; }
-    function paint() {
-      body.innerHTML = rows.map(function (row, idx) {
-        return '<tr data-i="' + idx + '"><td><input class="cand" data-i="' + idx + '" value="' + esc(row.name) + '" placeholder="Candidato ' + (idx + 1) + '…"></td>'
-          + CRIT.map(function (c) { return '<td><select class="sc" data-i="' + idx + '" data-k="' + c.k + '">' + opts(+row[c.k] || 0) + '</select></td>'; }).join('')
-          + '<td class="tot">' + total(row) + '</td></tr>';
-      }).join('');
-      var filled = rows.filter(function (r) { return r.name.trim(); });
-      if (!filled.length) { champEl.innerHTML = 'Preenche os candidatos e pontua de 1 a 5 — o de maior soma ganha, sem achismo.'; }
-      else {
-        var win = filled.slice().sort(function (a, b) { return total(b) - total(a); })[0];
-        champEl.innerHTML = 'Seu nicho, pelos números: <b>' + esc(win.name) + '</b> — ' + total(win) + ' pontos.';
-        Array.prototype.forEach.call(body.querySelectorAll('tr'), function (tr) { var r = rows[+tr.dataset.i]; tr.classList.toggle('win', r.name.trim() && r === win); });
-      }
+
+    function notaOpts(sel) { var s = '<option value="">—</option>'; for (var i = 1; i <= 5; i++) s += '<option ' + (i === sel ? 'selected' : '') + '>' + i + '</option>'; return s; }
+    function confOpts(sel) {
+      return [['', 'confiança?'], ['baixa', 'baixa'], ['media', 'média'], ['alta', 'alta']]
+        .map(function (x) { return '<option value="' + x[0] + '"' + (x[0] === sel ? ' selected' : '') + '>' + x[1] + '</option>'; }).join('');
     }
-    function matData() { return { rows: rows.map(function (r) { return { name: r.name, r: +r.r, n: +r.n, c: +r.c, p: +r.p, a: +r.a, total: total(r) }; }) }; }
-    function persist() { save(matData); }
-    body.addEventListener('focusout', function () { doSave(2, matData(), st, onSaved); }); // flush ao sair de um campo
-    body.addEventListener('input', function (e) { if (e.target.classList.contains('cand')) { rows[+e.target.dataset.i].name = e.target.value; if (st) st.textContent = '…'; paint(); persist(); } });
-    body.addEventListener('change', function (e) { if (e.target.classList.contains('sc')) { rows[+e.target.dataset.i][e.target.dataset.k] = +e.target.value; if (st) st.textContent = '…'; paint(); persist(); } });
+    function critHTML(row, i, c) {
+      var cell = row.cells[c.k];
+      return '<div class="adp-crit">'
+        + '<div class="crit-top"><span class="crit-h">' + esc(c.h) + '</span>'
+        + '<span class="crit-ctrl"><select class="mx-nota" data-i="' + i + '" data-k="' + c.k + '">' + notaOpts(cell.nota) + '</select>'
+        + '<select class="mx-conf" data-i="' + i + '" data-k="' + c.k + '">' + confOpts(cell.conf) + '</select></span></div>'
+        + '<div class="crit-hint">' + esc(c.hint) + '</div>'
+        + '<input class="mx-ev" data-i="' + i + '" data-k="' + c.k + '" value="' + esc(cell.ev) + '" placeholder="Evidência: o fato, não a torcida. Sem evidência, a nota não vale.">'
+        + '</div>';
+    }
+    function eixoHTML(row, i, eixo) {
+      return '<div class="adp-eixo"><div class="eixo-t"><span>' + esc(eixo.h) + '</span><span class="eixo-sum">' + somaEixo(row, eixo.key) + '/' + eixo.max + '</span></div>'
+        + eixo.crit.map(function (c) { return critHTML(row, i, c); }).join('') + '</div>';
+    }
+    function verdictHTML(row) {
+      var v = verdict(row), em = evMissing(row);
+      var extra = em ? ' · falta evidência em ' + em + ' nota' + (em > 1 ? 's' : '') : '';
+      return '<div class="adp-verdict v-' + v.tag + '">' + esc(v.txt + extra) + '</div>';
+    }
+    function champHTML() {
+      var hp = hipotesePrincipal(rows);
+      if (!hp) return 'Nomeia os candidatos, pontua os 7 critérios (1–5) e põe a evidência de cada nota. O nicho sai dos dois eixos, não de achismo.';
+      return '<b>Hipótese pros 30 dias: ' + esc(hp.nicho) + '</b><br>'
+        + 'Mercado ' + hp.soma_mercado + '/20 · Você ' + hp.soma_voce + '/15<br>'
+        + 'Risco: ' + esc(hp.risco) + '<br>'
+        + 'Primeiro teste: ' + esc(hp.primeiro_teste);
+    }
+    function paint() {
+      mx.innerHTML = rows.map(function (row, i) {
+        return '<div class="adp-cand" data-i="' + i + '">'
+          + '<div class="adp-cand-h"><input class="mx-name" data-i="' + i + '" value="' + esc(row.name) + '" placeholder="Candidato ' + (i + 1) + ' — vertical + horizontal (ex: clínicas saindo de convênio)">'
+          + (rows.length > 1 ? '<button type="button" class="mx-del" data-i="' + i + '">remover</button>' : '') + '</div>'
+          + '<div class="adp-eixos">' + EIXOS.map(function (e) { return eixoHTML(row, i, e); }).join('') + '</div>'
+          + verdictHTML(row) + '</div>';
+      }).join('');
+      champEl.innerHTML = champHTML();
+    }
+    function matData() {
+      return {
+        rows: rows.map(function (r) {
+          return { name: r.name, cells: r.cells, soma_mercado: somaEixo(r, 'mercado'), soma_voce: somaEixo(r, 'voce'), total: somaEixo(r, 'mercado') + somaEixo(r, 'voce'), veredito: verdict(r).txt };
+        }),
+        hipotese_principal: hipotesePrincipal(rows)
+      };
+    }
+    function persist() { if (st) st.textContent = '…'; save(matData); }
+
+    // digitar o nome não deve re-renderizar (perderia o foco) — só atualiza o campeão
+    container.addEventListener('input', function (e) {
+      var t = e.target, i = +t.dataset.i;
+      if (t.classList.contains('mx-name')) { rows[i].name = t.value; champEl.innerHTML = champHTML(); persist(); }
+      else if (t.classList.contains('mx-ev')) { rows[i].cells[t.dataset.k].ev = t.value; persist(); }
+    });
+    // selects (nota/confiança) disparam no blur — re-render é seguro
+    container.addEventListener('change', function (e) {
+      var t = e.target, i = +t.dataset.i;
+      if (t.classList.contains('mx-nota')) { rows[i].cells[t.dataset.k].nota = +t.value || 0; paint(); persist(); }
+      else if (t.classList.contains('mx-conf')) { rows[i].cells[t.dataset.k].conf = t.value; paint(); persist(); }
+    });
+    container.addEventListener('click', function (e) {
+      if (e.target.classList.contains('adp-addcand')) { rows.push(normRow()); paint(); persist(); }
+      else if (e.target.classList.contains('mx-del')) { rows.splice(+e.target.dataset.i, 1); if (!rows.length) rows.push(normRow()); paint(); persist(); }
+    });
+    container.addEventListener('focusout', function () { doSave(2, matData(), st, onSaved); });
     paint();
   }
 
-  // nicho campeão a partir dos dados do Bloco 2 (Matriz)
+  // nicho campeão a partir dos dados do Bloco 2 (Matriz v2): melhor viável; fallback = melhor parcial não-inviável, senão 1º nomeado
   function nichoFromBlock2(data2) {
     if (!data2 || !data2.rows) return '';
-    var f = data2.rows.filter(function (r) { return (r.name || '').trim(); });
-    if (!f.length) return '';
-    f = f.slice().sort(function (a, b) { return (b.total || 0) - (a.total || 0); });
-    return f[0].name;
+    var rows = data2.rows.map(normRow);
+    var w = champion(rows);
+    if (w) return w.name;
+    var named = rows.filter(function (r) { return (r.name || '').trim(); });
+    if (!named.length) return '';
+    var notInv = named.filter(function (r) { return verdict(r).tag !== 'inviavel'; });
+    var pool = notInv.length ? notInv : named;
+    pool.sort(function (a, b) { return (somaEixo(b, 'mercado') + somaEixo(b, 'voce')) - (somaEixo(a, 'mercado') + somaEixo(a, 'voce')); });
+    return pool[0].name;
   }
 
   // 🧠 Caça à Ruminação — anexa ao Bloco 3. Usa o nicho (opts.getNicho) + o cliente digitado.
