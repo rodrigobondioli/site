@@ -155,36 +155,54 @@ window.ADP_CANVAS = (function () {
     + '.adp-fld textarea:focus{outline:none;border-color:var(--line,#d4d4d8)}'
     + '.adp-savest{font-size:12px;color:var(--faint,#a1a1aa);margin-top:9px;min-height:1em}'
     + '.adp-savest.err{color:var(--pink,#ff00d7);font-weight:700}'
-    // --- Matriz v2 (cards por candidato) ---
-    + '.adp-mx{margin-top:8px;display:flex;flex-direction:column;gap:14px}'
-    + '.adp-cand{border:1px solid var(--line,#d4d4d8);border-radius:12px;padding:14px 15px;background:#fff}'
-    + '.adp-cand-h{display:flex;align-items:center;gap:10px;margin-bottom:12px}'
-    + '.mx-name{flex:1;min-width:0;border:none;border-bottom:1.5px solid var(--line,#d4d4d8);background:transparent;font:inherit;font-weight:700;font-size:15px;color:var(--ink,#18181b);padding:5px 2px}'
+    // --- Matriz v2 (grid de cards por critério) ---
+    + '.adp-mx{margin-top:8px;display:flex;flex-direction:column;gap:16px}'
+    + '.mx-cand{border:1px solid var(--line,#d4d4d8);border-radius:14px;padding:18px 18px 16px;background:#fff}'
+    + '.mx-cand-h{display:flex;align-items:center;gap:12px;margin-bottom:16px}'
+    + '.mx-name{flex:1;min-width:0;border:none;border-bottom:1.5px solid var(--line,#d4d4d8);background:transparent;font:inherit;font-weight:700;font-size:15.5px;color:var(--ink,#18181b);padding:5px 2px}'
     + '.mx-name:focus{outline:none;border-color:var(--ink,#18181b)}'
-    + '.mx-del{font-size:12px;color:var(--muted,#71717a);text-decoration:underline;flex:none;cursor:pointer}'
-    + '.adp-eixos{display:grid;grid-template-columns:1fr 1fr;gap:18px}'
-    + '@media(max-width:640px){.adp-eixos{grid-template-columns:1fr}}'
-    + '.eixo-t{font-size:12px;font-weight:700;letter-spacing:.02em;color:var(--muted,#71717a);margin-bottom:8px;display:flex;justify-content:space-between;align-items:baseline}'
-    + '.eixo-sum{font-weight:700;color:var(--ink,#18181b);font-size:13px}'
-    + '.adp-crit{padding:10px 0;border-top:1px solid var(--soft,#e6e6e8)}'
-    + '.adp-crit:first-of-type{border-top:none}'
-    + '.crit-top{display:flex;align-items:center;justify-content:space-between;gap:8px}'
-    + '.crit-h{font-weight:700;font-size:13.5px;color:var(--ink,#18181b)}'
-    + '.crit-ctrl{display:flex;gap:6px;flex:none}'
-    + '.mx-nota,.mx-conf{border:1px solid var(--line,#d4d4d8);border-radius:7px;background:#fff;font:inherit;font-size:12.5px;padding:4px 6px;color:var(--ink,#18181b);cursor:pointer}'
-    + '.mx-nota{font-weight:700}'
+    + '.mx-cand-r{display:flex;align-items:center;gap:12px;flex:none}'
+    + '.mx-del{display:inline-flex;align-items:center;gap:5px;font-size:12.5px;color:var(--muted,#71717a);cursor:pointer}'
+    + '.mx-del:hover{color:var(--pink,#ff00d7)}'
+    + '.mx-del svg{width:13px;height:13px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;pointer-events:none}'
+    + '.mx-total{font-size:12px;font-weight:700;padding:5px 11px;border-radius:999px;background:var(--soft,#e6e6e8);color:var(--ink,#18181b);white-space:nowrap}'
+    + '.mx-total.hi{background:var(--lime,#e7f99a)}'
+    + '.mx-bars{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}'
+    + '@media(max-width:560px){.mx-bars{grid-template-columns:1fr}}'
+    + '.mx-bar .mx-bl{display:flex;justify-content:space-between;align-items:baseline;font-size:12.5px;color:var(--muted,#71717a);margin-bottom:6px}'
+    + '.mx-bar .mx-bl b{color:var(--ink,#18181b);font-weight:700}'
+    + '.mx-track{height:7px;border-radius:999px;background:var(--soft,#e6e6e8);overflow:hidden}'
+    + '.mx-track i{display:block;height:100%;background:var(--pink,#ff00d7);border-radius:999px;transition:width .3s}'
+    + '.mx-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}'
+    + '@media(max-width:1080px){.mx-grid{grid-template-columns:repeat(3,1fr)}}'
+    + '@media(max-width:760px){.mx-grid{grid-template-columns:repeat(2,1fr)}}'
+    + '@media(max-width:480px){.mx-grid{grid-template-columns:1fr}}'
+    + '.mx-crit{border:1px solid var(--line,#d4d4d8);border-radius:12px;padding:13px;display:flex;flex-direction:column;gap:9px}'
+    + '.mx-crit-top{display:flex;align-items:flex-start;gap:8px}'
+    + '.mx-crit-top .ic{flex:none;color:var(--muted,#71717a);display:flex;margin-top:1px}'
+    + '.mx-crit-top .ic svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}'
+    + '.mx-crit-h{font-size:13px;font-weight:700;color:var(--ink,#18181b);line-height:1.25}'
+    + '.mx-crit-q{font-size:11.5px;color:var(--faint,#a1a1aa);line-height:1.35;flex:1;min-height:2.4em}'
+    + '.mx-crit-ctrl{display:flex;gap:6px}'
+    + '.mx-nota,.mx-conf{border:1px solid var(--line,#d4d4d8);border-radius:8px;background:#fff;font:inherit;font-size:12.5px;padding:6px 7px;color:var(--ink,#18181b);cursor:pointer}'
+    + '.mx-nota{font-weight:700;flex:none;width:52px}'
+    + '.mx-conf{flex:1;min-width:0}'
     + '.mx-nota:focus,.mx-conf:focus{outline:none;border-color:var(--ink,#18181b)}'
-    + '.crit-hint{font-size:11.5px;color:var(--faint,#a1a1aa);margin:4px 0 7px;line-height:1.4}'
-    + '.mx-ev{width:100%;border:1px solid var(--line,#d4d4d8);border-radius:8px;background:var(--surface,#f1f1f1);font:inherit;font-size:12.5px;padding:7px 9px;color:#3f3f46}'
+    + '.mx-evlbl{font-size:11px;font-weight:700;color:var(--muted,#71717a);margin-bottom:5px}'
+    + '.mx-ev{width:100%;border:1px solid var(--line,#d4d4d8);border-radius:8px;background:var(--surface,#f1f1f1);font:inherit;font-size:12px;padding:8px 9px;color:#3f3f46;resize:none;min-height:62px;line-height:1.4}'
     + '.mx-ev:focus{outline:none;border-color:var(--ink,#18181b);background:#fff}'
-    + '.adp-verdict{margin-top:12px;font-size:12.5px;font-weight:700;padding:8px 11px;border-radius:8px;line-height:1.4}'
+    + '.mx-dica{border:1px solid rgba(231,249,154,.85);background:rgba(231,249,154,.3);border-radius:12px;padding:14px}'
+    + '.mx-dica .dh{display:flex;align-items:center;gap:7px;font-size:12.5px;font-weight:700;color:var(--ink,#18181b);margin-bottom:8px}'
+    + '.mx-dica .dh svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}'
+    + '.mx-dica p{font-size:12px;color:#3f3f46;line-height:1.5}'
+    + '.adp-verdict{margin-top:14px;font-size:12.5px;font-weight:700;padding:11px 14px;border-radius:10px;line-height:1.4}'
     + '.v-todo{background:var(--soft,#e6e6e8);color:var(--muted,#71717a)}'
     + '.v-ok{background:var(--lime,#e7f99a);color:var(--ink,#18181b)}'
     + '.v-alerta,.v-construcao,.v-confortavel{background:rgba(255,0,215,.08);color:var(--ink,#18181b)}'
     + '.v-inviavel{background:var(--ink,#18181b);color:#fff}'
-    + '.adp-addcand{margin-top:14px;font-size:13px;font-weight:700;color:var(--ink,#18181b);border:1.5px dashed var(--line,#d4d4d8);border-radius:9px;padding:9px 14px;width:100%;cursor:pointer}'
+    + '.adp-addcand{margin-top:2px;font-size:13px;font-weight:700;color:var(--ink,#18181b);border:1.5px dashed var(--line,#d4d4d8);border-radius:10px;padding:11px 14px;width:100%;cursor:pointer}'
     + '.adp-addcand:hover{border-color:var(--ink,#18181b)}'
-    + '.adp-champ{margin-top:16px;font-size:14px;line-height:1.6;padding:13px 15px;border:1.5px solid var(--pink,#ff00d7);border-radius:10px;background:rgba(255,0,215,.04)}.adp-champ b{font-weight:700}'
+    + '.adp-champ{margin-top:16px;font-size:14px;line-height:1.6;padding:14px 16px;border:1.5px solid var(--pink,#ff00d7);border-radius:12px;background:rgba(255,0,215,.04)}.adp-champ b{font-weight:700}'
     // --- Caça à Ruminação ---
     + '.adp-rum{margin-top:20px;padding-top:20px;border-top:1px solid var(--line,#d4d4d8)}'
     + '.adp-rum .rh{display:flex;align-items:center;gap:8px;font-weight:700;font-size:14.5px}'
@@ -250,19 +268,34 @@ window.ADP_CANVAS = (function () {
       return [['', 'confiança?'], ['baixa', 'baixa'], ['media', 'média'], ['alta', 'alta']]
         .map(function (x) { return '<option value="' + x[0] + '"' + (x[0] === sel ? ' selected' : '') + '>' + x[1] + '</option>'; }).join('');
     }
-    function critHTML(row, i, c) {
-      var cell = row.cells[c.k];
-      return '<div class="adp-crit">'
-        + '<div class="crit-top"><span class="crit-h">' + esc(c.h) + '</span>'
-        + '<span class="crit-ctrl"><select class="mx-nota" data-i="' + i + '" data-k="' + c.k + '">' + notaOpts(cell.nota) + '</select>'
-        + '<select class="mx-conf" data-i="' + i + '" data-k="' + c.k + '">' + confOpts(cell.conf) + '</select></span></div>'
-        + '<div class="crit-hint">' + esc(c.hint) + '</div>'
-        + '<input class="mx-ev" data-i="' + i + '" data-k="' + c.k + '" value="' + esc(cell.ev) + '" placeholder="Evidência: o fato, não a torcida. Sem evidência, a nota não vale.">'
+    // ordem de exibição (mercado/você intercalados) + ícone de cada critério
+    var CRIT_ORDER = ['intensidade', 'repertorio', 'urgencia', 'acesso', 'crescimento', 'poder', 'aderencia'];
+    var CRIT_ICON = {
+      intensidade: '<path d="M13 2 4 14h7l-1 8 9-12h-7z"/>',
+      repertorio: '<circle cx="12" cy="8" r="3.2"/><path d="M5.5 20a6.5 6.5 0 0 1 13 0"/>',
+      urgencia: '<circle cx="12" cy="12" r="8"/><path d="M12 8v4l3 2"/>',
+      acesso: '<circle cx="7" cy="9" r="2.4"/><circle cx="17" cy="9" r="2.4"/><path d="M3.5 19a3.8 3.8 0 0 1 7 0M13.5 19a3.8 3.8 0 0 1 7 0"/>',
+      crescimento: '<path d="M3 17l6-6 4 4 8-8"/><path d="M16 7h5v5"/>',
+      poder: '<circle cx="12" cy="12" r="8.5"/><path d="M12 7v10M14.4 9.3A2.4 2 0 0 0 12 8.4c-1.4 0-2.4.7-2.4 1.8s1 1.6 2.4 1.8 2.4.7 2.4 1.8-1 1.8-2.4 1.8a2.4 2 0 0 1-2.4-1"/>',
+      aderencia: '<path d="M7 4h10v4a5 5 0 0 1-10 0z"/><path d="M7 6H4.5v.8a3 3 0 0 0 3 3M17 6h2.5v.8a3 3 0 0 1-3 3M9.5 15h5M10.5 20h3M12 15v5"/>'
+    };
+    var DICA_HTML = '<div class="mx-dica"><div class="dh"><svg viewBox="0 0 24 24"><path d="M12 3l7.5 3.5V12c0 4.2-3.2 7.2-7.5 8.5C7.7 19.2 4.5 16.2 4.5 12V6.5z"/></svg>Dica do Escavador</div><p>Sem prova ainda? Tudo bem. Marca a nota baixa e vai atrás de 1 caso real pra validar — nota sem evidência é torcida, não nicho.</p></div>';
+    function barsHTML(row) {
+      var sm = somaEixo(row, 'mercado'), sv = somaEixo(row, 'voce');
+      return '<div class="mx-bars">'
+        + '<div class="mx-bar"><div class="mx-bl"><span>Mercado</span><b>' + sm + '/20</b></div><div class="mx-track"><i style="width:' + Math.round(sm / 20 * 100) + '%"></i></div></div>'
+        + '<div class="mx-bar"><div class="mx-bl"><span>Você (fit)</span><b>' + sv + '/15</b></div><div class="mx-track"><i style="width:' + Math.round(sv / 15 * 100) + '%"></i></div></div>'
         + '</div>';
     }
-    function eixoHTML(row, i, eixo) {
-      return '<div class="adp-eixo"><div class="eixo-t"><span>' + esc(eixo.h) + '</span><span class="eixo-sum">' + somaEixo(row, eixo.key) + '/' + eixo.max + '</span></div>'
-        + eixo.crit.map(function (c) { return critHTML(row, i, c); }).join('') + '</div>';
+    function critCardHTML(row, i, k) {
+      var c = CRITDEF[k], cell = row.cells[k];
+      return '<div class="mx-crit">'
+        + '<div class="mx-crit-top"><span class="ic"><svg viewBox="0 0 24 24">' + CRIT_ICON[k] + '</svg></span><span class="mx-crit-h">' + esc(c.h) + '</span></div>'
+        + '<div class="mx-crit-q">' + esc(c.hint) + '</div>'
+        + '<div class="mx-crit-ctrl"><select class="mx-nota" data-i="' + i + '" data-k="' + k + '">' + notaOpts(cell.nota) + '</select>'
+        + '<select class="mx-conf" data-i="' + i + '" data-k="' + k + '">' + confOpts(cell.conf) + '</select></div>'
+        + '<div><div class="mx-evlbl">Evidência</div><textarea class="mx-ev" data-i="' + i + '" data-k="' + k + '" rows="2" placeholder="O fato, não a torcida. Sem ele, a nota não vale.">' + esc(cell.ev) + '</textarea></div>'
+        + '</div>';
     }
     function verdictHTML(row) {
       var v = verdict(row), em = evMissing(row);
@@ -279,10 +312,14 @@ window.ADP_CANVAS = (function () {
     }
     function paint() {
       mx.innerHTML = rows.map(function (row, i) {
-        return '<div class="adp-cand" data-i="' + i + '">'
-          + '<div class="adp-cand-h"><input class="mx-name" data-i="' + i + '" value="' + esc(row.name) + '" placeholder="Candidato ' + (i + 1) + ' — vertical + horizontal (ex: clínicas saindo de convênio)">'
-          + (rows.length > 1 ? '<button type="button" class="mx-del" data-i="' + i + '">remover</button>' : '') + '</div>'
-          + '<div class="adp-eixos">' + EIXOS.map(function (e) { return eixoHTML(row, i, e); }).join('') + '</div>'
+        var sm = somaEixo(row, 'mercado'), sv = somaEixo(row, 'voce'), total = sm + sv;
+        var crits = CRIT_ORDER.map(function (k) { return critCardHTML(row, i, k); }).join('');
+        return '<div class="mx-cand" data-i="' + i + '">'
+          + '<div class="mx-cand-h"><input class="mx-name" data-i="' + i + '" value="' + esc(row.name) + '" placeholder="Candidato ' + (i + 1) + ' — vertical + horizontal (ex: clínicas saindo de convênio)">'
+          + '<div class="mx-cand-r">' + (rows.length > 1 ? '<button type="button" class="mx-del" data-i="' + i + '"><svg viewBox="0 0 24 24"><path d="M4 7h16M9 7V5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2M6 7l1 13h10l1-13"/></svg>remover</button>' : '')
+          + '<span class="mx-total' + (total >= 24 ? ' hi' : '') + '">Total: ' + total + '/35</span></div></div>'
+          + barsHTML(row)
+          + '<div class="mx-grid">' + crits + DICA_HTML + '</div>'
           + verdictHTML(row) + '</div>';
       }).join('');
       champEl.innerHTML = champHTML();
@@ -310,8 +347,9 @@ window.ADP_CANVAS = (function () {
       else if (t.classList.contains('mx-conf')) { rows[i].cells[t.dataset.k].conf = t.value; paint(); persist(); }
     });
     container.addEventListener('click', function (e) {
-      if (e.target.classList.contains('adp-addcand')) { rows.push(normRow()); paint(); persist(); }
-      else if (e.target.classList.contains('mx-del')) { rows.splice(+e.target.dataset.i, 1); if (!rows.length) rows.push(normRow()); paint(); persist(); }
+      if (e.target.classList.contains('adp-addcand')) { rows.push(normRow()); paint(); persist(); return; }
+      var del = e.target.closest && e.target.closest('.mx-del');
+      if (del) { rows.splice(+del.dataset.i, 1); if (!rows.length) rows.push(normRow()); paint(); persist(); }
     });
     container.addEventListener('focusout', function () { doSave(2, matData(), st, onSaved); });
     paint();
