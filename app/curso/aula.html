@@ -178,6 +178,20 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .panel .li.on{background:rgba(255,255,255,.08);color:#fff}
 .panel .li .st.lock{border-color:rgba(255,255,255,.25)}
 .panel .li .st.lock svg{stroke:rgba(255,255,255,.4)}
+/* itens do painel: thumb 16:9 (play no hover) + linha entre aulas */
+.panel .li{align-items:center;gap:12px;padding:12px 16px}
+.panel .li+.li{border-top:1px solid rgba(255,255,255,.08)}
+.panel .li .tt{white-space:normal;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;line-height:1.3}
+.panel .li.done .tt{color:rgba(255,255,255,.5)}
+.lthumb{position:relative;width:100px;flex:none;aspect-ratio:16/9;border-radius:7px;overflow:hidden;background:#000;display:grid;place-items:center}
+.lthumb .lp{display:flex;color:rgba(255,255,255,.5)}
+.lthumb .lp svg{width:20px;height:20px;fill:currentColor}
+.lthumb.hasvid{cursor:pointer}
+.lthumb.hasvid:hover .lp{opacity:0}
+.lthumb iframe{position:absolute;inset:0;width:100%;height:100%;border:0;z-index:1}
+.lthumb .lchk{position:absolute;top:5px;right:5px;width:18px;height:18px;border-radius:999px;background:var(--lime);display:grid;place-items:center;z-index:2}
+.lthumb .lchk svg{width:10px;height:10px;fill:none;stroke:#18181b;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+.panel .li.on .lthumb{box-shadow:0 0 0 2px var(--pink)}
 
 @media(max-width:1000px){
   .panel{position:fixed;top:0;right:0;bottom:0;width:min(360px,86vw);z-index:60;transform:translateX(100%);transition:transform .22s ease}
@@ -618,11 +632,29 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
   function renderPanel(){
     document.getElementById('panelList').innerHTML = LESSONS.map(function(l,i){
       var isDone=DONE.has(l.id), on=(l.id===cur.id);
-      var st = isDone? '<span class="st done">'+ICON_DONE+'</span>'
-             : on ?    '<span class="st now">'+ICON_PLAY+'</span>'
-             :         '<span class="st lock" style="border-color:var(--line)"><svg viewBox="0 0 24 24" style="width:8px;height:8px"><circle cx="12" cy="12" r="6" fill="#a1a1aa"/></svg></span>';
-      return '<a class="li'+(on?' on':'')+'" href="aula.html?a='+l.id+'">'+st+'<span class="tt">'+esc(l.title)+'</span></a>';
+      var lib = l.video_library || LIB;
+      var hasVid = !!(l.video_id && lib);
+      var thumb = '<span class="lthumb'+(hasVid?' hasvid':'')+'"'
+        + (hasVid?' data-lib="'+esc(lib)+'" data-vid="'+esc(l.video_id)+'"':'')+'>'
+        + '<span class="lp">'+ICON_PLAY+'</span>'
+        + (isDone?'<span class="lchk">'+ICON_DONE+'</span>':'')
+        + '</span>';
+      return '<a class="li'+(on?' on':'')+(isDone?' done':'')+'" href="aula.html?a='+l.id+'">'
+        + thumb + '<span class="tt">'+esc(l.title)+'</span></a>';
     }).join('');
+    // play no mouseover: injeta o iframe do Bunny só no hover (leve) e remove ao sair
+    Array.prototype.forEach.call(document.querySelectorAll('#panelList .lthumb.hasvid'), function(th){
+      var frame=null;
+      th.addEventListener('mouseenter', function(){
+        if(frame) return;
+        var src='https://iframe.mediadelivery.net/embed/'+encodeURIComponent(th.dataset.lib)+'/'+encodeURIComponent(th.dataset.vid)+'?autoplay=true&loop=true&muted=true&preload=true&responsive=true';
+        frame=document.createElement('iframe');
+        frame.src=src; frame.loading='lazy'; frame.tabIndex=-1;
+        frame.setAttribute('allow','autoplay;encrypted-media;');
+        th.appendChild(frame);
+      });
+      th.addEventListener('mouseleave', function(){ if(frame){ th.removeChild(frame); frame=null; } });
+    });
   }
 
   async function toggleDone(){
