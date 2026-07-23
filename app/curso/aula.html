@@ -209,7 +209,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .esc-progbar{height:5px;border-radius:999px;background:var(--soft);overflow:hidden;margin-top:12px}
 .esc-progbar i{display:block;height:100%;background:var(--ink);border-radius:999px;transition:width .3s}
 /* chat */
-.esc-log{display:flex;flex-direction:column;gap:13px;max-height:360px;overflow-y:auto;padding:2px 8px 8px 2px;scrollbar-width:thin;scrollbar-color:var(--line) transparent}
+.esc-log{display:flex;flex-direction:column;gap:13px;height:340px;overflow-y:auto;padding:2px 8px 8px 2px;scrollbar-width:thin;scrollbar-color:var(--line) transparent}
 .esc-log::-webkit-scrollbar{width:5px}
 .esc-log::-webkit-scrollbar-thumb{background:var(--line);border-radius:999px}
 .esc-log::-webkit-scrollbar-thumb:hover{background:var(--faint)}
@@ -225,13 +225,13 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .esc-chips{display:flex;flex-wrap:wrap;gap:7px;margin-top:14px}
 .esc-chips.gone{display:none}
 .esc-chip{font-size:12.5px;font-weight:600;color:var(--ink);background:none;border:1px solid var(--line);border-radius:999px;padding:7px 13px;cursor:pointer}
-.esc-chip:hover{border-color:var(--ink);background:#fff}
+.esc-chip:hover{background:#fff}
 /* input: barra única, botão dentro */
 .esc-inbar{position:relative;margin-top:14px}
-.esc-inbar textarea{width:100%;border:none;border-radius:14px;background:#fff;padding:16px 118px 16px 18px;font:inherit;font-size:14.5px;resize:none;min-height:54px;max-height:150px;line-height:1.5;color:var(--ink);box-shadow:0 1px 2px rgba(16,16,16,.05)}
+.esc-inbar textarea{width:100%;border:none;border-radius:999px;background:#fff;padding:14px 120px 14px 20px;font:inherit;font-size:14.5px;resize:none;min-height:50px;max-height:140px;line-height:1.5;color:var(--ink);box-shadow:0 1px 2px rgba(16,16,16,.05)}
 .esc-inbar textarea::placeholder{color:var(--faint)}
 .esc-inbar textarea:focus{outline:none}
-.esc-send{position:absolute;right:8px;bottom:8px;background:var(--pink);color:#fff;font-weight:700;font-size:14px;padding:9px 22px;border-radius:999px;cursor:pointer}
+.esc-send{position:absolute;right:7px;top:50%;transform:translateY(-50%);background:var(--pink);color:#fff;font-weight:700;font-size:14px;padding:9px 22px;border-radius:999px;cursor:pointer}
 .esc-send:hover{filter:brightness(1.06)}
 .esc-send[disabled]{opacity:.5;cursor:not-allowed}
 /* gate */
@@ -397,7 +397,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
     var history = Array.isArray(voce._chat) ? voce._chat.slice() : [];
     container.innerHTML = '<div class="esc">'
       + '<div class="esc-head"><span class="dot"></span><span class="nm">O Escavador</span><span class="sb">conversa guiada pra montar teu bloco VOCÊ</span></div>'
-      + '<div class="esc-prevbar">'
+      + '<div class="esc-prevbar gone" id="escPrev">'
       +   '<div class="esc-ph"><b>Seu bloco VOCÊ</b><span class="live">prévia ao vivo</span><span class="prog" id="escProgTxt">0 de 9 itens</span></div>'
       +   '<div class="esc-cards" id="escCards"></div>'
       +   '<div class="esc-progbar"><i id="escProgBar" style="width:0%"></i></div>'
@@ -411,7 +411,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
     var log=container.querySelector('#escLog'), input=container.querySelector('#escInput'),
         send=container.querySelector('#escSend'), typing=container.querySelector('#escTyping'),
         chips=container.querySelector('#escChips'), cardsEl=container.querySelector('#escCards'),
-        gate=container.querySelector('#escGate');
+        prevbar=container.querySelector('#escPrev'), gate=container.querySelector('#escGate');
 
     function bubble(role, text){
       var d=document.createElement('div'); d.className='esc-b '+(role==='assistant'?'ai':'me');
@@ -434,6 +434,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
     }
     function hasAny(){ return ESC_CARDS.some(function(c){return cardData(voce,c.k).n>0;}); }
     function renderCards(){
+      prevbar.classList.toggle('gone', !hasAny());
       cardsEl.innerHTML=ESC_CARDS.map(function(c){
         var d=cardData(voce,c.k), empty=d.n===0;
         return '<div class="esc-c'+(empty?' empty':'')+'"><span class="ic">'+c.ic+'</span><div class="cbody">'
