@@ -1,4 +1,4 @@
-export const config = { matcher: ['/', '/cursos', '/curso', '/curso/:path*', '/admin', '/admin/:path*'] };
+export const config = { matcher: ['/', '/cursos', '/cursos/', '/curso', '/curso/:path*', '/admin', '/admin/:path*'] };
 
 export default function middleware(request) {
   const host = (request.headers.get('host') || '').toLowerCase();
@@ -6,10 +6,10 @@ export default function middleware(request) {
     const url = new URL(request.url);
     if (url.pathname === '/') {
       url.pathname = '/app/index.html';              // login
-    } else if (url.pathname === '/cursos') {
+    } else if (url.pathname === '/cursos' || url.pathname === '/cursos/') {
       url.pathname = '/app/curso/cursos.html';        // vitrine pública (URL limpa)
-    } else if (url.pathname === '/curso') {
-      url.pathname = '/app/curso/home.html';           // /curso -> home do curso
+    } else if (url.pathname === '/curso' || url.pathname === '/curso/') {
+      url.pathname = '/app/curso/home.html';           // /curso e /curso/ -> home do curso
     } else if (url.pathname.startsWith('/curso/')) {
       url.pathname = '/app' + url.pathname;           // /curso/x -> /app/curso/x
     } else if (url.pathname === '/admin' || url.pathname.startsWith('/admin/')) {
