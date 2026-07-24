@@ -158,7 +158,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 <div class="shell">
   <aside class="side">
     <nav>
-      <a href="#" class="on"><svg viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V20h14V9.5"/></svg>Início do curso</a>
+      <a href="#" class="on"><svg viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V20h14V9.5"/></svg>Visão geral</a>
       <a href="aula.html"><svg viewBox="0 0 24 24"><path d="m22 8-10 5L2 8l10-5 10 5Z"/><path d="M6 10.5V16c0 1 2.5 2.5 6 2.5s6-1.5 6-2.5v-5.5"/></svg>Aulas</a>
       <a href="#"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>Meu canvas</a>
       <a href="#"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4.5"/><circle cx="12" cy="12" r="1"/></svg>Meu posicionamento</a>
@@ -233,7 +233,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
     if(!g.preenchido) return '<span class="lsub">não preenchido</span>';
     // texto corrido: N/5 estruturado · diagnóstico · validação (sem pilha de pills)
     var n = Math.max(0,Math.min(5,Math.round((g.completion||0)*5)));
-    var parts = [n+'/5 estruturado'];
+    var parts = [n+'/5 preenchido'];
     if(g.gate.label) parts.push(esc(g.gate.label));
     if(g.validacao==='hipotese') parts.push('hipótese');
     return '<span class="lsub">'+parts.join(' · ')+'</span>';
@@ -261,9 +261,9 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
     var pendTxt = pend
       ? 'Próxima pendência: '+esc(pend.g.gate.label)+' — '+esc(pend.lesson.title)
       : (blocksFilled ? 'Nenhuma pendência crítica — dá pra gerar o posicionamento.' : 'Preenche o Canvas pra começar.');
-    document.getElementById('progSub').innerHTML = '<b>'+projPct+'% estruturado</b><br>Status: '+status+'<br>'+pendTxt;
-    // sem repetir a contagem: seção aqui, nº de aulas só no módulo
-    document.getElementById('contentMeta').textContent = '1 seção';
+    document.getElementById('progSub').innerHTML = '<b>'+projPct+'% preenchido</b><br>Status: '+status+'<br>'+pendTxt;
+    // nº de aulas fica só no módulo; "Conteúdo" não precisa de meta redundante
+    document.getElementById('contentMeta').textContent = '';
     document.getElementById('modMeta').textContent = total+' aula'+(total===1?'':'s');
 
     // "agora" = primeira não concluída

@@ -214,7 +214,7 @@
 
   // ---------- normaliza navegação ----------
   var MAP = {
-    "início do curso":"home.html","inicio do curso":"home.html","aulas":"aula.html",
+    "início do curso":"home.html","inicio do curso":"home.html","visão geral":"home.html","visao geral":"home.html","aulas":"aula.html",
     "meu canvas":"canvas.html","meu posicionamento":"posicionamento.html",
     "início":"home.html","inicio":"home.html","cursos":"/cursos"
   };
