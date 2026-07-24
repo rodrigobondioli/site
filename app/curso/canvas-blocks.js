@@ -66,6 +66,14 @@ window.ADP_CANVAS = (function () {
   function evMissing(row) {
     return CRIT7.filter(function (c) { return nota(row, c.k) >= 1 && !(cellOf(row, c.k).ev || '').trim(); }).length;
   }
+  // confiança INFERIDA da evidência (não é mais escolha manual):
+  // sem evidência → baixa · percepção/vaga → média · concreta/verificável (número, %, R$, data) → alta
+  function inferConf(ev) {
+    var t = (ev || '').trim();
+    if (!t) return 'baixa';
+    if (/\d|%|r\$|\bR\$/i.test(t)) return 'alta';
+    return 'media';
+  }
   // veredito qualitativo do candidato (substitui os pesos) — ver ARQ 3
   function verdict(row) {
     if (!anyScore(row)) return { tag: 'todo', txt: 'Pontua os 7 critérios (1–5) com evidência.' };
@@ -200,15 +208,15 @@ window.ADP_CANVAS = (function () {
     + '.mx-nn{width:26px;height:26px;border-radius:999px;border:1px solid var(--line,#d4d4d8);background:none;font:inherit;font-weight:700;font-size:12px;color:var(--muted,#71717a);cursor:pointer;display:inline-grid;place-items:center;padding:0;transition:.12s}'
     + '.mx-nn:hover{border-color:var(--muted,#71717a);color:var(--ink,#18181b)}'
     + '.mx-nn.on{border-color:var(--ink,#18181b);background:var(--ink,#18181b);color:#fff}'
-    // FAIXA de evidência: sempre presente, altura fixa; label/valor/confiança/ação em coordenadas fixas
-    + '.mx-evstrip{display:flex;align-items:center;gap:9px;min-height:30px;font-size:12.5px;cursor:pointer;border-top:1px solid var(--line,#d4d4d8);padding-top:11px}'
-    + '.mx-evstrip .lbl{flex:none;font-weight:700;color:var(--muted,#71717a)}'
-    + '.mx-evstrip .val{flex:1;min-width:0;color:#3f3f46;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}'
+    // FAIXA de evidência: uma linha discreta, dot-separada, flui à esquerda; a evidência trunca, confiança/ação ficam
+    + '.mx-evstrip{display:flex;align-items:center;gap:7px;min-height:30px;font-size:12.5px;cursor:pointer;border-top:1px solid var(--line,#d4d4d8);padding-top:11px;color:var(--muted,#71717a)}'
+    + '.mx-evstrip .val{flex:0 1 auto;min-width:2ch;color:#3f3f46;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}'
     + '.mx-evstrip .val.none{color:var(--faint,#a1a1aa)}'
-    + '.mx-evstrip .cf{flex:none;font-size:11px;font-weight:700;color:var(--faint,#a1a1aa)}'
-    + '.mx-evstrip .act{flex:none;font-weight:700;color:var(--ink,#18181b);text-decoration:underline;text-underline-offset:2px}'
-    + '.mx-evstrip:hover .act{color:var(--pink,#ff00d7)}'
-    // editor aberto (só a linha ativa): composer da HOME + chips de confiança
+    + '.mx-evstrip .sep{flex:none;color:var(--faint,#a1a1aa)}'
+    + '.mx-evstrip .cf{flex:none;color:var(--faint,#a1a1aa)}'
+    + '.mx-evstrip .act{flex:none;font-weight:700;color:var(--muted,#71717a);text-decoration:underline;text-underline-offset:2px}'
+    + '.mx-evstrip:hover .act{color:var(--ink,#18181b)}'
+    // editor aberto (só a linha ativa): composer da HOME (sem chips — confiança é inferida)
     + '.mx-eved{display:flex;flex-direction:column;gap:10px}'
     + '.mx-evbar{display:flex;align-items:flex-start;gap:9px;border:1px solid var(--line,#d4d4d8);border-radius:16px;padding:6px 8px 6px 12px;background:none}'
     + '.mx-evspark{flex:none;display:flex;color:var(--faint,#a1a1aa);padding-top:9px}'
@@ -216,12 +224,6 @@ window.ADP_CANVAS = (function () {
     + '.mx-ev{flex:1;min-width:0;border:none;background:none;padding:8px 0;font:inherit;font-size:14px;color:var(--ink,#18181b);resize:none;max-height:120px;line-height:1.5}'
     + '.mx-ev::placeholder{color:var(--faint,#a1a1aa)}'
     + '.mx-ev:focus{outline:none}'
-    + '.mx-confrow{display:inline-flex;align-items:center;gap:8px;padding-left:2px}'
-    + '.mx-confrow .cl{font-size:10px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--faint,#a1a1aa)}'
-    + '.mx-conf{display:inline-flex;gap:3px}'
-    + '.mx-cc{font:inherit;font-size:11px;font-weight:700;color:var(--faint,#a1a1aa);background:none;border:1px solid var(--line,#d4d4d8);cursor:pointer;padding:4px 11px;border-radius:999px;transition:.12s}'
-    + '.mx-cc:hover{color:var(--muted,#71717a);border-color:var(--muted,#71717a)}'
-    + '.mx-cc.on{color:#fff;background:var(--ink,#18181b);border-color:var(--ink,#18181b)}'
     + '.mx-vd{padding:4px 4px 2px;font-size:13px;color:var(--ink,#18181b);display:flex;align-items:baseline;gap:9px;line-height:1.45}'
     + '.mx-vd .dot{width:7px;height:7px;border-radius:999px;flex:none;align-self:center}'
     + '.mx-vd .dot.ok{background:var(--lime,#e7f99a)}.mx-vd .dot.mid{background:var(--faint,#a1a1aa)}.mx-vd .dot.bad{background:var(--ink,#18181b)}'
@@ -312,27 +314,28 @@ window.ADP_CANVAS = (function () {
     };
     var STAR = '<svg viewBox="0 0 24 24"><path d="M12 3l2.5 5.5L20 9.3l-4 3.9.9 5.8L12 16.2 7.1 19l.9-5.8-4-3.9 5.5-.8z"/></svg>';
     var CONF_LBL = { baixa: 'baixa', media: 'média', alta: 'alta' };
-    // FAIXA de evidência: sempre existe, mesma altura vazia/preenchida. Vazia = "nenhuma adicionada" + "adicionar";
-    // preenchida = resumo (1 linha, truncado) + "confiança X" + "editar". Clicar na faixa abre o editor (composer + chips).
+    // FAIXA de evidência: uma linha discreta, sempre presente, mesma altura vazia/preenchida.
+    // Vazia = "Sem evidência adicionada · adicionar". Preenchida = resumo · confiança (inferida) · editar.
+    // Confiança NÃO é mais controle manual — é estado secundário derivado da evidência.
     function evStripHTML(i, k, cell) {
       var key = i + ':' + k, has = !!(cell.ev && cell.ev.trim());
       if (editing === key) {
-        var chips = [['baixa', 'baixa'], ['media', 'média'], ['alta', 'alta']].map(function (x) {
-          return '<button type="button" class="mx-cc' + (cell.conf === x[0] ? ' on' : '') + '" data-i="' + i + '" data-k="' + k + '" data-c="' + x[0] + '">' + x[1] + '</button>';
-        }).join('');
         return '<div class="mx-eved">'
           + '<div class="mx-evbar"><span class="mx-evspark"><svg viewBox="0 0 24 24"><path d="M12 3l1.7 4.8L18.5 9.5l-4.8 1.7L12 16l-1.7-4.8L5.5 9.5l4.8-1.7z"/></svg></span>'
-          +   '<textarea class="mx-ev" data-i="' + i + '" data-k="' + k + '" rows="1" placeholder="Qual fato sustenta essa nota? Sem evidência ela é torcida.">' + esc(cell.ev || '') + '</textarea></div>'
-          + '<div class="mx-confrow"><span class="cl">confiança</span><span class="mx-conf">' + chips + '</span></div>'
+          +   '<textarea class="mx-ev" data-i="' + i + '" data-k="' + k + '" rows="1" placeholder="Descreva o fato que sustenta a nota. Quanto mais concreto (número, caso, data), mais forte.">' + esc(cell.ev || '') + '</textarea></div>'
           + '</div>';
       }
-      var val = has ? esc(cell.ev) : 'digite sua evidência aqui';
-      var conf = (has && cell.conf) ? '<span class="cf">confiança ' + (CONF_LBL[cell.conf] || cell.conf) + '</span>' : '';
+      if (!has) {
+        return '<div class="mx-evstrip" data-i="' + i + '" data-k="' + k + '">'
+          + '<span class="val none">Sem evidência adicionada</span>'
+          + '<span class="sep">·</span><span class="act">adicionar</span>'
+          + '</div>';
+      }
+      var cf = inferConf(cell.ev);
       return '<div class="mx-evstrip" data-i="' + i + '" data-k="' + k + '">'
-        + '<span class="lbl">Evidência:</span>'
-        + '<span class="val' + (has ? '' : ' none') + '">' + val + '</span>'
-        + conf
-        + '<span class="act">' + (has ? 'editar' : 'adicionar') + '</span>'
+        + '<span class="val">' + esc(cell.ev) + '</span>'
+        + '<span class="sep">·</span><span class="cf cf-' + cf + '">confiança ' + CONF_LBL[cf] + '</span>'
+        + '<span class="sep">·</span><span class="act">editar</span>'
         + '</div>';
     }
     // critério = LINHA: topo (nome+pergunta à esq · nota à dir) + FAIXA de evidência fixa no rodapé
@@ -420,7 +423,7 @@ window.ADP_CANVAS = (function () {
     container.addEventListener('input', function (e) {
       var t = e.target, i = +t.dataset.i;
       if (t.classList.contains('mx-name')) { rows[i].name = t.value; persist(); }
-      else if (t.classList.contains('mx-ev')) { rows[i].cells[t.dataset.k].ev = t.value; persist(); }
+      else if (t.classList.contains('mx-ev')) { var cc = rows[i].cells[t.dataset.k]; cc.ev = t.value; cc.conf = inferConf(t.value); persist(); }
     });
     container.addEventListener('click', function (e) {
       var C = e.target.closest ? e.target.closest.bind(e.target) : function () { return null; };
@@ -447,22 +450,11 @@ window.ADP_CANVAS = (function () {
       var del = C('.mx-del');
       if (del) { rows.splice(+del.dataset.i, 1); if (!rows.length) rows.push(normRow()); if (openIdx >= rows.length) openIdx = rows.length - 1; paint(); persist(); }
     });
-    // confiança: mousedown + preventDefault vence a corrida contra o blur do textarea
-    // (assim clicar num chip enquanto digita a evidência NÃO perde o clique nem o foco)
-    container.addEventListener('mousedown', function (e) {
-      var cc = e.target.closest ? e.target.closest('.mx-cc') : null;
-      if (!cc) return;
-      e.preventDefault();
-      var xi = +cc.dataset.i, xk = cc.dataset.k, xv = cc.dataset.c;
-      rows[xi].cells[xk].conf = (rows[xi].cells[xk].conf === xv ? '' : xv);
-      var self = rows[xi].cells[xk].conf;
-      cc.parentNode.querySelectorAll('.mx-cc').forEach(function (b) { b.classList.toggle('on', b.dataset.c === self); });
-      persist();
-    });
     container.addEventListener('focusout', function (e) {
-      // fechar o editor de evidência ao sair dele: salva, some com o textarea, repinta
+      // fechar o editor de evidência ao sair dele: salva, infere confiança, some com o textarea, repinta
       if (e.target && e.target.classList && e.target.classList.contains('mx-ev')) {
-        rows[+e.target.dataset.i].cells[e.target.dataset.k].ev = e.target.value;
+        var cell = rows[+e.target.dataset.i].cells[e.target.dataset.k];
+        cell.ev = e.target.value; cell.conf = inferConf(e.target.value);
         editing = null; persist(); paint(); return;
       }
       doSave(2, matData(), st, onSaved);
