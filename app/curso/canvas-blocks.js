@@ -245,7 +245,18 @@ window.ADP_CANVAS = (function () {
     + '.adp-rum .rcentral{display:block;width:100%;text-align:left;border:1.5px solid var(--pink,#ff00d7);border-radius:10px;padding:12px 14px;font-size:15px;font-weight:700;color:var(--ink,#18181b);background:rgba(255,0,215,.04);cursor:pointer;line-height:1.4}'
     + '.adp-rum .rmsg{font-size:13px;color:var(--muted,#71717a);margin-top:10px;line-height:1.5}'
     + '.adp-rum .spin{display:inline-block;width:12px;height:12px;border:2px solid currentColor;border-right-color:transparent;border-radius:50%;animation:adpspin .7s linear infinite;vertical-align:-1px;margin-right:8px}'
-    + '@keyframes adpspin{to{transform:rotate(360deg)}}';
+    + '@keyframes adpspin{to{transform:rotate(360deg)}}'
+    // --- Matriz responsiva no mobile: empilha a nota abaixo da pergunta (cabe em 390px) ---
+    + '@media(max-width:640px){'
+    +   '.mx-rtop{flex-direction:column;align-items:stretch;gap:10px}'
+    +   '.mx-ctrl{align-items:flex-start}'
+    +   '.mx-nota{flex-wrap:wrap}'
+    +   '.mx-eixohd{flex-wrap:wrap;row-gap:8px}'
+    +   '.mx-eixohd .et{white-space:normal}'
+    +   '.mx-cand-h{flex-wrap:wrap;row-gap:6px}'
+    +   '.mx-row{padding:14px 14px}'
+    +   '.mx-evstrip{flex-wrap:wrap;row-gap:4px}'
+    + '}';
 
   function ensureStyle() {
     if (document.getElementById('adp-canvas-style')) return;

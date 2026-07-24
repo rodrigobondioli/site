@@ -240,6 +240,40 @@
   // neutraliza qualquer '#' restante (evita pulo pro topo em links de demo)
   document.querySelectorAll('a[href="#"]').forEach(function(a){ a.addEventListener("click", function(e){ e.preventDefault(); }); });
 
+  // ---------- navegação MOBILE (hambúrguer + drawer) ----------
+  // no mobile a sidebar (.side) some; sem isso o aluno não chega em Canvas/Posicionamento/Aulas.
+  (function mobileNav(){
+    var side = document.querySelector(".side"), top = document.querySelector(".top");
+    if (!side || !top) return; // aula.html tem layout próprio (back + painel)
+    var burger = document.createElement("button");
+    burger.className = "adp-burger"; burger.setAttribute("aria-label", "Abrir menu"); burger.setAttribute("aria-expanded", "false");
+    burger.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg>';
+    top.insertBefore(burger, top.firstChild);
+    var ov = document.createElement("div"); ov.className = "adp-navov"; document.body.appendChild(ov);
+    side.classList.add("adp-drawer");
+    function set(open){ document.body.classList.toggle("adp-navopen", open); burger.setAttribute("aria-expanded", open ? "true" : "false"); }
+    burger.addEventListener("click", function(){ set(!document.body.classList.contains("adp-navopen")); });
+    ov.addEventListener("click", function(){ set(false); });
+    side.querySelectorAll("a").forEach(function(a){ a.addEventListener("click", function(){ set(false); }); });
+    document.addEventListener("keydown", function(e){ if (e.key === "Escape") set(false); });
+    var css = document.createElement("style");
+    css.textContent = ""
+      + ".adp-burger{display:none}"
+      + ".adp-burger svg{width:24px;height:24px}"
+      + "@media(max-width:900px){"
+      +   ".adp-burger{display:inline-grid;place-items:center;width:40px;height:40px;border:none;background:none;cursor:pointer;color:var(--ink,#18181b);flex:none;padding:0}"
+      +   ".top{grid-template-columns:auto 1fr auto!important}"
+      +   ".top .search{display:none}"
+      +   ".top .logo{white-space:nowrap;min-width:0}"
+      +   ".side.adp-drawer{display:flex!important;position:fixed;top:0;left:0;bottom:0;width:82%;max-width:300px;z-index:60;background:var(--bg,#f1f1f1);box-shadow:2px 0 24px rgba(16,16,16,.18);transform:translateX(-102%);transition:transform .22s ease;padding:20px 18px;overflow-y:auto;margin:0}"
+      +   "body.adp-navopen .side.adp-drawer{transform:none}"
+      +   ".adp-navov{display:none;position:fixed;inset:0;background:rgba(16,16,16,.42);z-index:55}"
+      +   "body.adp-navopen .adp-navov{display:block}"
+      +   "body.adp-navopen{overflow:hidden}"
+      + "}";
+    document.head.appendChild(css);
+  })();
+
   // expõe (caso queira chamar de outro lugar)
   window.ADP_UI = { suporte: openSuporte, sugestao: openSugestao, perfil: openPerfil, toast: toast };
 })();
