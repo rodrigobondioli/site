@@ -87,6 +87,13 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .pill.g-importante,.pill.g-aviso{background:rgba(255,0,215,.08);color:var(--ink);border-color:var(--pink)}
 .pill.g-ok{background:var(--lime);color:var(--ink);border-color:var(--lime)}
 .pill.val .vdot{width:7px;height:7px;border-radius:999px;display:inline-block;margin-right:5px;vertical-align:0;background:#e8b93a}
+/* blocos recolhíveis: header clica pra abrir/fechar (reduz o scrollzão) */
+.block .bh{cursor:pointer}
+.block .bh:focus-visible{outline:2px solid var(--ink);outline-offset:3px;border-radius:8px}
+.block .bchev{flex:none;width:24px;height:24px;display:grid;place-items:center;color:var(--muted);transition:transform .2s}
+.block .bchev svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.block.collapsed .bchev{transform:rotate(-90deg)}
+.block.collapsed .bfields{display:none}
 /* NB: os campos e a matriz do Canvas são estilizados em runtime pelo canvas-blocks.js (classes .adp-*) */
 .handoff{margin-top:28px;text-align:center;min-height:1px}
 .handoff .ho-cta{display:inline-flex;align-items:center;gap:8px;background:var(--pink);color:#fff;font-weight:700;font-size:15px;padding:14px 28px;border-radius:999px}
@@ -201,7 +208,8 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
       var card = document.createElement("div");
       card.className = "block";
       card.innerHTML = '<div class="bh"><span class="bn">'+def.block+'</span>'
-        + '<div class="bt"><h3>'+esc(def.title)+'</h3><span class="binfo linfo"></span></div></div>'
+        + '<div class="bt"><h3>'+esc(def.title)+'</h3><span class="binfo linfo"></span></div>'
+        + '<span class="bchev" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></span></div>'
         + '<div class="bfields" style="margin-top:6px"></div>';
       wrap.appendChild(card);
       window.ADP_CANVAS.renderBlock(card.querySelector(".bfields"), def.block, saved[def.block]||{}, function(b,data){
@@ -209,6 +217,14 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
       }, { getNicho:function(){ return window.ADP_CANVAS.nichoFromBlock2(saved[2]); } });
       card.classList.toggle("done", window.ADP_CANVAS.isFilled(def.block, saved[def.block]));
       paintInfo(card, def.block, saved[def.block]||{});
+      // recolhível: header abre/fecha; começa recolhido se o bloco já está preenchido (foco no que falta)
+      var bh = card.querySelector(".bh");
+      bh.setAttribute("role","button"); bh.setAttribute("tabindex","0");
+      function toggle(){ card.classList.toggle("collapsed"); bh.setAttribute("aria-expanded", String(!card.classList.contains("collapsed"))); }
+      bh.addEventListener("click", toggle);
+      bh.addEventListener("keydown", function(e){ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); toggle(); } });
+      if(window.ADP_CANVAS.isFilled(def.block, saved[def.block])) card.classList.add("collapsed");
+      bh.setAttribute("aria-expanded", String(!card.classList.contains("collapsed")));
     });
     updateGauge();
   }
