@@ -212,7 +212,7 @@ s { text-decoration: line-through; }
     "copy copy   copy copy  copy"
     "gl   visual gap  eusei gr";
   column-gap: 0;
-  row-gap: 56px;
+  row-gap: 96px;
 }
 .hero-copy { grid-area: copy; position: relative; z-index: 2; text-align: center; }
 .hero-copy .hero-title { margin-inline: auto; }
