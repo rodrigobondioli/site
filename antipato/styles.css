@@ -379,7 +379,7 @@ s { text-decoration: line-through; }
 }
 .imagine-list li:last-child { border-bottom: 0; padding-bottom: 0; }
 .imagine-list li span.ic { align-self: center; }
-.imagine-list .txt { max-width: 441px; }
+.imagine-list .txt { max-width: 580px; }
 .pergunto-right > .body-20:last-child { max-width: 640px; }
 
 /* ============================================================
