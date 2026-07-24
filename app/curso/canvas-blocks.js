@@ -194,9 +194,12 @@ window.ADP_CANVAS = (function () {
     + '.mx-nn{min-width:13px;text-align:center;border:none;background:none;font:inherit;font-weight:700;font-size:13px;color:var(--faint,#a1a1aa);cursor:pointer;line-height:1;padding:0;transition:color .12s,font-size .12s}'
     + '.mx-nn:hover{color:var(--muted,#71717a)}'
     + '.mx-nn.on{font-size:19px;color:var(--ink,#18181b)}'
-    + '.mx-confrow{display:inline-flex;align-items:baseline;gap:5px;font-size:10px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--faint,#a1a1aa)}'
-    + '.mx-confsel{font:inherit;font-size:11px;font-weight:700;letter-spacing:0;text-transform:none;color:var(--muted,#71717a);background:none;border:none;border-bottom:1px solid var(--line,#d4d4d8);padding:1px 1px;cursor:pointer}'
-    + '.mx-confsel:focus{outline:none;border-color:var(--ink,#18181b)}'
+    + '.mx-confrow{display:inline-flex;align-items:center;gap:7px}'
+    + '.mx-confrow .cl{font-size:10px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--faint,#a1a1aa)}'
+    + '.mx-conf{display:inline-flex;gap:2px}'
+    + '.mx-cc{font:inherit;font-size:10.5px;font-weight:700;color:var(--faint,#a1a1aa);background:none;border:none;cursor:pointer;padding:3px 7px;border-radius:6px;transition:.12s}'
+    + '.mx-cc:hover{color:var(--muted,#71717a)}'
+    + '.mx-cc.on{color:var(--ink,#18181b);background:var(--soft,#e6e6e8)}'
     + '.mx-evline{margin-top:7px}'
     + '.mx-evbtn{display:inline-flex;align-items:center;gap:6px;max-width:100%;font:inherit;font-size:11.5px;color:var(--faint,#a1a1aa);background:none;border:none;cursor:pointer;text-align:left;padding:0}'
     + '.mx-evbtn .ei{width:11px;height:11px;flex:none;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}'
@@ -307,15 +310,16 @@ window.ADP_CANVAS = (function () {
       var c = CRITDEF[k], cell = row.cells[k], n = '';
       // nota: 1–5 discretos, o escolhido cresce e fica preto (é o próprio seletor, sem caixa)
       for (var v = 1; v <= 5; v++) n += '<button type="button" class="mx-nn' + (cell.nota === v ? ' on' : '') + '" data-i="' + i + '" data-k="' + k + '" data-v="' + v + '">' + v + '</button>';
-      // confiança: select secundário, embaixo da nota (peso menor)
-      var conf = [['', '—'], ['baixa', 'baixa'], ['media', 'média'], ['alta', 'alta']].map(function (x) {
-        return '<option value="' + x[0] + '"' + (cell.conf === x[0] ? ' selected' : '') + '>' + x[1] + '</option>';
+      // confiança: 3 chips pequenos, aparece SÓ depois que tem evidência (é a confiança na nota, dado o fato)
+      var hasEv = !!(cell.ev && cell.ev.trim());
+      var chips = [['baixa', 'baixa'], ['media', 'média'], ['alta', 'alta']].map(function (x) {
+        return '<button type="button" class="mx-cc' + (cell.conf === x[0] ? ' on' : '') + '" data-i="' + i + '" data-k="' + k + '" data-c="' + x[0] + '">' + x[1] + '</button>';
       }).join('');
+      var confHTML = hasEv ? '<span class="mx-confrow"><span class="cl">confiança</span><span class="mx-conf">' + chips + '</span></span>' : '';
       return '<div class="mx-row">'
         + '<div class="mx-c1"><div class="n">' + esc(c.h) + '</div><div class="q">' + esc(c.hint) + '</div>'
         +   '<div class="mx-evline" data-i="' + i + '" data-k="' + k + '">' + evLineHTML(i, k, cell) + '</div></div>'
-        + '<div class="mx-ctrl"><span class="mx-nota">' + n + '</span>'
-        +   '<span class="mx-confrow">confiança <select class="mx-confsel" data-i="' + i + '" data-k="' + k + '">' + conf + '</select></span></div>'
+        + '<div class="mx-ctrl"><span class="mx-nota">' + n + '</span>' + confHTML + '</div>'
         + '</div>';
     }
     function eixoHTML(row, i, eixo) {
@@ -391,23 +395,22 @@ window.ADP_CANVAS = (function () {
       if (t.classList.contains('mx-name')) { rows[i].name = t.value; persist(); }
       else if (t.classList.contains('mx-ev')) { rows[i].cells[t.dataset.k].ev = t.value; persist(); }
     });
-    // confiança = select secundário
-    container.addEventListener('change', function (e) {
-      var t = e.target;
-      if (t.classList.contains('mx-confsel')) { rows[+t.dataset.i].cells[t.dataset.k].conf = t.value; paint(); persist(); }
-    });
     container.addEventListener('click', function (e) {
       var C = e.target.closest ? e.target.closest.bind(e.target) : function () { return null; };
       // nota (1–5): clica o número, o escolhido cresce/fica preto
       var nn = C('.mx-nn');
       if (nn) { var ni = +nn.dataset.i, nk = nn.dataset.k, nv = +nn.dataset.v; rows[ni].cells[nk].nota = (rows[ni].cells[nk].nota === nv ? 0 : nv); paint(); persist(); return; }
+      // confiança em chips (só aparece com evidência)
+      var cc = C('.mx-cc');
+      if (cc) { var xi = +cc.dataset.i, xk = cc.dataset.k, xv = cc.dataset.c; rows[xi].cells[xk].conf = (rows[xi].cells[xk].conf === xv ? '' : xv); paint(); persist(); return; }
       // abrir editor de evidência inline
       var evbtn = C('.mx-evbtn');
       if (evbtn) {
         var ei = +evbtn.dataset.i, ek = evbtn.dataset.k, line = evbtn.parentNode;
         line.innerHTML = '<textarea class="mx-ev" data-i="' + ei + '" data-k="' + ek + '" rows="2" placeholder="Qual fato sustenta essa nota? Sem evidência ela é torcida.">' + esc(rows[ei].cells[ek].ev || '') + '</textarea>';
         var ta = line.querySelector('textarea');
-        if (ta) { ta.focus(); ta.addEventListener('blur', function () { rows[ei].cells[ek].ev = ta.value; persist(); line.innerHTML = evLineHTML(ei, ek, rows[ei].cells[ek]); }); }
+        // ao sair, salva e re-renderiza (pra confiança aparecer/sumir conforme a evidência)
+        if (ta) { ta.focus(); ta.addEventListener('blur', function () { rows[ei].cells[ek].ev = ta.value; persist(); paint(); }); }
         return;
       }
       // expandir candidato colapsado
