@@ -185,8 +185,8 @@ s { text-decoration: line-through; }
   justify-content: space-between;
   padding: 26px 56px;
 }
-.logo { width: 69px; height: 69px; display: block; }
-.logo img { width: 100%; height: 100%; border-radius: 999px; }
+.logo { height: 60px; width: auto; display: block; }
+.logo img { height: 100%; width: auto; border-radius: 0; }
 /* nav alinhado ao topo do logo · tipografia igual ao footer */
 .topnav {
   display: flex;
@@ -212,7 +212,7 @@ s { text-decoration: line-through; }
     "copy copy   copy copy  copy"
     "gl   visual gap  eusei gr";
   column-gap: 0;
-  row-gap: 96px;
+  row-gap: 56px;
 }
 .hero-copy { grid-area: copy; position: relative; z-index: 2; text-align: center; }
 .hero-copy .hero-title { margin-inline: auto; }
@@ -379,7 +379,7 @@ s { text-decoration: line-through; }
 }
 .imagine-list li:last-child { border-bottom: 0; padding-bottom: 0; }
 .imagine-list li span.ic { align-self: center; }
-.imagine-list .txt { max-width: 580px; }
+.imagine-list .txt { max-width: 441px; }
 .pergunto-right > .body-20:last-child { max-width: 640px; }
 
 /* ============================================================
@@ -496,7 +496,6 @@ s { text-decoration: line-through; }
    RECAP + OFERTA
    ============================================================ */
 .offer { padding-block: 80px; }
-.offer-tease { text-align: center; margin: 0 0 48px; text-wrap: balance; }
 .offer-grid { grid-template-columns: minmax(0, 1.42fr) minmax(0, 1fr); align-items: start; }
 .offer-grid .col { display: flex; flex-direction: column; gap: 24px; }
 .rationale { gap: 20px; }
@@ -545,6 +544,7 @@ s { text-decoration: line-through; }
   font-weight: 800;
   font-size: 13px;
   letter-spacing: 0.8px;
+  text-transform: uppercase;
   padding: 9px 0 13px;
   filter: drop-shadow(0 5px 12px rgba(0,0,0,0.18));
   z-index: 3;
