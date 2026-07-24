@@ -30,28 +30,29 @@ a{color:inherit;text-decoration:none}
 .inner{max-width:760px;margin:0 auto}
 .back{display:inline-flex;align-items:center;gap:6px;color:var(--muted);font-size:13.5px;margin-bottom:20px}
 .back:hover{color:var(--ink)}
-.kicker{font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--pink)}
+.kicker{font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
 .ptitle{font-size:clamp(30px,5vw,48px);font-weight:800;letter-spacing:-.02em;line-height:1.02;margin:8px 0 14px;text-wrap:balance}
 .intro{color:var(--muted);font-size:15.5px;max-width:64ch;margin-bottom:34px}
 .intro b{color:var(--ink)}
-.draftnote{background:var(--lime);border-radius:12px;padding:14px 18px;font-size:13.5px;margin-bottom:30px}
-.principle{background:#fff;border:1px solid var(--line);border-left:3px solid var(--pink);border-radius:12px;padding:16px 18px;margin:0 0 26px;font-size:15px;text-wrap:pretty}
-.principle b{color:var(--ink)}
+.rule{background:var(--lime);border-radius:12px;padding:16px 18px;margin:0 0 30px;font-size:15px;line-height:1.55;text-wrap:pretty}
+.rule b{color:var(--ink)}
 .q{border-top:1px solid var(--line);padding:26px 0}
 .q:last-child{border-bottom:1px solid var(--line)}
 .qn{display:inline-grid;place-items:center;width:34px;height:34px;border-radius:999px;background:var(--ink);color:#fff;font-weight:800;font-size:14px;margin-bottom:12px}
 .q h3{font-size:20px;font-weight:700;letter-spacing:-.01em;text-wrap:balance}
-.q .why{color:var(--muted);font-size:14px;margin-top:8px;text-wrap:pretty}
-.q .why b{color:var(--ink)}
 .q .ask{font-size:16.5px;color:var(--ink);margin-top:10px;line-height:1.45;text-wrap:pretty}
 .q .ask .alt{color:var(--muted);display:block;margin-top:2px}
 .q .combo{color:var(--muted);font-size:13.5px;margin-top:8px;font-style:italic}
-.apply{margin-top:14px;background:#fff;border:1px solid var(--line);border-radius:12px;padding:14px 16px}
-.apply .al{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--pink);display:block;margin-bottom:6px}
-.apply p{color:var(--muted);font-size:14px;text-wrap:pretty}
-.src{color:var(--muted);font-size:13px;margin:-18px 0 30px;text-wrap:pretty}
-.src a{color:var(--pink);font-weight:700}
-.src a:hover{text-decoration:underline}
+.apply{margin-top:14px;background:#fff;border-radius:12px;padding:15px 17px}
+.apply .al{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:6px}
+.apply p{color:var(--ink);font-size:14.5px;line-height:1.55;text-wrap:pretty}
+.ins-h{font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:40px 0 14px}
+.insights{display:flex;flex-direction:column;gap:12px}
+.insight{background:var(--soft);border-radius:12px;padding:16px 18px;font-size:15px;line-height:1.55;text-wrap:pretty}
+.insight b{color:var(--ink)}
+.src{color:var(--muted);font-size:13px;margin:40px 0 0;text-wrap:pretty}
+.src a{color:var(--ink);font-weight:700;text-decoration:underline}
+.src a:hover{color:var(--pink)}
 @media(max-width:820px){.tabs{display:none}.top{grid-template-columns:1fr auto}.main{padding:28px 20px 72px}}
 .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0)}
 </style>
@@ -80,23 +81,21 @@ a{color:inherit;text-decoration:none}
     <h1 class="ptitle">As 7 Perguntas que Viram a Mesa</h1>
     <p class="intro">Essa é a aula que muda o teu lugar na mesa. O cliente chega e senta na <b>sala de produção</b> — “me faz um site”, “preciso de um logo”, “roda um tráfego”. Estas 7 perguntas são o que conduz ele, sem empurrão, pra <b>sala de estratégia</b>: onde você deixa de ser cotado por hora e vira a pessoa que resolve o problema de negócio. Faz na ordem.</p>
 
-    <div class="principle">A regra é uma: <b>não prescreva, diagnostique.</b> O estrategista não dá resposta — faz a pergunta certa e deixa o cliente chegar sozinho na virada. Quando ele tem o insight na tua frente, é você que ele passa a enxergar como autoridade. Fala menos, pergunta mais.</div>
-
-    <p class="src">Base: as 7 perguntas de Michael Bungay Stanier (<i>Faça do Coaching um Hábito</i>), aplicadas à mesa do designer. Inclusive, o livro tá aqui — vale a leitura pra aprofundar: <a href="https://link.amazon/B03TLsili" target="_blank" rel="noopener noreferrer">pega na Amazon →</a></p>
+    <div class="rule">A regra é uma: <b>não prescreva, diagnostique.</b> O estrategista não dá resposta — faz a pergunta certa e deixa o cliente chegar sozinho na virada. Quando ele tem o insight na tua frente, é você que ele passa a enxergar como autoridade. Fala menos, pergunta mais.</div>
 
     <section class="qlist">
       <div class="q">
         <div class="qn">1</div>
         <h3>Pergunta Quebra-Gelo</h3>
         <p class="ask">“O que você tem em mente?”<span class="alt">“No que você tá pensando?” · “Por onde devemos começar?”</span></p>
-        <div class="apply"><span class="al">Como aplicar</span><p>Abre a reunião com isso e cala a boca. Deixa o cliente apontar por onde começar — não chega com solução pronta. O ponto de partida tem que sair da boca dele, não da tua.</p></div>
+        <div class="apply"><span class="al">Como aplicar</span><p>Abre a reunião com isso e cala a boca. A tentação é chegar já com o diagnóstico pronto — não faz. Deixa o cliente apontar por onde <i>ele</i> acha que começa; o ponto de partida tem que sair da boca dele. Isso já inverte o jogo: em vez de você chegar vendendo, ele começa a te explicar o mundo dele — e é aí que você escuta o que ninguém antes escutou.</p></div>
       </div>
 
       <div class="q">
         <div class="qn">2</div>
         <h3>Mais Fundo</h3>
         <p class="ask">“E o que mais? Tem alguma coisa que você deixou de fora?”</p>
-        <div class="apply"><span class="al">Como aplicar</span><p>Depois da primeira resposta, não avança — puxa mais. “E o que mais?” quase sempre traz o que ele engoliu de primeira. É a pergunta que mais rende com o menor esforço. Repete até secar.</p></div>
+        <div class="apply"><span class="al">Como aplicar</span><p>Depois da primeira resposta, não avança — puxa mais. “E o que mais?” é a pergunta mais preguiçosa e mais poderosa da lista: o que importa quase nunca vem na primeira leva, vem na segunda, na terceira. Repete até secar. O cliente vai desenterrando coisa que nem ele sabia que estava incomodando — e é nesse material que mora o problema de verdade.</p></div>
       </div>
 
       <div class="q">
@@ -104,39 +103,46 @@ a{color:inherit;text-decoration:none}
         <h3>A Pergunta do Foco</h3>
         <p class="ask">“Qual é o verdadeiro desafio aqui pra você?”</p>
         <p class="combo">Combine a 02 com a 03: “E o que mais te desafia?” ou “Como isso te desafia?”</p>
-        <div class="apply"><span class="al">Como aplicar</span><p>Aqui você separa o pedido do problema real. O cliente veio falando de site, logo, tráfego — essa pergunta acha o desafio de verdade por trás disso. Não aceita o primeiro sintoma como o problema.</p></div>
+        <div class="apply"><span class="al">Como aplicar</span><p>Aqui você separa o pedido do problema. O cliente chega falando de site, logo, tráfego — isso é sintoma. Essa pergunta obriga ele a nomear o desafio real por trás. Combina com “e o que mais te desafia?” pra afunilar. Não aceita o primeiro sintoma como se fosse o diagnóstico: quase nunca é. Na aula, o problema não era “fazer o site” — era o cara não saber se diferenciar sem ter em quem se espelhar.</p></div>
       </div>
 
       <div class="q">
         <div class="qn">4</div>
         <h3>A Pergunta Fundamental</h3>
         <p class="ask">“O que você quer que aconteça? Qual o resultado que você mais gostaria de ter?”</p>
-        <div class="apply"><span class="al">Como aplicar</span><p>Não presume o resultado — faz ele dizer. É aqui que você para de vender entregável (um site, um logo) e passa a vender resultado (cliente, diferenciação, dinheiro). Ele pediu um site, mas quer é fechar mais negócio.</p></div>
+        <div class="apply"><span class="al">Como aplicar</span><p>Não presume o resultado — faz ele dizer, em voz alta, o que quer que aconteça. É a pergunta que te tira da venda de entregável (um site) e te bota na venda de resultado (mais cliente, diferenciação, dinheiro). Na aula, o cara pediu tráfego; o que ele queria de verdade era <i>provar</i> que dava pra crescer com branding. Só a pergunta revela isso — e é isso que você vende, não a tela.</p></div>
       </div>
 
       <div class="q">
         <div class="qn">5</div>
         <h3>A Pergunta Preguiçosa</h3>
         <p class="ask">“Como eu posso ajudar?”<span class="alt">“Se eu pudesse te ajudar com apenas uma coisa, qual seria?”</span></p>
-        <div class="apply"><span class="al">Como aplicar</span><p>Mesmo que você já saiba a resposta, pergunta. Criativo tem urgência de dizer “já sei o que você precisa” — segura. Quando o cliente formula o próprio pedido, vira compromisso dele, não palpite teu. O “uma coisa só” obriga ele a priorizar.</p></div>
+        <div class="apply"><span class="al">Como aplicar</span><p>Mesmo sabendo a resposta, pergunta. Criativo tem sangue no olho pra soltar “já sei o que você precisa” — segura esse impulso, ele te sabota. Quando é o cliente que formula o próprio pedido, aquilo vira compromisso dele, não palpite teu — e ninguém discute o que acabou de dizer com a própria boca. O “se fosse uma coisa só” força ele a priorizar: você descobre o que realmente importa, não a lista de desejos.</p></div>
       </div>
 
       <div class="q">
         <div class="qn">6</div>
         <h3>A Pergunta Estratégica</h3>
         <p class="ask">“O que você está disposto a abdicar/investir para fazer isso acontecer?”<span class="alt">“Como é o cenário de vitória neste caso?”</span></p>
-        <div class="apply"><span class="al">Como aplicar</span><p>A virada pro dinheiro. Antes de soltar teu preço, faz o cliente dimensionar quanto a solução vale pra ele. Quando é ele que diz que aquilo gera 10, 15 mil, teu preço fica barato perto do retorno. Nunca ancore na tua hora — ancore no resultado dele.</p></div>
+        <div class="apply"><span class="al">Como aplicar</span><p>A virada pro dinheiro, e a mais importante. Antes de soltar teu preço, faz o cliente dimensionar quanto a solução vale pra ele. Na aula, o cara disse que vende o serviço por 3–5 mil, e que aquilo puxa projeto de 10–15 — foi <i>ele</i> que colocou o número na mesa. Quando é o cliente que fala que aquilo gera 15 mil, teu preço fica barato perto do retorno. Nunca ancore na tua hora; ancore no resultado dele.</p></div>
       </div>
 
       <div class="q">
         <div class="qn">7</div>
         <h3>A Pergunta de Aprendizado / Persuasão</h3>
         <p class="ask">“O que mais foi útil pra você nessa conversa?”<span class="alt">“O que você descobriu com essa conversa?”</span></p>
-        <div class="apply"><span class="al">Como aplicar</span><p>Fecha fazendo <b>ele</b> dizer o que tirou da conversa. Em vez de você falar que é bom, você faz ele falar. Se saiu pensando algo que não tinha pensado antes, já te colocou como autoridade — sem você se vender uma vez sequer.</p></div>
+        <div class="apply"><span class="al">Como aplicar</span><p>Fecha fazendo <b>ele</b> dizer o que tirou da conversa. Em vez de você falar que é bom, você faz ele falar — e ele acredita, porque saiu da boca dele. Se o cara sai pensando algo que não tinha pensado quando entrou, já te promoveu a autoridade sem você se vender uma vez. É o oposto do designer que passa a reunião inteira tentando provar que é foda.</p></div>
       </div>
     </section>
 
-    <div class="principle" style="margin-top:30px;margin-bottom:0">Pensa no médico: você chega com fratura exposta e ele ainda te manda pro raio-X antes de operar. <b>Você também não prescreve de cara — diagnostica.</b></div>
+    <h2 class="ins-h">Insights</h2>
+    <div class="insights">
+      <div class="insight">Pensa no médico: você chega com fratura exposta e ele ainda te manda pro raio-X antes de operar. <b>Você também não prescreve de cara — diagnostica.</b></div>
+      <div class="insight">Você não dá resposta nenhuma. Ouve, simplifica o que o cliente disse e devolve o essencial em forma de pergunta. <b>São as perguntas que fazem a engrenagem dele girar</b> — não os teus conselhos.</div>
+      <div class="insight">O cliente nunca quer o entregável. Pediu um site, mas quer é dinheiro, diferenciação e gente chegando até ele. <b>Acha isso e você para de brigar pelo valor da tua hora</b> — porque site qualquer um faz.</div>
+    </div>
+
+    <p class="src">Base: as 7 perguntas de Michael Bungay Stanier (<i>Faça do Coaching um Hábito</i>), aplicadas à mesa do designer. Inclusive, o livro tá aqui — vale a leitura pra aprofundar: <a href="https://link.amazon/B03TLsili" target="_blank" rel="noopener noreferrer">pega na Amazon →</a></p>
   </div>
 </main>
 
