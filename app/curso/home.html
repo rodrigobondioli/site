@@ -114,6 +114,8 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .lesson .st.now svg{width:10px;height:10px;fill:#fff;margin-left:1px}
 .lesson .st.lock{border:1.5px solid var(--line)}
 .lesson .st.lock svg{width:10px;height:10px;fill:none;stroke:var(--faint);stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.lesson .st.part{border:1.5px solid var(--lime)}
+.lesson .st.part svg circle{fill:var(--ink)}
 .lesson .lcol{flex:1;min-width:0;display:flex;flex-direction:column;gap:5px}
 .lesson .tt{font-weight:400;font-size:14px}
 .lesson.now .tt{font-weight:700}
@@ -268,13 +270,15 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
     var nowIdx = lessons.findIndex(function(l){ return !doneSet.has(l.id); });
     if(nowIdx<0) nowIdx = total-1;
     var cont = document.getElementById('continueBtn');
-    if(total){ var nxt=lessons[nowIdx]; var verb=done? (done<total?'Continuar':'Revisar') : 'Começar'; cont.href='aula.html?a='+nxt.id; cont.textContent = verb+(nxt.title? ': '+nxt.title : ''); }
+    if(total){ var nxt=lessons[nowIdx]; var verb=done? (done<total?'Continuar':'Revisar') : 'Começar'; cont.href='aula.html?a='+nxt.id; cont.textContent = verb+(nxt.title? ' — '+nxt.title : ''); }
     else cont.style.display='none';
 
     var html = lessons.map(function(l,i){
       var isDone=doneSet.has(l.id), isNow=(i===nowIdx && !isDone);
+      var started = (l.canvas_block!=null && GATE) ? (GATE(l.canvas_block, (blockData||{})[l.canvas_block]).completion > 0) : false;
       var st = isDone? '<span class="st done">'+ICON_DONE+'</span>'
              : isNow ? '<span class="st now">'+ICON_PLAY+'</span>'
+             : started ? '<span class="st part" title="em progresso">'+ICON_DOT+'</span>'
              :         '<span class="st lock" style="border-color:var(--line)">'+ICON_DOT+'</span>';
       var cls = isDone?'lesson done':(isNow?'lesson now':'lesson');
       var tag = isNow? '<span class="tag">agora</span>':'';

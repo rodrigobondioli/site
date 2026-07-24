@@ -284,6 +284,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .fw-back{font-size:13px;color:var(--muted);text-decoration:underline;margin-right:auto;cursor:pointer}
 .fw-back:hover{color:var(--ink)}
 .fw-back.gone{display:none}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
 </style>
 </head>
 <body>
@@ -610,6 +611,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
     document.getElementById('lessonRoot').innerHTML =
       '<p class="eyebrow">Aula '+(idx+1)+' de '+total+'</p>'
       +'<div class="lhead"><h1>'+esc(l.title)+'</h1>'+nav+'</div>'
+      +'<h2 class="sr-only">Aula e exercício</h2>'
       +videoHTML(l)
       +descHTML(l.description)
       +(l.canvas_block!=null ? applyHereHTML(l) : exerciseHTML(l.exercise,l))

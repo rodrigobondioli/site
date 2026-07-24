@@ -58,6 +58,9 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .head{display:flex;align-items:flex-start;justify-content:space-between;gap:24px;flex-wrap:wrap}
 .head h1{font-size:27px;font-weight:700;letter-spacing:-.02em}
 .head p{color:var(--muted);font-size:14.5px;margin-top:6px;max-width:52ch}
+.head .csave{display:inline-block;margin-top:8px;font-size:12.5px;font-weight:700;color:var(--muted);opacity:0;transition:opacity .18s}
+.head .csave.on{opacity:1}
+.head .csave .ck{color:var(--ink)}
 
 /* barra 🦆→🎯 */
 .gauge{flex:none;width:280px;border:1px solid var(--line);border-radius:var(--r);padding:16px 18px}
@@ -101,6 +104,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .handoff .ho-note{color:var(--muted);font-size:14px}
 .handoff .ho-link{color:var(--ink);font-size:13.5px;text-decoration:underline;margin-left:6px}
 @media(max-width:900px){.side{display:none}.tabs{display:none}.top{grid-template-columns:1fr auto}.gauge{width:100%}}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
 </style>
 </head>
 <body>
@@ -144,6 +148,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
         <div>
           <h1>Meu Canvas</h1>
           <p>A matéria-prima do seu posicionamento. Você despeja aqui, o Estrategista responde no final. Preenche e a barra enche.</p>
+          <span class="csave" id="csave" aria-live="polite"></span>
         </div>
         <div class="gauge">
           <div class="gt"><span>Progresso do Canvas</span><b>3 de 5 blocos</b></div>
@@ -155,6 +160,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
         </div>
       </div>
 
+      <h2 class="sr-only">Blocos do Canvas</h2>
       <div class="blocks" id="blocksWrap"></div>
       <div class="handoff" id="handoff"></div>
     </div>
@@ -201,6 +207,9 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
     var bar = document.querySelector(".gauge .bar i"); if(bar) bar.style.width = Math.round(filled/total*100) + "%";
     updateHandoff(filled, total);
   }
+  // confirmação global de salvamento (confiança: o aluno vê que gravou)
+  var _csvT;
+  function flashSaved(){ var el=document.getElementById("csave"); if(!el) return; el.innerHTML='<span class="ck">✓</span> salvo'; el.classList.add("on"); clearTimeout(_csvT); _csvT=setTimeout(function(){ el.classList.remove("on"); }, 1600); }
 
   function buildCards(){
     wrap.innerHTML = "";
@@ -213,7 +222,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
         + '<div class="bfields" style="margin-top:6px"></div>';
       wrap.appendChild(card);
       window.ADP_CANVAS.renderBlock(card.querySelector(".bfields"), def.block, saved[def.block]||{}, function(b,data){
-        saved[b] = data; card.classList.toggle("done", window.ADP_CANVAS.isFilled(b, data)); paintInfo(card, b, data); updateGauge();
+        saved[b] = data; card.classList.toggle("done", window.ADP_CANVAS.isFilled(b, data)); paintInfo(card, b, data); updateGauge(); flashSaved();
       }, { getNicho:function(){ return window.ADP_CANVAS.nichoFromBlock2(saved[2]); } });
       card.classList.toggle("done", window.ADP_CANVAS.isFilled(def.block, saved[def.block]));
       paintInfo(card, def.block, saved[def.block]||{});

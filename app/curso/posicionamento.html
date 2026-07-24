@@ -68,8 +68,9 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .btn[disabled]{opacity:.55;cursor:not-allowed}
 .genmsg{font-size:13px;color:var(--muted);margin:14px 0 24px;line-height:1.5}
 .gone{display:none!important}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
 .gate{border-radius:12px;padding:16px 18px;margin:16px 0 4px;font-size:14.5px;line-height:1.55}
-.gate h4{font-size:15px;font-weight:700;margin-bottom:8px}
+.gate h3{font-size:15px;font-weight:700;margin-bottom:8px}
 .gate ul{margin:9px 0 0;padding-left:18px}
 .gate li{margin:5px 0}
 .gate.block{background:#18181b;color:#fff}
@@ -160,6 +161,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
       <div class="head">
         <div>
           <h1>Meu Posicionamento</h1>
+          <h2 class="sr-only">Seu posicionamento</h2>
           <span class="gen"><svg viewBox="0 0 24 24"><path d="M12 3l2 5 5 2-5 2-2 5-2-5-5-2 5-2z"/></svg>Gerado pelo Estrategista a partir do seu Canvas</span>
         </div>
         <div class="actions">
@@ -280,7 +282,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
       var crit = (gate && gate.criticos) || [];
       if(g){
         g.className = "gate block";
-        g.innerHTML = "<h4>🚫 Ainda não dá pra gerar</h4><p>"
+        g.innerHTML = "<h3>🚫 Ainda não dá pra gerar</h3><p>"
           + ((gate && gate.mensagem) || "Tem gate crítico aberto. Resolve e volta.") + "</p>"
           + (crit.length ? "<ul>" + crit.map(function(x){ return "<li>" + String(x) + "</li>"; }).join("") + "</ul>" : "")
           + '<p style="margin-top:11px"><a href="canvas.html">Voltar pro Canvas →</a></p>';
@@ -296,7 +298,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
       if(gate && gate.status === "carimbado"){
         var imp = (gate.importantes || []).concat(gate.avisos || []);
         g.className = "gate stamp";
-        g.innerHTML = "<h4>⚠️ Gerado como hipótese de baixa confiança</h4><p>"
+        g.innerHTML = "<h3>⚠️ Gerado como hipótese de baixa confiança</h3><p>"
           + (gate.mensagem || "Teu Canvas passou com pendências. O posicionamento sai carimbado — trata como aposta pros 30 dias, não como veredito.") + "</p>"
           + (imp.length ? "<ul>" + imp.map(function(x){ return "<li>" + String(x) + "</li>"; }).join("") + "</ul>" : "");
       } else { g.className = "gate gone"; g.innerHTML = ""; }
