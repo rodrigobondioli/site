@@ -13,6 +13,7 @@
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:Vinila,-apple-system,"Segoe UI",system-ui,sans-serif;background:var(--surface);color:var(--ink);font-size:14.5px;line-height:1.5;-webkit-font-smoothing:antialiased}
 a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .mk{display:inline-flex}.mk svg{width:100%;height:100%;display:block}
 .top{height:60px;background:var(--surface);border-bottom:1px solid var(--line);display:grid;grid-template-columns:1fr auto 1fr;align-items:center;padding:0 22px;position:sticky;top:0;z-index:20}
 .logo{display:flex;align-items:center;gap:9px;font-weight:700;font-size:15.5px;justify-self:start}
@@ -29,20 +30,68 @@ a{color:inherit;text-decoration:none}
 .pagehead .ph-in a{color:inherit}
 .pagehead .ph-in a:hover{color:var(--muted)}
 .main{padding:36px 40px 90px}
-.inner{max-width:760px;margin:0 auto}
-.back{display:inline-flex;align-items:center;gap:6px;color:var(--muted);font-size:13.5px;margin-bottom:20px}
-.back:hover{color:var(--ink)}
+.inner{max-width:680px;margin:0 auto}
 .kicker{font-size:13px;font-weight:700;letter-spacing:.01em;color:var(--muted)}
-.ptitle{font-size:clamp(30px,5vw,48px);font-weight:800;letter-spacing:-.02em;line-height:1.02;margin:8px 0 14px;text-wrap:balance}
-.intro{color:var(--muted);font-size:15.5px;max-width:64ch;margin-bottom:34px}
+.ptitle{font-size:clamp(30px,5vw,46px);font-weight:800;letter-spacing:-.02em;line-height:1.02;margin:8px 0 14px;text-wrap:balance}
+.intro{color:var(--muted);font-size:15.5px;max-width:60ch;margin-bottom:26px;text-wrap:pretty}
 .intro b{color:var(--ink)}
-.draftnote{background:var(--lime);border-radius:12px;padding:14px 18px;font-size:13.5px;margin-bottom:30px}
-.four{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-bottom:30px}
-.pill4{border:1px solid var(--line);border-radius:14px;padding:18px 18px}
-.pill4 h4{font-size:15px;font-weight:700}
-.pill4 p{color:var(--muted);font-size:13.5px;margin-top:5px}
-.cta{display:inline-flex;align-items:center;font-weight:700;font-size:14px;padding:12px 22px;border-radius:999px;background:var(--pink);color:#fff;margin-top:8px}
-@media(max-width:820px){.tabs{display:none}.top{grid-template-columns:1fr auto}.main{padding:28px 20px 72px}.four{grid-template-columns:1fr}}
+.btn{display:inline-flex;align-items:center;gap:8px;font-weight:700;font-size:14.5px;padding:12px 22px;border-radius:999px;background:var(--pink);color:#fff}
+.btn:hover{filter:brightness(1.05)}
+.btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line);font-weight:700}
+.btn.ghost:hover{background:var(--soft)}
+.btn[disabled]{opacity:.5;cursor:default}
+
+/* progress */
+.prog{display:flex;align-items:center;gap:12px;margin-bottom:26px}
+.prog .bar{flex:1;height:6px;border-radius:999px;background:var(--soft);overflow:hidden}
+.prog .bar i{display:block;height:100%;width:0;background:var(--ink);border-radius:999px;transition:width .25s}
+.prog .n{font-size:12.5px;color:var(--muted);white-space:nowrap}
+
+/* step */
+.qd{display:inline-flex;align-items:center;gap:8px;font-size:12.5px;font-weight:700;color:var(--muted);margin-bottom:14px}
+.qd i{width:10px;height:10px;border-radius:999px;display:inline-block}
+.qd.amor i{background:var(--lime)} .qd.dom i{background:var(--cyan)} .qd.mercado i{background:var(--ink)} .qd.acesso i{background:var(--pink)}
+.qtitle{font-size:clamp(22px,3.4vw,28px);font-weight:800;letter-spacing:-.02em;line-height:1.1;text-wrap:balance}
+.qhint{color:var(--muted);font-size:15px;margin-top:8px}
+.qex{color:var(--muted);font-size:13.5px;margin-top:10px;font-style:italic}
+textarea{width:100%;margin-top:18px;border:1px solid var(--line);border-radius:14px;padding:16px 18px;font:inherit;font-size:16px;color:var(--ink);background:#fff;outline:none;min-height:120px;resize:vertical;line-height:1.5}
+textarea:focus{border-color:var(--ink)}
+.nav{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:24px}
+.nav .r{margin-left:auto;display:flex;gap:10px}
+
+/* review */
+.rev{display:flex;flex-direction:column;gap:2px;margin-top:8px}
+.rev .row{display:flex;gap:14px;align-items:flex-start;padding:16px 0;border-top:1px solid var(--line)}
+.rev .row:last-child{border-bottom:1px solid var(--line)}
+.rev .rq{flex:1}
+.rev .rq .rl{font-size:12.5px;color:var(--muted);margin-bottom:3px}
+.rev .rq .ra{font-size:15px;color:var(--ink);text-wrap:pretty}
+.rev .rq .ra.empty{color:var(--muted);font-style:italic}
+.rev .row .ed{font-size:13px;font-weight:700;color:var(--muted)}
+.rev .row .ed:hover{color:var(--ink)}
+
+/* result */
+.loading{display:flex;flex-direction:column;align-items:center;gap:14px;padding:60px 0;text-align:center}
+.spin{width:34px;height:34px;border:3px solid var(--soft);border-top-color:var(--ink);border-radius:999px;animation:sp 1s linear infinite}
+@keyframes sp{to{transform:rotate(360deg)}}
+.cand{background:#fff;border-radius:14px;padding:20px 20px;margin-bottom:14px}
+.cand .ch{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.cand h3{font-size:19px;font-weight:800;letter-spacing:-.01em;text-wrap:balance;flex:1;min-width:200px}
+.chip{font-size:11.5px;font-weight:700;padding:4px 11px;border-radius:999px;background:var(--soft);color:var(--ink)}
+.chip.alta{background:var(--lime)} .chip.media{background:var(--cyan)}
+.cand p{font-size:14.5px;margin-top:10px;line-height:1.55;text-wrap:pretty}
+.cand .risk{color:var(--muted);font-size:13.5px;margin-top:8px}
+.box{border-radius:12px;padding:16px 18px;font-size:15px;line-height:1.55;margin-bottom:12px;text-wrap:pretty}
+.box.conv{background:var(--cyan)} .box.falta{background:var(--soft)}
+.box b{color:var(--ink)}
+.plan{background:var(--lime);border-radius:12px;padding:18px 20px;margin-bottom:12px}
+.plan h4{font-size:13px;font-weight:800;margin-bottom:10px}
+.plan ol{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:8px}
+.plan li{font-size:14.5px;line-height:1.5}
+.err{background:#fff;border-radius:12px;padding:16px 18px;color:var(--ink);font-size:14.5px;margin-bottom:14px}
+.h-res{font-size:22px;font-weight:800;letter-spacing:-.02em;margin:6px 0 16px}
+.muted-note{color:var(--muted);font-size:13px;margin-top:6px}
+@media(max-width:820px){.tabs{display:none}.top{grid-template-columns:1fr auto}.main{padding:26px 18px 72px}}
 .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0)}
 </style>
 </head>
@@ -64,22 +113,7 @@ a{color:inherit;text-decoration:none}
 <div class="pagehead"><div class="ph-in"><a href="/curso/bonus.html">Bônus</a> · O Ikigai do Nicho</div></div>
 
 <main class="main">
-  <div class="inner">
-    <p class="kicker">Quando você trava</p>
-    <h1 class="ptitle">O Ikigai do Nicho</h1>
-    <p class="intro">Travou pra achar o nicho? Cruza o que você <b>ama</b>, o que <b>faz bem</b> e o que o <b>mercado paga</b> — e sai com candidatos de nicho na mão, sem achismo.</p>
-
-    <div class="draftnote">⚠️ Rascunho — definir o formato do Ikigai (GPT/link, exercício guiado ou texto). A estrutura abaixo é placeholder.</div>
-
-    <div class="four">
-      <div class="pill4"><h4>O que você ama</h4><p>[mundos, causas, temas que te puxam]</p></div>
-      <div class="pill4"><h4>O que você faz bem</h4><p>[competências com prova]</p></div>
-      <div class="pill4"><h4>O que o mercado paga</h4><p>[dores com verba]</p></div>
-      <div class="pill4"><h4>O cruzamento</h4><p>[onde os três se encontram = teus candidatos]</p></div>
-    </div>
-
-    <a class="cta" href="#">Rodar o Ikigai →</a>
-  </div>
+  <div class="inner" id="app"><!-- render dinâmico --></div>
 </main>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -87,5 +121,157 @@ a{color:inherit;text-decoration:none}
 <script src="/app/curso/guard.js"></script>
 <script src="/app/curso/api.js"></script>
 <script src="/app/curso/ui.js"></script>
+<script>
+(function(){
+  var KEY = "adp_ikigai_v1";
+  var Q = [
+    {k:'amor_projetos', quad:'amor', label:'O que você ama', title:'Que tipos de projeto te acendem?', hint:'Aqueles que você faria nem que pagasse pouco.', ex:'identidade de marca, embalagem, social de restaurante, motion…'},
+    {k:'amor_mundos', quad:'amor', label:'O que você ama', title:'Que mundos ou assuntos você curte de verdade?', hint:'Fora do design. Onde você já é “de casa”.', ex:'games, gastronomia, fitness, moda, pet, música, carro…'},
+    {k:'dom_forte', quad:'dom', label:'No que você é bom', title:'O que você entrega melhor que a média?', hint:'Onde o cliente já te elogiou ou pediu de novo.', ex:'landing que converte, direção de arte, naming, ilustração…'},
+    {k:'dom_prova', quad:'dom', label:'No que você é bom', title:'Um resultado concreto que você já gerou.', hint:'Número, antes/depois, um case real. Prova, não achismo.', ex:'“subi a conversão da loja de 1% pra 2,4%”, “o rebrand dobrou o ticket”…'},
+    {k:'mercado_quem', quad:'mercado', label:'O que o mercado paga', title:'Que tipo de empresa já te pagou bem — ou paga bem no mercado?', hint:'Setores com verba pra design.', ex:'clínicas, e-commerce, infoproduto, indústria, construtora…'},
+    {k:'mercado_dor', quad:'mercado', label:'O que o mercado paga', title:'Que dor cara essas empresas têm que o design resolve?', hint:'O que elas pagariam AGORA pra sumir.', ex:'“não vende no site”, “parece amador do lado do concorrente”, “ninguém entende o que ela faz”…'},
+    {k:'acesso_porta', quad:'acesso', label:'Onde você tem entrada', title:'Onde você tem porta de entrada?', hint:'Rede, ex-clientes, comunidades que você já frequenta.', ex:'“conheço vários donos de restaurante”, “jogo num time amador”, “minha família tem clínica”…'},
+    {k:'acesso_chute', quad:'acesso', label:'Onde você tem entrada', title:'Se você fosse “o designer de ___”, o que preencheria hoje?', hint:'Chute inicial, sem medo de errar.', ex:'“clínicas de estética”, “hamburgueria artesanal”, “estúdio de tatuagem”…'}
+  ];
+  var QUADNAME = {amor:'O que você ama', dom:'No que você é bom', mercado:'O que o mercado paga', acesso:'Onde você tem entrada'};
+
+  var state = load() || { step:-1, answers:{}, result:null };
+  var app = document.getElementById('app');
+
+  function load(){ try { return JSON.parse(localStorage.getItem(KEY)); } catch(e){ return null; } }
+  function save(){ try { localStorage.setItem(KEY, JSON.stringify(state)); } catch(e){} }
+  function esc(s){ return String(s==null?'':s).replace(/[&<>"]/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
+  function answered(){ return Q.filter(function(q){ return (state.answers[q.k]||'').trim(); }).length; }
+
+  function render(){
+    if(state.result){ return renderResult(state.result); }
+    if(state.step === -1){ return renderIntro(); }
+    if(state.step >= Q.length){ return renderReview(); }
+    return renderStep();
+  }
+
+  function renderIntro(){
+    app.innerHTML =
+      '<p class="kicker">Quando você trava</p>'+
+      '<h1 class="ptitle">O Ikigai do Nicho</h1>'+
+      '<p class="intro">Travou pra achar o nicho? Isto aqui cruza o que você <b>ama</b>, o que <b>faz bem</b>, o que o <b>mercado paga</b> e onde você tem <b>acesso</b> — e devolve candidatos de nicho concretos pra você testar. São 8 perguntas curtas, uma por tela. Responde na lata, sem caprichar demais.</p>'+
+      (window.ADP && window.ADP.devMode ? '<p class="muted-note">Modo de teste: a geração por IA só roda logado como aluno.</p>' : '')+
+      '<div class="nav"><span></span><div class="r">'+
+        (answered() ? '<button class="btn ghost" id="clr">Recomeçar</button>' : '')+
+        '<button class="btn" id="go">'+(answered()?'Continuar':'Começar')+' →</button>'+
+      '</div></div>';
+    document.getElementById('go').onclick = function(){ state.step = firstUnanswered(); save(); render(); };
+    var clr = document.getElementById('clr'); if(clr) clr.onclick = resetAll;
+  }
+  function firstUnanswered(){ for(var i=0;i<Q.length;i++){ if(!(state.answers[Q[i].k]||'').trim()) return i; } return Q.length; }
+
+  function renderStep(){
+    var q = Q[state.step];
+    var pct = Math.round((state.step)/Q.length*100);
+    app.innerHTML =
+      '<div class="prog"><div class="bar"><i style="width:'+pct+'%"></i></div><span class="n">'+(state.step+1)+' de '+Q.length+'</span></div>'+
+      '<div class="qd '+q.quad+'"><i></i>'+esc(q.label)+'</div>'+
+      '<h2 class="qtitle">'+esc(q.title)+'</h2>'+
+      '<p class="qhint">'+esc(q.hint)+'</p>'+
+      '<p class="qex">ex: '+esc(q.ex)+'</p>'+
+      '<textarea id="ta" placeholder="Escreve aqui…">'+esc(state.answers[q.k]||'')+'</textarea>'+
+      '<div class="nav">'+
+        '<button class="btn ghost" id="back">← Voltar</button>'+
+        '<div class="r"><button class="btn" id="next">'+(state.step===Q.length-1?'Revisar':'Próxima')+' →</button></div>'+
+      '</div>';
+    var ta = document.getElementById('ta');
+    ta.focus();
+    ta.oninput = function(){ state.answers[q.k] = ta.value; save(); };
+    document.getElementById('back').onclick = function(){ state.answers[q.k]=ta.value; state.step--; save(); render(); };
+    document.getElementById('next').onclick = function(){ state.answers[q.k]=ta.value; state.step++; save(); render(); };
+  }
+
+  function renderReview(){
+    var rows = Q.map(function(q,i){
+      var a = (state.answers[q.k]||'').trim();
+      return '<div class="row"><div class="rq"><div class="rl">'+esc(QUADNAME[q.quad])+' · '+esc(q.title)+'</div>'+
+        '<div class="ra'+(a?'':' empty')+'">'+(a?esc(a):'(em branco)')+'</div></div>'+
+        '<button class="ed" data-i="'+i+'">editar</button></div>';
+    }).join('');
+    app.innerHTML =
+      '<p class="kicker">Revisão</p>'+
+      '<h1 class="ptitle">Confere antes de gerar</h1>'+
+      '<p class="intro">Quanto mais concreto, melhor o cruzamento. Faltou algo? Edita. Tá bom? Manda a IA cruzar.</p>'+
+      '<div class="rev">'+rows+'</div>'+
+      '<div class="nav"><button class="btn ghost" id="back">← Voltar</button>'+
+        '<div class="r"><button class="btn" id="gen">Gerar candidatos de nicho →</button></div></div>'+
+      (window.ADP && window.ADP.devMode ? '<p class="muted-note">Modo de teste: a geração por IA só roda logado como aluno.</p>' : '');
+    Array.prototype.forEach.call(app.querySelectorAll('.ed'), function(b){
+      b.onclick = function(){ state.step = +b.getAttribute('data-i'); save(); render(); };
+    });
+    document.getElementById('back').onclick = function(){ state.step = Q.length-1; save(); render(); };
+    document.getElementById('gen').onclick = generate;
+  }
+
+  function renderLoading(){
+    app.innerHTML = '<div class="loading"><div class="spin"></div><p>Cruzando as quatro frentes e montando teus candidatos…</p></div>';
+  }
+
+  async function generate(){
+    renderLoading();
+    try {
+      if(!window.ADP || window.ADP.devMode){ throw new Error('Entra com o teu login de aluno pra gerar — a IA roda logada.'); }
+      var r = await window.ADP.ikigai(state.answers);
+      state.result = (r && r.data) || {};
+      save(); renderResult(state.result);
+    } catch(e){
+      renderReviewError(e.message || 'Deu ruim. Tenta de novo.');
+    }
+  }
+  function renderReviewError(msg){
+    renderReview();
+    var box = document.createElement('div'); box.className='err'; box.textContent = msg;
+    var inner = document.getElementById('app'); inner.insertBefore(box, inner.querySelector('.rev').nextSibling);
+  }
+
+  function renderResult(d){
+    if(d && d.raw && !d.candidatos){
+      app.innerHTML = '<p class="kicker">Teus candidatos</p><h1 class="ptitle">O Ikigai do Nicho</h1>'+
+        '<div class="err">'+esc(d.raw)+'</div>'+resultFoot();
+      wireFoot(); return;
+    }
+    var cands = (d && d.candidatos) || [];
+    var html = '<p class="kicker">Teus candidatos</p><h1 class="ptitle">Onde o teu nicho se cruza</h1>';
+    if(!cands.length){ html += '<div class="err">A IA não devolveu candidatos. Volta e detalha mais as respostas.</div>'; }
+    cands.forEach(function(c){
+      var f = (c.forca||'').toLowerCase();
+      html += '<div class="cand"><div class="ch"><h3>'+esc(c.nicho||'—')+'</h3>'+
+        (c.forca?'<span class="chip '+(f==='alta'?'alta':(f==='media'||f==='média'?'media':''))+'">'+esc(c.forca)+'</span>':'')+'</div>'+
+        (c.porque?'<p>'+esc(c.porque)+'</p>':'')+
+        (c.risco?'<p class="risk"><b>Furo/risco:</b> '+esc(c.risco)+'</p>':'')+'</div>';
+    });
+    if(d && d.convergencia){ html += '<div class="box conv"><b>Onde converge:</b> '+esc(d.convergencia)+'</div>'; }
+    if(d && d.faltando){ html += '<div class="box falta"><b>O que falta:</b> '+esc(d.faltando)+'</div>'; }
+    if(d && d.plano && d.plano.length){
+      html += '<div class="plan"><h4>Próximos passos</h4><ol>'+d.plano.map(function(p){return '<li>'+esc(p)+'</li>';}).join('')+'</ol></div>';
+    }
+    html += resultFoot();
+    app.innerHTML = html;
+    wireFoot();
+  }
+  function resultFoot(){
+    return '<div class="nav" style="margin-top:22px"><span></span><div class="r">'+
+      '<button class="btn ghost" id="again">Refazer</button>'+
+      '<a class="btn ghost" href="/curso/canvas.html">Levar pro Canvas →</a>'+
+      '</div></div>';
+  }
+  function wireFoot(){
+    var a = document.getElementById('again');
+    if(a) a.onclick = function(){ state.result = null; state.step = Q.length; save(); render(); };
+  }
+
+  function resetAll(){
+    state = { step:-1, answers:{}, result:null }; save(); render();
+  }
+
+  render();
+})();
+</script>
 </body>
 </html>
