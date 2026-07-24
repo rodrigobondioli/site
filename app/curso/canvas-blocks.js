@@ -155,48 +155,49 @@ window.ADP_CANVAS = (function () {
     + '.adp-fld textarea:focus{outline:none;border-color:var(--line,#d4d4d8)}'
     + '.adp-savest{font-size:12px;color:var(--faint,#a1a1aa);margin-top:9px;min-height:1em}'
     + '.adp-savest.err{color:var(--pink,#ff00d7);font-weight:700}'
-    // --- Matriz v4 (superfície única por candidato, critérios em linhas — registro da HOME) ---
-    + '.adp-mx{margin-top:8px;display:flex;flex-direction:column;gap:12px}'
-    + '.mx-cbar{display:flex;align-items:center;gap:12px;border:1px solid var(--line,#d4d4d8);border-radius:12px;padding:14px 18px;cursor:pointer}'
-    + '.mx-cbar:hover{background:var(--soft,#e6e6e8)}'
+    // --- Matriz v5 (esqueleto da lista de aulas da HOME: módulo por eixo + linhas tipo aula) ---
+    + '.adp-mx{margin-top:8px;display:flex;flex-direction:column;gap:18px}'
+    + '.mx-cbar{display:flex;align-items:center;gap:12px;border:1px solid var(--line,#d4d4d8);border-radius:12px;padding:14px 18px;cursor:pointer;background:var(--soft,#e6e6e8)}'
+    + '.mx-cbar:hover{filter:brightness(.985)}'
     + '.mx-cbtitle{font-weight:700;font-size:14px;color:var(--ink,#18181b);flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}'
     + '.mx-cbread{font-size:12.5px;color:var(--muted,#71717a);flex:none}'
     + '.mx-cbar .chev{width:16px;height:16px;fill:none;stroke:var(--muted,#71717a);stroke-width:2;flex:none}'
-    + '.mx-cand{border:1px solid var(--line,#d4d4d8);border-radius:18px;overflow:hidden;background:var(--card,transparent)}'
-    + '.mx-cand-h{display:flex;align-items:center;gap:12px;padding:22px 32px;border-bottom:1px solid var(--line,#d4d4d8)}'
-    + '.mx-lead{font-weight:700;font-size:16px;flex:none;color:var(--ink,#18181b)}'
-    + '.mx-name{flex:1;min-width:110px;border:none;border-bottom:1px solid transparent;background:transparent;font:inherit;font-weight:700;font-size:16px;color:var(--ink,#18181b);padding:2px 0}'
+    + '.mx-cand{display:flex;flex-direction:column;gap:12px}'
+    + '.mx-cand-h{display:flex;align-items:center;gap:11px;padding:2px 4px 0}'
+    + '.mx-lead{font-weight:700;font-size:15px;flex:none;color:var(--ink,#18181b)}'
+    + '.mx-name{flex:1;min-width:110px;border:none;border-bottom:1px solid transparent;background:transparent;font:inherit;font-weight:700;font-size:15px;color:var(--ink,#18181b);padding:2px 0}'
     + '.mx-name::placeholder{color:var(--faint,#a1a1aa);font-weight:400}'
     + '.mx-name:hover{border-bottom-color:var(--line,#d4d4d8)}'
     + '.mx-name:focus{outline:none;border-bottom-color:var(--ink,#18181b)}'
-    + '.mx-state{flex:none;font-size:11px;font-weight:700;padding:5px 12px;border-radius:999px}'
+    + '.mx-state{flex:none;font-size:11px;font-weight:700;padding:4px 11px;border-radius:999px}'
     + '.mx-state.s-ok{background:var(--lime,#e7f99a);color:var(--ink,#18181b)}'
     + '.mx-state.s-mid{background:var(--soft,#e6e6e8);color:var(--muted,#71717a)}'
     + '.mx-state.s-bad{background:var(--ink,#18181b);color:#fff}'
     + '.mx-del{flex:none;font-size:12px;color:var(--muted,#71717a);text-decoration:underline;cursor:pointer;background:none;border:none;padding:2px}'
     + '.mx-del:hover{color:var(--ink,#18181b)}'
-    + '.mx-eixo{padding:24px 0}'
-    + '.mx-eixo+.mx-eixo{border-top:1px solid var(--line,#d4d4d8)}'
-    + '.mx-eixo-h{padding:0 32px;margin-bottom:14px}'
-    + '.mx-eixo-h .et{font-size:16px;font-weight:700;color:var(--ink,#18181b)}'
-    + '.mx-eixo-h .et .ex{font-weight:400;color:var(--muted,#71717a)}'
-    + '.mx-eixo-h .ebar{display:flex;align-items:center;gap:11px;margin-top:11px}'
-    + '.mx-eixo-h .en{font-size:12.5px;font-weight:700;color:var(--ink,#18181b);flex:none;min-width:40px}'
-    + '.mx-eixo-h .etrack{flex:1;height:5px;border-radius:999px;background:var(--soft,#e6e6e8);overflow:hidden}'
-    + '.mx-eixo-h .etrack i{display:block;height:100%;background:var(--lime,#e7f99a);border-radius:999px;transition:width .3s}'
-    + '.mx-row{display:grid;grid-template-columns:3fr 1fr 1fr;column-gap:24px;align-items:start;min-height:112px;padding:13px 32px;border-top:1px solid var(--line,#d4d4d8)}'
-    + '.mx-c1{min-width:0}'
-    + '.mx-c1 .n{font-size:18px;font-weight:700;color:var(--ink,#18181b);line-height:1.2}'
-    + '.mx-c1 .q{font-size:15px;color:var(--muted,#71717a);margin-top:5px;line-height:1.4;min-height:2.8em;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}'
-    + '.mx-c1 .mx-evline{margin-top:8px}'
-    + '.mx-c2{display:flex;align-items:baseline;gap:6px;padding-top:2px}'
-    + '.mx-nn{width:20px;text-align:center;border:none;background:none;font:inherit;font-weight:700;font-size:15px;color:var(--faint,#a1a1aa);cursor:pointer;line-height:1;padding:0;transition:color .12s,font-size .12s}'
+    // eixo = módulo (igual .module da HOME)
+    + '.mx-eixomod{background:var(--card,transparent);border:1px solid var(--line,#d4d4d8);border-radius:12px;overflow:hidden}'
+    + '.mx-eixohd{display:flex;align-items:center;gap:12px;padding:12px 18px;background:var(--soft,#e6e6e8)}'
+    + '.mx-eixohd .et{font-size:13.5px;font-weight:700;color:var(--ink,#18181b);flex:none}'
+    + '.mx-eixohd .etrack{flex:1;height:5px;border-radius:999px;background:rgba(16,16,16,.09);overflow:hidden;min-width:40px}'
+    + '.mx-eixohd .etrack i{display:block;height:100%;background:var(--lime,#e7f99a);border-radius:999px;transition:width .3s}'
+    + '.mx-eixohd .en{font-size:12.5px;font-weight:700;color:var(--ink,#18181b);flex:none}'
+    // linha de critério = .lesson
+    + '.mx-row{display:flex;align-items:center;gap:14px;padding:12px 18px;border-top:1px solid var(--line,#d4d4d8)}'
+    + '.mx-c1{flex:1;min-width:0}'
+    + '.mx-c1 .n{font-size:14px;font-weight:700;color:var(--ink,#18181b);line-height:1.25}'
+    + '.mx-c1 .q{font-size:12px;color:var(--muted,#71717a);margin-top:2px;line-height:1.35}'
+    + '.mx-c1 .mx-evline{margin-top:7px}'
+    // controles à direita: NOTA em cima (destaque) · confiança embaixo (menor/apagada)
+    + '.mx-ctrl{flex:none;display:flex;flex-direction:column;align-items:flex-end;gap:5px}'
+    + '.mx-nota{display:inline-flex;align-items:baseline;gap:8px}'
+    + '.mx-nn{min-width:13px;text-align:center;border:none;background:none;font:inherit;font-weight:700;font-size:13px;color:var(--faint,#a1a1aa);cursor:pointer;line-height:1;padding:0;transition:color .12s,font-size .12s}'
     + '.mx-nn:hover{color:var(--muted,#71717a)}'
-    + '.mx-nn.on{font-size:23px;color:var(--ink,#18181b)}'
-    + '.mx-c3{padding-top:3px;min-width:0}'
-    + '.mx-confsel{max-width:100%;font:inherit;font-size:12.5px;font-weight:700;color:var(--muted,#71717a);background:none;border:none;border-bottom:1px solid var(--line,#d4d4d8);padding:2px 1px;cursor:pointer}'
+    + '.mx-nn.on{font-size:19px;color:var(--ink,#18181b)}'
+    + '.mx-confrow{display:inline-flex;align-items:baseline;gap:5px;font-size:10px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--faint,#a1a1aa)}'
+    + '.mx-confsel{font:inherit;font-size:11px;font-weight:700;letter-spacing:0;text-transform:none;color:var(--muted,#71717a);background:none;border:none;border-bottom:1px solid var(--line,#d4d4d8);padding:1px 1px;cursor:pointer}'
     + '.mx-confsel:focus{outline:none;border-color:var(--ink,#18181b)}'
-    + '.mx-evline{margin-top:8px}'
+    + '.mx-evline{margin-top:7px}'
     + '.mx-evbtn{display:inline-flex;align-items:center;gap:6px;max-width:100%;font:inherit;font-size:11.5px;color:var(--faint,#a1a1aa);background:none;border:none;cursor:pointer;text-align:left;padding:0}'
     + '.mx-evbtn .ei{width:11px;height:11px;flex:none;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}'
     + '.mx-evbtn:hover{color:var(--ink,#18181b)}'
@@ -206,7 +207,7 @@ window.ADP_CANVAS = (function () {
     + '.mx-ev{width:100%;border:1px solid var(--line,#d4d4d8);border-radius:8px;background:transparent;font:inherit;font-size:12px;padding:8px 9px;color:#3f3f46;resize:none;min-height:40px;line-height:1.4}'
     + '.mx-ev::placeholder{color:var(--faint,#a1a1aa)}'
     + '.mx-ev:focus{outline:none;border-color:var(--ink,#18181b)}'
-    + '.mx-vd{padding:16px 32px;border-top:1px solid var(--line,#d4d4d8);font-size:13.5px;color:var(--ink,#18181b);display:flex;align-items:baseline;gap:9px;line-height:1.45}'
+    + '.mx-vd{padding:4px 4px 2px;font-size:13px;color:var(--ink,#18181b);display:flex;align-items:baseline;gap:9px;line-height:1.45}'
     + '.mx-vd .dot{width:7px;height:7px;border-radius:999px;flex:none;align-self:center}'
     + '.mx-vd .dot.ok{background:var(--lime,#e7f99a)}.mx-vd .dot.mid{background:var(--faint,#a1a1aa)}.mx-vd .dot.bad{background:var(--ink,#18181b)}'
     + '.mx-vd .vl{font-weight:700;flex:none}'
@@ -306,21 +307,21 @@ window.ADP_CANVAS = (function () {
       var c = CRITDEF[k], cell = row.cells[k], n = '';
       // nota: 1–5 discretos, o escolhido cresce e fica preto (é o próprio seletor, sem caixa)
       for (var v = 1; v <= 5; v++) n += '<button type="button" class="mx-nn' + (cell.nota === v ? ' on' : '') + '" data-i="' + i + '" data-k="' + k + '" data-v="' + v + '">' + v + '</button>';
-      // confiança: select secundário (o placeholder já é "confiança")
-      var conf = [['', 'confiança'], ['baixa', 'baixa'], ['media', 'média'], ['alta', 'alta']].map(function (x) {
+      // confiança: select secundário, embaixo da nota (peso menor)
+      var conf = [['', '—'], ['baixa', 'baixa'], ['media', 'média'], ['alta', 'alta']].map(function (x) {
         return '<option value="' + x[0] + '"' + (cell.conf === x[0] ? ' selected' : '') + '>' + x[1] + '</option>';
       }).join('');
       return '<div class="mx-row">'
         + '<div class="mx-c1"><div class="n">' + esc(c.h) + '</div><div class="q">' + esc(c.hint) + '</div>'
         +   '<div class="mx-evline" data-i="' + i + '" data-k="' + k + '">' + evLineHTML(i, k, cell) + '</div></div>'
-        + '<div class="mx-c2">' + n + '</div>'
-        + '<div class="mx-c3"><select class="mx-confsel" data-i="' + i + '" data-k="' + k + '">' + conf + '</select></div>'
+        + '<div class="mx-ctrl"><span class="mx-nota">' + n + '</span>'
+        +   '<span class="mx-confrow">confiança <select class="mx-confsel" data-i="' + i + '" data-k="' + k + '">' + conf + '</select></span></div>'
         + '</div>';
     }
     function eixoHTML(row, i, eixo) {
       var m = COL_META[eixo.key], soma = somaEixo(row, eixo.key), pct = Math.round(soma / eixo.max * 100);
-      return '<div class="mx-eixo"><div class="mx-eixo-h"><div class="et">' + m.label + ' <span class="ex">— ' + m.hint.toLowerCase() + '</span></div>'
-        + '<div class="ebar"><span class="en">' + soma + '/' + eixo.max + '</span><span class="etrack"><i style="width:' + pct + '%"></i></span></div></div>'
+      return '<div class="mx-eixomod">'
+        + '<div class="mx-eixohd"><span class="et">' + m.label + '</span><span class="etrack"><i style="width:' + pct + '%"></i></span><span class="en">' + soma + '/' + eixo.max + '</span></div>'
         + eixo.crit.map(function (c) { return critRowHTML(row, i, c.k); }).join('')
         + '</div>';
     }
