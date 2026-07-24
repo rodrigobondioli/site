@@ -216,7 +216,8 @@
   var MAP = {
     "início do curso":"home.html","inicio do curso":"home.html","visão geral":"home.html","visao geral":"home.html","aulas":"aula.html",
     "meu canvas":"canvas.html","meu posicionamento":"posicionamento.html",
-    "início":"home.html","inicio":"home.html","cursos":"/cursos"
+    "início":"home.html","inicio":"home.html","cursos":"/cursos",
+    "bônus":"/curso/bonus.html","bonus":"/curso/bonus.html"
   };
   function txt(el){ return (el.textContent||"").trim().toLowerCase(); }
 
@@ -230,6 +231,18 @@
   });
   // logo -> home
   document.querySelectorAll("a.logo").forEach(function(a){ if(a.getAttribute("href")==="#"||!a.getAttribute("href")) a.href="home.html"; });
+
+  // injeta a aba "Bônus" no topbar (uma vez), ao lado de "Cursos"
+  document.querySelectorAll(".tabs").forEach(function(tabs){
+    if (tabs.querySelector('a[href*="bonus"]')) return; // já existe (páginas de bônus)
+    var link = document.createElement("a");
+    link.href = "/curso/bonus.html";
+    link.textContent = "Bônus";
+    if (/bonus/.test(location.pathname)) link.className = "on";
+    var cursos = Array.prototype.filter.call(tabs.querySelectorAll("a"), function(a){ return txt(a) === "cursos"; })[0];
+    if (cursos && cursos.nextSibling) tabs.insertBefore(link, cursos.nextSibling);
+    else tabs.appendChild(link);
+  });
   // busca ainda não existe -> esconde (evita afordância morta que parece funcional)
   document.querySelectorAll(".search").forEach(function(el){ el.style.display="none"; });
   // selo "em breve" da Comunidade + leve opacidade no link
