@@ -232,16 +232,19 @@
   // logo -> home
   document.querySelectorAll("a.logo").forEach(function(a){ if(a.getAttribute("href")==="#"||!a.getAttribute("href")) a.href="home.html"; });
 
-  // injeta a aba "Bônus" no topbar (uma vez), ao lado de "Cursos"
-  document.querySelectorAll(".tabs").forEach(function(tabs){
-    if (tabs.querySelector('a[href*="bonus"]')) return; // já existe (páginas de bônus)
+  // injeta "Bônus" na BARRA LATERAL, depois de "Meu posicionamento" (separador + ícone de presente)
+  var GIFT = '<svg viewBox="0 0 24 24"><polyline points="20 12 20 22 4 22 4 12"/><rect x="2" y="7" width="20" height="5"/><line x1="12" y1="22" x2="12" y2="7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/></svg>';
+  document.querySelectorAll(".side > nav").forEach(function(nav){
+    if (nav.classList.contains("nav-bottom")) return;      // só o nav principal (topo)
+    if (nav.querySelector('a[href*="bonus"]')) return;      // já injetado
+    var pos = Array.prototype.filter.call(nav.querySelectorAll("a"), function(a){ return txt(a).indexOf("posicionamento") >= 0; })[0];
+    var sep = document.createElement("div"); sep.className = "sep"; sep.style.cssText = "margin:8px 0;border-top:1px solid var(--line)";
     var link = document.createElement("a");
     link.href = "/curso/bonus.html";
-    link.textContent = "Bônus";
+    link.innerHTML = GIFT + "Bônus";
     if (/bonus/.test(location.pathname)) link.className = "on";
-    var cursos = Array.prototype.filter.call(tabs.querySelectorAll("a"), function(a){ return txt(a) === "cursos"; })[0];
-    if (cursos && cursos.nextSibling) tabs.insertBefore(link, cursos.nextSibling);
-    else tabs.appendChild(link);
+    if (pos && pos.nextSibling) { nav.insertBefore(sep, pos.nextSibling); nav.insertBefore(link, sep.nextSibling); }
+    else { nav.appendChild(sep); nav.appendChild(link); }
   });
   // busca ainda não existe -> esconde (evita afordância morta que parece funcional)
   document.querySelectorAll(".search").forEach(function(el){ el.style.display="none"; });

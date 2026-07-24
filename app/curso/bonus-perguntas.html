@@ -41,6 +41,13 @@ a{color:inherit;text-decoration:none}
 .q h3{font-size:20px;font-weight:700;letter-spacing:-.01em;text-wrap:balance}
 .q .why{color:var(--muted);font-size:14px;margin-top:8px;text-wrap:pretty}
 .q .why b{color:var(--ink)}
+.q .ask{font-size:16.5px;color:var(--ink);margin-top:10px;line-height:1.45;text-wrap:pretty}
+.q .ask .alt{color:var(--muted);display:block;margin-top:2px}
+.q .combo{color:var(--muted);font-size:13.5px;margin-top:8px;font-style:italic}
+.apply{margin-top:14px;background:#fff;border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.apply .al{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--pink);display:block;margin-bottom:6px}
+.apply p{color:var(--muted);font-size:14px;text-wrap:pretty}
+.src{color:var(--faint,#a1a1aa);font-size:12.5px;margin:-18px 0 30px}
 @media(max-width:820px){.tabs{display:none}.top{grid-template-columns:1fr auto}.main{padding:28px 20px 72px}}
 .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0)}
 </style>
@@ -55,7 +62,6 @@ a{color:inherit;text-decoration:none}
   <nav class="tabs">
     <a href="/curso/home.html">Início</a>
     <a href="/cursos">Cursos</a>
-    <a href="/curso/bonus.html" class="on">Bônus</a>
     <a href="#">Comunidade</a>
   </nav>
   <div class="right"><span class="avatar"><img src="/app/eu-login.webp" alt="Rodrigo"></span></div>
@@ -69,17 +75,60 @@ a{color:inherit;text-decoration:none}
     <p class="kicker">Bônus 01 · O fim do desconto</p>
     <h1 class="ptitle">As 7 Perguntas que Viram a Mesa</h1>
     <p class="intro">As 7 perguntas que viram o jogo na primeira reunião. Você para de ser cotado, passa a ser ouvido — e o desconto morre antes de nascer. <b>Faz na ordem.</b></p>
+    <p class="src">Base: as 7 perguntas de Michael Bungay Stanier (<i>Faça do Coaching um Hábito</i>), aplicadas à mesa do designer.</p>
 
-    <div class="draftnote">⚠️ Rascunho — colar aqui as 7 perguntas (aula 18, André Lona). Os slots abaixo já estão prontos: é só trocar o título e o "por que".</div>
+    <div class="draftnote">⚠️ Rascunho — a área <b>“Como aplicar”</b> de cada pergunta tá vazia pra você colar a transcrição da aula do André Lona (quando usar, o que observar, como conduzir).</div>
 
     <section class="qlist">
-      <div class="q"><div class="qn">1</div><h3>[Pergunta 1]</h3><p class="why"><b>Por que funciona:</b> [o que essa pergunta faz o cliente perceber].</p></div>
-      <div class="q"><div class="qn">2</div><h3>[Pergunta 2]</h3><p class="why"><b>Por que funciona:</b> […]</p></div>
-      <div class="q"><div class="qn">3</div><h3>[Pergunta 3]</h3><p class="why"><b>Por que funciona:</b> […]</p></div>
-      <div class="q"><div class="qn">4</div><h3>[Pergunta 4]</h3><p class="why"><b>Por que funciona:</b> […]</p></div>
-      <div class="q"><div class="qn">5</div><h3>[Pergunta 5]</h3><p class="why"><b>Por que funciona:</b> […]</p></div>
-      <div class="q"><div class="qn">6</div><h3>[Pergunta 6]</h3><p class="why"><b>Por que funciona:</b> […]</p></div>
-      <div class="q"><div class="qn">7</div><h3>[Pergunta 7]</h3><p class="why"><b>Por que funciona:</b> […]</p></div>
+      <div class="q">
+        <div class="qn">1</div>
+        <h3>Pergunta Quebra-Gelo</h3>
+        <p class="ask">“O que você tem em mente?”<span class="alt">“No que você tá pensando?” · “Por onde devemos começar?”</span></p>
+        <div class="apply"><span class="al">Como aplicar</span><p>[colar André Lona]</p></div>
+      </div>
+
+      <div class="q">
+        <div class="qn">2</div>
+        <h3>Mais Fundo</h3>
+        <p class="ask">“E o que mais? Tem alguma coisa que você deixou de fora?”</p>
+        <div class="apply"><span class="al">Como aplicar</span><p>[colar André Lona]</p></div>
+      </div>
+
+      <div class="q">
+        <div class="qn">3</div>
+        <h3>A Pergunta do Foco</h3>
+        <p class="ask">“Qual é o verdadeiro desafio aqui pra você?”</p>
+        <p class="combo">Combine a 02 com a 03: “E o que mais te desafia?” ou “Como isso te desafia?”</p>
+        <div class="apply"><span class="al">Como aplicar</span><p>[colar André Lona]</p></div>
+      </div>
+
+      <div class="q">
+        <div class="qn">4</div>
+        <h3>A Pergunta Fundamental</h3>
+        <p class="ask">“O que você quer que aconteça? Qual o resultado que você mais gostaria de ter?”</p>
+        <div class="apply"><span class="al">Como aplicar</span><p>[colar André Lona]</p></div>
+      </div>
+
+      <div class="q">
+        <div class="qn">5</div>
+        <h3>A Pergunta Preguiçosa</h3>
+        <p class="ask">“Como eu posso ajudar?”<span class="alt">“Se eu pudesse te ajudar com apenas uma coisa, qual seria?”</span></p>
+        <div class="apply"><span class="al">Como aplicar</span><p>[colar André Lona]</p></div>
+      </div>
+
+      <div class="q">
+        <div class="qn">6</div>
+        <h3>A Pergunta Estratégica</h3>
+        <p class="ask">“O que você está disposto a abdicar/investir para fazer isso acontecer?”<span class="alt">“Como é o cenário de vitória neste caso?”</span></p>
+        <div class="apply"><span class="al">Como aplicar</span><p>[colar André Lona]</p></div>
+      </div>
+
+      <div class="q">
+        <div class="qn">7</div>
+        <h3>A Pergunta de Aprendizado / Persuasão</h3>
+        <p class="ask">“O que mais foi útil pra você nessa conversa?”<span class="alt">“O que você descobriu com essa conversa?”</span></p>
+        <div class="apply"><span class="al">Como aplicar</span><p>[colar André Lona]</p></div>
+      </div>
     </section>
   </div>
 </main>
