@@ -163,9 +163,12 @@ window.ADP_CANVAS = (function () {
     + '.mx-cbread{font-size:12.5px;color:var(--muted,#71717a);flex:none}'
     + '.mx-cbar .chev{width:16px;height:16px;fill:none;stroke:var(--muted,#71717a);stroke-width:2;flex:none}'
     + '.mx-cand{display:flex;flex-direction:column;gap:12px}'
-    + '.mx-cand-h{display:flex;align-items:center;gap:11px;padding:2px 4px 0}'
-    + '.mx-lead{font-weight:700;font-size:15px;flex:none;color:var(--ink,#18181b)}'
-    + '.mx-name{flex:1;min-width:110px;border:none;border-bottom:1px solid transparent;background:transparent;font:inherit;font-weight:700;font-size:15px;color:var(--ink,#18181b);padding:2px 0}'
+    + '.mx-cand-h{display:flex;align-items:center;gap:12px;padding:2px 4px 2px}'
+    + '.mx-idc{flex:1;min-width:0;display:flex;flex-direction:column;gap:1px}'
+    + '.mx-lead{font-weight:700;font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--faint,#a1a1aa)}'
+    // segundo eixo respira mais que o gap padrão (separa seção sem virar card)
+    + '.mx-eixomod + .mx-eixomod{margin-top:14px}'
+    + '.mx-name{width:100%;border:none;border-bottom:1px solid transparent;background:transparent;font:inherit;font-weight:700;font-size:19px;letter-spacing:-.01em;color:var(--ink,#18181b);padding:1px 0}'
     + '.mx-name::placeholder{color:var(--faint,#a1a1aa);font-weight:400}'
     + '.mx-name:hover{border-bottom-color:var(--line,#d4d4d8)}'
     + '.mx-name:focus{outline:none;border-bottom-color:var(--ink,#18181b)}'
@@ -190,8 +193,8 @@ window.ADP_CANVAS = (function () {
     + '.mx-c1 .mx-evline{margin-top:12px}'
     // controles à direita: NOTA em cima (destaque) · confiança embaixo (menor/apagada)
     + '.mx-ctrl{flex:none;display:flex;flex-direction:column;align-items:flex-end;gap:11px}'
-    + '.mx-nota{display:inline-flex;align-items:center;gap:8px}'
-    + '.mx-nn{width:30px;height:30px;border-radius:999px;border:1px solid var(--line,#d4d4d8);background:none;font:inherit;font-weight:700;font-size:13px;color:var(--muted,#71717a);cursor:pointer;display:inline-grid;place-items:center;padding:0;transition:.12s}'
+    + '.mx-nota{display:inline-flex;align-items:center;gap:6px}'
+    + '.mx-nn{width:26px;height:26px;border-radius:999px;border:1px solid var(--line,#d4d4d8);background:none;font:inherit;font-weight:700;font-size:12px;color:var(--muted,#71717a);cursor:pointer;display:inline-grid;place-items:center;padding:0;transition:.12s}'
     + '.mx-nn:hover{border-color:var(--muted,#71717a);color:var(--ink,#18181b)}'
     + '.mx-nn.on{border-color:var(--ink,#18181b);background:var(--ink,#18181b);color:#fff}'
     + '.mx-confrow{display:inline-flex;align-items:center;gap:7px}'
@@ -341,12 +344,13 @@ window.ADP_CANVAS = (function () {
     }
     // estado resumido do candidato (chip do header)
     function stateChip(row) {
-      if (!anyScore(row)) return { cls: 's-mid', txt: 'em avaliação' };
+      // estado muda conforme os dados: incompleto → precisa de evidência → pronto/promissor/inviável
+      if (!isScored(row)) return { cls: 's-mid', txt: 'incompleto' };
+      if (evMissing(row) > 0) return { cls: 's-mid', txt: 'precisa de evidência' };
       var t = verdict(row).tag;
       if (t === 'ok') return { cls: 's-ok', txt: 'promissor' };
       if (t === 'inviavel') return { cls: 's-bad', txt: 'inviável' };
-      if (t === 'todo') return { cls: 's-mid', txt: 'em avaliação' };
-      return { cls: 's-mid', txt: 'precisa validar' };
+      return { cls: 's-mid', txt: 'pronto para comparar' };
     }
     // veredito em UMA linha
     function vereditoHTML(row) {
@@ -380,8 +384,8 @@ window.ADP_CANVAS = (function () {
         var stt = stateChip(row);
         return '<div class="mx-cand" data-i="' + i + '">'
           + '<div class="mx-cand-h">'
-          +   '<span class="mx-lead">Candidato ' + (i + 1) + '</span>'
-          +   '<input class="mx-name" data-i="' + i + '" value="' + esc(row.name) + '" placeholder="dá um nome (ex: clínicas de estética premium)">'
+          +   '<div class="mx-idc"><span class="mx-lead">Candidato ' + (i + 1) + '</span>'
+          +     '<input class="mx-name" data-i="' + i + '" value="' + esc(row.name) + '" placeholder="dá um nome (ex: clínicas de estética premium)"></div>'
           +   '<span class="mx-state ' + stt.cls + '">' + stt.txt + '</span>'
           +   (rows.length > 1 ? '<button type="button" class="mx-del" data-i="' + i + '">remover</button>' : '')
           + '</div>'
