@@ -178,7 +178,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
     </div>
     <div class="inner">
       <div class="head">
-        <h1 id="greet">Boas-vindas.</h1>
+        <h1 id="greet">Fala.</h1>
         <a class="btn btn-primary" id="continueBtn" href="#">Continuar</a>
       </div>
 
@@ -294,7 +294,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
     // saudação em paralelo — não bloqueia o dashboard
     window.ADP.me().then(function(me){
       var nome = me && me.user_metadata && me.user_metadata.full_name;
-      if(nome){ document.getElementById('greet').textContent = 'Boas-vindas, '+String(nome).trim().split(' ')[0]+'.'; }
+      if(nome){ document.getElementById('greet').textContent = 'Fala, '+String(nome).trim().split(' ')[0]+'.'; }
     }).catch(function(){});
     try{
       // aulas, progresso e canvas em PARALELO (antes eram 3 round-trips em série)
