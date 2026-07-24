@@ -178,6 +178,9 @@ window.ADP_CANVAS = (function () {
     + '.mx-state.s-bad{background:var(--ink,#18181b);color:#fff}'
     + '.mx-del{flex:none;font-size:12px;color:var(--muted,#71717a);text-decoration:underline;cursor:pointer;background:none;border:none;padding:2px}'
     + '.mx-del:hover{color:var(--ink,#18181b)}'
+    + '.mx-collapse{flex:none;display:grid;place-items:center;width:28px;height:28px;border-radius:999px;border:1px solid var(--line,#d4d4d8);background:none;cursor:pointer;padding:0}'
+    + '.mx-collapse svg{width:15px;height:15px;fill:none;stroke:var(--muted,#71717a);stroke-width:2;stroke-linecap:round;stroke-linejoin:round}'
+    + '.mx-collapse:hover{border-color:var(--ink,#18181b)}.mx-collapse:hover svg{stroke:var(--ink,#18181b)}'
     // eixo = módulo (igual .module da HOME)
     + '.mx-eixomod{background:var(--card,transparent);border:1px solid var(--line,#d4d4d8);border-radius:12px;overflow:hidden}'
     + '.mx-eixohd{display:flex;align-items:center;gap:12px;padding:12px 18px;background:var(--soft,#e6e6e8)}'
@@ -323,7 +326,7 @@ window.ADP_CANVAS = (function () {
           + '<div class="mx-confrow"><span class="cl">confiança</span><span class="mx-conf">' + chips + '</span></div>'
           + '</div>';
       }
-      var val = has ? esc(cell.ev) : 'nenhuma adicionada';
+      var val = has ? esc(cell.ev) : 'digite sua evidência aqui';
       var conf = (has && cell.conf) ? '<span class="cf">confiança ' + (CONF_LBL[cell.conf] || cell.conf) + '</span>' : '';
       return '<div class="mx-evstrip" data-i="' + i + '" data-k="' + k + '">'
         + '<span class="lbl">Evidência:</span>'
@@ -397,6 +400,7 @@ window.ADP_CANVAS = (function () {
           +     '<input class="mx-name" data-i="' + i + '" value="' + esc(row.name) + '" placeholder="dá um nome (ex: clínicas de estética premium)"></div>'
           +   '<span class="mx-state ' + stt.cls + '">' + stt.txt + '</span>'
           +   (rows.length > 1 ? '<button type="button" class="mx-del" data-i="' + i + '">remover</button>' : '')
+          +   (rows.length > 1 ? '<button type="button" class="mx-collapse" data-i="' + i + '" aria-label="Recolher"><svg viewBox="0 0 24 24"><path d="m6 15 6-6 6 6"/></svg></button>' : '')
           + '</div>'
           + EIXOS.map(function (e) { return eixoHTML(row, i, e); }).join('')
           + vereditoHTML(row) + '</div>';
@@ -434,6 +438,9 @@ window.ADP_CANVAS = (function () {
       // expandir candidato colapsado
       var bar = C('.mx-cbar');
       if (bar) { openIdx = +bar.dataset.i; paint(); return; }
+      // recolher o candidato aberto (vira barra; todos podem ficar recolhidos)
+      var col = C('.mx-collapse');
+      if (col) { openIdx = -1; paint(); return; }
       // adicionar candidato (abre ele)
       if (e.target.classList.contains('adp-addcand')) { rows.push(normRow()); openIdx = rows.length - 1; paint(); persist(); return; }
       // remover
