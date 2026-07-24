@@ -193,7 +193,17 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .lthumb iframe{position:absolute;inset:0;width:100%;height:100%;border:0;z-index:1}
 .lthumb .lchk{position:absolute;top:5px;right:5px;width:18px;height:18px;border-radius:999px;background:var(--lime);display:grid;place-items:center;z-index:2}
 .lthumb .lchk svg{width:10px;height:10px;fill:none;stroke:#18181b;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
-.panel .li.on .lthumb{box-shadow:0 0 0 2px var(--pink)}
+/* linha de progresso assistido (proporção real via player) */
+.lthumb .lprog{position:absolute;left:0;right:0;bottom:0;height:3px;background:rgba(255,255,255,.16);z-index:2}
+.lthumb .lprog i{display:block;height:100%;width:0;background:var(--pink);transition:width .3s}
+/* grupos colapsáveis (Trilha / Bônus) */
+.mtoggle{width:100%;text-align:left;background:none;border:0;cursor:pointer;font:inherit}
+.mod .mtitle .chev{transition:transform .18s}
+.mod.collapsed .mbody{display:none}
+.mod.collapsed .mtitle .chev{transform:rotate(-90deg)}
+/* itens de bônus (sem vídeo) */
+.libonus .bthumb{color:var(--lime)}
+.libonus .bthumb svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
 
 @media(max-width:1000px){
   .panel{position:fixed;top:0;right:0;bottom:0;width:min(360px,86vw);z-index:60;transform:translateX(100%);transition:transform .22s ease}
@@ -315,9 +325,16 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
       <button class="iconbtn" aria-label="Fechar aulas" onclick="document.querySelector('.panel').classList.add('hidden')"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
     </div>
     <div class="plist">
-      <div class="mod">
-        <div class="mtitle"><svg viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg>Trilha do posicionamento</div>
-        <div id="panelList"></div>
+      <div class="mod" id="modTrilha">
+        <button class="mtitle mtoggle" type="button" aria-expanded="true"><svg class="chev" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg>Trilha do posicionamento</button>
+        <div class="mbody"><div id="panelList"></div></div>
+      </div>
+      <div class="mod collapsed" id="modBonus">
+        <button class="mtitle mtoggle" type="button" aria-expanded="false"><svg class="chev" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg>Bônus</button>
+        <div class="mbody">
+          <a class="li libonus" href="/curso/bonus-perguntas.html"><span class="lthumb bthumb"><svg viewBox="0 0 24 24"><polyline points="20 12 20 22 4 22 4 12"/><rect x="2" y="7" width="20" height="5"/><line x1="12" y1="22" x2="12" y2="7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/></svg></span><span class="tt">As 7 Perguntas que Viram a Mesa</span></a>
+          <a class="li libonus" href="/curso/bonus-ikigai.html"><span class="lthumb bthumb"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4.5"/><circle cx="12" cy="12" r="1"/></svg></span><span class="tt">O Ikigai do Nicho</span></a>
+        </div>
       </div>
     </div>
   </aside>
@@ -329,6 +346,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 <script src="/app/curso/api.js"></script>
 <script src="/app/curso/canvas-blocks.js"></script>
 <script src="/app/curso/ui.js"></script>
+<script src="https://cdn.embed.ly/player-0.1.0.min.js"></script>
 <script>
 (function(){
   var ICON_DONE='<svg viewBox="0 0 24 24"><path d="m5 13 4 4L19 7"/></svg>';
@@ -338,11 +356,28 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 
   var LESSONS=[], DONE=new Set(), LIB=null, cur=null, idx=-1, CANVAS={};
 
+  // progresso assistido (proporção real, por aula) — guardado local por dispositivo
+  var WATCH = (function(){ try{ return JSON.parse(localStorage.getItem('adp_watch_v1'))||{}; }catch(e){ return {}; } })();
+  function saveWatch(){ try{ localStorage.setItem('adp_watch_v1', JSON.stringify(WATCH)); }catch(e){} }
+  function updateThumbProg(id, pct){ var el=document.querySelector('#panelList .li[data-lid="'+id+'"] .lprog i'); if(el) el.style.width=pct+'%'; }
+  function attachPlayer(){
+    if(!window.playerjs || !cur) return;
+    var ifr=document.getElementById('mainVideo'); if(!ifr) return;
+    try{
+      var p=new playerjs.Player(ifr);
+      p.on('timeupdate', function(d){
+        if(!d) return; var dur=+d.duration||0, sec=+d.seconds||0;
+        if(dur>0){ var pct=Math.min(100, Math.round(sec/dur*100));
+          if(pct>(WATCH[cur.id]||0)){ WATCH[cur.id]=pct; saveWatch(); updateThumbProg(cur.id,pct); } }
+      });
+    }catch(e){}
+  }
+
   function videoHTML(l){
     var lib = l.video_library || LIB;
     if(l.video_id && lib){
       var src='https://iframe.mediadelivery.net/embed/'+encodeURIComponent(lib)+'/'+encodeURIComponent(l.video_id)+'?autoplay=false&preload=true&responsive=true';
-      return '<div class="video"><iframe src="'+src+'" loading="lazy" style="border:0;position:absolute;inset:0;width:100%;height:100%" allow="accelerometer;gyroscope;autoplay;encrypted-media;picture-in-picture;" allowfullscreen></iframe></div>';
+      return '<div class="video"><iframe id="mainVideo" src="'+src+'" loading="lazy" style="border:0;position:absolute;inset:0;width:100%;height:100%" allow="accelerometer;gyroscope;autoplay;encrypted-media;picture-in-picture;" allowfullscreen></iframe></div>';
     }
     // sem vídeo ainda -> pôster "em breve"
     var num=(idx+1<10?'0':'')+(idx+1);
@@ -629,6 +664,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
     }
     paintNextStep();
     renderPanel();
+    attachPlayer();
   }
 
   // "Seu próximo passo" — sempre óbvio. Calibrado: guia, nunca trava.
@@ -660,8 +696,9 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
         + (hasVid?' data-lib="'+esc(lib)+'" data-vid="'+esc(l.video_id)+'"':'')+'>'
         + '<span class="lp">'+ICON_PLAY+'</span>'
         + (isDone?'<span class="lchk">'+ICON_DONE+'</span>':'')
+        + (hasVid?'<span class="lprog"><i style="width:'+(WATCH[l.id]||0)+'%"></i></span>':'')
         + '</span>';
-      return '<a class="li'+(on?' on':'')+(isDone?' done':'')+'" href="aula.html?a='+l.id+'">'
+      return '<a class="li'+(on?' on':'')+(isDone?' done':'')+'" data-lid="'+esc(l.id)+'" href="aula.html?a='+l.id+'">'
         + thumb + '<span class="tt">'+esc(l.title)+'</span></a>';
     }).join('');
     // play no mouseover: injeta o iframe do Bunny só no hover (leve) e remove ao sair
@@ -716,6 +753,15 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
       showBootError('<p class="eyebrow">Não consegui carregar a aula agora.</p>'+RETRYBTN);
     }
   }
+  // grupos colapsáveis (Trilha / Bônus)
+  Array.prototype.forEach.call(document.querySelectorAll('.mtoggle'), function(b){
+    b.addEventListener('click', function(){
+      var mod=b.closest('.mod'); if(!mod) return;
+      mod.classList.toggle('collapsed');
+      b.setAttribute('aria-expanded', mod.classList.contains('collapsed')?'false':'true');
+    });
+  });
+
   // no mobile o painel de aulas começa fechado (drawer)
   if(window.matchMedia('(max-width:1000px)').matches){ var _p=document.querySelector('.panel'); if(_p) _p.classList.add('hidden'); }
   boot();
