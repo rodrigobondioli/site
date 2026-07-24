@@ -225,13 +225,15 @@
     var t = txt(a);
     if (t === "suporte") { a.href = "#"; a.addEventListener("click", function(e){ e.preventDefault(); openSuporte(); }); return; }
     if (t === "sugestão" || t === "sugestao") { a.href = "#"; a.addEventListener("click", function(e){ e.preventDefault(); openSugestao(); }); return; }
-    if (t === "comunidade") { a.href = "#"; a.addEventListener("click", function(e){ e.preventDefault(); toast("Comunidade: em breve"); }); return; }
+    if (t === "comunidade") { a.href = "#"; a.classList.add("adp-soonlink"); a.insertAdjacentHTML("beforeend", '<span class="adp-soon">em breve</span>'); a.addEventListener("click", function(e){ e.preventDefault(); toast("Comunidade: em breve"); }); return; }
     if (MAP[t] && (a.getAttribute("href") === "#" || !a.getAttribute("href"))) { a.href = MAP[t]; }
   });
   // logo -> home
   document.querySelectorAll("a.logo").forEach(function(a){ if(a.getAttribute("href")==="#"||!a.getAttribute("href")) a.href="home.html"; });
-  // busca -> toast
-  document.querySelectorAll(".search").forEach(function(el){ el.style.cursor="pointer"; el.addEventListener("click", ()=>toast("Busca: em breve")); });
+  // busca ainda não existe -> esconde (evita afordância morta que parece funcional)
+  document.querySelectorAll(".search").forEach(function(el){ el.style.display="none"; });
+  // selo "em breve" da Comunidade + leve opacidade no link
+  (function(){ var s=document.createElement("style"); s.textContent='.adp-soonlink{opacity:.75}.adp-soon{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--muted,#71717a);border:1px solid var(--line,#d4d4d8);border-radius:999px;padding:1px 6px;margin-left:6px;vertical-align:1px}'; document.head.appendChild(s); })();
   // avatar -> perfil
   document.querySelectorAll(".avatar").forEach(function(el){ el.style.cursor="pointer"; el.addEventListener("click", openPerfil); });
   // sincroniza a foto da barra com o perfil (ou placeholder neutro)
