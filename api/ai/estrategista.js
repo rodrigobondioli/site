@@ -96,55 +96,51 @@ Voz: direta, seca, anti-guru, tiozão sem frescura. Zero emoji, zero "querido(a)
 
 CONTEXTO: quem responde é um designer que faz de tudo e ganha mal, e quer escolher UM nicho pra parar de competir com todo mundo. NÃO é ikigai de "sentido da vida" — é ikigai aplicado a ESCOLHER NICHO DE ATUAÇÃO.
 
-Você recebe as respostas do designer em 4 frentes:
-- AMOR: tipos de projeto e mundos/assuntos que ele curte.
-- DOM: o que ele faz melhor que a média, com prova/resultado real.
-- MERCADO: que empresas pagam bem e que dor cara o design resolve pra elas.
-- ACESSO: onde ele tem porta de entrada (rede, ex-clientes, comunidades) + o chute inicial de nicho dele.
+Você recebe as 4 frentes do Ikigai (o designer jogou tags/peças em cada círculo):
+- AMO: o que ele ama fazer + mundos/assuntos que curte.
+- SOU BOM: no que ele é bom, com prova/resultado real.
+- O MUNDO PRECISA: dores que o mercado tem e que design resolve.
+- ME PAGAM: pelo que já pagaram / quem paga bem.
 
-TAREFA: cruzar as 4 frentes e devolver 2 a 3 CANDIDATOS DE NICHO concretos.
+TAREFA: cruzar as 4 e devolver (a) 2 a 3 CANDIDATOS DE NICHO e (b) uma leitura curta de cada cruzamento do Ikigai.
 Regras dos candidatos:
 - NICHO = VERTICAL (o mercado/tipo de cliente: "clínicas de estética", "hamburguerias artesanais") + HORIZONTAL (a situação/serviço: "que querem lotar a agenda", "que vão abrir a segunda unidade"). Nunca só "design pra restaurante".
-- Cada candidato tem que se sustentar nas 4 frentes: ele curte, ele é bom, o mercado paga, ele tem acesso. Se faltar uma, diga qual falta.
-- Prioriza onde o designer JÁ tem prova e JÁ tem acesso — é o que ele valida mais rápido.
-- Proibido genérico ("pequenas empresas", "empreendedores"). Tem que doer de tão específico.
+- Cada candidato tem que se sustentar nas 4 frentes. Se faltar uma, diga qual falta.
+- Prioriza onde ele JÁ tem prova e acesso — valida mais rápido.
+- Proibido genérico ("pequenas empresas", "empreendedores"). Tem que doer de específico.
 - Ancora no que resolve DINHEIRO pro cliente do nicho, não em estética.
+Cruzamentos (1 frase curta e concreta cada, na cara do que ele escreveu):
+- paixao = AMO × SOU BOM (o que ele faz de olho brilhando e manda bem).
+- profissao = SOU BOM × ME PAGAM (o que ele já entrega e o mercado paga).
+- vocacao = ME PAGAM × O MUNDO PRECISA (dor cara com quem tem verba).
+- missao = O MUNDO PRECISA × AMO (dor que ele se importa em resolver).
 
 Responda SÓ em JSON, sem texto fora:
 {
  "candidatos": [
-   {"nicho":"vertical + horizontal, numa frase","forca":"alta|media","porque":"1-2 frases secas: por que converge nas 4 frentes DELE (cita a prova/acesso que ele deu)","risco":"1 frase: o furo ou o que falta"}
+   {"nicho":"vertical + horizontal, numa frase","forca":"alta|media","porque":"1-2 frases secas: por que converge nas 4 frentes DELE","risco":"1 frase: o furo ou o que falta"}
  ],
+ "cruzamentos":{"paixao":"...","profissao":"...","vocacao":"...","missao":"..."},
  "convergencia":"1-2 frases: onde as 4 frentes se cruzam de verdade nesse designer",
  "faltando":"1-2 frases: contradição, buraco ou o que ele precisa reunir antes de cravar",
  "plano":["passo concreto 1 (validação, não teoria)","passo 2","passo 3"]
 }`;
 
 async function handleIkigai(req, res, body) {
-  const r = (body && body.respostas) || {};
-  const val = (k) => (r[k] && String(r[k]).trim()) || '(vazio)';
-  const has = Object.values(r).filter(v => v && String(v).trim()).length;
-  if (has < 3) return res.status(400).json({ error: 'Responde mais algumas antes de gerar.' });
+  const c = (body && body.circles) || {};
+  const j = (v) => Array.isArray(v) ? v.filter(Boolean).map(s => String(s).trim()).filter(Boolean).join('; ') : ((v && String(v).trim()) || '');
+  const amo = j(c.amo), bom = j(c.bom), precisam = j(c.precisam), pagam = j(c.pagam);
+  const filled = [amo, bom, precisam, pagam].filter(Boolean).length;
+  if (filled < 4) return res.status(400).json({ error: 'Preenche as 4 áreas antes de revelar.' });
 
-  const user_msg = `Respostas do designer:
+  const user_msg = `As 4 frentes do designer (o que ele colocou em cada círculo):
 
-AMOR
-- Projetos que acendem: ${val('amor_projetos')}
-- Mundos/assuntos que curte: ${val('amor_mundos')}
+AMO (ama fazer / mundos que curte): ${amo}
+SOU BOM (no que é bom, com prova): ${bom}
+O MUNDO PRECISA (dores do mercado): ${precisam}
+ME PAGAM (pelo que já pagaram / quem paga bem): ${pagam}
 
-DOM
-- Entrega melhor que a média: ${val('dom_forte')}
-- Resultado concreto já gerado: ${val('dom_prova')}
-
-MERCADO
-- Quem já pagou / paga bem: ${val('mercado_quem')}
-- Dor cara que o design resolve: ${val('mercado_dor')}
-
-ACESSO
-- Porta de entrada / rede: ${val('acesso_porta')}
-- Chute inicial de nicho: ${val('acesso_chute')}
-
-Cruza tudo e devolve o JSON com os candidatos de nicho.`;
+Cruza as 4 e devolve o JSON (candidatos + cruzamentos).`;
 
   try {
     const out = await ai(MODEL_SMART(), [

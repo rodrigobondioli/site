@@ -9,7 +9,7 @@
 @font-face{font-family:Vinila;src:url(/shared/fonts/vinila-400-normal.woff2) format("woff2");font-weight:400;font-display:swap}
 @font-face{font-family:Vinila;src:url(/shared/fonts/vinila-700-normal.woff2) format("woff2");font-weight:700;font-display:swap}
 @font-face{font-family:Vinila;src:url(/shared/fonts/vinila-800-normal.woff2) format("woff2");font-weight:800;font-display:swap}
-:root{--surface:#f1f1f1;--soft:#e6e6e8;--line:#d4d4d8;--ink:#18181b;--muted:#71717a;--lime:#e7f99a;--pink:#ff00d7;--cyan:#00fff6}
+:root{--surface:#f1f1f1;--soft:#e6e6e8;--line:#d4d4d8;--ink:#18181b;--muted:#71717a;--faint:#a1a1aa;--lime:#e7f99a;--pink:#ff00d7;--cyan:#00fff6}
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:Vinila,-apple-system,"Segoe UI",system-ui,sans-serif;background:var(--surface);color:var(--ink);font-size:14.5px;line-height:1.5;-webkit-font-smoothing:antialiased}
 a{color:inherit;text-decoration:none}
@@ -21,7 +21,6 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .tabs{display:flex;align-items:center;gap:2px;justify-self:center}
 .tabs a{padding:7px 15px;border-radius:8px;color:var(--muted);font-weight:400;font-size:14px}
 .tabs a:hover{background:var(--soft);color:var(--ink)}
-.tabs a.on{background:var(--soft);color:var(--ink);font-weight:700}
 .top .right{justify-self:end;display:flex;align-items:center;gap:8px}
 .avatar{width:32px;height:32px;border-radius:999px;overflow:hidden;box-shadow:0 0 0 1px var(--line)}
 .avatar img{width:100%;height:100%;object-fit:cover}
@@ -29,69 +28,89 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .pagehead .ph-in{padding:19px 40px;font-weight:700;font-size:16px}
 .pagehead .ph-in a{color:inherit}
 .pagehead .ph-in a:hover{color:var(--muted)}
-.main{padding:36px 40px 90px}
-.inner{max-width:680px;margin:0 auto}
-.kicker{font-size:13px;font-weight:700;letter-spacing:.01em;color:var(--muted)}
-.ptitle{font-size:clamp(30px,5vw,46px);font-weight:800;letter-spacing:-.02em;line-height:1.02;margin:8px 0 14px;text-wrap:balance}
-.intro{color:var(--muted);font-size:15.5px;max-width:60ch;margin-bottom:26px;text-wrap:pretty}
+.main{padding:32px 24px 90px}
+.inner{max-width:900px;margin:0 auto}
+.kicker{font-size:13px;font-weight:700;color:var(--muted)}
+.ptitle{font-size:clamp(30px,5vw,46px);font-weight:800;letter-spacing:-.02em;line-height:1.02;margin:8px 0 12px;text-wrap:balance}
+.intro{color:var(--muted);font-size:15.5px;max-width:64ch;text-wrap:pretty}
 .intro b{color:var(--ink)}
-.btn{display:inline-flex;align-items:center;gap:8px;font-weight:700;font-size:14.5px;padding:12px 22px;border-radius:999px;background:var(--pink);color:#fff}
+
+/* ---------- STAGE (gráfico) ---------- */
+.stage{position:relative;width:100%;max-width:600px;margin:26px auto 8px;aspect-ratio:1}
+.stage svg{position:absolute;inset:0;width:100%;height:100%}
+.stage svg .c{mix-blend-mode:multiply;stroke:var(--ink);stroke-width:.4;transition:fill-opacity .3s}
+.c.amo{fill:var(--pink)} .c.bom{fill:var(--cyan)} .c.pagam{fill:var(--lime)} .c.precisam{fill:#b9b9c2}
+/* zonas de peças (lóbulo externo de cada círculo) */
+.zone{position:absolute;display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center;width:38%;pointer-events:none}
+.zone.amo{top:5%;left:50%;transform:translateX(-50%)}
+.zone.pagam{bottom:5%;left:50%;transform:translateX(-50%)}
+.zone.bom{top:50%;left:2%;transform:translateY(-50%);width:27%}
+.zone.precisam{top:50%;right:2%;transform:translateY(-50%);width:27%}
+.zone .zl{font-size:12px;font-weight:800;letter-spacing:.02em;color:var(--ink);text-transform:none}
+.zone .chips{display:flex;flex-wrap:wrap;gap:4px;justify-content:center}
+.zone .chip{background:#fff;border-radius:999px;padding:3px 9px;font-size:11.5px;font-weight:700;color:var(--ink);box-shadow:0 1px 4px rgba(0,0,0,.08);max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.zone .chip.more{background:var(--ink);color:#fff}
+.zone .empty{font-size:11.5px;color:var(--muted)}
+/* rótulos dos cruzamentos */
+.ov{position:absolute;transform:translate(-50%,-50%);text-align:center;width:22%;pointer-events:none}
+.ov .on{font-size:11.5px;font-weight:800;color:var(--ink)}
+.ov .ot{font-size:10.5px;color:var(--ink);line-height:1.2;margin-top:2px;display:none}
+.ov.show .ot{display:block}
+.ov.paixao{top:33%;left:33%} .ov.missao{top:33%;left:67%}
+.ov.profissao{top:67%;left:33%} .ov.vocacao{top:67%;left:67%}
+/* centro */
+.core{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;width:24%}
+.core .cn{font-size:13px;font-weight:800;letter-spacing:.04em;color:var(--ink)}
+.core .chint{font-size:10px;color:var(--muted);margin-top:2px}
+.core button{margin-top:6px;background:var(--pink);color:#fff;font-weight:800;font-size:11.5px;padding:7px 13px;border-radius:999px;box-shadow:0 4px 14px rgba(255,0,215,.35);animation:pulse 1.8s infinite}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.06)}}
+
+/* ---------- ADDERS ---------- */
+.adders{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:22px}
+.adder{background:#fff;border-radius:14px;padding:14px 15px}
+.adder .ah{display:flex;align-items:center;gap:8px;font-weight:800;font-size:14px}
+.adder .dot{width:11px;height:11px;border-radius:999px;flex:none}
+.dot.amo{background:var(--pink)} .dot.bom{background:var(--cyan)} .dot.pagam{background:var(--lime);box-shadow:0 0 0 1px var(--line)} .dot.precisam{background:#b9b9c2}
+.adder .ap{color:var(--muted);font-size:12.5px;margin:2px 0 10px}
+.adder .row{display:flex;gap:8px}
+.adder input{flex:1;min-width:0;border:1px solid var(--line);border-radius:999px;padding:9px 14px;font:inherit;font-size:14px;color:var(--ink);background:var(--surface);outline:none}
+.adder input:focus{border-color:var(--ink);background:#fff}
+.adder .add{flex:none;width:38px;height:38px;border-radius:999px;background:var(--ink);color:#fff;font-size:20px;font-weight:700;display:grid;place-items:center}
+.adder .list{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.adder .t{display:inline-flex;align-items:center;gap:6px;background:var(--soft);border-radius:999px;padding:4px 6px 4px 11px;font-size:12.5px;font-weight:700}
+.adder .t button{color:var(--muted);font-size:14px;line-height:1;width:16px;height:16px;display:grid;place-items:center;border-radius:999px}
+.adder .t button:hover{background:var(--line);color:var(--ink)}
+
+.bignav{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:26px}
+.btn{display:inline-flex;align-items:center;gap:8px;font-weight:800;font-size:15px;padding:13px 26px;border-radius:999px;background:var(--pink);color:#fff}
 .btn:hover{filter:brightness(1.05)}
+.btn[disabled]{opacity:.45;cursor:default;filter:none}
 .btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line);font-weight:700}
 .btn.ghost:hover{background:var(--soft)}
-.btn[disabled]{opacity:.5;cursor:default}
+.hint{color:var(--muted);font-size:13px}
 
-/* progress */
-.prog{display:flex;align-items:center;gap:12px;margin-bottom:26px}
-.prog .bar{flex:1;height:6px;border-radius:999px;background:var(--soft);overflow:hidden}
-.prog .bar i{display:block;height:100%;width:0;background:var(--ink);border-radius:999px;transition:width .25s}
-.prog .n{font-size:12.5px;color:var(--muted);white-space:nowrap}
-
-/* step */
-.qd{display:inline-flex;align-items:center;gap:8px;font-size:12.5px;font-weight:700;color:var(--muted);margin-bottom:14px}
-.qd i{width:10px;height:10px;border-radius:999px;display:inline-block}
-.qd.amor i{background:var(--lime)} .qd.dom i{background:var(--cyan)} .qd.mercado i{background:var(--ink)} .qd.acesso i{background:var(--pink)}
-.qtitle{font-size:clamp(22px,3.4vw,28px);font-weight:800;letter-spacing:-.02em;line-height:1.1;text-wrap:balance}
-.qhint{color:var(--muted);font-size:15px;margin-top:8px}
-.qex{color:var(--muted);font-size:13.5px;margin-top:10px;font-style:italic}
-textarea{width:100%;margin-top:18px;border:1px solid var(--line);border-radius:14px;padding:16px 18px;font:inherit;font-size:16px;color:var(--ink);background:#fff;outline:none;min-height:120px;resize:vertical;line-height:1.5}
-textarea:focus{border-color:var(--ink)}
-.nav{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:24px}
-.nav .r{margin-left:auto;display:flex;gap:10px}
-
-/* review */
-.rev{display:flex;flex-direction:column;gap:2px;margin-top:8px}
-.rev .row{display:flex;gap:14px;align-items:flex-start;padding:16px 0;border-top:1px solid var(--line)}
-.rev .row:last-child{border-bottom:1px solid var(--line)}
-.rev .rq{flex:1}
-.rev .rq .rl{font-size:12.5px;color:var(--muted);margin-bottom:3px}
-.rev .rq .ra{font-size:15px;color:var(--ink);text-wrap:pretty}
-.rev .rq .ra.empty{color:var(--muted);font-style:italic}
-.rev .row .ed{font-size:13px;font-weight:700;color:var(--muted)}
-.rev .row .ed:hover{color:var(--ink)}
-
-/* result */
-.loading{display:flex;flex-direction:column;align-items:center;gap:14px;padding:60px 0;text-align:center}
+/* ---------- RESULT ---------- */
+.loading{display:flex;flex-direction:column;align-items:center;gap:14px;padding:40px 0;text-align:center}
 .spin{width:34px;height:34px;border:3px solid var(--soft);border-top-color:var(--ink);border-radius:999px;animation:sp 1s linear infinite}
 @keyframes sp{to{transform:rotate(360deg)}}
-.cand{background:#fff;border-radius:14px;padding:20px 20px;margin-bottom:14px}
+.results{margin-top:34px}
+.h-res{font-size:22px;font-weight:800;letter-spacing:-.02em;margin:0 0 16px}
+.cand{background:#fff;border-radius:14px;padding:20px;margin-bottom:14px}
 .cand .ch{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
 .cand h3{font-size:19px;font-weight:800;letter-spacing:-.01em;text-wrap:balance;flex:1;min-width:200px}
-.chip{font-size:11.5px;font-weight:700;padding:4px 11px;border-radius:999px;background:var(--soft);color:var(--ink)}
-.chip.alta{background:var(--lime)} .chip.media{background:var(--cyan)}
+.chip2{font-size:11.5px;font-weight:700;padding:4px 11px;border-radius:999px;background:var(--soft)}
+.chip2.alta{background:var(--lime)} .chip2.media{background:var(--cyan)}
 .cand p{font-size:14.5px;margin-top:10px;line-height:1.55;text-wrap:pretty}
 .cand .risk{color:var(--muted);font-size:13.5px;margin-top:8px}
 .box{border-radius:12px;padding:16px 18px;font-size:15px;line-height:1.55;margin-bottom:12px;text-wrap:pretty}
 .box.conv{background:var(--cyan)} .box.falta{background:var(--soft)}
-.box b{color:var(--ink)}
 .plan{background:var(--lime);border-radius:12px;padding:18px 20px;margin-bottom:12px}
 .plan h4{font-size:13px;font-weight:800;margin-bottom:10px}
 .plan ol{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:8px}
 .plan li{font-size:14.5px;line-height:1.5}
-.err{background:#fff;border-radius:12px;padding:16px 18px;color:var(--ink);font-size:14.5px;margin-bottom:14px}
-.h-res{font-size:22px;font-weight:800;letter-spacing:-.02em;margin:6px 0 16px}
-.muted-note{color:var(--muted);font-size:13px;margin-top:6px}
-@media(max-width:820px){.tabs{display:none}.top{grid-template-columns:1fr auto}.main{padding:26px 18px 72px}}
+.err{background:#fff;border-radius:12px;padding:16px 18px;font-size:14.5px;margin-bottom:14px}
+.muted-note{color:var(--muted);font-size:13px;margin-top:10px}
+@media(max-width:820px){.tabs{display:none}.top{grid-template-columns:1fr auto}.main{padding:24px 16px 72px}.adders{grid-template-columns:1fr}.zone .chip{max-width:84px}}
 .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0)}
 </style>
 </head>
@@ -113,7 +132,13 @@ textarea:focus{border-color:var(--ink)}
 <div class="pagehead"><div class="ph-in"><a href="/curso/bonus.html">Bônus</a> · O Ikigai do Nicho</div></div>
 
 <main class="main">
-  <div class="inner" id="app"><!-- render dinâmico --></div>
+  <div class="inner">
+    <p class="kicker">Quando você trava</p>
+    <h1 class="ptitle">O Mapa do Ikigai</h1>
+    <p class="intro">Quatro círculos. Joga tuas peças em cada um — <b>o que você ama, no que é bom, o que o mercado precisa e pelo que te pagam</b>. Quando os quatro se cruzam no meio, é ali que mora o teu nicho. Preenche e revela.</p>
+
+    <div id="app"></div>
+  </div>
 </main>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -123,151 +148,134 @@ textarea:focus{border-color:var(--ink)}
 <script src="/app/curso/ui.js"></script>
 <script>
 (function(){
-  var KEY = "adp_ikigai_v1";
-  var Q = [
-    {k:'amor_projetos', quad:'amor', label:'O que você ama', title:'Que tipos de projeto te acendem?', hint:'Aqueles que você faria nem que pagasse pouco.', ex:'identidade de marca, embalagem, social de restaurante, motion…'},
-    {k:'amor_mundos', quad:'amor', label:'O que você ama', title:'Que mundos ou assuntos você curte de verdade?', hint:'Fora do design. Onde você já é “de casa”.', ex:'games, gastronomia, fitness, moda, pet, música, carro…'},
-    {k:'dom_forte', quad:'dom', label:'No que você é bom', title:'O que você entrega melhor que a média?', hint:'Onde o cliente já te elogiou ou pediu de novo.', ex:'landing que converte, direção de arte, naming, ilustração…'},
-    {k:'dom_prova', quad:'dom', label:'No que você é bom', title:'Um resultado concreto que você já gerou.', hint:'Número, antes/depois, um case real. Prova, não achismo.', ex:'“subi a conversão da loja de 1% pra 2,4%”, “o rebrand dobrou o ticket”…'},
-    {k:'mercado_quem', quad:'mercado', label:'O que o mercado paga', title:'Que tipo de empresa já te pagou bem — ou paga bem no mercado?', hint:'Setores com verba pra design.', ex:'clínicas, e-commerce, infoproduto, indústria, construtora…'},
-    {k:'mercado_dor', quad:'mercado', label:'O que o mercado paga', title:'Que dor cara essas empresas têm que o design resolve?', hint:'O que elas pagariam AGORA pra sumir.', ex:'“não vende no site”, “parece amador do lado do concorrente”, “ninguém entende o que ela faz”…'},
-    {k:'acesso_porta', quad:'acesso', label:'Onde você tem entrada', title:'Onde você tem porta de entrada?', hint:'Rede, ex-clientes, comunidades que você já frequenta.', ex:'“conheço vários donos de restaurante”, “jogo num time amador”, “minha família tem clínica”…'},
-    {k:'acesso_chute', quad:'acesso', label:'Onde você tem entrada', title:'Se você fosse “o designer de ___”, o que preencheria hoje?', hint:'Chute inicial, sem medo de errar.', ex:'“clínicas de estética”, “hamburgueria artesanal”, “estúdio de tatuagem”…'}
+  var KEY="adp_ikigai_v2";
+  var C = [
+    {k:'amo', label:'Amo', prompt:'o que você ama fazer / mundos que curte'},
+    {k:'bom', label:'Sou bom', prompt:'no que você é bom — com prova'},
+    {k:'precisam', label:'O mundo precisa', prompt:'a dor cara que o mercado tem'},
+    {k:'pagam', label:'Me pagam', prompt:'pelo que já te pagaram / quem paga bem'}
   ];
-  var QUADNAME = {amor:'O que você ama', dom:'No que você é bom', mercado:'O que o mercado paga', acesso:'Onde você tem entrada'};
-
-  var state = load() || { step:-1, answers:{}, result:null };
+  var OV = [
+    {k:'paixao', label:'Paixão'},{k:'missao', label:'Missão'},
+    {k:'profissao', label:'Profissão'},{k:'vocacao', label:'Vocação'}
+  ];
+  var state = load() || { tags:{amo:[],bom:[],precisam:[],pagam:[]}, result:null };
   var app = document.getElementById('app');
+  var focusK = null, busy=false;
 
-  function load(){ try { return JSON.parse(localStorage.getItem(KEY)); } catch(e){ return null; } }
-  function save(){ try { localStorage.setItem(KEY, JSON.stringify(state)); } catch(e){} }
-  function esc(s){ return String(s==null?'':s).replace(/[&<>"]/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
-  function answered(){ return Q.filter(function(q){ return (state.answers[q.k]||'').trim(); }).length; }
+  function load(){ try{ return JSON.parse(localStorage.getItem(KEY)); }catch(e){ return null; } }
+  function save(){ try{ localStorage.setItem(KEY, JSON.stringify(state)); }catch(e){} }
+  function esc(s){ return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];}); }
+  function tags(k){ return state.tags[k]||[]; }
+  function ready(){ return C.every(function(c){ return tags(c.k).length>0; }); }
+
+  function circleSVG(){
+    // viewBox 100x100 — 4 círculos em diamante (N,W,S,E)
+    return '<svg viewBox="0 0 100 100" aria-hidden="true">'
+      + '<circle class="c amo" cx="50" cy="27" r="31" fill-opacity="'+op('amo')+'"/>'
+      + '<circle class="c bom" cx="27" cy="50" r="31" fill-opacity="'+op('bom')+'"/>'
+      + '<circle class="c pagam" cx="50" cy="73" r="31" fill-opacity="'+op('pagam')+'"/>'
+      + '<circle class="c precisam" cx="73" cy="50" r="31" fill-opacity="'+op('precisam')+'"/>'
+      + '</svg>';
+  }
+  function op(k){ return tags(k).length ? 0.5 : 0.22; }
+
+  function zoneHTML(c){
+    var t = tags(c.k);
+    var chips = t.length
+      ? t.slice(0,4).map(function(x){return '<span class="chip">'+esc(x)+'</span>';}).join('') + (t.length>4?'<span class="chip more">+'+(t.length-4)+'</span>':'')
+      : '<span class="empty">＋ '+esc(c.prompt)+'</span>';
+    return '<div class="zone '+c.k+'"><span class="zl">'+esc(c.label)+'</span><div class="chips">'+chips+'</div></div>';
+  }
+  function ovHTML(o){
+    var txt = state.result && state.result.cruzamentos && state.result.cruzamentos[o.k];
+    return '<div class="ov '+o.k+(txt?' show':'')+'"><div class="on">'+o.label+'</div>'+(txt?'<div class="ot">'+esc(txt)+'</div>':'')+'</div>';
+  }
+  function coreHTML(){
+    if(state.result) return '<div class="core"><div class="cn">IKIGAI</div><div class="chint">nicho revelado ↓</div></div>';
+    if(ready()) return '<div class="core"><div class="cn">IKIGAI</div><button id="revealCore">Revelar</button></div>';
+    return '<div class="core"><div class="cn">IKIGAI</div><div class="chint">preenche os 4</div></div>';
+  }
 
   function render(){
-    if(state.result){ return renderResult(state.result); }
-    if(state.step === -1){ return renderIntro(); }
-    if(state.step >= Q.length){ return renderReview(); }
-    return renderStep();
-  }
+    var stage = '<div class="stage">'+circleSVG()
+      + C.map(zoneHTML).join('') + OV.map(ovHTML).join('') + coreHTML() + '</div>';
 
-  function renderIntro(){
-    app.innerHTML =
-      '<p class="kicker">Quando você trava</p>'+
-      '<h1 class="ptitle">O Ikigai do Nicho</h1>'+
-      '<p class="intro">Travou pra achar o nicho? Isto aqui cruza o que você <b>ama</b>, o que <b>faz bem</b>, o que o <b>mercado paga</b> e onde você tem <b>acesso</b> — e devolve candidatos de nicho concretos pra você testar. São 8 perguntas curtas, uma por tela. Responde na lata, sem caprichar demais.</p>'+
-      (window.ADP && window.ADP.devMode ? '<p class="muted-note">Modo de teste: a geração por IA só roda logado como aluno.</p>' : '')+
-      '<div class="nav"><span></span><div class="r">'+
-        (answered() ? '<button class="btn ghost" id="clr">Recomeçar</button>' : '')+
-        '<button class="btn" id="go">'+(answered()?'Continuar':'Começar')+' →</button>'+
-      '</div></div>';
-    document.getElementById('go').onclick = function(){ state.step = firstUnanswered(); save(); render(); };
-    var clr = document.getElementById('clr'); if(clr) clr.onclick = resetAll;
-  }
-  function firstUnanswered(){ for(var i=0;i<Q.length;i++){ if(!(state.answers[Q[i].k]||'').trim()) return i; } return Q.length; }
+    var adders = '<div class="adders">'+C.map(function(c){
+      var list = tags(c.k).map(function(x,i){return '<span class="t">'+esc(x)+'<button data-del="'+c.k+'" data-i="'+i+'" aria-label="remover">×</button></span>';}).join('');
+      return '<div class="adder"><div class="ah"><span class="dot '+c.k+'"></span>'+esc(c.label)+'</div>'
+        + '<div class="ap">'+esc(c.prompt)+'</div>'
+        + '<div class="row"><input type="text" data-add="'+c.k+'" placeholder="uma peça por vez…" autocomplete="off"><button class="add" data-addbtn="'+c.k+'" aria-label="adicionar">＋</button></div>'
+        + '<div class="list">'+list+'</div></div>';
+    }).join('')+'</div>';
 
-  function renderStep(){
-    var q = Q[state.step];
-    var pct = Math.round((state.step)/Q.length*100);
-    app.innerHTML =
-      '<div class="prog"><div class="bar"><i style="width:'+pct+'%"></i></div><span class="n">'+(state.step+1)+' de '+Q.length+'</span></div>'+
-      '<div class="qd '+q.quad+'"><i></i>'+esc(q.label)+'</div>'+
-      '<h2 class="qtitle">'+esc(q.title)+'</h2>'+
-      '<p class="qhint">'+esc(q.hint)+'</p>'+
-      '<p class="qex">ex: '+esc(q.ex)+'</p>'+
-      '<textarea id="ta" placeholder="Escreve aqui…">'+esc(state.answers[q.k]||'')+'</textarea>'+
-      '<div class="nav">'+
-        '<button class="btn ghost" id="back">← Voltar</button>'+
-        '<div class="r"><button class="btn" id="next">'+(state.step===Q.length-1?'Revisar':'Próxima')+' →</button></div>'+
-      '</div>';
-    var ta = document.getElementById('ta');
-    ta.focus();
-    ta.oninput = function(){ state.answers[q.k] = ta.value; save(); };
-    document.getElementById('back').onclick = function(){ state.answers[q.k]=ta.value; state.step--; save(); render(); };
-    document.getElementById('next').onclick = function(){ state.answers[q.k]=ta.value; state.step++; save(); render(); };
-  }
+    var nav = '<div class="bignav"><span class="hint">'+(ready()?'Pronto pra cruzar.':'Coloca pelo menos uma peça em cada círculo.')+'</span>'
+      + '<div style="display:flex;gap:10px">'
+      + (anyTag()?'<button class="btn ghost" id="clr">Limpar</button>':'')
+      + '<button class="btn" id="reveal"'+(ready()?'':' disabled')+'>Revelar meu nicho →</button></div></div>';
 
-  function renderReview(){
-    var rows = Q.map(function(q,i){
-      var a = (state.answers[q.k]||'').trim();
-      return '<div class="row"><div class="rq"><div class="rl">'+esc(QUADNAME[q.quad])+' · '+esc(q.title)+'</div>'+
-        '<div class="ra'+(a?'':' empty')+'">'+(a?esc(a):'(em branco)')+'</div></div>'+
-        '<button class="ed" data-i="'+i+'">editar</button></div>';
-    }).join('');
-    app.innerHTML =
-      '<p class="kicker">Revisão</p>'+
-      '<h1 class="ptitle">Confere antes de gerar</h1>'+
-      '<p class="intro">Quanto mais concreto, melhor o cruzamento. Faltou algo? Edita. Tá bom? Manda a IA cruzar.</p>'+
-      '<div class="rev">'+rows+'</div>'+
-      '<div class="nav"><button class="btn ghost" id="back">← Voltar</button>'+
-        '<div class="r"><button class="btn" id="gen">Gerar candidatos de nicho →</button></div></div>'+
-      (window.ADP && window.ADP.devMode ? '<p class="muted-note">Modo de teste: a geração por IA só roda logado como aluno.</p>' : '');
-    Array.prototype.forEach.call(app.querySelectorAll('.ed'), function(b){
-      b.onclick = function(){ state.step = +b.getAttribute('data-i'); save(); render(); };
+    app.innerHTML = stage + adders + nav + '<div id="result"></div>'
+      + (window.ADP && window.ADP.devMode ? '<p class="muted-note">Modo de teste: a revelação por IA só roda logado como aluno.</p>' : '');
+
+    wire();
+    if(state.result) renderResult(state.result);
+    if(focusK){ var el=app.querySelector('input[data-add="'+focusK+'"]'); if(el){ el.focus(); } focusK=null; }
+  }
+  function anyTag(){ return C.some(function(c){return tags(c.k).length;}); }
+
+  function wire(){
+    Array.prototype.forEach.call(app.querySelectorAll('input[data-add]'), function(inp){
+      inp.addEventListener('keydown', function(e){ if(e.key==='Enter'){ e.preventDefault(); addFrom(inp); } });
     });
-    document.getElementById('back').onclick = function(){ state.step = Q.length-1; save(); render(); };
-    document.getElementById('gen').onclick = generate;
+    Array.prototype.forEach.call(app.querySelectorAll('[data-addbtn]'), function(b){
+      b.addEventListener('click', function(){ var inp=app.querySelector('input[data-add="'+b.getAttribute('data-addbtn')+'"]'); if(inp) addFrom(inp); });
+    });
+    Array.prototype.forEach.call(app.querySelectorAll('[data-del]'), function(b){
+      b.addEventListener('click', function(){ var k=b.getAttribute('data-del'), i=+b.getAttribute('data-i'); state.tags[k].splice(i,1); save(); render(); });
+    });
+    var rc=document.getElementById('revealCore'); if(rc) rc.addEventListener('click', reveal);
+    var rv=document.getElementById('reveal'); if(rv) rv.addEventListener('click', reveal);
+    var cl=document.getElementById('clr'); if(cl) cl.addEventListener('click', function(){ state={tags:{amo:[],bom:[],precisam:[],pagam:[]},result:null}; save(); render(); });
+  }
+  function addFrom(inp){
+    var k=inp.getAttribute('data-add'); var v=(inp.value||'').trim();
+    if(!v) return;
+    state.tags[k].push(v); if(state.result){ state.result=null; } save(); focusK=k; render();
   }
 
-  function renderLoading(){
-    app.innerHTML = '<div class="loading"><div class="spin"></div><p>Cruzando as quatro frentes e montando teus candidatos…</p></div>';
-  }
-
-  async function generate(){
-    renderLoading();
-    try {
-      if(!window.ADP || window.ADP.devMode){ throw new Error('Entra com o teu login de aluno pra gerar — a IA roda logada.'); }
-      var r = await window.ADP.ikigai(state.answers);
+  async function reveal(){
+    if(!ready()||busy) return;
+    busy=true;
+    document.getElementById('result').innerHTML='<div class="loading"><div class="spin"></div><p>Cruzando os quatro círculos e revelando teu nicho…</p></div>';
+    try{
+      if(!window.ADP || window.ADP.devMode){ throw new Error('Entra com o teu login de aluno pra revelar — a IA roda logada.'); }
+      var r = await window.ADP.ikigai(state.tags);
       state.result = (r && r.data) || {};
-      save(); renderResult(state.result);
-    } catch(e){
-      renderReviewError(e.message || 'Deu ruim. Tenta de novo.');
+      save(); render();
+      var res=document.getElementById('result'); if(res) res.scrollIntoView({behavior:'smooth',block:'start'});
+    }catch(e){
+      document.getElementById('result').innerHTML='<div class="err">'+esc(e.message||'Deu ruim. Tenta de novo.')+'</div>';
     }
-  }
-  function renderReviewError(msg){
-    renderReview();
-    var box = document.createElement('div'); box.className='err'; box.textContent = msg;
-    var inner = document.getElementById('app'); inner.insertBefore(box, inner.querySelector('.rev').nextSibling);
+    busy=false;
   }
 
   function renderResult(d){
-    if(d && d.raw && !d.candidatos){
-      app.innerHTML = '<p class="kicker">Teus candidatos</p><h1 class="ptitle">O Ikigai do Nicho</h1>'+
-        '<div class="err">'+esc(d.raw)+'</div>'+resultFoot();
-      wireFoot(); return;
-    }
-    var cands = (d && d.candidatos) || [];
-    var html = '<p class="kicker">Teus candidatos</p><h1 class="ptitle">Onde o teu nicho se cruza</h1>';
-    if(!cands.length){ html += '<div class="err">A IA não devolveu candidatos. Volta e detalha mais as respostas.</div>'; }
+    var el=document.getElementById('result'); if(!el) return;
+    if(d && d.raw && !d.candidatos){ el.innerHTML='<div class="results"><div class="err">'+esc(d.raw)+'</div></div>'; return; }
+    var cands=(d && d.candidatos)||[];
+    var html='<div class="results"><h2 class="h-res">Onde o teu nicho se cruza</h2>';
+    if(!cands.length) html+='<div class="err">A IA não devolveu candidatos. Detalha mais as peças e revela de novo.</div>';
     cands.forEach(function(c){
-      var f = (c.forca||'').toLowerCase();
-      html += '<div class="cand"><div class="ch"><h3>'+esc(c.nicho||'—')+'</h3>'+
-        (c.forca?'<span class="chip '+(f==='alta'?'alta':(f==='media'||f==='média'?'media':''))+'">'+esc(c.forca)+'</span>':'')+'</div>'+
-        (c.porque?'<p>'+esc(c.porque)+'</p>':'')+
-        (c.risco?'<p class="risk"><b>Furo/risco:</b> '+esc(c.risco)+'</p>':'')+'</div>';
+      var f=(c.forca||'').toLowerCase(); var cls=f==='alta'?'alta':((f==='media'||f==='média')?'media':'');
+      html+='<div class="cand"><div class="ch"><h3>'+esc(c.nicho||'—')+'</h3>'+(c.forca?'<span class="chip2 '+cls+'">'+esc(c.forca)+'</span>':'')+'</div>'
+        +(c.porque?'<p>'+esc(c.porque)+'</p>':'')
+        +(c.risco?'<p class="risk"><b>Furo/risco:</b> '+esc(c.risco)+'</p>':'')+'</div>';
     });
-    if(d && d.convergencia){ html += '<div class="box conv"><b>Onde converge:</b> '+esc(d.convergencia)+'</div>'; }
-    if(d && d.faltando){ html += '<div class="box falta"><b>O que falta:</b> '+esc(d.faltando)+'</div>'; }
-    if(d && d.plano && d.plano.length){
-      html += '<div class="plan"><h4>Próximos passos</h4><ol>'+d.plano.map(function(p){return '<li>'+esc(p)+'</li>';}).join('')+'</ol></div>';
-    }
-    html += resultFoot();
-    app.innerHTML = html;
-    wireFoot();
-  }
-  function resultFoot(){
-    return '<div class="nav" style="margin-top:22px"><span></span><div class="r">'+
-      '<button class="btn ghost" id="again">Refazer</button>'+
-      '<a class="btn ghost" href="/curso/canvas.html">Levar pro Canvas →</a>'+
-      '</div></div>';
-  }
-  function wireFoot(){
-    var a = document.getElementById('again');
-    if(a) a.onclick = function(){ state.result = null; state.step = Q.length; save(); render(); };
-  }
-
-  function resetAll(){
-    state = { step:-1, answers:{}, result:null }; save(); render();
+    if(d && d.convergencia) html+='<div class="box conv"><b>Onde converge:</b> '+esc(d.convergencia)+'</div>';
+    if(d && d.faltando) html+='<div class="box falta"><b>O que falta:</b> '+esc(d.faltando)+'</div>';
+    if(d && d.plano && d.plano.length) html+='<div class="plan"><h4>Próximos passos</h4><ol>'+d.plano.map(function(p){return '<li>'+esc(p)+'</li>';}).join('')+'</ol></div>';
+    html+='<div class="bignav"><span></span><a class="btn ghost" href="/curso/canvas.html">Levar pro Canvas →</a></div></div>';
+    el.innerHTML=html;
   }
 
   render();
