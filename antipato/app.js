@@ -170,6 +170,61 @@
     });
   }
 
+  // Marquee Lote Fundador — escassez (estoque) + urgência (countdown), fake-seguro/determinístico
+  (function () {
+    var track = document.querySelector(".marquee-track");
+    if (!track) return;
+    var mq = document.querySelector(".marquee");
+    var mqItems = track.querySelectorAll(".marquee-item");
+    if (!mqItems.length) return;
+
+    // >>> AJUSTE AQUI o dia que o lote entrou no ar (ano, mês 0-based, dia):
+    var LAUNCH = Date.UTC(2026, 6, 24); // 24/jul/2026
+    var START = 50;    // acessos iniciais
+    var PER_DAY = 3;   // quanto "some" por dia
+    var FLOOR = 6;     // trava aqui (nunca zera)
+
+    // Estoque: só depende da data -> não reseta no F5, só desce
+    function stockLeft() {
+      var days = Math.floor((Date.now() - LAUNCH) / 86400000);
+      if (days < 0) days = 0;
+      var left = START - days * PER_DAY;
+      return left < FLOOR ? FLOOR : left;
+    }
+
+    // Prazo: próximo domingo 23:59:59 -> reancorá sozinho toda semana
+    function nextDeadline() {
+      var now = new Date();
+      var d = new Date(now);
+      var until = (7 - d.getDay()) % 7; // 0 = domingo
+      d.setDate(d.getDate() + until);
+      d.setHours(23, 59, 59, 0);
+      if (d <= now) d.setDate(d.getDate() + 7);
+      return d;
+    }
+    function fmt(ms) {
+      if (ms < 0) ms = 0;
+      var s = Math.floor(ms / 1000);
+      var dd = Math.floor(s / 86400); s -= dd * 86400;
+      var hh = Math.floor(s / 3600); s -= hh * 3600;
+      var mm = Math.floor(s / 60); s -= mm * 60;
+      var p = function (n) { return (n < 10 ? "0" : "") + n; };
+      return (dd > 0 ? dd + "d " : "") + p(hh) + "h " + p(mm) + "m " + p(s) + "s";
+    }
+
+    function render() {
+      var stock = stockLeft();
+      var left = fmt(nextDeadline() - new Date());
+      var html = "<strong>Lote Fundador:</strong> Restam " + stock +
+        " dos 50 acessos por R$ 97 (ou 12x de R$ 9,97) · Encerra em " + left;
+      for (var i = 0; i < mqItems.length; i++) mqItems[i].innerHTML = html;
+      if (mq) mq.setAttribute("aria-label",
+        "Lote Fundador: restam " + stock + " de 50 acessos por R$ 97. Encerra em " + left + ". Valor oficial R$ 197.");
+    }
+    render();
+    setInterval(render, 1000);
+  })();
+
   // FAQ: accordion — abre um, fecha os outros
   var items = document.querySelectorAll(".faq-item");
   items.forEach(function (item) {
