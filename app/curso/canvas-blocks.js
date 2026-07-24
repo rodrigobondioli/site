@@ -180,7 +180,7 @@ window.ADP_CANVAS = (function () {
     + '.mx-name::placeholder{color:var(--faint,#a1a1aa);font-weight:400}'
     + '.mx-name:hover{border-bottom-color:var(--line,#d4d4d8)}'
     + '.mx-name:focus{outline:none;border-bottom-color:var(--ink,#18181b)}'
-    + '.mx-state{flex:none;font-size:11px;font-weight:700;padding:4px 11px;border-radius:999px}'
+    + '.mx-state{flex:none;font-size:12px;font-weight:700;padding:7px 13px;border-radius:999px;line-height:1}'
     + '.mx-state.s-ok{background:var(--lime,#e7f99a);color:var(--ink,#18181b)}'
     + '.mx-state.s-mid{background:var(--soft,#e6e6e8);color:var(--muted,#71717a)}'
     + '.mx-state.s-bad{background:var(--ink,#18181b);color:#fff}'
@@ -229,7 +229,7 @@ window.ADP_CANVAS = (function () {
     + '.mx-vd .dot.ok{background:var(--lime,#e7f99a)}.mx-vd .dot.mid{background:var(--faint,#a1a1aa)}.mx-vd .dot.bad{background:var(--ink,#18181b)}'
     + '.mx-vd .vl{font-weight:700;flex:none}'
     + '.mx-vd .vx{color:#3f3f46;min-width:0}'
-    + '.adp-addcand{margin-top:4px;font-size:13px;font-weight:700;color:var(--ink,#18181b);border:1px solid var(--line,#d4d4d8);border-radius:10px;padding:11px 14px;width:100%;cursor:pointer;background:none}'
+    + '.adp-addcand{margin-top:18px;font-size:13px;font-weight:700;color:var(--ink,#18181b);border:1px solid var(--line,#d4d4d8);border-radius:12px;padding:16px 14px;width:100%;cursor:pointer;background:none}'
     + '.adp-addcand:hover{background:var(--soft,#e6e6e8)}'
     // --- Caça à Ruminação ---
     + '.adp-rum{margin-top:20px;padding-top:20px;border-top:1px solid var(--line,#d4d4d8)}'
