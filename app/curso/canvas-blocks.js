@@ -183,17 +183,17 @@ window.ADP_CANVAS = (function () {
     + '.mx-eixohd .etrack i{display:block;height:100%;background:var(--lime,#e7f99a);border-radius:999px;transition:width .3s}'
     + '.mx-eixohd .en{font-size:12.5px;font-weight:700;color:var(--ink,#18181b);flex:none}'
     // linha de critério = .lesson
-    + '.mx-row{display:flex;align-items:flex-start;gap:18px;padding:17px 20px;border-top:1px solid var(--line,#d4d4d8)}'
+    + '.mx-row{display:flex;align-items:center;gap:18px;padding:17px 20px;border-top:1px solid var(--line,#d4d4d8)}'
     + '.mx-c1{flex:1;min-width:0}'
     + '.mx-c1 .n{font-size:14.5px;font-weight:700;color:var(--ink,#18181b);line-height:1.25}'
     + '.mx-c1 .q{font-size:12.5px;color:var(--muted,#71717a);margin-top:3px;line-height:1.4}'
     + '.mx-c1 .mx-evline{margin-top:12px}'
     // controles à direita: NOTA em cima (destaque) · confiança embaixo (menor/apagada)
-    + '.mx-ctrl{flex:none;display:flex;flex-direction:column;align-items:flex-end;gap:9px;padding-top:1px}'
-    + '.mx-nota{display:inline-flex;align-items:baseline;gap:8px}'
-    + '.mx-nn{min-width:13px;text-align:center;border:none;background:none;font:inherit;font-weight:700;font-size:13px;color:var(--faint,#a1a1aa);cursor:pointer;line-height:1;padding:0;transition:color .12s,font-size .12s}'
-    + '.mx-nn:hover{color:var(--muted,#71717a)}'
-    + '.mx-nn.on{font-size:19px;color:var(--ink,#18181b)}'
+    + '.mx-ctrl{flex:none;display:flex;flex-direction:column;align-items:flex-end;gap:11px}'
+    + '.mx-nota{display:inline-flex;align-items:center;gap:8px}'
+    + '.mx-nn{width:30px;height:30px;border-radius:999px;border:1px solid var(--line,#d4d4d8);background:none;font:inherit;font-weight:700;font-size:13px;color:var(--muted,#71717a);cursor:pointer;display:inline-grid;place-items:center;padding:0;transition:.12s}'
+    + '.mx-nn:hover{border-color:var(--muted,#71717a);color:var(--ink,#18181b)}'
+    + '.mx-nn.on{border-color:var(--ink,#18181b);background:var(--ink,#18181b);color:#fff}'
     + '.mx-confrow{display:inline-flex;align-items:center;gap:7px}'
     + '.mx-confrow .cl{font-size:10px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--faint,#a1a1aa)}'
     + '.mx-conf{display:inline-flex;gap:2px}'
@@ -208,9 +208,13 @@ window.ADP_CANVAS = (function () {
     + '.mx-evbtn.has:hover{color:var(--ink,#18181b)}'
     + '.mx-evbtn.has b{color:var(--ink,#18181b);font-weight:700;flex:none}'
     + '.mx-evbtn.has .tx{color:#3f3f46;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}'
-    + '.mx-ev{width:100%;border:1px solid var(--line,#d4d4d8);border-radius:8px;background:transparent;font:inherit;font-size:12px;padding:8px 9px;color:#3f3f46;resize:none;min-height:40px;line-height:1.4}'
+    // campo de evidência = MESMO composer da HOME (borda leve, sparkle, sem stroke preto no foco)
+    + '.mx-evbar{display:flex;align-items:flex-start;gap:9px;border:1px solid var(--line,#d4d4d8);border-radius:16px;padding:6px 8px 6px 12px;background:none}'
+    + '.mx-evspark{flex:none;display:flex;color:var(--faint,#a1a1aa);padding-top:9px}'
+    + '.mx-evspark svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}'
+    + '.mx-ev{flex:1;min-width:0;border:none;background:none;padding:8px 0;font:inherit;font-size:14px;color:var(--ink,#18181b);resize:none;max-height:120px;line-height:1.5}'
     + '.mx-ev::placeholder{color:var(--faint,#a1a1aa)}'
-    + '.mx-ev:focus{outline:none;border-color:var(--ink,#18181b)}'
+    + '.mx-ev:focus{outline:none}'
     + '.mx-vd{padding:4px 4px 2px;font-size:13px;color:var(--ink,#18181b);display:flex;align-items:baseline;gap:9px;line-height:1.45}'
     + '.mx-vd .dot{width:7px;height:7px;border-radius:999px;flex:none;align-self:center}'
     + '.mx-vd .dot.ok{background:var(--lime,#e7f99a)}.mx-vd .dot.mid{background:var(--faint,#a1a1aa)}.mx-vd .dot.bad{background:var(--ink,#18181b)}'
@@ -303,7 +307,8 @@ window.ADP_CANVAS = (function () {
     // evidência = linha compacta que abre pra editar (nada de caixão cinza sempre aberto)
     function evLineHTML(i, k, cell) {
       if (editing === i + ':' + k) {
-        return '<textarea class="mx-ev" data-i="' + i + '" data-k="' + k + '" rows="2" placeholder="Qual fato sustenta essa nota? Sem evidência ela é torcida.">' + esc(cell.ev || '') + '</textarea>';
+        return '<div class="mx-evbar"><span class="mx-evspark"><svg viewBox="0 0 24 24"><path d="M12 3l1.7 4.8L18.5 9.5l-4.8 1.7L12 16l-1.7-4.8L5.5 9.5l4.8-1.7z"/></svg></span>'
+          + '<textarea class="mx-ev" data-i="' + i + '" data-k="' + k + '" rows="1" placeholder="Qual fato sustenta essa nota? Sem evidência ela é torcida.">' + esc(cell.ev || '') + '</textarea></div>';
       }
       if (cell.ev && cell.ev.trim()) {
         return '<button type="button" class="mx-evbtn has" data-i="' + i + '" data-k="' + k + '"><svg viewBox="0 0 24 24" class="ei"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg><b>Evidência:</b>&nbsp;<span class="tx">' + esc(cell.ev) + '</span></button>';
