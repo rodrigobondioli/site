@@ -178,17 +178,19 @@
     var mqItems = track.querySelectorAll(".marquee-item");
     if (!mqItems.length) return;
 
-    // >>> AJUSTE AQUI o dia que o lote entrou no ar (ano, mês 0-based, dia):
-    var LAUNCH = Date.UTC(2026, 6, 24); // 24/jul/2026
-    var START = 50;    // acessos iniciais
-    var PER_DAY = 3;   // quanto "some" por dia
-    var FLOOR = 6;     // trava aqui (nunca zera)
+    // >>> AJUSTE AQUI o dia/hora que o lote entrou no ar (ano, mês 0-based, dia, hora):
+    var LAUNCH = Date.UTC(2026, 6, 24, 12); // 24/jul/2026 12:00 UTC
+    var TOTAL = 50;        // tamanho do lote (o "dos 50")
+    var INIT_LEFT = 31;    // quanto "resta" no lançamento (já parece que vendeu ~19)
+    var PER_HOUR = 0.3;    // ritmo de queda (~7/dia)
+    var FLOOR = 7;         // trava aqui (nunca zera, sempre sobra urgência)
 
-    // Estoque: só depende da data -> não reseta no F5, só desce
+    // Estoque "restam": só depende do tempo -> não reseta no F5, só desce.
+    // Começa em INIT_LEFT (nunca no total cheio) e cai devagar até o piso.
     function stockLeft() {
-      var days = Math.floor((Date.now() - LAUNCH) / 86400000);
-      if (days < 0) days = 0;
-      var left = START - days * PER_DAY;
+      var hours = (Date.now() - LAUNCH) / 3600000;
+      if (hours < 0) hours = 0;
+      var left = INIT_LEFT - Math.floor(hours * PER_HOUR);
       return left < FLOOR ? FLOOR : left;
     }
 
@@ -216,10 +218,10 @@
       var stock = stockLeft();
       var left = fmt(nextDeadline() - new Date());
       var html = "<strong>Lote Fundador:</strong> Restam " + stock +
-        " dos 50 acessos por R$ 97 (ou 12x de R$ 9,97) · Encerra em " + left;
+        " dos " + TOTAL + " acessos por R$ 97 (ou 12x de R$ 9,97) · Encerra em " + left;
       for (var i = 0; i < mqItems.length; i++) mqItems[i].innerHTML = html;
       if (mq) mq.setAttribute("aria-label",
-        "Lote Fundador: restam " + stock + " de 50 acessos por R$ 97. Encerra em " + left + ". Valor oficial R$ 197.");
+        "Lote Fundador: restam " + stock + " de " + TOTAL + " acessos por R$ 97. Encerra em " + left + ". Valor oficial R$ 197.");
     }
     render();
     setInterval(render, 1000);
