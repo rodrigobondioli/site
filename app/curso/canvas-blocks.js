@@ -183,13 +183,13 @@ window.ADP_CANVAS = (function () {
     + '.mx-eixohd .etrack i{display:block;height:100%;background:var(--lime,#e7f99a);border-radius:999px;transition:width .3s}'
     + '.mx-eixohd .en{font-size:12.5px;font-weight:700;color:var(--ink,#18181b);flex:none}'
     // linha de critério = .lesson
-    + '.mx-row{display:flex;align-items:center;gap:14px;padding:12px 18px;border-top:1px solid var(--line,#d4d4d8)}'
+    + '.mx-row{display:flex;align-items:flex-start;gap:18px;padding:17px 20px;border-top:1px solid var(--line,#d4d4d8)}'
     + '.mx-c1{flex:1;min-width:0}'
-    + '.mx-c1 .n{font-size:14px;font-weight:700;color:var(--ink,#18181b);line-height:1.25}'
-    + '.mx-c1 .q{font-size:12px;color:var(--muted,#71717a);margin-top:2px;line-height:1.35}'
-    + '.mx-c1 .mx-evline{margin-top:7px}'
+    + '.mx-c1 .n{font-size:14.5px;font-weight:700;color:var(--ink,#18181b);line-height:1.25}'
+    + '.mx-c1 .q{font-size:12.5px;color:var(--muted,#71717a);margin-top:3px;line-height:1.4}'
+    + '.mx-c1 .mx-evline{margin-top:12px}'
     // controles à direita: NOTA em cima (destaque) · confiança embaixo (menor/apagada)
-    + '.mx-ctrl{flex:none;display:flex;flex-direction:column;align-items:flex-end;gap:5px}'
+    + '.mx-ctrl{flex:none;display:flex;flex-direction:column;align-items:flex-end;gap:9px;padding-top:1px}'
     + '.mx-nota{display:inline-flex;align-items:baseline;gap:8px}'
     + '.mx-nn{min-width:13px;text-align:center;border:none;background:none;font:inherit;font-weight:700;font-size:13px;color:var(--faint,#a1a1aa);cursor:pointer;line-height:1;padding:0;transition:color .12s,font-size .12s}'
     + '.mx-nn:hover{color:var(--muted,#71717a)}'
@@ -201,10 +201,11 @@ window.ADP_CANVAS = (function () {
     + '.mx-cc:hover{color:var(--muted,#71717a)}'
     + '.mx-cc.on{color:var(--ink,#18181b);background:var(--soft,#e6e6e8)}'
     + '.mx-evline{margin-top:7px}'
-    + '.mx-evbtn{display:inline-flex;align-items:center;gap:6px;max-width:100%;font:inherit;font-size:11.5px;color:var(--faint,#a1a1aa);background:none;border:none;cursor:pointer;text-align:left;padding:0}'
-    + '.mx-evbtn .ei{width:11px;height:11px;flex:none;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}'
-    + '.mx-evbtn:hover{color:var(--ink,#18181b)}'
-    + '.mx-evbtn.has{display:flex;min-width:0;color:var(--muted,#71717a)}'
+    + '.mx-evbtn{display:inline-flex;align-items:center;gap:6px;max-width:100%;font:inherit;font-size:11.5px;font-weight:700;color:var(--muted,#71717a);background:none;border:1px solid var(--line,#d4d4d8);border-radius:999px;cursor:pointer;text-align:left;padding:5px 12px}'
+    + '.mx-evbtn .ei{width:12px;height:12px;flex:none;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}'
+    + '.mx-evbtn:hover{border-color:var(--ink,#18181b);color:var(--ink,#18181b)}'
+    + '.mx-evbtn.has{display:flex;min-width:0;border:none;padding:0;font-weight:400;color:var(--muted,#71717a)}'
+    + '.mx-evbtn.has:hover{color:var(--ink,#18181b)}'
     + '.mx-evbtn.has b{color:var(--ink,#18181b);font-weight:700;flex:none}'
     + '.mx-evbtn.has .tx{color:#3f3f46;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}'
     + '.mx-ev{width:100%;border:1px solid var(--line,#d4d4d8);border-radius:8px;background:transparent;font:inherit;font-size:12px;padding:8px 9px;color:#3f3f46;resize:none;min-height:40px;line-height:1.4}'
@@ -270,6 +271,7 @@ window.ADP_CANVAS = (function () {
   function renderMatrix(container, data, onSaved) {
     var rows = (data && data.rows && data.rows.length) ? data.rows.map(normRow) : [normRow(), normRow()];
     var openIdx = 0; // acordeão: só um candidato aberto por vez
+    var editing = null; // "i:k" da evidência em edição (abre o textarea + revela a confiança)
     container.innerHTML = '<div class="adp-mx"></div>'
       + '<button type="button" class="adp-addcand">+ candidato a nicho</button>'
       + '<div class="adp-savest" style="display:none"></div>';
@@ -300,6 +302,9 @@ window.ADP_CANVAS = (function () {
     var STAR = '<svg viewBox="0 0 24 24"><path d="M12 3l2.5 5.5L20 9.3l-4 3.9.9 5.8L12 16.2 7.1 19l.9-5.8-4-3.9 5.5-.8z"/></svg>';
     // evidência = linha compacta que abre pra editar (nada de caixão cinza sempre aberto)
     function evLineHTML(i, k, cell) {
+      if (editing === i + ':' + k) {
+        return '<textarea class="mx-ev" data-i="' + i + '" data-k="' + k + '" rows="2" placeholder="Qual fato sustenta essa nota? Sem evidência ela é torcida.">' + esc(cell.ev || '') + '</textarea>';
+      }
       if (cell.ev && cell.ev.trim()) {
         return '<button type="button" class="mx-evbtn has" data-i="' + i + '" data-k="' + k + '"><svg viewBox="0 0 24 24" class="ei"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg><b>Evidência:</b>&nbsp;<span class="tx">' + esc(cell.ev) + '</span></button>';
       }
@@ -311,11 +316,11 @@ window.ADP_CANVAS = (function () {
       // nota: 1–5 discretos, o escolhido cresce e fica preto (é o próprio seletor, sem caixa)
       for (var v = 1; v <= 5; v++) n += '<button type="button" class="mx-nn' + (cell.nota === v ? ' on' : '') + '" data-i="' + i + '" data-k="' + k + '" data-v="' + v + '">' + v + '</button>';
       // confiança: 3 chips pequenos, aparece SÓ depois que tem evidência (é a confiança na nota, dado o fato)
-      var hasEv = !!(cell.ev && cell.ev.trim());
+      var showConf = !!(cell.ev && cell.ev.trim()) || editing === i + ':' + k;
       var chips = [['baixa', 'baixa'], ['media', 'média'], ['alta', 'alta']].map(function (x) {
         return '<button type="button" class="mx-cc' + (cell.conf === x[0] ? ' on' : '') + '" data-i="' + i + '" data-k="' + k + '" data-c="' + x[0] + '">' + x[1] + '</button>';
       }).join('');
-      var confHTML = hasEv ? '<span class="mx-confrow"><span class="cl">confiança</span><span class="mx-conf">' + chips + '</span></span>' : '';
+      var confHTML = showConf ? '<span class="mx-confrow"><span class="cl">confiança</span><span class="mx-conf">' + chips + '</span></span>' : '';
       return '<div class="mx-row">'
         + '<div class="mx-c1"><div class="n">' + esc(c.h) + '</div><div class="q">' + esc(c.hint) + '</div>'
         +   '<div class="mx-evline" data-i="' + i + '" data-k="' + k + '">' + evLineHTML(i, k, cell) + '</div></div>'
@@ -400,17 +405,12 @@ window.ADP_CANVAS = (function () {
       // nota (1–5): clica o número, o escolhido cresce/fica preto
       var nn = C('.mx-nn');
       if (nn) { var ni = +nn.dataset.i, nk = nn.dataset.k, nv = +nn.dataset.v; rows[ni].cells[nk].nota = (rows[ni].cells[nk].nota === nv ? 0 : nv); paint(); persist(); return; }
-      // confiança em chips (só aparece com evidência)
-      var cc = C('.mx-cc');
-      if (cc) { var xi = +cc.dataset.i, xk = cc.dataset.k, xv = cc.dataset.c; rows[xi].cells[xk].conf = (rows[xi].cells[xk].conf === xv ? '' : xv); paint(); persist(); return; }
-      // abrir editor de evidência inline
+      // abrir editor de evidência (revela a confiança ao lado na mesma hora)
       var evbtn = C('.mx-evbtn');
       if (evbtn) {
-        var ei = +evbtn.dataset.i, ek = evbtn.dataset.k, line = evbtn.parentNode;
-        line.innerHTML = '<textarea class="mx-ev" data-i="' + ei + '" data-k="' + ek + '" rows="2" placeholder="Qual fato sustenta essa nota? Sem evidência ela é torcida.">' + esc(rows[ei].cells[ek].ev || '') + '</textarea>';
-        var ta = line.querySelector('textarea');
-        // ao sair, salva e re-renderiza (pra confiança aparecer/sumir conforme a evidência)
-        if (ta) { ta.focus(); ta.addEventListener('blur', function () { rows[ei].cells[ek].ev = ta.value; persist(); paint(); }); }
+        editing = evbtn.dataset.i + ':' + evbtn.dataset.k; paint();
+        var ta = container.querySelector('.mx-ev');
+        if (ta) { ta.focus(); var L = ta.value.length; try { ta.setSelectionRange(L, L); } catch (er) {} }
         return;
       }
       // expandir candidato colapsado
@@ -422,7 +422,26 @@ window.ADP_CANVAS = (function () {
       var del = C('.mx-del');
       if (del) { rows.splice(+del.dataset.i, 1); if (!rows.length) rows.push(normRow()); if (openIdx >= rows.length) openIdx = rows.length - 1; paint(); persist(); }
     });
-    container.addEventListener('focusout', function () { doSave(2, matData(), st, onSaved); });
+    // confiança: mousedown + preventDefault vence a corrida contra o blur do textarea
+    // (assim clicar num chip enquanto digita a evidência NÃO perde o clique nem o foco)
+    container.addEventListener('mousedown', function (e) {
+      var cc = e.target.closest ? e.target.closest('.mx-cc') : null;
+      if (!cc) return;
+      e.preventDefault();
+      var xi = +cc.dataset.i, xk = cc.dataset.k, xv = cc.dataset.c;
+      rows[xi].cells[xk].conf = (rows[xi].cells[xk].conf === xv ? '' : xv);
+      var self = rows[xi].cells[xk].conf;
+      cc.parentNode.querySelectorAll('.mx-cc').forEach(function (b) { b.classList.toggle('on', b.dataset.c === self); });
+      persist();
+    });
+    container.addEventListener('focusout', function (e) {
+      // fechar o editor de evidência ao sair dele: salva, some com o textarea, repinta
+      if (e.target && e.target.classList && e.target.classList.contains('mx-ev')) {
+        rows[+e.target.dataset.i].cells[e.target.dataset.k].ev = e.target.value;
+        editing = null; persist(); paint(); return;
+      }
+      doSave(2, matData(), st, onSaved);
+    });
     paint();
   }
 
