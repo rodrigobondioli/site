@@ -36,8 +36,8 @@ window.ADP = (function () {
     savePlan: (data, course = COURSE) =>
       api("/api/plan", { method: "POST", body: JSON.stringify({ course, data }) }),
     ruminacao: (nicho, cliente) => api("/api/ai/ruminacao", { method: "POST", body: JSON.stringify({ nicho, cliente }) }),
-    // 🎯 Ikigai do Nicho (Bônus): recebe as respostas e devolve candidatos de nicho.
-    ikigai: (respostas) => api("/api/ai/ikigai", { method: "POST", body: JSON.stringify({ respostas }) }),
+    // 🎯 Ikigai do Nicho (Bônus): mesma função do Estrategista, roteada por task (limite de serverless functions).
+    ikigai: (respostas) => api("/api/ai/estrategista", { method: "POST", body: JSON.stringify({ task: "ikigai", respostas }) }),
     // 🛠️ Escavador (Aula 1 — VOCÊ): 1 turno da conversa. Cliente guarda o estado (history + voce) e manda a cada chamada.
     escavador: (payload) => api("/api/ai/escavador", { method: "POST", body: JSON.stringify(payload || {}) }),
     // aulas + progresso
