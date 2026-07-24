@@ -509,7 +509,7 @@ window.ADP_CANVAS = (function () {
         if (!hasComu && !hasComp && !hasProva) res.gate = { sev: 'critico', label: 'sem matéria-prima' };
         else if (!hasProva) res.gate = { sev: 'importante', label: 'falta prova concreta' };
         else if (!has(d.historia)) res.gate = { sev: 'aviso', label: 'história fraca' };
-        else res.gate = { sev: 'ok', label: 'matéria-prima com prova' };
+        else res.gate = { sev: 'ok', label: 'base sólida' };
       } else {
         if (!has(d.forte) && !has(d.mundos)) res.gate = { sev: 'critico', label: 'sem matéria-prima' };
         else if (!has(d.forte)) res.gate = { sev: 'importante', label: 'sem prova concreta' };
@@ -523,7 +523,7 @@ window.ADP_CANVAS = (function () {
         var anyEv = rows.some(function (r) { return CRIT7.some(function (c) { return (r.cells[c.k].ev || '').trim(); }); });
         var champ = champion(rows);
         if (!anyEv) res.gate = { sev: 'critico', label: 'matriz sem evidência' };
-        else if (!champ) res.gate = { sev: 'importante', label: 'nenhum nicho fecha os 2 eixos' };
+        else if (!champ) res.gate = { sev: 'importante', label: 'falta fechar os dois eixos' };
         else if (avgConf(champ) < 1) res.gate = { sev: 'importante', label: 'confiança baixa' };
         else res.gate = { sev: 'ok', label: 'nicho com evidência' };
       }

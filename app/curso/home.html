@@ -91,7 +91,8 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .progress .row .pct{font-weight:700;font-size:16px}
 .progress .bar{margin-top:14px;height:7px;border-radius:999px;background:var(--soft);overflow:hidden}
 .progress .bar i{display:block;height:100%;width:40%;border-radius:999px;background:var(--ink);transition:width .3s}
-.progress .psub{margin-top:12px;font-size:13px;color:var(--muted)}
+.progress .psub{margin-top:12px;font-size:13px;color:var(--muted);line-height:1.65}
+.progress .psub b{font-weight:700;color:var(--ink)}
 
 /* conteúdo */
 .chead{display:flex;align-items:baseline;justify-content:space-between;gap:16px;margin:36px 0 14px}
@@ -119,7 +120,9 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .lesson.lock .tt{color:var(--faint)}
 .lesson .tag{font-size:11px;font-weight:700;color:var(--muted);border:1px solid var(--line);padding:2px 8px;border-radius:999px;flex:none}
 .lesson .dur{font-size:13px;color:var(--muted);flex:none;min-width:42px;text-align:right}
-/* 3 infos por card: Conclusão · Gate · Validação — nunca um selo só */
+/* linha secundária do card: texto corrido (conclusão · diagnóstico · validação) */
+.lesson .lsub{font-size:12px;color:var(--muted);line-height:1.4}
+.lesson.lock .lsub{color:var(--faint)}
 .linfo{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
 .pill{font-size:11px;font-weight:700;padding:2px 8px;border-radius:999px;border:1px solid var(--line);color:var(--muted);white-space:nowrap}
 .pill.dots{letter-spacing:1.5px;font-size:10px;color:var(--ink)}
@@ -225,13 +228,13 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
   function blockInfo(l, blockData){
     if(l.canvas_block==null || !GATE) return '';
     var g = GATE(l.canvas_block, blockData[l.canvas_block]);
-    if(!g.preenchido) return '<span class="linfo"><span class="pill">bloco não preenchido</span></span>';
-    var gatePill = g.gate.sev!=='nenhum' ? '<span class="pill g-'+g.gate.sev+'">'+esc(g.gate.label)+'</span>' : '';
-    return '<span class="linfo">'
-      + '<span class="pill dots">'+dots(g.completion)+'</span>'
-      + gatePill
-      + '<span class="pill val"><i class="vdot"></i>hipótese</span>'
-      + '</span>';
+    if(!g.preenchido) return '<span class="lsub">não preenchido</span>';
+    // texto corrido: N/5 estruturado · diagnóstico · validação (sem pilha de pills)
+    var n = Math.max(0,Math.min(5,Math.round((g.completion||0)*5)));
+    var parts = [n+'/5 estruturado'];
+    if(g.gate.label) parts.push(esc(g.gate.label));
+    if(g.validacao==='hipotese') parts.push('hipótese');
+    return '<span class="lsub">'+parts.join(' · ')+'</span>';
   }
   // primeira pendência aberta (crítico > importante > aviso), na ordem da trilha — pro resumo global
   function firstPend(lessons, blockData){
@@ -250,21 +253,22 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
     var projPct = blocksTotal? Math.round(blocksFilled/blocksTotal*100):0;
     document.getElementById('progPct').textContent = projPct+'%';
     document.getElementById('progBar').style.width = projPct+'%';
-    // resumo global: % estruturado · status · próxima pendência (o dashboard só representa estados)
-    var status = blocksFilled ? 'hipótese (nada validado em campo ainda)' : 'sem dados ainda';
+    // resumo global em 3 linhas (mais fácil escanear): % estruturado / status / próxima pendência
+    var status = blocksFilled ? 'hipótese' : 'sem dados ainda';
     var pend = firstPend(lessons, blockData||{});
     var pendTxt = pend
       ? 'Próxima pendência: '+esc(pend.g.gate.label)+' — '+esc(pend.lesson.title)
       : (blocksFilled ? 'Nenhuma pendência crítica — dá pra gerar o posicionamento.' : 'Preenche o Canvas pra começar.');
-    document.getElementById('progSub').textContent = projPct+'% estruturado · Status: '+status+' · '+pendTxt;
-    document.getElementById('contentMeta').textContent = '1 seção · '+total+' aula'+(total===1?'':'s');
+    document.getElementById('progSub').innerHTML = '<b>'+projPct+'% estruturado</b><br>Status: '+status+'<br>'+pendTxt;
+    // sem repetir a contagem: seção aqui, nº de aulas só no módulo
+    document.getElementById('contentMeta').textContent = '1 seção';
     document.getElementById('modMeta').textContent = total+' aula'+(total===1?'':'s');
 
     // "agora" = primeira não concluída
     var nowIdx = lessons.findIndex(function(l){ return !doneSet.has(l.id); });
     if(nowIdx<0) nowIdx = total-1;
     var cont = document.getElementById('continueBtn');
-    if(total){ cont.href='aula.html?a='+lessons[nowIdx].id; cont.textContent = done? (done<total?'Continuar':'Revisar') : 'Começar'; }
+    if(total){ var nxt=lessons[nowIdx]; var verb=done? (done<total?'Continuar':'Revisar') : 'Começar'; cont.href='aula.html?a='+nxt.id; cont.textContent = verb+(nxt.title? ': '+nxt.title : ''); }
     else cont.style.display='none';
 
     var html = lessons.map(function(l,i){
