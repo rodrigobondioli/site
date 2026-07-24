@@ -496,6 +496,7 @@ s { text-decoration: line-through; }
    RECAP + OFERTA
    ============================================================ */
 .offer { padding-block: 80px; }
+.offer-tease { text-align: center; margin: 0 0 48px; text-wrap: balance; }
 .offer-grid { grid-template-columns: minmax(0, 1.42fr) minmax(0, 1fr); align-items: start; }
 .offer-grid .col { display: flex; flex-direction: column; gap: 24px; }
 .rationale { gap: 20px; }
