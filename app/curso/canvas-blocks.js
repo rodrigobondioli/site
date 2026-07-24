@@ -21,25 +21,25 @@ window.ADP_CANVAS = (function () {
   var CONF_W = { alta: 2, media: 1, baixa: 0 };
 
   var BLOCKS = [
-    { block: 0, title: 'Sobre você', type: 'fields', fields: [
+    { block: 0, title: 'Sobre Você', type: 'fields', fields: [
       { key: 'mundos',   label: 'Mundos que você já conhece por dentro', ph: 'Trampo antigo, negócio da família, hobby, paixão — mercados que você já vive.' },
       { key: 'forte',    label: 'O que sai fácil e onde você já tem prova', ph: 'O projeto que sai quase no automático — e pra que tipo de cliente você já tem trabalho pra mostrar.' },
       { key: 'turmas',   label: 'Suas turmas e comunidades',              ph: 'Academia, futebol, RPG, igreja, trampo antigo, pais de pet… onde esse tipo de dono se encontra.' },
       { key: 'historia', label: 'Sua história',                           ph: 'De onde você veio e por que faz o que faz do jeito que faz. O que só você tem.' }
     ]},
-    { block: 1, title: 'O inimigo (seus medos)', type: 'fields', fields: [
+    { block: 1, title: 'O Inimigo (seus medos)', type: 'fields', fields: [
       { key: 'segura',       label: 'O que te segura no genérico',        ph: 'Qual medo te trava pra nichar? Manda sem filtro — medo no papel encolhe.' },
       { key: 'visibilidade', label: 'Como teu cliente ideal te acharia hoje?', ph: 'Hoje, quantos cliques até alguém chegar em você? Sem maquiar.' }
     ]},
     { block: 2, title: 'A Matriz do Nicho', type: 'matrix' },
-    { block: 3, title: 'Quem você atende (a dor)', type: 'fields', fields: [
+    { block: 3, title: 'Quem Você Atende (a dor)', type: 'fields', fields: [
       { key: 'nao',           label: 'Quem eu NÃO atendo (obrigatório)',  ph: 'Quem você recusa. Começa por aqui — posicionamento é dizer não.' },
       { key: 'ideal',         label: 'Cliente ideal — situação e dor',    ph: 'Não idade e CEP. A situação que ele vive e a dor que o mantém acordado.' },
       { key: 'intermediario', label: 'Cliente intermediário',             ph: 'Serve, mas não é o sonho.' },
       { key: 'dor',           label: 'A dor-loop principal',              ph: 'A vozinha que não cala na cabeça dele. Roda a Caça à Ruminação se travar.' },
       { key: 'desejo',        label: 'O que ele quer no lugar (o desejo)',ph: 'Não a dor — o estado que ele quer alcançar. Pra onde ele quer chegar quando a dor sumir.' }
     ]},
-    { block: 4, title: 'Seu monopólio', type: 'fields', fields: [
+    { block: 4, title: 'Seu Monopólio', type: 'fields', fields: [
       { key: 'diferencial', label: 'Seu diferencial que ninguém copia', ph: 'Tua história, o que só você tem — o cruzamento do nicho com quem você é.' },
       { key: 'metodo',      label: 'Seu método — as fases',             ph: 'Não um nome bonito. Os passos reais de como você resolve, em ordem. Ex: 1) diagnóstico 2) recorte 3) execução. Sem fases, é só um rótulo.' },
       { key: 'prova',       label: 'Sua prova real (um caso com resultado)', ph: 'Um caso concreto: cliente, o que você fez, o que mudou. Número se tiver. Não tem prova ainda? Deixa vazio — não invente.' },
@@ -536,7 +536,7 @@ window.ADP_CANVAS = (function () {
         var anyEv = rows.some(function (r) { return CRIT7.some(function (c) { return (r.cells[c.k].ev || '').trim(); }); });
         var champ = champion(rows);
         if (!anyEv) res.gate = { sev: 'critico', label: 'matriz sem evidência' };
-        else if (!champ) res.gate = { sev: 'importante', label: 'falta fechar os dois eixos' };
+        else if (!champ) res.gate = { sev: 'importante', label: 'falta o nicho passar nos dois lados (mercado e você)' };
         else if (avgConf(champ) < 1) res.gate = { sev: 'importante', label: 'confiança baixa' };
         else res.gate = { sev: 'ok', label: 'nicho com evidência' };
       }

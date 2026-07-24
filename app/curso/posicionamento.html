@@ -217,7 +217,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
         </div>
 
         <div class="sec wide">
-          <div class="k">Sua PUV</div>
+          <div class="k">Sua frase de valor</div>
           <div class="puvbox">
             <div class="puv"><div class="pl">CURTA (bio, cartão)</div><div class="pv" id="f-puvc">Encho os horários vazios da sua barbearia premium.</div></div>
             <div class="puv"><div class="pl">FALADA (quando perguntarem o que você faz)</div><div class="pv long" id="f-puvf">"Sabe aquele buraco na agenda da barbearia no meio da semana? Eu faço landing page que transforma quem só segue no Instagram em assinante que aparece na terça-feira."</div></div>
@@ -393,7 +393,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
     const parts = ["f-frase","f-nicho","f-monopolio","f-dor","f-puvc","f-puvf","f-medos"].map(id=>$(id)?.textContent?.trim()).filter(Boolean);
     const atende = [...($("f-atende")?.querySelectorAll("li")||[])].map(li=>"- "+li.textContent).join("\n");
     const nao = [...($("f-naoatende")?.querySelectorAll("li")||[])].map(li=>"- "+li.textContent).join("\n");
-    const txt = `MEU POSICIONAMENTO\n\n${parts[0]}\n\nNICHO: ${parts[1]}\nMONOPÓLIO: ${parts[2]}\n\nATENDE:\n${atende}\n\nNÃO ATENDE:\n${nao}\n\nDOR: ${parts[3]}\n\nPUV CURTA: ${parts[4]}\nPUV FALADA: ${parts[5]}`;
+    const txt = `MEU POSICIONAMENTO\n\n${parts[0]}\n\nNICHO: ${parts[1]}\nMONOPÓLIO: ${parts[2]}\n\nATENDE:\n${atende}\n\nNÃO ATENDE:\n${nao}\n\nDOR: ${parts[3]}\n\nFRASE DE VALOR (CURTA): ${parts[4]}\nFRASE DE VALOR (FALADA): ${parts[5]}`;
     navigator.clipboard?.writeText(txt).then(()=>say("Copiado."), ()=>say("Não consegui copiar."));
   });
 
@@ -410,7 +410,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
     try{
       const r = await window.ADP.loadPlan();
       if(r && r.plan){ render(r.plan); say("Gerado a partir do seu Canvas."); }
-      else { clearExample(); say("Preenche os 5 blocos do Canvas e clica em Gerar com o Estrategista — ele lê tua matéria-prima e monta frase, nicho, PUV e o plano de 90 dias."); }
+      else { clearExample(); say("Preenche os 5 blocos do Canvas e clica em Gerar com o Estrategista — ele lê tua matéria-prima e monta a frase de especialista, o nicho, a frase de valor e o plano de 90 dias."); }
     }catch(e){ /* se o load falhar, deixa como está */ }
   }
   boot();

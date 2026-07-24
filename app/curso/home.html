@@ -256,7 +256,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
     document.getElementById('progPct').textContent = projPct+'%';
     document.getElementById('progBar').style.width = projPct+'%';
     // resumo global em 3 linhas (mais fácil escanear): % estruturado / status / próxima pendência
-    var status = blocksFilled ? 'hipótese' : 'sem dados ainda';
+    var status = blocksFilled ? 'hipótese (a testar — ainda não validado)' : 'sem dados ainda';
     var pend = firstPend(lessons, blockData||{});
     var pendTxt = pend
       ? 'Próxima pendência: '+esc(pend.g.gate.label)+' — '+esc(pend.lesson.title)
