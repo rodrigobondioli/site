@@ -157,7 +157,8 @@ window.ADP_CANVAS = (function () {
 
   var STYLE = ''
     + '.adp-fld{margin-top:18px}'
-    + '.adp-fld label{display:block;font-size:16px;font-weight:700;color:var(--ink,#18181b);margin-bottom:9px;letter-spacing:-.01em;line-height:1.4}'
+    + '.adp-fld label{display:block;font-size:16px;font-weight:700;color:var(--ink,#18181b);margin-bottom:5px;letter-spacing:-.01em;line-height:1.4}'
+    + '.adp-fld .adp-hint{font-size:12.5px;color:var(--muted,#71717a);margin:0 0 9px;line-height:1.45;max-width:70ch}'
     + '.adp-fld textarea{width:100%;border:1px solid var(--line,#d4d4d8);border-radius:16px;background:none;padding:13px 15px;font:inherit;font-size:14.5px;color:var(--ink,#18181b);resize:none;min-height:70px;line-height:1.55;transition:border-color .15s}'
     + '.adp-fld textarea::placeholder{color:var(--faint,#a1a1aa)}'
     + '.adp-fld textarea:focus{outline:none;border-color:var(--line,#d4d4d8)}'
@@ -279,7 +280,8 @@ window.ADP_CANVAS = (function () {
   function renderFields(container, def, data, onSaved) {
     var html = def.fields.map(function (f) {
       return '<div class="adp-fld"><label>' + esc(f.label) + '</label>'
-        + '<textarea data-key="' + f.key + '" placeholder="' + esc(f.ph) + '">' + esc(data[f.key] != null ? data[f.key] : '') + '</textarea></div>';
+        + '<div class="adp-hint">' + esc(f.ph) + '</div>'
+        + '<textarea data-key="' + f.key + '" placeholder="Escreva aqui…">' + esc(data[f.key] != null ? data[f.key] : '') + '</textarea></div>';
     }).join('');
     container.innerHTML = html + '<div class="adp-savest"></div>';
     var tas = container.querySelectorAll('textarea[data-key]');

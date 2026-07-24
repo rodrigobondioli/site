@@ -130,6 +130,8 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .nextstep .ns-next:hover{color:var(--ink)}
 /* aplique aqui (bloco do Canvas embaixo do vídeo) */
 .applyhere{position:relative;margin-top:44px;border:1px solid var(--line);border-radius:var(--r);padding:26px 24px 22px}
+.applyhere .adp-syncnote{font-size:12.5px;color:var(--muted);margin-top:18px;padding-top:13px;border-top:1px solid var(--line)}
+.applyhere .adp-syncnote a{color:var(--ink);text-decoration:underline;font-weight:700}
 .applyhere .ah-tag{position:absolute;top:-12px;left:22px;display:inline-flex;align-items:center;gap:6px;background:var(--surface);border:1px solid var(--line);color:var(--ink);font-size:10.5px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;padding:5px 11px;border-radius:8px}
 .applyhere .ah-tag svg{stroke:var(--ink)}
 .applyhere h3{font-size:18px;font-weight:700;margin-top:7px;letter-spacing:-.01em}
@@ -374,7 +376,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
     if(!def) return '';
     // bloco 0 (VOCÊ) é conversa: o card começa DIRETO na ferramenta (abinha + 2 colunas), sem título/intro redundante
     if(l.canvas_block===0){
-      return '<div class="applyhere applyhere-esc"><div id="canvasInline"></div></div>';
+      return '<div class="applyhere applyhere-esc"><div id="canvasInline"></div><p class="adp-syncnote">Salva sozinho — isto é o teu <a href="canvas.html">Meu Canvas</a>. Dá pra continuar aqui ou lá.</p></div>';
     }
     // blocos de formulário (1/3/4): wizard 1 pergunta por vez — MESMO padrão da Aula 1 (card + barra N de M + pergunta grande + botão avança). initFormWizard() liga a navegação.
     var ex = l.exercise||{};
@@ -386,6 +388,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
       +'<div class="esc-q" id="fwQ"></div>'
       +'<div id="canvasInline" class="esc-fieldwrap"></div>'
       +'<div class="esc-formfoot gone" id="fwFoot"><button class="esc-cont" id="fwNext">Continuar →</button></div>'
+      +'<p class="adp-syncnote">Salva sozinho — isto é o teu <a href="canvas.html">Meu Canvas</a>. Dá pra continuar aqui ou lá.</p>'
       +'</div>';
   }
 
@@ -576,6 +579,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
       var ta=f.querySelector('textarea');
       if(ta){
         ta.rows=1; // começa 1 linha (igual ao composer) e cresce conforme digita
+        var __h=f.querySelector('.adp-hint'); if(__h){ ta.placeholder=__h.textContent; __h.style.display='none'; } // no wizard a dica vira o placeholder do composer (sem duplicar)
         ta.__grow=function(){ ta.style.height='auto'; ta.style.height=Math.min(ta.scrollHeight,140)+'px'; };
         ta.addEventListener('input', ta.__grow);
         ta.addEventListener('keydown', function(e){ if(e.key==='Enter' && !e.shiftKey){ e.preventDefault(); advance(); } });
