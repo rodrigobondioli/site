@@ -230,7 +230,7 @@ window.ADP_CANVAS = (function () {
     + '.mx-vd .dot.ok{background:var(--lime,#e7f99a)}.mx-vd .dot.mid{background:var(--faint,#a1a1aa)}.mx-vd .dot.bad{background:var(--ink,#18181b)}'
     + '.mx-vd .vl{font-weight:700;flex:none}'
     + '.mx-vd .vx{color:#3f3f46;min-width:0}'
-    + '.adp-addcand{margin-top:22px;font-size:12.5px;color:var(--muted,#71717a);border:none;background:none;cursor:pointer;text-decoration:underline;text-underline-offset:2px;padding:4px 2px}'
+    + '.adp-addcand{margin-top:24px;padding:16px 2px 4px;font-size:12.5px;color:var(--muted,#71717a);border:none;border-top:1px solid var(--line,#d4d4d8);background:none;cursor:pointer;text-decoration:underline;text-underline-offset:2px;display:block;width:100%;text-align:left}'
     + '.adp-addcand:hover{color:var(--ink,#18181b)}'
     // --- Matriz v6: stepper (uma hipótese aberta + um critério por vez) ---
     + '.mx2-head{padding:2px 2px 0}'
@@ -435,7 +435,7 @@ window.ADP_CANVAS = (function () {
         + '<button type="button" class="mx2-link mx2-trocar" data-i="' + i + '">trocar</button>'
         + (multi ? '<button type="button" class="mx2-link mx2-rm" data-i="' + i + '">remover</button>' : '')
         + (multi ? '<button type="button" class="mx2-link mx2-recolher" data-i="' + i + '">recolher</button>' : '');
-      var lead = ak ? (SEC[critEixo(ak)] + ' · ' + (STEP_ORDER.indexOf(ak) + 1) + ' de 7') : '7 de 7 ✓';
+      var lead = ak ? (SEC[critEixo(ak)] + ' · Critério ' + (STEP_ORDER.indexOf(ak) + 1) + ' de 7') : 'Todos os 7 critérios ✓';
       return '<div class="mx-cand" data-i="' + i + '">'
         + '<div class="mx2-head">'
         +   '<textarea class="mx-name" data-i="' + i + '" rows="1" placeholder="ex: clínicas de estética que precisam atrair cliente pelo digital">' + esc(row.name) + '</textarea>'
@@ -539,6 +539,14 @@ window.ADP_CANVAS = (function () {
   function matrizReady(data2) {
     if (!data2 || !data2.rows) return false;
     return data2.rows.map(normRow).some(function (r) { return (r.name || '').trim() && isScored(r); });
+  }
+  // quantos critérios faltam na hipótese mais avançada (pro "Faltam N critérios")
+  function matrizRemaining(data2) {
+    if (!data2 || !data2.rows) return CRIT7.length;
+    var named = data2.rows.map(normRow).filter(function (r) { return (r.name || '').trim(); });
+    if (!named.length) return CRIT7.length;
+    var best = Math.max.apply(null, named.map(function (r) { return CRIT7.filter(function (c) { return nota(r, c.k) >= 1; }).length; }));
+    return Math.max(0, CRIT7.length - best);
   }
 
   // quão preenchido está um bloco (0..1) — pros pontinhos ●●●○○ do dashboard/cards
@@ -656,5 +664,5 @@ window.ADP_CANVAS = (function () {
     if (blockNum === 3) appendRuminacao(container, opts || {});
   }
 
-  return { BLOCKS: BLOCKS, byBlock: byBlock, isFilled: isFilled, renderBlock: renderBlock, nichoFromBlock2: nichoFromBlock2, matrizReady: matrizReady, gateForBlock: gateForBlock, blockCompletion: blockCompletion };
+  return { BLOCKS: BLOCKS, byBlock: byBlock, isFilled: isFilled, renderBlock: renderBlock, nichoFromBlock2: nichoFromBlock2, matrizReady: matrizReady, matrizRemaining: matrizRemaining, gateForBlock: gateForBlock, blockCompletion: blockCompletion };
 })();

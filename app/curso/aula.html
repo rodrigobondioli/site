@@ -623,9 +623,10 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
       // Continuar só ativa quando UMA hipótese tem os 7 critérios pontuados (ponto 8)
       var savedEl=card.querySelector('#fwSaved');
       var gate=function(){
-        var ready = !window.ADP_CANVAS.matrizReady || window.ADP_CANVAS.matrizReady(CANVAS[2]||{});
+        var rem = window.ADP_CANVAS.matrizRemaining ? window.ADP_CANVAS.matrizRemaining(CANVAS[2]||{}) : 0;
+        var ready = rem===0;
         if(nextBtn){ nextBtn.disabled=!ready; }
-        if(savedEl){ savedEl.textContent = ready ? 'salvo automaticamente' : 'pontue os 7 critérios pra seguir'; }
+        if(savedEl){ savedEl.textContent = ready ? 'salvo automaticamente' : (rem===1 ? 'Falta 1 critério' : ('Faltam '+rem+' critérios')); }
       };
       window.__matrizGate=gate; gate();
       if(nextBtn) nextBtn.addEventListener('click', function(){ if(nextBtn.disabled) return; finish(); });
