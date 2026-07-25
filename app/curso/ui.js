@@ -45,9 +45,9 @@
   .adp-toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
   .adp-toast.ok{background:#e7f99a;color:#101010}
   .adp-toast.erro{background:#ff00d7;color:#fff}
-  .adp-chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:2px}
-  .adp-chip{border:1px solid #d4d4d8;border-radius:999px;padding:8px 14px;font-size:13px;font-weight:700;cursor:pointer;background:#fff;color:#18181b}
-  .adp-chip.on{background:#18181b;color:#fff;border-color:#18181b}
+  .adp-chips{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:2px}
+  .adp-chip{border:0;border-radius:999px;padding:9px 14px;font-size:13px;font-weight:700;cursor:pointer;background:#f1f1f1;color:#18181b;text-align:center;transition:background .12s,color .12s}
+  .adp-chip.on{background:#18181b;color:#fff}
   @media(max-width:520px){.adp-dw{width:100%}}
   /* ---- tema escuro dos drawers (Suporte/Sugestão/Perfil) — igual ao painel de aulas ---- */
   .adp-dw{background:#101010}
@@ -58,18 +58,19 @@
   .adp-db{color:#fff}
   .adp-db p.sub{color:rgba(255,255,255,.6)}
   .adp-f label{color:rgba(255,255,255,.6)}
-  .adp-f input,.adp-f textarea,.adp-f select{background:rgba(255,255,255,.05);border-color:rgba(255,255,255,.16);color:#fff}
+  .adp-f input,.adp-f textarea,.adp-f select{background:rgba(255,255,255,.06);border:0;color:#fff}
   .adp-f input::placeholder,.adp-f textarea::placeholder{color:rgba(255,255,255,.38)}
-  .adp-f input:focus,.adp-f textarea:focus,.adp-f select:focus{border-color:#fff}
+  .adp-f input:focus,.adp-f textarea:focus,.adp-f select:focus{background:rgba(255,255,255,.11)}
   .adp-f input[readonly]{background:rgba(255,255,255,.04);color:rgba(255,255,255,.5)}
-  .adp-ghost{background:rgba(255,255,255,.05);border-color:rgba(255,255,255,.16);color:#fff}
-  .adp-ghost:hover{background:rgba(255,255,255,.1)}
+  .adp-ghost{background:rgba(255,255,255,.06);border:0;color:#fff}
+  .adp-ghost:hover{background:rgba(255,255,255,.11)}
   .adp-msg{color:rgba(255,255,255,.6)}
   .adp-signout{border-top-color:rgba(255,255,255,.1)}
   .adp-signout a{color:rgba(255,255,255,.6)}
   .adp-signout a:hover{color:var(--pink,#ff00d7)}
-  .adp-chip{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.18);color:#fff}
-  .adp-chip.on{background:#fff;color:#101010;border-color:#fff}
+  .adp-chip{background:rgba(255,255,255,.08);color:#fff}
+  .adp-chip:hover{background:rgba(255,255,255,.15)}
+  .adp-chip.on{background:#fff;color:#101010}
   .adp-photo .pic{box-shadow:0 0 0 1px rgba(255,255,255,.14);background:rgba(255,255,255,.06)}
   .adp-photo .hint{color:rgba(255,255,255,.55)}
   `;
