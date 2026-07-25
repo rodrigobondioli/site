@@ -230,8 +230,47 @@ window.ADP_CANVAS = (function () {
     + '.mx-vd .dot.ok{background:var(--lime,#e7f99a)}.mx-vd .dot.mid{background:var(--faint,#a1a1aa)}.mx-vd .dot.bad{background:var(--ink,#18181b)}'
     + '.mx-vd .vl{font-weight:700;flex:none}'
     + '.mx-vd .vx{color:#3f3f46;min-width:0}'
-    + '.adp-addcand{margin-top:18px;font-size:13px;font-weight:700;color:var(--ink,#18181b);border:1px solid var(--line,#d4d4d8);border-radius:12px;padding:16px 14px;width:100%;cursor:pointer;background:none}'
-    + '.adp-addcand:hover{background:var(--soft,#e6e6e8)}'
+    + '.adp-addcand{margin-top:22px;font-size:12.5px;color:var(--muted,#71717a);border:none;background:none;cursor:pointer;text-decoration:underline;text-underline-offset:2px;padding:4px 2px}'
+    + '.adp-addcand:hover{color:var(--ink,#18181b)}'
+    // --- Matriz v6: stepper (uma hipótese aberta + um critério por vez) ---
+    + '.mx2-head{padding:2px 2px 0}'
+    + '.mx2-metatop{display:flex;justify-content:space-between;align-items:center;gap:12px}'
+    + '.mx2-lead{font-weight:700;font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--faint,#a1a1aa)}'
+    + '.mx2-recolher{font-size:12px;color:var(--muted,#71717a);text-decoration:underline;cursor:pointer;background:none;border:none;padding:2px}'
+    + '.mx2-recolher:hover{color:var(--ink,#18181b)}'
+    + '.mx2-links{display:flex;gap:16px;margin-top:8px}'
+    + '.mx2-link{font-size:12.5px;color:var(--muted,#71717a);text-decoration:underline;text-underline-offset:2px;cursor:pointer;background:none;border:none;padding:0;font-weight:700}'
+    + '.mx2-link:hover{color:var(--ink,#18181b)}'
+    + '.mx2-prog{display:flex;align-items:center;gap:14px;margin:22px 2px 4px}'
+    + '.mx2-progn{font-size:11px;font-weight:700;letter-spacing:.06em;color:var(--muted,#71717a);flex:none;text-transform:uppercase}'
+    + '.mx2-dots{display:flex;gap:7px;flex:1;flex-wrap:wrap}'
+    + '.mx2-dots i{width:9px;height:9px;border-radius:999px;background:var(--soft,#e6e6e8);border:1px solid var(--line,#d4d4d8);transition:.15s;cursor:pointer}'
+    + '.mx2-dots i.on{background:var(--ink,#18181b);border-color:var(--ink,#18181b)}'
+    + '.mx2-dots i.cur{background:var(--pink,#ff00d7);border-color:var(--pink,#ff00d7)}'
+    + '.mx2-sec{font-weight:700;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--faint,#a1a1aa);margin:18px 2px 0}'
+    + '.mx2-active{padding:12px 2px 4px}'
+    + '.mx2-ctitle{font-size:21px;font-weight:700;letter-spacing:-.01em;color:var(--ink,#18181b);line-height:1.18}'
+    + '.mx2-cq{font-size:13.5px;color:var(--muted,#71717a);margin:7px 0 18px;line-height:1.5;max-width:58ch}'
+    + '.mx2-notes{display:flex;gap:10px;flex-wrap:wrap}'
+    + '.mx2-nb{width:48px;height:48px;border-radius:13px;border:1px solid var(--line,#d4d4d8);background:none;font:inherit;font-weight:700;font-size:16px;color:var(--muted,#71717a);cursor:pointer;display:grid;place-items:center;transition:.12s}'
+    + '.mx2-nb:hover{border-color:var(--ink,#18181b);color:var(--ink,#18181b)}'
+    + '.mx2-nb.on{border-color:var(--ink,#18181b);background:var(--ink,#18181b);color:#fff}'
+    + '.mx2-scale{display:flex;justify-content:space-between;font-size:11px;color:var(--faint,#a1a1aa);margin-top:9px;max-width:288px}'
+    + '.mx2-done{display:flex;align-items:center;gap:12px;padding:12px 2px;border-top:1px solid var(--line,#d4d4d8)}'
+    + '.mx2-done .di{flex:none;display:flex;color:var(--faint,#a1a1aa)}'
+    + '.mx2-done .di svg{width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}'
+    + '.mx2-done .dn{flex:1;min-width:0;font-size:13.5px;font-weight:700;color:var(--ink,#18181b);cursor:pointer}'
+    + '.mx2-done .dv{flex:none;font-size:12px;font-weight:700;color:var(--ink,#18181b);background:var(--soft,#e6e6e8);border-radius:999px;padding:3px 11px;line-height:1.2}'
+    + '.mx2-done .dx{flex:none;font-size:12px;color:var(--muted,#71717a);text-decoration:underline;cursor:pointer}'
+    + '.mx2-done .dx:hover{color:var(--ink,#18181b)}'
+    + '.mx2-expl{padding:0 2px 12px}'
+    + '.mx2-expl textarea{width:100%;border:1px solid var(--line,#d4d4d8);border-radius:12px;background:none;padding:10px 12px;font:inherit;font-size:13.5px;color:var(--ink,#18181b);resize:none;min-height:54px;line-height:1.5}'
+    + '.mx2-expl textarea:focus{outline:none;border-color:var(--ink,#18181b)}'
+    + '.mx2-vd{display:flex;align-items:flex-start;gap:11px;margin-top:20px;padding:15px 17px;border:1px solid var(--line,#d4d4d8);border-radius:14px;background:var(--soft,#e6e6e8)}'
+    + '.mx2-vd .vdi{flex:none;width:8px;height:8px;border-radius:999px;margin-top:6px}'
+    + '.mx2-vd .vdi.ok{background:var(--lime,#e7f99a)}.mx2-vd .vdi.mid{background:var(--faint,#a1a1aa)}.mx2-vd .vdi.bad{background:var(--ink,#18181b)}'
+    + '.mx2-vd .vdt b{font-size:14.5px;color:var(--ink,#18181b);font-weight:700}'
+    + '.mx2-vd .vdt p{margin:4px 0 0;font-size:13px;color:var(--muted,#71717a);line-height:1.5}'
     // --- Caça à Ruminação ---
     + '.adp-rum{margin-top:20px;padding-top:20px;border-top:1px solid var(--line,#d4d4d8)}'
     + '.adp-rum .rh{display:flex;align-items:center;gap:8px;font-weight:700;font-size:14.5px}'
@@ -301,7 +340,7 @@ window.ADP_CANVAS = (function () {
     var NOTE_OK = 'Você não precisa acertar de primeira. Escolha a direção que mais faz sentido com o que você conhece hoje — usa, edita ou troca à vontade.';
     container.innerHTML = '<p class="mx-note" id="mxNote" style="font-size:13px;color:var(--muted,#71717a);line-height:1.5;margin:0 0 16px">' + NOTE_OK + '</p>'
       + '<div class="adp-mx"></div>'
-      + '<button type="button" class="adp-addcand">+ hipótese de nicho</button>'
+      + '<button type="button" class="adp-addcand">Nenhuma dessas faz sentido? Criar outra hipótese</button>'
       + '<div class="adp-savest" style="display:none"></div>';
     var mx = container.querySelector('.adp-mx');
     var st = container.querySelector('.adp-savest');
@@ -332,119 +371,97 @@ window.ADP_CANVAS = (function () {
       return [['', 'conf.'], ['baixa', 'baixa'], ['media', 'média'], ['alta', 'alta']]
         .map(function (x) { return '<option value="' + x[0] + '"' + (x[0] === sel ? ' selected' : '') + '>' + x[1] + '</option>'; }).join('');
     }
-    // ordem de exibição (mercado/você intercalados) + ícone de cada critério
-    var CRIT_ORDER = ['intensidade', 'repertorio', 'urgencia', 'acesso', 'crescimento', 'poder', 'aderencia'];
-    var CRIT_ICON = {
+    // stepper: um critério por vez. Ordem = mercado (4) depois você (3), agrupado por eixo.
+    var STEP_ORDER = ['intensidade', 'urgencia', 'crescimento', 'poder', 'repertorio', 'acesso', 'aderencia'];
+    var SEC = { mercado: 'Sobre o mercado', voce: 'Sobre você' };
+    var C_ICON = {
       intensidade: '<path d="M13 2 4 14h7l-1 8 9-12h-7z"/>',
-      repertorio: '<circle cx="12" cy="8" r="3.2"/><path d="M5.5 20a6.5 6.5 0 0 1 13 0"/>',
       urgencia: '<circle cx="12" cy="12" r="8"/><path d="M12 8v4l3 2"/>',
-      acesso: '<circle cx="7" cy="9" r="2.4"/><circle cx="17" cy="9" r="2.4"/><path d="M3.5 19a3.8 3.8 0 0 1 7 0M13.5 19a3.8 3.8 0 0 1 7 0"/>',
       crescimento: '<path d="M3 17l6-6 4 4 8-8"/><path d="M16 7h5v5"/>',
-      poder: '<circle cx="12" cy="12" r="8.5"/><path d="M12 7v10M14.4 9.3A2.4 2 0 0 0 12 8.4c-1.4 0-2.4.7-2.4 1.8s1 1.6 2.4 1.8 2.4.7 2.4 1.8-1 1.8-2.4 1.8a2.4 2 0 0 1-2.4-1"/>',
-      aderencia: '<path d="M7 4h10v4a5 5 0 0 1-10 0z"/><path d="M7 6H4.5v.8a3 3 0 0 0 3 3M17 6h2.5v.8a3 3 0 0 1-3 3M9.5 15h5M10.5 20h3M12 15v5"/>'
+      poder: '<circle cx="12" cy="12" r="8.5"/><path d="M12 7v10"/><path d="M14.4 9.3A2.4 2 0 0 0 12 8.4c-1.4 0-2.4.7-2.4 1.8s1 1.6 2.4 1.8 2.4.7 2.4 1.8-1 1.8-2.4 1.8a2.4 2 0 0 1-2.4-1"/>',
+      repertorio: '<circle cx="12" cy="8" r="3.2"/><path d="M5.5 20a6.5 6.5 0 0 1 13 0"/>',
+      acesso: '<circle cx="7" cy="9" r="2.4"/><circle cx="17" cy="9" r="2.4"/><path d="M3.5 19a3.8 3.8 0 0 1 7 0M13.5 19a3.8 3.8 0 0 1 7 0"/>',
+      aderencia: '<path d="M7 4h10v4a5 5 0 0 1-10 0z"/><path d="M9.5 15h5M12 12v8"/>'
     };
-    var COL_META = {
-      mercado: { label: 'O mercado vale a pena?', hint: 'Dor forte, urgência e quem paga.' },
-      voce: { label: 'Você tem vantagem aqui?', hint: 'Conhece por dentro, tem acesso e prova.' }
-    };
-    var STAR = '<svg viewBox="0 0 24 24"><path d="M12 3l2.5 5.5L20 9.3l-4 3.9.9 5.8L12 16.2 7.1 19l.9-5.8-4-3.9 5.5-.8z"/></svg>';
-    var CONF_LBL = { baixa: 'baixa', media: 'média', alta: 'alta' };
-    // FAIXA de evidência: uma linha discreta, sempre presente, mesma altura vazia/preenchida.
-    // Vazia = "Sem evidência adicionada · adicionar". Preenchida = resumo · confiança (inferida) · editar.
-    // Confiança NÃO é mais controle manual — é estado secundário derivado da evidência.
-    function evStripHTML(i, k, cell) {
-      var key = i + ':' + k, has = !!(cell.ev && cell.ev.trim());
-      if (editing === key) {
-        return '<div class="mx-eved">'
-          + '<div class="mx-evbar"><span class="mx-evspark"><svg viewBox="0 0 24 24"><path d="M12 3l1.7 4.8L18.5 9.5l-4.8 1.7L12 16l-1.7-4.8L5.5 9.5l4.8-1.7z"/></svg></span>'
-          +   '<textarea class="mx-ev" data-i="' + i + '" data-k="' + k + '" rows="1" placeholder="Descreva o fato que sustenta a nota. Quanto mais concreto (número, caso, data), mais forte.">' + esc(cell.ev || '') + '</textarea></div>'
-          + '</div>';
+    function critNota(row, k) { return +(row.cells[k] && row.cells[k].nota) || 0; }
+    function critEixo(k) { return CRITDEF[k].eixo; }
+    function firstUnanswered(row) { for (var i = 0; i < STEP_ORDER.length; i++) { if (critNota(row, STEP_ORDER[i]) < 1) return STEP_ORDER[i]; } return null; }
+    function activeKey(row) { if (row._active && STEP_ORDER.indexOf(row._active) >= 0) return row._active; return firstUnanswered(row); }
+
+    // critério já respondido → linha compacta (nome · nota · explicar). Editando a evidência → textarea inline.
+    function doneRowHTML(row, i, k) {
+      var cell = row.cells[k], has = !!(cell.ev && cell.ev.trim());
+      if (editing === i + ':' + k) {
+        return '<div class="mx2-expl" data-i="' + i + '" data-k="' + k + '">'
+          + '<textarea class="mx-ev" data-i="' + i + '" data-k="' + k + '" rows="2" placeholder="Por que essa nota? Um fato concreto (número, caso, data) deixa a nota mais forte.">' + esc(cell.ev || '') + '</textarea></div>';
       }
-      if (!has) {
-        return '<div class="mx-evstrip" data-i="' + i + '" data-k="' + k + '">'
-          + '<span class="val none">Por que você deu essa nota? (opcional)</span>'
-          + '<span class="sep">·</span><span class="act">adicionar</span>'
-          + '</div>';
-      }
-      var cf = inferConf(cell.ev);
-      return '<div class="mx-evstrip" data-i="' + i + '" data-k="' + k + '">'
-        + '<span class="val">' + esc(cell.ev) + '</span>'
-        + '<span class="sep">·</span><span class="cf cf-' + cf + '">confiança ' + CONF_LBL[cf] + '</span>'
-        + '<span class="sep">·</span><span class="act">editar</span>'
+      return '<div class="mx2-done" data-i="' + i + '" data-k="' + k + '">'
+        + '<span class="di"><svg viewBox="0 0 24 24">' + (C_ICON[k] || '') + '</svg></span>'
+        + '<span class="dn" data-i="' + i + '" data-k="' + k + '">' + esc(CRITDEF[k].h) + '</span>'
+        + '<span class="dv">' + critNota(row, k) + '/5</span>'
+        + '<span class="dx" data-i="' + i + '" data-k="' + k + '">' + (has ? 'contexto ✓' : 'explicar') + '</span>'
         + '</div>';
     }
-    // critério = LINHA: topo (nome+pergunta à esq · nota à dir) + FAIXA de evidência fixa no rodapé
-    function critRowHTML(row, i, k) {
-      var c = CRITDEF[k], cell = row.cells[k], n = '';
-      for (var v = 1; v <= 5; v++) n += '<button type="button" class="mx-nn' + (cell.nota === v ? ' on' : '') + '" data-i="' + i + '" data-k="' + k + '" data-v="' + v + '">' + v + '</button>';
-      return '<div class="mx-row">'
-        + '<div class="mx-rtop">'
-        +   '<div class="mx-c1"><div class="n">' + esc(c.h) + '</div><div class="q">' + esc(c.hint) + '</div></div>'
-        +   '<div class="mx-ctrl"><span class="mx-nota">' + n + '</span></div>'
+    // critério ativo (o único aberto) — pergunta grande + notas 1-5
+    function activeHTML(row, i, k) {
+      var c = CRITDEF[k], nb = '';
+      for (var v = 1; v <= 5; v++) nb += '<button type="button" class="mx2-nb' + (critNota(row, k) === v ? ' on' : '') + '" data-i="' + i + '" data-k="' + k + '" data-v="' + v + '">' + v + '</button>';
+      return '<div class="mx2-sec">' + SEC[critEixo(k)] + '</div>'
+        + '<div class="mx2-active">'
+        +   '<div class="mx2-ctitle">' + esc(c.h) + '</div>'
+        +   '<div class="mx2-cq">' + esc(c.hint) + '</div>'
+        +   '<div class="mx2-notes">' + nb + '</div>'
+        +   '<div class="mx2-scale"><span>fraco</span><span>forte</span></div>'
+        + '</div>';
+    }
+    function dotsHTML(row, i) {
+      var ak = activeKey(row);
+      return STEP_ORDER.map(function (k) { var on = critNota(row, k) >= 1, cur = k === ak; return '<i class="' + (cur ? 'cur' : (on ? 'on' : '')) + '" data-i="' + i + '" data-k="' + k + '"></i>'; }).join('');
+    }
+    // veredito só aparece quando os 7 estão pontuados (ponto 6)
+    function vdHTML(row) {
+      if (!isScored(row)) return '';
+      var v = verdict(row);
+      var map = { ok: ['Boa direção para investigar', 'ok'], construcao: ['Vale investigar — com uma ressalva', 'mid'], confortavel: ['Zona confortável, mercado fraco', 'mid'], alerta: ['Tem um ponto de atenção', 'bad'], inviavel: ['Provavelmente não vale a pena', 'bad'], todo: ['Quase lá', 'mid'] };
+      var m = map[v.tag] || ['Leitura pronta', 'mid'];
+      return '<div class="mx2-vd"><span class="vdi ' + m[1] + '"></span><div class="vdt"><b>' + m[0] + '</b><p>' + esc(v.txt) + '</p></div></div>';
+    }
+    // hipótese aberta = header (nome protagonista) + progresso + respondidos compactos + critério ativo + veredito
+    function openHTML(row, i) {
+      var ak = activeKey(row), multi = rows.length > 1;
+      var dones = STEP_ORDER.filter(function (k) { return critNota(row, k) >= 1 && k !== ak; });
+      var body = '';
+      dones.forEach(function (k) { body += doneRowHTML(row, i, k); });
+      if (ak) body += activeHTML(row, i, ak);
+      return '<div class="mx-cand" data-i="' + i + '">'
+        + '<div class="mx2-head">'
+        +   '<div class="mx2-metatop"><span class="mx2-lead">Hipótese ' + (i + 1) + '</span>' + (multi ? '<button type="button" class="mx2-recolher" data-i="' + i + '">recolher</button>' : '') + '</div>'
+        +   '<textarea class="mx-name" data-i="' + i + '" rows="1" placeholder="ex: clínicas de estética que precisam atrair cliente pelo digital">' + esc(row.name) + '</textarea>'
+        +   '<div class="mx2-links"><button type="button" class="mx2-link mx2-editar" data-i="' + i + '">editar</button><button type="button" class="mx2-link mx2-trocar" data-i="' + i + '">trocar</button>' + (multi ? '<button type="button" class="mx2-link mx2-rm" data-i="' + i + '">remover</button>' : '') + '</div>'
         + '</div>'
-        + evStripHTML(i, k, cell)
+        + '<div class="mx2-prog"><span class="mx2-progn">' + (ak ? ('Critério ' + (STEP_ORDER.indexOf(ak) + 1) + ' de 7') : '7 de 7 ✓') + '</span><span class="mx2-dots">' + dotsHTML(row, i) + '</span></div>'
+        + body
+        + vdHTML(row)
         + '</div>';
     }
-    function eixoHTML(row, i, eixo) {
-      var m = COL_META[eixo.key], soma = somaEixo(row, eixo.key), pct = Math.round(soma / eixo.max * 100);
-      return '<div class="mx-eixomod">'
-        + '<div class="mx-eixohd"><span class="et">' + m.label + '</span><span class="etrack"><i style="width:' + pct + '%"></i></span><span class="en">' + soma + '/' + eixo.max + '</span></div>'
-        + eixo.crit.map(function (c) { return critRowHTML(row, i, c.k); }).join('')
-        + '</div>';
-    }
-    // estado resumido do candidato (chip do header)
-    function stateChip(row) {
-      // estado muda conforme os dados: incompleto → precisa de evidência → pronto/promissor/inviável
-      if (!isScored(row)) return { cls: 's-mid', txt: 'incompleto' };
-      if (evMissing(row) > 0) return { cls: 's-mid', txt: 'precisa de evidência' };
-      var t = verdict(row).tag;
-      if (t === 'ok') return { cls: 's-ok', txt: 'promissor' };
-      if (t === 'inviavel') return { cls: 's-bad', txt: 'inviável' };
-      return { cls: 's-mid', txt: 'pronto para comparar' };
-    }
-    // veredito em UMA linha
-    function vereditoHTML(row) {
-      if (!anyScore(row)) return '<div class="mx-vd"><span class="dot mid"></span><span class="vl">Veredito:</span><span class="vx">pontua os critérios pra ver a leitura.</span></div>';
-      var v = verdict(row), d = v.tag === 'ok' ? 'ok' : (v.tag === 'inviavel' ? 'bad' : 'mid');
-      return '<div class="mx-vd"><span class="dot ' + d + '"></span><span class="vl">Veredito:</span><span class="vx">' + esc(v.txt) + '</span></div>';
-    }
-    function verdictHTML(row) {
-      var v = verdict(row), em = evMissing(row);
-      var extra = em ? ' · falta evidência em ' + em + ' nota' + (em > 1 ? 's' : '') : '';
-      return '<div class="adp-verdict v-' + v.tag + '"><span class="vs"><svg viewBox="0 0 24 24"><path d="M12 3l2.5 5.5L20 9.3l-4 3.9.9 5.8L12 16.2 7.1 19l.9-5.8-4-3.9 5.5-.8z"/></svg></span><div class="vt"><b>Veredito rápido</b><br>' + esc(v.txt + extra) + '</div></div>';
-    }
-    function champHTML() {
-      var hp = hipotesePrincipal(rows);
-      if (!hp) return 'Nomeia os candidatos, pontua os 7 critérios (1–5) e põe a evidência de cada nota. O nicho sai dos dois eixos, não de achismo.';
-      return '<b>Hipótese pros 30 dias: ' + esc(hp.nicho) + '</b><br>'
-        + 'Mercado ' + hp.soma_mercado + '/20 · Você ' + hp.soma_voce + '/15<br>'
-        + 'Risco: ' + esc(hp.risco) + '<br>'
-        + 'Primeiro teste: ' + esc(hp.primeiro_teste);
+    // hipótese recolhida = barra resumida (ponto 5: "ainda não avaliada" / "Mercado X/20 · Afinidade Y/15")
+    function barHTML(row, i) {
+      var read;
+      if (!anyScore(row)) read = 'ainda não avaliada';
+      else if (!isScored(row)) read = STEP_ORDER.filter(function (k) { return critNota(row, k) >= 1; }).length + ' de 7 critérios';
+      else read = 'Mercado ' + somaEixo(row, 'mercado') + '/20 · Afinidade ' + somaEixo(row, 'voce') + '/15';
+      return '<div class="mx-cbar" data-i="' + i + '">'
+        + '<span class="mx-cbtitle">Hipótese ' + (i + 1) + (row.name ? ' · ' + esc(row.name) : '') + '</span>'
+        + '<span class="mx-cbread">' + read + '</span>'
+        + '<svg class="chev" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></div>';
     }
     function paint() {
       mx.innerHTML = rows.map(function (row, i) {
-        var sm = somaEixo(row, 'mercado'), sv = somaEixo(row, 'voce');
-        // candidato colapsado (acordeão) — linha resumida clicável
-        if (i !== openIdx && rows.length > 1) {
-          return '<div class="mx-cbar" data-i="' + i + '">'
-            + '<span class="mx-cbtitle">Hipótese ' + (i + 1) + (row.name ? ' · ' + esc(row.name) : '') + '</span>'
-            + '<span class="mx-cbread">Mercado ' + sm + '/20 · Você ' + sv + '/15</span>'
-            + '<svg class="chev" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></div>';
-        }
-        var stt = stateChip(row);
-        return '<div class="mx-cand" data-i="' + i + '">'
-          + '<div class="mx-cand-h">'
-          +   '<div class="mx-idc"><span class="mx-lead">Hipótese ' + (i + 1) + '</span>'
-          +     '<textarea class="mx-name" data-i="' + i + '" rows="1" placeholder="ex: clínicas de estética que precisam atrair cliente pelo digital">' + esc(row.name) + '</textarea></div>'
-          +   '<span class="mx-state ' + stt.cls + '">' + stt.txt + '</span>'
-          +   (rows.length > 1 ? '<button type="button" class="mx-del" data-i="' + i + '">remover</button>' : '')
-          +   (rows.length > 1 ? '<button type="button" class="mx-collapse" data-i="' + i + '" aria-label="Recolher"><svg viewBox="0 0 24 24"><path d="m6 15 6-6 6 6"/></svg></button>' : '')
-          + '</div>'
-          + EIXOS.map(function (e) { return eixoHTML(row, i, e); }).join('')
-          + vereditoHTML(row) + '</div>';
+        if (i !== openIdx && rows.length > 1) return barHTML(row, i);
+        return openHTML(row, i);
       }).join('');
-      // textarea da hipótese cresce com o texto (sem cortar linhas longas)
-      Array.prototype.forEach.call(mx.querySelectorAll('.mx-name'), function (t) { t.style.height = 'auto'; t.style.height = t.scrollHeight + 'px'; });
+      // textareas crescem com o texto (nome da hipótese e evidência)
+      Array.prototype.forEach.call(mx.querySelectorAll('.mx-name,.mx-ev'), function (t) { t.style.height = 'auto'; t.style.height = t.scrollHeight + 'px'; });
     }
     function matData() {
       return {
@@ -456,42 +473,41 @@ window.ADP_CANVAS = (function () {
     }
     function persist() { if (st) st.textContent = '…'; save(matData); }
 
-    // digitar o nome não deve re-renderizar (perderia o foco) — só atualiza o campeão
+    // digitar não re-renderiza (perderia o foco) — só atualiza o dado + cresce o textarea
     container.addEventListener('input', function (e) {
       var t = e.target, i = +t.dataset.i;
       if (t.classList.contains('mx-name')) { rows[i].name = t.value; t.style.height = 'auto'; t.style.height = t.scrollHeight + 'px'; persist(); }
-      else if (t.classList.contains('mx-ev')) { var cc = rows[i].cells[t.dataset.k]; cc.ev = t.value; cc.conf = inferConf(t.value); persist(); }
+      else if (t.classList.contains('mx-ev')) { var cc = rows[i].cells[t.dataset.k]; cc.ev = t.value; cc.conf = inferConf(t.value); t.style.height = 'auto'; t.style.height = t.scrollHeight + 'px'; persist(); }
     });
     container.addEventListener('click', function (e) {
-      var C = e.target.closest ? e.target.closest.bind(e.target) : function () { return null; };
-      // falha da geração de hipóteses: tentar de novo ou seguir manual
-      if (e.target.classList.contains('mx-hipretry')) { genHipoteses(); return; }
-      if (e.target.classList.contains('mx-hipmanual')) { if (mxNote) mxNote.textContent = NOTE_OK; return; }
-      // nota (1–5): clica o número, o escolhido cresce/fica preto
-      var nn = C('.mx-nn');
-      if (nn) { var ni = +nn.dataset.i, nk = nn.dataset.k, nv = +nn.dataset.v; rows[ni].cells[nk].nota = (rows[ni].cells[nk].nota === nv ? 0 : nv); paint(); persist(); return; }
-      // clicar na faixa de evidência abre o editor (composer + chips de confiança)
-      var strip = C('.mx-evstrip');
-      if (strip) {
-        editing = strip.dataset.i + ':' + strip.dataset.k; paint();
-        var ta = container.querySelector('.mx-ev');
-        if (ta) { ta.focus(); var L = ta.value.length; try { ta.setSelectionRange(L, L); } catch (er) {} }
-        return;
-      }
-      // expandir candidato colapsado
-      var bar = C('.mx-cbar');
-      if (bar) { openIdx = +bar.dataset.i; paint(); return; }
-      // recolher o candidato aberto (vira barra; todos podem ficar recolhidos)
-      var col = C('.mx-collapse');
-      if (col) { openIdx = -1; paint(); return; }
-      // adicionar candidato (abre ele)
-      if (e.target.classList.contains('adp-addcand')) { rows.push(normRow()); openIdx = rows.length - 1; paint(); persist(); return; }
+      var el = e.target, cl = el.classList, i = +el.dataset.i;
+      // falha da geração de hipóteses
+      if (cl.contains('mx-hipretry')) { genHipoteses(); return; }
+      if (cl.contains('mx-hipmanual')) { if (mxNote) mxNote.textContent = NOTE_OK; return; }
+      // nota do critério ativo → registra e AVANÇA pro próximo não respondido
+      if (cl.contains('mx2-nb')) { var k = el.dataset.k, v = +el.dataset.v, cell = rows[i].cells[k]; cell.nota = (cell.nota === v ? 0 : v); rows[i]._active = cell.nota ? firstUnanswered(rows[i]) : k; paint(); persist(); return; }
+      // dot → pula pro critério
+      if (el.tagName === 'I' && el.parentNode && el.parentNode.classList.contains('mx2-dots')) { rows[i]._active = el.dataset.k; paint(); return; }
+      // revisar critério respondido (clica no nome)
+      if (cl.contains('dn')) { rows[i]._active = el.dataset.k; paint(); return; }
+      // explicar → abre o textarea da evidência
+      if (cl.contains('dx')) { editing = i + ':' + el.dataset.k; paint(); var ta = container.querySelector('.mx-ev'); if (ta) { ta.focus(); var L = ta.value.length; try { ta.setSelectionRange(L, L); } catch (er) {} } return; }
+      // editar nome
+      if (cl.contains('mx2-editar')) { var nm = container.querySelector('.mx-name[data-i="' + i + '"]'); if (nm) { nm.focus(); var L2 = nm.value.length; try { nm.setSelectionRange(L2, L2); } catch (er) {} } return; }
+      // trocar hipótese (limpa pra reescrever)
+      if (cl.contains('mx2-trocar')) { rows[i].name = ''; paint(); persist(); var nm2 = container.querySelector('.mx-name[data-i="' + i + '"]'); if (nm2) nm2.focus(); return; }
       // remover
-      var del = C('.mx-del');
-      if (del) { rows.splice(+del.dataset.i, 1); if (!rows.length) rows.push(normRow()); if (openIdx >= rows.length) openIdx = rows.length - 1; paint(); persist(); }
+      if (cl.contains('mx2-rm')) { rows.splice(i, 1); if (!rows.length) rows.push(normRow()); if (openIdx >= rows.length) openIdx = rows.length - 1; if (openIdx < 0) openIdx = 0; paint(); persist(); return; }
+      // recolher a aberta
+      if (cl.contains('mx2-recolher')) { openIdx = -1; paint(); return; }
+      // expandir barra recolhida
+      var bar = el.closest ? el.closest('.mx-cbar') : null;
+      if (bar) { openIdx = +bar.dataset.i; paint(); return; }
+      // criar outra hipótese
+      if (cl.contains('adp-addcand')) { rows.push(normRow()); openIdx = rows.length - 1; paint(); persist(); return; }
     });
     container.addEventListener('focusout', function (e) {
-      // fechar o editor de evidência ao sair dele: salva, infere confiança, some com o textarea, repinta
+      // sair do textarea de evidência: salva, infere confiança, fecha e repinta (vira linha compacta)
       if (e.target && e.target.classList && e.target.classList.contains('mx-ev')) {
         var cell = rows[+e.target.dataset.i].cells[e.target.dataset.k];
         cell.ev = e.target.value; cell.conf = inferConf(e.target.value);
