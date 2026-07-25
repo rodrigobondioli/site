@@ -185,7 +185,8 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .panel .li+.li{border-top:1px solid rgba(255,255,255,.08)}
 .panel .li .tt{white-space:normal;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;line-height:1.3;text-wrap:balance}
 .panel .li.done .tt{color:rgba(255,255,255,.5)}
-.lthumb{position:relative;width:100px;flex:none;aspect-ratio:16/9;border-radius:7px;overflow:hidden;background:#000;display:grid;place-items:center}
+.lthumb{position:relative;width:100px;flex:none;aspect-ratio:16/9;border-radius:7px;overflow:hidden;background:#000 center/cover no-repeat;display:grid;place-items:center}
+.lthumb .lprev{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;z-index:1}
 .lthumb .lp{display:flex;color:rgba(255,255,255,.5)}
 .lthumb .lp svg{width:20px;height:20px;fill:currentColor}
 .lthumb.hasvid{cursor:pointer}
@@ -695,8 +696,11 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
       var isDone=DONE.has(l.id), on=(l.id===cur.id);
       var lib = l.video_library || LIB;
       var hasVid = !!(l.video_id && lib);
+      var pz = 'vz-6010a13b-258.b-cdn.net';
+      var thumbUrl = hasVid ? ('https://'+pz+'/'+encodeURIComponent(l.video_id)+'/thumbnail.jpg') : '';
+      var prevUrl  = hasVid ? ('https://'+pz+'/'+encodeURIComponent(l.video_id)+'/preview.webp') : '';
       var thumb = '<span class="lthumb'+(hasVid?' hasvid':'')+'"'
-        + (hasVid?' data-lib="'+esc(lib)+'" data-vid="'+esc(l.video_id)+'"':'')+'>'
+        + (hasVid?' data-prev="'+esc(prevUrl)+'" style="background-image:url('+esc(thumbUrl)+')"':'')+'>'
         + '<span class="lp">'+ICON_PLAY+'</span>'
         + (hasVid?'<span class="lprog"><i style="width:'+(WATCH[l.id]||0)+'%"></i></span>':'')
         + '</span>';
@@ -704,19 +708,16 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
         + thumb + '<span class="tt">'+esc(l.title)+'</span>'
         + (isDone?'<span class="ldone">'+ICON_DONE+'</span>':'')+'</a>';
     }).join('');
-    // play no mouseover: injeta o iframe do Bunny só no hover (leve) e remove ao sair
+    // preview MUDO no mouseover: troca pelo preview.webp do Bunny (silencioso, leve, encaixa) e volta ao sair
     Array.prototype.forEach.call(document.querySelectorAll('#panelList .lthumb.hasvid'), function(th){
-      var frame=null;
+      var img=null;
       th.addEventListener('mouseenter', function(){
-        if(frame) return;
-        var src='https://iframe.mediadelivery.net/embed/'+encodeURIComponent(th.dataset.lib)+'/'+encodeURIComponent(th.dataset.vid)+'?autoplay=true&loop=true&muted=true&preload=true';
-        frame=document.createElement('iframe');
-        frame.src=src; frame.tabIndex=-1;
-        frame.style.cssText='position:absolute;inset:0;width:100%;height:100%;border:0;pointer-events:none;z-index:1';
-        frame.setAttribute('allow','autoplay;encrypted-media;');
-        th.appendChild(frame);
+        if(img || !th.dataset.prev) return;
+        img=document.createElement('img');
+        img.className='lprev'; img.alt=''; img.src=th.dataset.prev;
+        th.appendChild(img);
       });
-      th.addEventListener('mouseleave', function(){ if(frame){ th.removeChild(frame); frame=null; } });
+      th.addEventListener('mouseleave', function(){ if(img){ try{th.removeChild(img);}catch(e){} img=null; } });
     });
   }
 
