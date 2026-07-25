@@ -891,13 +891,13 @@ s { text-decoration: line-through; }
    Vem depois do bloco 900 principal → sobrescreve o que precisar.
    ============================================================ */
 @media (max-width: 900px) {
-  /* --- Header: some com o nav textual, centraliza o logo --- */
+  /* --- Header: some no mobile (logo fora) --- */
   .topnav { display: none; }
-  .topbar { justify-content: center; padding: 24px; }
+  .topbar { display: none; }
 
-  /* --- Hero: H1 um degrau menor + eyebrow menor --- */
-  .hero-title { font-size: clamp(26px, 7vw, 38px); }
-  .eyebrow { font-size: 11px; letter-spacing: 0.4px; }
+  /* --- Hero: H1 e eyebrow maiores no mobile --- */
+  .hero-title { font-size: clamp(34px, 9vw, 48px); }
+  .eyebrow { font-size: 15px; line-height: 1.35; letter-spacing: 0.2px; }
   .hero { padding-bottom: 48px; }
 
   /* --- Copy do hero no mobile: H1 curto + sub-headline --- */
