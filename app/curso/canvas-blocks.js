@@ -274,10 +274,25 @@ window.ADP_CANVAS = (function () {
     + '.mx2-decide{margin-top:14px;display:flex;flex-direction:column;gap:11px;align-items:flex-start}'
     + '.mx2-cta{font-weight:700;font-size:14px;padding:12px 24px;border-radius:999px;background:var(--pink,#ff00d7);color:#fff;border:none;cursor:pointer;white-space:nowrap}'
     + '.mx2-cta:hover{filter:brightness(1.06)}'
+    + '.mx2-sec2{font-size:13.5px;font-weight:700;color:var(--ink,#18181b);text-decoration:underline;text-underline-offset:2px;background:none;border:none;cursor:pointer;padding:2px 0}'
+    + '.mx2-sec2:hover{color:var(--pink,#ff00d7)}'
     + '.mx2-secacts{display:flex;align-items:center;gap:10px;flex-wrap:wrap}'
     + '.mx2-seclink{font-size:12.5px;color:var(--muted,#71717a);text-decoration:underline;text-underline-offset:2px;background:none;border:none;cursor:pointer;padding:2px 0}'
     + '.mx2-seclink:hover{color:var(--ink,#18181b)}'
     + '.mx2-secdot{color:var(--faint,#a1a1aa);font-size:12px}'
+    // --- Seletor de entrada da Matriz (escolher qual hipótese avaliar primeiro) ---
+    + '.mx2-selwait{font-size:13px;color:var(--muted,#71717a);padding:10px 2px}'
+    + '.mx2-selhead b{display:block;font-size:15.5px;font-weight:700;color:var(--ink,#18181b);line-height:1.3}'
+    + '.mx2-selhead p{margin:7px 0 0;font-size:13.5px;color:var(--muted,#71717a)}'
+    + '.mx2-selgrid{display:flex;flex-direction:column;gap:12px;margin-top:18px}'
+    + '.mx2-selcard{border:1px solid var(--line,#d4d4d8);border-radius:14px;padding:16px 18px;display:flex;flex-direction:column;gap:13px;transition:border-color .15s}'
+    + '.mx2-selcard:hover{border-color:var(--muted,#71717a)}'
+    + '.mx2-seltitle{font-size:16px;font-weight:700;color:var(--ink,#18181b);line-height:1.32}'
+    + '.mx2-selacts{display:flex;align-items:center;gap:16px}'
+    + '.mx2-selpick{font-weight:700;font-size:13px;padding:10px 20px;border-radius:999px;background:var(--ink,#18181b);color:#fff;border:none;cursor:pointer}'
+    + '.mx2-selpick:hover{filter:brightness(1.35)}'
+    + '.mx2-seledit{font-size:12.5px;color:var(--muted,#71717a);text-decoration:underline;text-underline-offset:2px;background:none;border:none;cursor:pointer}'
+    + '.mx2-seledit:hover{color:var(--ink,#18181b)}'
     // --- Caça à Ruminação ---
     + '.adp-rum{margin-top:20px;padding-top:20px;border-top:1px solid var(--line,#d4d4d8)}'
     + '.adp-rum .rh{display:flex;align-items:center;gap:8px;font-weight:700;font-size:14.5px}'
@@ -343,6 +358,10 @@ window.ADP_CANVAS = (function () {
   function renderMatrix(container, data, onSaved) {
     var rows = (data && data.rows && data.rows.length) ? data.rows.map(normRow) : [normRow(), normRow()];
     var openIdx = 0; // acordeão: só um candidato aberto por vez
+    // abre direto na hipótese que já tem pontuação (aluno voltando); senão, o seletor decide
+    for (var _o = 0; _o < rows.length; _o++) { if (anyScore(rows[_o])) { openIdx = _o; break; } }
+    var picked = false; // enquanto false E nada pontuado, mostra o SELETOR (escolher qual avaliar primeiro)
+    function selectorMode() { return !picked && !rows.some(function (r) { return anyScore(r); }); }
     var editing = null; // "i:k" da evidência em edição (abre o textarea + revela a confiança)
     var NOTE_OK = 'Você não precisa acertar de primeira. Escolha a direção que mais faz sentido com o que você conhece hoje — usa, edita ou troca à vontade.';
     container.innerHTML = '<p class="mx-note" id="mxNote" style="font-size:13px;color:var(--muted,#71717a);line-height:1.5;margin:0 0 16px;padding-bottom:10px;border-bottom:1px solid var(--line,#d4d4d8)">' + NOTE_OK + '</p>'
@@ -351,6 +370,7 @@ window.ADP_CANVAS = (function () {
       + '<div class="adp-savest" style="display:none"></div>';
     var mx = container.querySelector('.adp-mx');
     var st = container.querySelector('.adp-savest');
+    var addBtn = container.querySelector('.adp-addcand');
     var save = makeSaver(2, st, onSaved);
     var mxNote = container.querySelector('#mxNote');
     var HIPBTN = 'background:none;border:0;color:var(--ink,#18181b);font-weight:700;text-decoration:underline;cursor:pointer;font:inherit;padding:0';
@@ -435,7 +455,22 @@ window.ADP_CANVAS = (function () {
       return v0txt(row);
     }
     function v0txt(row) { return verdict(row).txt; }
-    // veredito → DECISÃO. Só aparece com os 7 pontuados; o CTA muda conforme o resultado e o estado das outras hipóteses.
+    // SELETOR de entrada: antes de pontuar, o aluno escolhe QUAL hipótese avaliar primeiro (não é escolher o vencedor)
+    function selectorHTML() {
+      var named = [], j;
+      for (j = 0; j < rows.length; j++) { if ((rows[j].name || '').trim()) named.push(j); }
+      if (!named.length) return '<div class="mx2-selwait">Montando as direções com base nas suas respostas…</div>';
+      var cards = named.map(function (k) {
+        return '<div class="mx2-selcard">'
+          + '<div class="mx2-seltitle">' + esc(rows[k].name) + '</div>'
+          + '<div class="mx2-selacts"><button type="button" class="mx2-selpick" data-i="' + k + '">Avaliar esta</button>'
+          + '<button type="button" class="mx2-seledit" data-i="' + k + '">Editar</button></div>'
+          + '</div>';
+      }).join('');
+      return '<div class="mx2-selhead"><b>A IA encontrou estas direções com base nas suas respostas:</b><p>Qual delas você quer avaliar primeiro?</p></div>'
+        + '<div class="mx2-selgrid">' + cards + '</div>';
+    }
+    // veredito → DECISÃO. Só aparece com os 7 pontuados; hierarquia (principal/secundária/terciárias) muda pelo resultado + estado das outras.
     function decisionHTML(row, i) {
       if (!isScored(row)) return '';
       var v = verdict(row), tag = v.tag;
@@ -446,25 +481,32 @@ window.ADP_CANVAS = (function () {
       var others = [], j;
       for (j = 0; j < rows.length; j++) { if (j !== i && (rows[j].name || '').trim()) others.push(j); }
       var otherUnscored = others.filter(function (k) { return !isScored(rows[k]); });
-      var primary, secondary = [];
+      var primary, secondary = null, tertiary = [];
       if (good) {
         primary = { act: 'continuar', label: 'Continuar →' };
-        if (others.length) secondary.push({ act: 'switch', label: 'Comparar com a outra hipótese' });
+        if (others.length) tertiary.push({ act: 'switch', label: 'Comparar com a outra hipótese' });
       } else if (bad) {
-        if (otherUnscored.length) { primary = { act: 'switch', label: 'Avaliar a outra hipótese →' }; secondary.push({ act: 'adjust', label: 'Ajustar esta hipótese' }); secondary.push({ act: 'continuar', label: 'Continuar mesmo assim' }); }
-        else if (others.length) { primary = { act: 'adjust', label: 'Ajustar esta hipótese' }; secondary.push({ act: 'switch', label: 'Ver a outra hipótese' }); secondary.push({ act: 'add', label: 'Criar outra' }); secondary.push({ act: 'continuar', label: 'Continuar mesmo assim' }); }
-        else { primary = { act: 'adjust', label: 'Ajustar esta hipótese' }; secondary.push({ act: 'add', label: 'Criar outra hipótese' }); secondary.push({ act: 'continuar', label: 'Continuar mesmo assim' }); }
-      } else { // mediano
-        if (otherUnscored.length) primary = { act: 'switch', label: 'Avaliar a outra hipótese →' };
-        else if (others.length) primary = { act: 'switch', label: 'Comparar com a outra hipótese' };
-        else primary = { act: 'continuar', label: 'Continuar mesmo assim →' };
-        secondary.push({ act: 'adjust', label: 'Ajustar esta hipótese' });
-        if (primary.act !== 'continuar') secondary.push({ act: 'continuar', label: 'Continuar mesmo assim' });
+        if (otherUnscored.length) {
+          primary = { act: 'switch', label: 'Avaliar a outra hipótese →' };
+          secondary = { act: 'adjust', label: 'Ajustar esta hipótese' };
+          tertiary.push({ act: 'add', label: 'Criar outra hipótese' });
+          tertiary.push({ act: 'continuar', label: 'Continuar mesmo assim' });
+        } else { // ruim + todas já avaliadas (ou única)
+          primary = { act: 'adjust', label: 'Ajustar esta hipótese' };
+          secondary = { act: 'add', label: 'Criar outra hipótese' };
+          tertiary.push({ act: 'continuar', label: 'Continuar mesmo assim' });
+        }
+      } else { // intermediária → prioriza comparação
+        if (otherUnscored.length) { primary = { act: 'switch', label: 'Avaliar a outra hipótese →' }; secondary = { act: 'continuar', label: 'Continuar com esta' }; tertiary.push({ act: 'adjust', label: 'Ajustar esta hipótese' }); }
+        else if (others.length) { primary = { act: 'switch', label: 'Comparar com a outra hipótese' }; secondary = { act: 'continuar', label: 'Continuar com esta' }; tertiary.push({ act: 'adjust', label: 'Ajustar esta hipótese' }); }
+        else { primary = { act: 'continuar', label: 'Continuar com esta →' }; secondary = { act: 'adjust', label: 'Ajustar esta hipótese' }; }
       }
-      var prim = '<button type="button" class="mx2-cta" data-act="' + primary.act + '" data-i="' + i + '">' + esc(primary.label) + '</button>';
-      var sec = secondary.length ? '<div class="mx2-secacts">' + secondary.map(function (s) { return '<button type="button" class="mx2-seclink" data-act="' + s.act + '" data-i="' + i + '">' + esc(s.label) + '</button>'; }).join('<span class="mx2-secdot">·</span>') + '</div>' : '';
-      return '<div class="mx2-vd"><span class="vdi ' + tm[1] + '"></span><div class="vdt"><b>' + tm[0] + '</b><p>' + esc(guide) + '</p></div></div>'
-        + '<div class="mx2-decide">' + prim + sec + '</div>';
+      var html = '<div class="mx2-vd"><span class="vdi ' + tm[1] + '"></span><div class="vdt"><b>' + tm[0] + '</b><p>' + esc(guide) + '</p></div></div>';
+      html += '<div class="mx2-decide"><button type="button" class="mx2-cta" data-act="' + primary.act + '" data-i="' + i + '">' + esc(primary.label) + '</button>';
+      if (secondary) html += '<button type="button" class="mx2-sec2" data-act="' + secondary.act + '" data-i="' + i + '">' + esc(secondary.label) + '</button>';
+      if (tertiary.length) html += '<div class="mx2-secacts">' + tertiary.map(function (s) { return '<button type="button" class="mx2-seclink" data-act="' + s.act + '" data-i="' + i + '">' + esc(s.label) + '</button>'; }).join('<span class="mx2-secdot">·</span>') + '</div>';
+      html += '</div>';
+      return html;
     }
     // hipótese aberta = header (nome protagonista) + progresso + respondidos compactos + critério ativo + veredito
     function openHTML(row, i) {
@@ -501,12 +543,20 @@ window.ADP_CANVAS = (function () {
         + '<svg class="chev" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></div>';
     }
     function paint() {
+      if (selectorMode()) {
+        mx.innerHTML = selectorHTML();
+        if (addBtn) addBtn.style.display = ''; // "Nenhuma faz sentido? Criar outra" = ação alternativa do seletor
+        return;
+      }
       mx.innerHTML = rows.map(function (row, i) {
         if (i !== openIdx && rows.length > 1) return barHTML(row, i);
         return openHTML(row, i);
       }).join('');
       // textareas crescem com o texto (nome da hipótese e evidência)
       Array.prototype.forEach.call(mx.querySelectorAll('.mx-name,.mx-ev'), function (t) { t.style.height = 'auto'; t.style.height = t.scrollHeight + 'px'; });
+      // dedup: com o bloco de decisão visível (hipótese aberta já pontuada), some com o link duplicado do rodapé
+      var openRow = (openIdx >= 0) ? rows[openIdx] : null;
+      if (addBtn) addBtn.style.display = (openRow && isScored(openRow)) ? 'none' : '';
     }
     function matData() {
       return {
@@ -529,8 +579,11 @@ window.ADP_CANVAS = (function () {
       // falha da geração de hipóteses
       if (cl.contains('mx-hipretry')) { genHipoteses(); return; }
       if (cl.contains('mx-hipmanual')) { if (mxNote) mxNote.textContent = NOTE_OK; return; }
+      // seletor de entrada: escolher qual hipótese avaliar primeiro
+      if (cl.contains('mx2-selpick')) { picked = true; openIdx = i; rows[i]._active = firstUnanswered(rows[i]); paint(); return; }
+      if (cl.contains('mx2-seledit')) { picked = true; openIdx = i; paint(); var nmE = container.querySelector('.mx-name[data-i="' + i + '"]'); if (nmE) { nmE.focus(); var LE = nmE.value.length; try { nmE.setSelectionRange(LE, LE); } catch (er) {} } return; }
       // ações da decisão (veredito) — o CTA vira a próxima ação, não um "continuar" cego
-      if (cl.contains('mx2-cta') || cl.contains('mx2-seclink')) {
+      if (cl.contains('mx2-cta') || cl.contains('mx2-sec2') || cl.contains('mx2-seclink')) {
         var act = el.dataset.act;
         if (act === 'continuar') { if (window.__matrizContinue) window.__matrizContinue(); return; }
         if (act === 'add') { rows.push(normRow()); openIdx = rows.length - 1; paint(); persist(); return; }
