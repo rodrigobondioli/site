@@ -1,6 +1,6 @@
 // 🚀 O Estrategista — pega o Canvas inteiro e devolve o posicionamento (as 14 seções que a tela lê) + metadados novos.
 // Compatível por adição: mantém TODAS as chaves que posicionamento.html já renderiza; só acrescenta campos extras (a UI ignora o que não conhece).
-import { getUser, ai, extractJSON, MODEL_SMART } from '../_auth.js';
+import { getUser, aiRateOk, ai, extractJSON, MODEL_SMART } from '../_auth.js';
 
 const SYSTEM = `Você é "O Estrategista", a entrega final do curso De Genérico a Especialista (Rodrigo Bondioli).
 Recebe o Canvas do aluno e devolve o posicionamento + plano — SEMPRE como HIPÓTESE a testar nos próximos 30 dias, nunca como veredito.
@@ -158,6 +158,7 @@ export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
   const user = await getUser(req);
   if (!user) return res.status(401).json({ error: 'Faça login.' });
+  if (!(await aiRateOk(user.id))) return res.status(429).json({ error: 'Você bateu o limite de uso da IA por hoje. Tenta amanhã ou fala com o suporte.' });
 
   let body = req.body; if (typeof body === 'string') { try { body = JSON.parse(body); } catch { body = {}; } }
 

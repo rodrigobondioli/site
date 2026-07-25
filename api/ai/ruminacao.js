@@ -1,7 +1,7 @@
 // 🧠 Caça à Ruminação — gera HIPÓTESES de dor-loop do cliente do aluno (1ª pessoa) e um plano de validação.
 // NÃO descobre a dor real: produz as ruminações mais plausíveis, que o aluno precisa confirmar no campo.
 // Compatível por adição: mantém {ruminacoes, dor_central, porque} que a UI já lê; acrescenta status/como_validar/aviso.
-import { getUser, ai, extractJSON, MODEL_FAST } from '../_auth.js';
+import { getUser, aiRateOk, ai, extractJSON, MODEL_FAST } from '../_auth.js';
 
 const SYSTEM = `Você é a "Caça à Ruminação", parte do curso De Genérico a Especialista do Rodrigo Bondioli.
 Voz: direta, seca, anti-guru, sem floreio. Nada de emoji, nada de "querido(a)".
@@ -38,6 +38,7 @@ export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
   const user = await getUser(req);
   if (!user) return res.status(401).json({ error: 'Faça login.' });
+  if (!(await aiRateOk(user.id))) return res.status(429).json({ error: 'Você bateu o limite de uso da IA por hoje. Tenta amanhã ou fala com o suporte.' });
 
   let body = req.body; if (typeof body === 'string') { try { body = JSON.parse(body); } catch { body = {}; } }
   const { nicho, cliente } = body || {};

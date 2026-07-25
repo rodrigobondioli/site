@@ -2,7 +2,7 @@
 // Servidor STATELESS: o cliente guarda o estado (history + voce) e manda a cada turno. A memória real é o objeto `voce`.
 // Gate 1 OFICIAL é calculado no cliente por gateForBlock(0, voce) — aqui só devolvemos um diagnóstico de suficiência (advisory).
 // Ponte de compatibilidade: além do `voce` rico, sintetizamos os campos legados (mundos/forte/turmas/historia) que Canvas/Estrategista já leem.
-import { getUser, ai, extractJSON, MODEL_FAST } from '../_auth.js';
+import { getUser, aiRateOk, ai, extractJSON, MODEL_FAST } from '../_auth.js';
 
 export const SYSTEM = `Você é "O Escavador", a IA que conduz a Aula 1 (VOCÊ) do curso De Genérico a Especialista (Rodrigo Bondioli).
 Voz: direta, seca, anti-guru, tiozão sem frescura. Sem emoji, sem "querido(a)", sem motivação, sem floreio.
@@ -113,6 +113,7 @@ export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
   const user = await getUser(req);
   if (!user) return res.status(401).json({ error: 'Faça login.' });
+  if (!(await aiRateOk(user.id))) return res.status(429).json({ error: 'Você bateu o limite de uso da IA por hoje. Tenta amanhã ou fala com o suporte.' });
 
   let body = req.body; if (typeof body === 'string') { try { body = JSON.parse(body); } catch { body = {}; } }
   try {

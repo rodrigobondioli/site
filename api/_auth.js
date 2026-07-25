@@ -47,6 +47,25 @@ export async function hasAccess(userId, courseId) {
   const rows = await r.json();
   return Array.isArray(rows) && rows.length > 0;
 }
+// Rate-limit da IA por usuário/dia (via RPC ai_bump no Postgres). FAIL-OPEN:
+// se a infra do contador falhar, NÃO bloqueia a IA (não derruba aluno pagante por hiccup no banco).
+// Limite via AI_DAILY_LIMIT (default 120 chamadas/dia por usuário).
+export async function aiRateOk(userId) {
+  const url = process.env.SUPABASE_URL, svc = process.env.SUPABASE_SERVICE_ROLE;
+  if (!url || !svc || !userId) return true;
+  const limit = parseInt(process.env.AI_DAILY_LIMIT || '120', 10);
+  try {
+    const day = new Date().toISOString().slice(0, 10);
+    const r = await fetch(`${url}/rest/v1/rpc/ai_bump`, {
+      method: 'POST',
+      headers: { apikey: svc, Authorization: `Bearer ${svc}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ p_user: userId, p_day: day }),
+    });
+    if (!r.ok) return true;          // fail-open em erro de infra
+    const count = await r.json();     // ai_bump devolve o novo total (int)
+    return Number(count) <= limit;
+  } catch { return true; }            // fail-open
+}
 // Chamada de IA agnóstica de provider (formato OpenAI chat/completions).
 // Default = Google Gemini (tier grátis, endpoint compatível com OpenAI).
 // Trocar de provider = mudar AI_BASE_URL + AI_API_KEY (+ modelos AI_MODEL_*).
