@@ -118,6 +118,7 @@ h1{font-size:26px;font-weight:800;letter-spacing:-.02em}
 <div id="toast" class="toast"></div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.embed.ly/player-0.1.0.min.js"></script>
 <script src="/app/config.js"></script>
 <script>
 const C = window.ADP_CONFIG || {};
@@ -140,6 +141,32 @@ async function api(path, opts={}){
   return j;
 }
 function esc(s){ return String(s==null?'':s).replace(/[<>&"]/g,c=>({'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;'}[c])); }
+
+// ---------- duração automática (via Player.js do Bunny — sem API key) ----------
+const BUNNY_LIB_DEFAULT = '710586';
+function fmtDur(sec){ sec=Math.round(sec||0); if(!sec) return ''; const h=Math.floor(sec/3600), m=Math.floor((sec%3600)/60), s=sec%60; const mm=h?String(m).padStart(2,'0'):String(m); return (h?h+':':'')+mm+':'+String(s).padStart(2,'0'); }
+function pullBunnyDuration(guid, lib){
+  return new Promise(resolve=>{
+    if(!guid || !window.playerjs){ resolve(null); return; }
+    lib = (lib||'').trim() || BUNNY_LIB_DEFAULT;
+    const f=document.createElement('iframe');
+    f.style.cssText='position:absolute;left:-9999px;width:1px;height:1px;opacity:0;pointer-events:none';
+    f.src='https://iframe.mediadelivery.net/embed/'+encodeURIComponent(lib)+'/'+encodeURIComponent(guid)+'?autoplay=false&preload=true&muted=true';
+    let done=false; const finish=v=>{ if(done) return; done=true; try{f.remove();}catch(e){} resolve(v); };
+    f.onload=()=>{ try{ const p=new playerjs.Player(f); p.on('ready',()=>p.getDuration(d=>finish(d))); }catch(e){ finish(null); } };
+    document.body.appendChild(f);
+    setTimeout(()=>finish(null), 9000); // timeout de segurança
+  });
+}
+async function autofillDuration(){
+  const v=document.getElementById('f_video'), dur=document.getElementById('f_duration');
+  if(!v||!dur) return; const guid=v.value.trim(); if(!guid) return;
+  const lib=(document.getElementById('f_lib')||{}).value||'';
+  dur.placeholder='puxando do Bunny…';
+  const sec=await pullBunnyDuration(guid, lib);
+  dur.placeholder='14:00';
+  if(sec){ dur.value=fmtDur(sec); toast('Duração puxada do Bunny ✓'); }
+}
 
 // ---------- boot ----------
 (async function(){
@@ -210,10 +237,10 @@ function openForm(l){
       <div class="field"><label>Título</label><input id="f_title" type="text" value="${esc(l.title)}" placeholder="Ex: Escolher o seu nicho"></div>
       <div class="grid2">
         <div class="field"><label>Frase do pôster <span class="hint">(aparece no vídeo)</span></label><input id="f_tagline" type="text" value="${esc(l.tagline)}" placeholder="nicho não é prisão — é parar de disputar migalha"></div>
-        <div class="field"><label>Duração <span class="hint">(ex 14:00)</span></label><input id="f_duration" type="text" value="${esc(l.duration)}" placeholder="14:00"></div>
+        <div class="field"><label>Duração <span class="hint">(puxa do Bunny sozinho — dá pra ajustar)</span></label><input id="f_duration" type="text" value="${esc(l.duration)}" placeholder="14:00"></div>
       </div>
       <div class="grid2">
-        <div class="field"><label>ID do vídeo (Bunny) <span class="hint">o GUID do vídeo</span></label><input id="f_video" type="text" value="${esc(l.video_id)}" placeholder="ex: 8f3a...-...-...-...-..."></div>
+        <div class="field"><label>ID do vídeo (Bunny) <span class="hint">o GUID do vídeo</span></label><input id="f_video" type="text" value="${esc(l.video_id)}" placeholder="ex: 8f3a...-...-...-...-..." onblur="autofillDuration()"></div>
         <div class="field"><label>Library ID (Bunny) <span class="hint">deixa vazio p/ usar o padrão</span></label><input id="f_lib" type="text" value="${esc(l.video_library)}" placeholder="opcional"></div>
       </div>
       <div class="field"><label>Descrição (Sobre a aula)</label><textarea id="f_desc" placeholder="Do que trata a aula...">${esc(l.description)}</textarea></div>
@@ -237,6 +264,7 @@ function openForm(l){
       </div>
     </div>`;
   document.getElementById('formWrap').scrollIntoView({behavior:'smooth',block:'start'});
+  if(l.video_id && !l.duration) setTimeout(autofillDuration, 300); // aula antiga sem duração: puxa na hora
 }
 function matRow(m){ m=m||{}; return `<div class="matrow">
   <input class="mat-label" type="text" value="${esc(m.label)}" placeholder="Nome do material">
