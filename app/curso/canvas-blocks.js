@@ -282,12 +282,12 @@ window.ADP_CANVAS = (function () {
     + '.mx2-secdot{color:var(--faint,#a1a1aa);font-size:12px}'
     // --- Seletor de entrada da Matriz (escolher qual hipótese avaliar primeiro) ---
     + '.mx2-selwait{font-size:13px;color:var(--muted,#71717a);padding:10px 2px}'
-    + '.mx2-selhead b{display:block;font-size:15.5px;font-weight:700;color:var(--ink,#18181b);line-height:1.3}'
-    + '.mx2-selhead p{margin:7px 0 0;font-size:13.5px;color:var(--muted,#71717a)}'
+    + '.mx2-selhead b{display:block;font-size:15.5px;font-weight:700;color:var(--ink,#18181b);line-height:1.3;text-wrap:balance}'
+    + '.mx2-selhead p{margin:7px 0 0;font-size:13.5px;color:var(--muted,#71717a);text-wrap:balance}'
     + '.mx2-selgrid{display:flex;flex-direction:column;gap:12px;margin-top:18px}'
     + '.mx2-selcard{border:1px solid var(--line,#d4d4d8);border-radius:14px;padding:14px 18px;display:flex;align-items:center;gap:18px;transition:border-color .15s}'
     + '.mx2-selcard:hover{border-color:var(--muted,#71717a)}'
-    + '.mx2-seltitle{flex:1;min-width:0;font-size:15.5px;font-weight:700;color:var(--ink,#18181b);line-height:1.3}'
+    + '.mx2-seltitle{flex:1;min-width:0;font-size:15.5px;font-weight:700;color:var(--ink,#18181b);line-height:1.3;text-wrap:balance}'
     + '.mx2-selacts{flex:none;display:flex;align-items:center;gap:16px}'
     + '.mx2-selpick{font-weight:700;font-size:13px;padding:10px 20px;border-radius:999px;background:var(--pink,#ff00d7);color:#fff;border:none;cursor:pointer;white-space:nowrap}'
     + '.mx2-selpick:hover{filter:brightness(1.06)}'
@@ -365,7 +365,7 @@ window.ADP_CANVAS = (function () {
     function selectorMode() { return !picked && !rows.some(function (r) { return anyScore(r); }); }
     var editing = null; // "i:k" da evidência em edição (abre o textarea + revela a confiança)
     var NOTE_OK = 'Você não precisa acertar de primeira. Avalie as direções que mais combinam com o que você conhece hoje.';
-    container.innerHTML = '<p class="mx-note" id="mxNote" style="font-size:13px;color:var(--muted,#71717a);line-height:1.5;margin:0 0 16px;padding-bottom:10px;border-bottom:1px solid var(--line,#d4d4d8)">' + NOTE_OK + '</p>'
+    container.innerHTML = '<p class="mx-note" id="mxNote" style="font-size:13px;color:var(--muted,#71717a);line-height:1.5;margin:0 0 16px;padding-bottom:10px;border-bottom:1px solid var(--line,#d4d4d8);text-wrap:balance">' + NOTE_OK + '</p>'
       + '<div class="adp-mx"></div>'
       + '<button type="button" class="adp-addcand">Nenhuma dessas faz sentido? Criar outra hipótese</button>'
       + '<div class="adp-savest" style="display:none"></div>';
