@@ -245,11 +245,6 @@ function openForm(l){
       </div>
       <div class="field"><label>Descrição (Sobre a aula)</label><textarea id="f_desc" placeholder="Do que trata a aula...">${esc(l.description)}</textarea></div>
 
-      <div class="sec-title">Exercício <span style="text-transform:none;letter-spacing:0;font-weight:400;color:var(--faint)">— título e intro só aparecem nas aulas de formulário (blocos 1/3/4). A aula do Escavador ignora.</span></div>
-      <div class="field"><label>Título do exercício</label><input id="f_ex_title" type="text" value="${esc(ex.title)}" placeholder="Ex: Rode a Matriz do Nicho"></div>
-      <div class="field"><label>Introdução</label><input id="f_ex_intro" type="text" value="${esc(ex.intro)}" placeholder="Abra o Meu Canvas e faça agora..."></div>
-      <div class="field"><label>Bloco do Canvas que alimenta <span class="hint">(0 a 4, ou vazio — define o formato do exercício)</span></label><input id="f_block" type="text" value="${l.canvas_block!=null?l.canvas_block:''}" placeholder="2"></div>
-
       <div class="sec-title">Materiais <span style="text-transform:none;letter-spacing:0;font-weight:400">(opcional — link, template, PDF)</span></div>
       <div id="matList">
         ${mats.map(m=>matRow(m)).join('')}
@@ -289,7 +284,6 @@ async function saveAula(){
   const wasEdit = !!editingId;
   const title=val('f_title');
   if(!title){ toast('Bota um título'); return; }
-  const blockRaw=val('f_block');
   const payload={
     title,
     tagline:val('f_tagline'),
@@ -297,12 +291,7 @@ async function saveAula(){
     video_id:val('f_video'),
     video_library:val('f_lib'),
     description:val('f_desc'),
-    canvas_block: blockRaw===''?null:parseInt(blockRaw,10),
     is_published: document.getElementById('f_pub').checked,
-    exercise:{
-      title:val('f_ex_title'),
-      intro:val('f_ex_intro'),
-    },
     materials: collectMats(),
   };
   if(editingId) payload.id=editingId;
