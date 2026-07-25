@@ -14,10 +14,11 @@ const REVOKE = ['refunded', 'chargedback'];
 export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
-  // valida o segredo da URL (?secret=) ou header
+  // valida o segredo da URL (?secret=) ou header — FAIL-CLOSED:
+  // se o segredo não estiver configurado, rejeita tudo (nunca abre o endpoint sozinho).
   const secret = process.env.GREENN_WEBHOOK_SECRET;
   const got = req.query?.secret || req.headers['x-greenn-secret'];
-  if (secret && got !== secret) return res.status(401).json({ error: 'segredo inválido' });
+  if (!secret || got !== secret) return res.status(401).json({ error: 'segredo inválido' });
 
   let body = req.body; if (typeof body === 'string') { try { body = JSON.parse(body); } catch { body = {}; } }
   body = body || {};
