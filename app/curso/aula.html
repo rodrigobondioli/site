@@ -494,7 +494,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
       +   '<div class="esc-inbar"><div class="esc-inrow"><span class="esc-spark"><svg viewBox="0 0 24 24"><path d="M12 3l1.7 4.8L18.5 9.5l-4.8 1.7L12 16l-1.7-4.8L5.5 9.5l4.8-1.7z"/></svg></span><textarea id="escInput" rows="1"></textarea><button class="esc-send" id="escSend" aria-label="Enviar"><svg viewBox="0 0 24 24"><path d="M22 2 11 13"/><path d="M22 2 15 22l-4-9-9-4z"/></svg></button></div><div class="esc-chips gone" id="escChips"></div></div>'
       + '</div>'
       + '<div class="esc-block">'
-      +   '<div class="esc-bh"><b>Sua matéria-prima</b><span class="prog" id="escProgTxt">0 de 9 itens</span></div>'
+      +   '<div class="esc-bh"><b>Sua matéria-prima</b><span class="prog" id="escProgTxt">quanto mais você despeja, mais afiado o resultado</span></div>'
       +   '<div class="esc-cards" id="escCards"></div>'
       + '</div>'
       + '<div class="esc-done gone" id="escDone"></div>'
@@ -541,7 +541,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
       }).join('');
       stepEl.textContent = qCount ? ('· pergunta '+Math.min(qCount,5)+' de ~5') : '';
       var qb=container.querySelector('#escQbar'); if(qb) qb.style.width = (done?100:Math.min(qCount,5)/5*100)+'%';
-      progEl.textContent = filledCount()+' de 9 itens';
+      progEl.textContent = filledCount()+' preenchidos · quanto mais, mais afiado';
     }
     function renderChips(){
       if(hasAny()){ chips.classList.add('gone'); chips.innerHTML=''; return; }
@@ -555,9 +555,9 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
       var g=window.ADP_CANVAS.gateForBlock(0, voce);
       var next=(LESSONS[idx+1])?('aula.html?a='+LESSONS[idx+1].id):'canvas.html';
       var msg;
-      if(g.gate.sev==='ok') msg='<b>Pronto — tua matéria-prima tá forte.</b> Tem comunidade, competência e prova. Já dá pra montar teu posicionamento.';
-      else if(g.gate.sev==='importante'||g.gate.sev==='aviso') msg='<b>Pronto — já dá pra seguir.</b> Só falta reforçar: '+esc(g.gate.label)+'. Dá pra melhorar mais pra frente.';
-      else msg='<b>Pronto.</b> Tua matéria-prima tá montada.';
+      if(g.gate.sev==='ok') msg='<b>Boa base.</b> E cada item a mais deixa o resultado mais afiado — se der, volta e completa o que ficou vazio antes de seguir.';
+      else if(g.gate.sev==='importante'||g.gate.sev==='aviso') msg='<b>Dá pra seguir</b> — mas não pare no meio: quanto mais você preenche, mais forte o teu posicionamento sai. Falta reforçar '+esc(g.gate.label)+'.';
+      else msg='<b>Base montada.</b> Quanto mais você despejar aqui, mais afiado o resultado no fim.';
       doneEl.innerHTML='<div class="dt">'+msg+'</div><a class="esc-cont" id="escCont" href="'+next+'">Continuar →</a>';
       doneEl.classList.remove('gone');
       var cont=doneEl.querySelector('#escCont');
