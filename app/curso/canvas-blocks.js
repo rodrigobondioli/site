@@ -285,14 +285,15 @@ window.ADP_CANVAS = (function () {
     + '.mx2-selhead b{display:block;font-size:15.5px;font-weight:700;color:var(--ink,#18181b);line-height:1.3}'
     + '.mx2-selhead p{margin:7px 0 0;font-size:13.5px;color:var(--muted,#71717a)}'
     + '.mx2-selgrid{display:flex;flex-direction:column;gap:12px;margin-top:18px}'
-    + '.mx2-selcard{border:1px solid var(--line,#d4d4d8);border-radius:14px;padding:16px 18px;display:flex;flex-direction:column;gap:13px;transition:border-color .15s}'
+    + '.mx2-selcard{border:1px solid var(--line,#d4d4d8);border-radius:14px;padding:14px 18px;display:flex;align-items:center;gap:18px;transition:border-color .15s}'
     + '.mx2-selcard:hover{border-color:var(--muted,#71717a)}'
-    + '.mx2-seltitle{font-size:16px;font-weight:700;color:var(--ink,#18181b);line-height:1.32}'
-    + '.mx2-selacts{display:flex;align-items:center;gap:16px}'
-    + '.mx2-selpick{font-weight:700;font-size:13px;padding:10px 20px;border-radius:999px;background:var(--ink,#18181b);color:#fff;border:none;cursor:pointer}'
-    + '.mx2-selpick:hover{filter:brightness(1.35)}'
+    + '.mx2-seltitle{flex:1;min-width:0;font-size:15.5px;font-weight:700;color:var(--ink,#18181b);line-height:1.3}'
+    + '.mx2-selacts{flex:none;display:flex;align-items:center;gap:16px}'
+    + '.mx2-selpick{font-weight:700;font-size:13px;padding:10px 20px;border-radius:999px;background:var(--pink,#ff00d7);color:#fff;border:none;cursor:pointer;white-space:nowrap}'
+    + '.mx2-selpick:hover{filter:brightness(1.06)}'
     + '.mx2-seledit{font-size:12.5px;color:var(--muted,#71717a);text-decoration:underline;text-underline-offset:2px;background:none;border:none;cursor:pointer}'
     + '.mx2-seledit:hover{color:var(--ink,#18181b)}'
+    + '@media(max-width:560px){.mx2-selcard{flex-direction:column;align-items:stretch;gap:12px}.mx2-selacts{justify-content:flex-end}}'
     // --- Caça à Ruminação ---
     + '.adp-rum{margin-top:20px;padding-top:20px;border-top:1px solid var(--line,#d4d4d8)}'
     + '.adp-rum .rh{display:flex;align-items:center;gap:8px;font-weight:700;font-size:14.5px}'
@@ -363,7 +364,7 @@ window.ADP_CANVAS = (function () {
     var picked = false; // enquanto false E nada pontuado, mostra o SELETOR (escolher qual avaliar primeiro)
     function selectorMode() { return !picked && !rows.some(function (r) { return anyScore(r); }); }
     var editing = null; // "i:k" da evidência em edição (abre o textarea + revela a confiança)
-    var NOTE_OK = 'Você não precisa acertar de primeira. Escolha a direção que mais faz sentido com o que você conhece hoje — usa, edita ou troca à vontade.';
+    var NOTE_OK = 'Você não precisa acertar de primeira. Avalie as direções que mais combinam com o que você conhece hoje.';
     container.innerHTML = '<p class="mx-note" id="mxNote" style="font-size:13px;color:var(--muted,#71717a);line-height:1.5;margin:0 0 16px;padding-bottom:10px;border-bottom:1px solid var(--line,#d4d4d8)">' + NOTE_OK + '</p>'
       + '<div class="adp-mx"></div>'
       + '<button type="button" class="adp-addcand">Nenhuma dessas faz sentido? Criar outra hipótese</button>'
@@ -463,11 +464,11 @@ window.ADP_CANVAS = (function () {
       var cards = named.map(function (k) {
         return '<div class="mx2-selcard">'
           + '<div class="mx2-seltitle">' + esc(rows[k].name) + '</div>'
-          + '<div class="mx2-selacts"><button type="button" class="mx2-selpick" data-i="' + k + '">Avaliar esta</button>'
+          + '<div class="mx2-selacts"><button type="button" class="mx2-selpick" data-i="' + k + '">Avaliar esta direção</button>'
           + '<button type="button" class="mx2-seledit" data-i="' + k + '">Editar</button></div>'
           + '</div>';
       }).join('');
-      return '<div class="mx2-selhead"><b>A IA encontrou estas direções com base nas suas respostas:</b><p>Qual delas você quer avaliar primeiro?</p></div>'
+      return '<div class="mx2-selhead"><b>A IA encontrou estas ' + (named.length === 2 ? 'duas ' : '') + 'possibilidades:</b><p>Qual você quer avaliar primeiro?</p></div>'
         + '<div class="mx2-selgrid">' + cards + '</div>';
     }
     // veredito → DECISÃO. Só aparece com os 7 pontuados; hierarquia (principal/secundária/terciárias) muda pelo resultado + estado das outras.
