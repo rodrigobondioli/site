@@ -122,6 +122,11 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .lesson.lock .tt{color:var(--faint)}
 .lesson .tag{font-size:11px;font-weight:700;color:var(--muted);border:1px solid var(--line);padding:2px 8px;border-radius:999px;flex:none}
 .lesson .dur{font-size:13px;color:var(--muted);flex:none;min-width:42px;text-align:right}
+.lesson .lthumb{position:relative;width:78px;flex:none;aspect-ratio:16/9;border-radius:7px;overflow:hidden;background:#000 center/cover no-repeat;display:grid;place-items:center}
+.lesson .lthumb .lp{display:flex;color:rgba(255,255,255,.72)}
+.lesson .lthumb .lp svg{width:17px;height:17px;fill:currentColor}
+.lesson .lthumb.novid{background:var(--soft)}
+.lesson .lthumb.novid .lp{color:var(--faint)}
 /* linha secundária do card: texto corrido (conclusão · diagnóstico · validação) */
 .lesson .lsub{font-size:12px;color:var(--muted);line-height:1.4}
 .lesson.lock .lsub{color:var(--faint)}
@@ -284,7 +289,11 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
       var tag = isNow? '<span class="tag">agora</span>':'';
       var dur = l.duration? '<span class="dur">'+esc(l.duration)+'</span>':'';
       var info = blockInfo(l, blockData||{});
-      return '<a class="'+cls+'" href="aula.html?a='+l.id+'">'+st+'<span class="lcol"><span class="tt">'+esc(l.title)+'</span>'+info+'</span>'+tag+dur+'</a>';
+      var pz='vz-6010a13b-258.b-cdn.net';
+      var thumb = l.video_id
+        ? '<span class="lthumb" style="background-image:url(https://'+pz+'/'+encodeURIComponent(l.video_id)+'/thumbnail.jpg)"><span class="lp">'+ICON_PLAY+'</span></span>'
+        : '<span class="lthumb novid"><span class="lp">'+ICON_PLAY+'</span></span>';
+      return '<a class="'+cls+'" href="aula.html?a='+l.id+'">'+st+thumb+'<span class="lcol"><span class="tt">'+esc(l.title)+'</span>'+info+'</span>'+tag+dur+'</a>';
     }).join('');
     document.getElementById('lessonList').innerHTML = html || '<div class="lesson"><span class="tt" style="color:var(--muted)">Nenhuma aula publicada ainda.</span></div>';
   }
