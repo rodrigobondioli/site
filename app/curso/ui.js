@@ -16,7 +16,7 @@
   .adp-x:hover{background:#f1f1f1;color:#18181b}
   .adp-x svg{width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round}
   .adp-db{padding:24px 26px 30px;overflow-y:auto;flex:1;color:#18181b}
-  .adp-db p.sub{font-size:14px;color:#71717a;line-height:1.6;margin:0 0 20px}
+  .adp-db p.sub{font-size:14px;color:#71717a;line-height:1.6;margin:0 0 20px;text-wrap:balance}
   .adp-f label{display:block;font-size:12.5px;font-weight:700;color:#71717a;margin:16px 0 7px}
   .adp-f input,.adp-f textarea,.adp-f select{width:100%;border:1px solid #d4d4d8;border-radius:10px;background:#fff;padding:11px 13px;
     font:inherit;font-size:14.5px;color:#18181b;outline:none}
