@@ -215,6 +215,12 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
   .panel.hidden{display:flex;transform:translateX(100%)}
   .panel:not(.hidden){transform:translateX(0);box-shadow:-24px 0 48px rgba(0,0,0,.4)}
 }
+@media(max-width:600px){
+  .lhead h1{font-size:24px}
+  .lhead{gap:12px;margin-bottom:20px}
+  .applyhere{padding:22px 16px 20px}
+  .exercise{padding:20px 16px}
+}
 
 /* ---------- Escavador — extração guiada com preview estrutural ---------- */
 .esc .gone{display:none}
@@ -594,7 +600,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
         intro=card.querySelector('#fwIntro'), foot=card.querySelector('#fwFoot'), nextBtn=card.querySelector('#fwNext'),
         qbar=card.querySelector('.esc-qbar');
     var nextHref=(LESSONS[idx+1])?('aula.html?a='+LESSONS[idx+1].id):'canvas.html';
-    function finish(){ try{ if(cur && !DONE.has(cur.id)){ DONE.add(cur.id); window.ADP.setDone(cur.id,true).catch(function(){}); } }catch(e){} location.href=nextHref; }
+    function finish(){ try{ var _b=l.canvas_block, _filled=(_b!=null && window.ADP_CANVAS)?window.ADP_CANVAS.isFilled(_b, CANVAS[_b]||{}):true; if(_filled && cur && !DONE.has(cur.id)){ DONE.add(cur.id); window.ADP.setDone(cur.id,true).catch(function(){}); } }catch(e){} location.href=nextHref; }
     var fields = (def.type==='fields') ? Array.prototype.slice.call(card.querySelectorAll('#canvasInline > .adp-fld')) : [];
     // matriz (bloco 2) não é pergunta-a-pergunta: some com barra/pergunta, mostra a ferramenta inteira + Continuar
     if(!fields.length){
