@@ -366,17 +366,26 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 
   // progresso assistido (proporção real, por aula) — guardado local por dispositivo
   var WATCH = (function(){ try{ return JSON.parse(localStorage.getItem('adp_watch_v1'))||{}; }catch(e){ return {}; } })();
-  function saveWatch(){ try{ localStorage.setItem('adp_watch_v1', JSON.stringify(WATCH)); }catch(e){} }
+  var WATCH_T = (function(){ try{ return JSON.parse(localStorage.getItem('adp_watch_t_v1'))||{}; }catch(e){ return {}; } })(); // segundos assistidos por aula (retomar de onde parou)
+  function saveWatch(){ try{ localStorage.setItem('adp_watch_v1', JSON.stringify(WATCH)); localStorage.setItem('adp_watch_t_v1', JSON.stringify(WATCH_T)); }catch(e){} }
   function updateThumbProg(id, pct){ var el=document.querySelector('#panelList .li[data-lid="'+id+'"] .lprog i'); if(el) el.style.width=pct+'%'; }
   function attachPlayer(){
     if(!window.playerjs || !cur) return;
     var ifr=document.getElementById('mainVideo'); if(!ifr) return;
     try{
       var p=new playerjs.Player(ifr);
+      var seeked=false;
+      function resume(){
+        if(seeked) return; seeked=true;
+        var t=+WATCH_T[cur.id]||0; if(t<=5) return; // só retoma se valeu a pena
+        p.getDuration(function(dur){ if(!dur || t < dur-10){ try{ p.setCurrentTime(t); }catch(e){} } }); // não retoma coladinho no fim
+      }
+      p.on('ready', resume);
+      p.on('play', resume); // fallback: garante o seek se o 'ready' não pegar
       p.on('timeupdate', function(d){
         if(!d) return; var dur=+d.duration||0, sec=+d.seconds||0;
         if(dur>0){ var pct=Math.min(100, Math.round(sec/dur*100));
-          if(pct>(WATCH[cur.id]||0)){ WATCH[cur.id]=pct; saveWatch(); updateThumbProg(cur.id,pct); } }
+          if(pct>(WATCH[cur.id]||0)){ WATCH[cur.id]=pct; WATCH_T[cur.id]=sec; saveWatch(); updateThumbProg(cur.id,pct); } }
       });
     }catch(e){}
   }
