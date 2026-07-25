@@ -212,7 +212,7 @@ s { text-decoration: line-through; }
   position: relative;
   margin-top: -44px;
   display: grid;
-  grid-template-columns: 1fr 518px 96px 460px 1fr;
+  grid-template-columns: 1fr minmax(0, 600px) 88px minmax(0, 600px) 1fr;
   grid-template-areas:
     "copy copy   copy copy  copy"
     "gl   visual gap  eusei gr";
