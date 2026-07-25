@@ -271,6 +271,13 @@ window.ADP_CANVAS = (function () {
     + '.mx2-vd .vdi.ok{background:var(--lime,#e7f99a)}.mx2-vd .vdi.mid{background:var(--faint,#a1a1aa)}.mx2-vd .vdi.bad{background:var(--ink,#18181b)}'
     + '.mx2-vd .vdt b{font-size:14.5px;color:var(--ink,#18181b);font-weight:700}'
     + '.mx2-vd .vdt p{margin:4px 0 0;font-size:13px;color:var(--muted,#71717a);line-height:1.5}'
+    + '.mx2-decide{margin-top:14px;display:flex;flex-direction:column;gap:11px;align-items:flex-start}'
+    + '.mx2-cta{font-weight:700;font-size:14px;padding:12px 24px;border-radius:999px;background:var(--pink,#ff00d7);color:#fff;border:none;cursor:pointer;white-space:nowrap}'
+    + '.mx2-cta:hover{filter:brightness(1.06)}'
+    + '.mx2-secacts{display:flex;align-items:center;gap:10px;flex-wrap:wrap}'
+    + '.mx2-seclink{font-size:12.5px;color:var(--muted,#71717a);text-decoration:underline;text-underline-offset:2px;background:none;border:none;cursor:pointer;padding:2px 0}'
+    + '.mx2-seclink:hover{color:var(--ink,#18181b)}'
+    + '.mx2-secdot{color:var(--faint,#a1a1aa);font-size:12px}'
     // --- Caça à Ruminação ---
     + '.adp-rum{margin-top:20px;padding-top:20px;border-top:1px solid var(--line,#d4d4d8)}'
     + '.adp-rum .rh{display:flex;align-items:center;gap:8px;font-weight:700;font-size:14.5px}'
@@ -416,13 +423,48 @@ window.ADP_CANVAS = (function () {
       var ak = activeKey(row);
       return STEP_ORDER.map(function (k) { var on = critNota(row, k) >= 1, cur = k === ak; return '<i class="' + (cur ? 'cur' : (on ? 'on' : '')) + '" data-i="' + i + '" data-k="' + k + '"></i>'; }).join('');
     }
-    // veredito só aparece quando os 7 estão pontuados (ponto 6)
-    function vdHTML(row) {
+    // o que está matando a hipótese + a direção de ajuste (aponta, não entrega nicho pronto)
+    function weakDiag(row) {
+      var p = nota(row, 'poder'), u = nota(row, 'urgencia'), ac = nota(row, 'acesso'), ad = nota(row, 'aderencia');
+      var sm = somaEixo(row, 'mercado'), sv = somaEixo(row, 'voce');
+      if (p >= 1 && p <= 2) return 'O poder de compra é o gargalo. Talvez o público esteja amplo ou pequeno demais — tenta focar quem já tem operação girando, mais volume ou ticket maior.';
+      if (u >= 1 && u <= 2) return 'Falta urgência. Vê se dá pra mirar um momento em que essa dor aperta de verdade — não algo que o cliente empurra com a barriga.';
+      if (ac >= 1 && ac <= 2 && ad >= 1 && ad <= 2) return 'Você está longe do decisor e sem prova. Escolhe um recorte onde você já tem rede ou algum caso pra mostrar.';
+      if (sm >= 14 && sv <= 6) return 'O mercado é bom, mas você ainda não tem prova nem acesso aqui. Dá pra começar construindo um caso pequeno antes de apostar tudo.';
+      if (sm <= 8 && sv >= 11) return 'Você conhece bem, mas o mercado é fraco. Vê se há um recorte com mais dor, mais urgência ou mais dinheiro em jogo.';
+      return v0txt(row);
+    }
+    function v0txt(row) { return verdict(row).txt; }
+    // veredito → DECISÃO. Só aparece com os 7 pontuados; o CTA muda conforme o resultado e o estado das outras hipóteses.
+    function decisionHTML(row, i) {
       if (!isScored(row)) return '';
-      var v = verdict(row);
-      var map = { ok: ['Boa direção para investigar', 'ok'], construcao: ['Vale investigar — com uma ressalva', 'mid'], confortavel: ['Zona confortável, mercado fraco', 'mid'], alerta: ['Tem um ponto de atenção', 'bad'], inviavel: ['Provavelmente não vale a pena', 'bad'], todo: ['Quase lá', 'mid'] };
-      var m = map[v.tag] || ['Leitura pronta', 'mid'];
-      return '<div class="mx2-vd"><span class="vdi ' + m[1] + '"></span><div class="vdt"><b>' + m[0] + '</b><p>' + esc(v.txt) + '</p></div></div>';
+      var v = verdict(row), tag = v.tag;
+      var titleMap = { ok: ['Boa direção para investigar', 'ok'], construcao: ['Vale investigar — com uma ressalva', 'mid'], confortavel: ['Zona confortável, mercado fraco', 'mid'], alerta: ['Tem um ponto de atenção', 'bad'], inviavel: ['Provavelmente não vale a pena', 'bad'], todo: ['Quase lá', 'mid'] };
+      var tm = titleMap[tag] || ['Leitura pronta', 'mid'];
+      var good = (tag === 'ok'), bad = (tag === 'inviavel');
+      var guide = good ? v.txt : weakDiag(row);
+      var others = [], j;
+      for (j = 0; j < rows.length; j++) { if (j !== i && (rows[j].name || '').trim()) others.push(j); }
+      var otherUnscored = others.filter(function (k) { return !isScored(rows[k]); });
+      var primary, secondary = [];
+      if (good) {
+        primary = { act: 'continuar', label: 'Continuar →' };
+        if (others.length) secondary.push({ act: 'switch', label: 'Comparar com a outra hipótese' });
+      } else if (bad) {
+        if (otherUnscored.length) { primary = { act: 'switch', label: 'Avaliar a outra hipótese →' }; secondary.push({ act: 'adjust', label: 'Ajustar esta hipótese' }); secondary.push({ act: 'continuar', label: 'Continuar mesmo assim' }); }
+        else if (others.length) { primary = { act: 'adjust', label: 'Ajustar esta hipótese' }; secondary.push({ act: 'switch', label: 'Ver a outra hipótese' }); secondary.push({ act: 'add', label: 'Criar outra' }); secondary.push({ act: 'continuar', label: 'Continuar mesmo assim' }); }
+        else { primary = { act: 'adjust', label: 'Ajustar esta hipótese' }; secondary.push({ act: 'add', label: 'Criar outra hipótese' }); secondary.push({ act: 'continuar', label: 'Continuar mesmo assim' }); }
+      } else { // mediano
+        if (otherUnscored.length) primary = { act: 'switch', label: 'Avaliar a outra hipótese →' };
+        else if (others.length) primary = { act: 'switch', label: 'Comparar com a outra hipótese' };
+        else primary = { act: 'continuar', label: 'Continuar mesmo assim →' };
+        secondary.push({ act: 'adjust', label: 'Ajustar esta hipótese' });
+        if (primary.act !== 'continuar') secondary.push({ act: 'continuar', label: 'Continuar mesmo assim' });
+      }
+      var prim = '<button type="button" class="mx2-cta" data-act="' + primary.act + '" data-i="' + i + '">' + esc(primary.label) + '</button>';
+      var sec = secondary.length ? '<div class="mx2-secacts">' + secondary.map(function (s) { return '<button type="button" class="mx2-seclink" data-act="' + s.act + '" data-i="' + i + '">' + esc(s.label) + '</button>'; }).join('<span class="mx2-secdot">·</span>') + '</div>' : '';
+      return '<div class="mx2-vd"><span class="vdi ' + tm[1] + '"></span><div class="vdt"><b>' + tm[0] + '</b><p>' + esc(guide) + '</p></div></div>'
+        + '<div class="mx2-decide">' + prim + sec + '</div>';
     }
     // hipótese aberta = header (nome protagonista) + progresso + respondidos compactos + critério ativo + veredito
     function openHTML(row, i) {
@@ -443,7 +485,7 @@ window.ADP_CANVAS = (function () {
         + '</div>'
         + '<div class="mx2-prog"><span class="mx2-progn">' + lead + '</span><span class="mx2-dots">' + dotsHTML(row, i) + '</span></div>'
         + body
-        + vdHTML(row)
+        + decisionHTML(row, i)
         + '</div>';
     }
     // hipótese recolhida = barra resumida (ponto 5: "ainda não avaliada" / "Mercado X/20 · Afinidade Y/15")
@@ -487,6 +529,22 @@ window.ADP_CANVAS = (function () {
       // falha da geração de hipóteses
       if (cl.contains('mx-hipretry')) { genHipoteses(); return; }
       if (cl.contains('mx-hipmanual')) { if (mxNote) mxNote.textContent = NOTE_OK; return; }
+      // ações da decisão (veredito) — o CTA vira a próxima ação, não um "continuar" cego
+      if (cl.contains('mx2-cta') || cl.contains('mx2-seclink')) {
+        var act = el.dataset.act;
+        if (act === 'continuar') { if (window.__matrizContinue) window.__matrizContinue(); return; }
+        if (act === 'add') { rows.push(normRow()); openIdx = rows.length - 1; paint(); persist(); return; }
+        if (act === 'adjust') { var nmA = container.querySelector('.mx-name[data-i="' + i + '"]'); if (nmA) { nmA.focus(); var LA = nmA.value.length; try { nmA.setSelectionRange(LA, LA); } catch (er) {} } return; }
+        if (act === 'switch') {
+          var target = -1, jj;
+          for (jj = 0; jj < rows.length; jj++) { if (jj !== i && (rows[jj].name || '').trim() && !isScored(rows[jj])) { target = jj; break; } }
+          if (target < 0) for (jj = 0; jj < rows.length; jj++) { if (jj !== i && (rows[jj].name || '').trim()) { target = jj; break; } }
+          if (target < 0) for (jj = 0; jj < rows.length; jj++) { if (jj !== i) { target = jj; break; } }
+          if (target >= 0) { openIdx = target; paint(); }
+          return;
+        }
+        return;
+      }
       // nota do critério ativo → registra e AVANÇA pro próximo não respondido
       if (cl.contains('mx2-nb')) { var k = el.dataset.k, v = +el.dataset.v, cell = rows[i].cells[k]; cell.nota = (cell.nota === v ? 0 : v); rows[i]._active = cell.nota ? firstUnanswered(rows[i]) : k; paint(); persist(); return; }
       // dot → pula pro critério

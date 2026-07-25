@@ -605,7 +605,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
   // 🧭 Wizard dos blocos de formulário (1/3/4): mostra 1 campo por vez com barra N de M — mesmo comportamento do Escavador.
   // Reusa o renderBlock (salvamento testado): todos os campos existem no DOM, só escondemos os que não são o passo atual.
   function initFormWizard(l){
-    window.__matrizGate=null; // evita gate órfão de uma aula anterior
+    window.__matrizGate=null; window.__matrizContinue=null; // evita hooks órfãos de uma aula anterior
     var def = window.ADP_CANVAS && window.ADP_CANVAS.byBlock(l.canvas_block);
     var card = document.querySelector('.applyhere-form'); if(!card || !def) return;
     var qEl=card.querySelector('#fwQ'), bar=card.querySelector('#fwBar'), stepEl=card.querySelector('#fwStep'),
@@ -619,17 +619,8 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
       if(qEl) qEl.style.display='none';
       if(qbar) qbar.style.display='none';
       if(intro) intro.style.display='none';
-      if(foot){ foot.classList.remove('gone'); }
-      // Continuar só ativa quando UMA hipótese tem os 7 critérios pontuados (ponto 8)
-      var savedEl=card.querySelector('#fwSaved');
-      var gate=function(){
-        var rem = window.ADP_CANVAS.matrizRemaining ? window.ADP_CANVAS.matrizRemaining(CANVAS[2]||{}) : 0;
-        var ready = rem===0;
-        if(nextBtn){ nextBtn.disabled=!ready; }
-        if(savedEl){ savedEl.textContent = ready ? 'salvo automaticamente' : (rem===1 ? 'Falta 1 critério' : ('Faltam '+rem+' critérios')); }
-      };
-      window.__matrizGate=gate; gate();
-      if(nextBtn) nextBtn.addEventListener('click', function(){ if(nextBtn.disabled) return; finish(); });
+      if(foot){ foot.classList.add('gone'); } // a Matriz tem CTA próprio — o veredito vira decisão, sem footer "Continuar" genérico
+      window.__matrizContinue=finish;          // o botão principal da decisão chama isto pra seguir
       return;
     }
     // MESMO comportamento do Escavador: botão enviar (aviãozinho rosa) DENTRO do campo; Enter envia; a pergunta troca na hora.
