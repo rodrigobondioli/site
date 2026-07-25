@@ -241,7 +241,7 @@ window.ADP_CANVAS = (function () {
     + '.mx2-links{display:flex;gap:16px;margin-top:8px}'
     + '.mx2-link{font-size:12.5px;color:var(--muted,#71717a);text-decoration:underline;text-underline-offset:2px;cursor:pointer;background:none;border:none;padding:0;font-weight:700}'
     + '.mx2-link:hover{color:var(--ink,#18181b)}'
-    + '.mx2-prog{display:flex;align-items:center;gap:14px;margin:22px 2px 4px}'
+    + '.mx2-prog{display:flex;align-items:center;gap:14px;margin:24px 2px 4px;border-top:1px solid var(--line,#d4d4d8);padding-top:20px}'
     + '.mx2-progn{font-size:11px;font-weight:700;letter-spacing:.06em;color:var(--muted,#71717a);flex:none;text-transform:uppercase}'
     + '.mx2-dots{display:flex;gap:7px;flex:1;flex-wrap:wrap}'
     + '.mx2-dots i{width:9px;height:9px;border-radius:999px;background:var(--soft,#e6e6e8);border:1px solid var(--line,#d4d4d8);transition:.15s;cursor:pointer}'
@@ -338,7 +338,7 @@ window.ADP_CANVAS = (function () {
     var openIdx = 0; // acordeão: só um candidato aberto por vez
     var editing = null; // "i:k" da evidência em edição (abre o textarea + revela a confiança)
     var NOTE_OK = 'Você não precisa acertar de primeira. Escolha a direção que mais faz sentido com o que você conhece hoje — usa, edita ou troca à vontade.';
-    container.innerHTML = '<p class="mx-note" id="mxNote" style="font-size:13px;color:var(--muted,#71717a);line-height:1.5;margin:0 0 16px">' + NOTE_OK + '</p>'
+    container.innerHTML = '<p class="mx-note" id="mxNote" style="font-size:13px;color:var(--muted,#71717a);line-height:1.5;margin:0 0 16px;padding-bottom:10px;border-bottom:1px solid var(--line,#d4d4d8)">' + NOTE_OK + '</p>'
       + '<div class="adp-mx"></div>'
       + '<button type="button" class="adp-addcand">Nenhuma dessas faz sentido? Criar outra hipótese</button>'
       + '<div class="adp-savest" style="display:none"></div>';
