@@ -298,12 +298,34 @@ window.ADP_CANVAS = (function () {
     var rows = (data && data.rows && data.rows.length) ? data.rows.map(normRow) : [normRow(), normRow()];
     var openIdx = 0; // acordeão: só um candidato aberto por vez
     var editing = null; // "i:k" da evidência em edição (abre o textarea + revela a confiança)
-    container.innerHTML = '<div class="adp-mx"></div>'
-      + '<button type="button" class="adp-addcand">+ candidato a nicho</button>'
+    var NOTE_OK = 'Você não precisa acertar de primeira. Escolha a direção que mais faz sentido com o que você conhece hoje — usa, edita ou troca à vontade.';
+    container.innerHTML = '<p class="mx-note" id="mxNote" style="font-size:13px;color:var(--muted,#71717a);line-height:1.5;margin:0 0 16px">' + NOTE_OK + '</p>'
+      + '<div class="adp-mx"></div>'
+      + '<button type="button" class="adp-addcand">+ hipótese de nicho</button>'
       + '<div class="adp-savest" style="display:none"></div>';
     var mx = container.querySelector('.adp-mx');
     var st = container.querySelector('.adp-savest');
     var save = makeSaver(2, st, onSaved);
+    var mxNote = container.querySelector('#mxNote');
+    var HIPBTN = 'background:none;border:0;color:var(--ink,#18181b);font-weight:700;text-decoration:underline;cursor:pointer;font:inherit;padding:0';
+    function anyName() { return rows.some(function (r) { return (r.name || '').trim(); }); }
+    // Gera 2 hipóteses da matéria-prima (Bloco 0). Não regenera se já houver salva, não sobrescreve o que o aluno escreveu.
+    function genHipoteses() {
+      if (!(window.ADP && window.ADP.hipoteses)) return;
+      if (mxNote) mxNote.textContent = 'Montando hipóteses com base nas suas respostas…';
+      window.ADP.hipoteses().then(function (r) {
+        var hs = (r && r.data && r.data.hipoteses) || [];
+        if (mxNote) mxNote.textContent = NOTE_OK;
+        if (!hs.length || anyName()) return; // sem base ou o aluno já digitou → não mexe
+        for (var k = 0; k < Math.min(2, hs.length); k++) { if (rows[k]) rows[k].name = hs[k].nicho || hs[k].name || ''; }
+        paint(); persist();
+      }).catch(function () {
+        if (mxNote) mxNote.innerHTML = 'Não consegui gerar agora. Você pode escrever uma hipótese ou tentar de novo. '
+          + '<button type="button" class="mx-hipretry" style="' + HIPBTN + '">Tentar novamente</button>'
+          + ' · <button type="button" class="mx-hipmanual" style="' + HIPBTN + '">Preencher manualmente</button>';
+      });
+    }
+    if (!anyName()) genHipoteses(); // só gera quando NÃO existe nenhuma hipótese salva
 
     function notaOpts(sel) { var s = '<option value="">—</option>'; for (var i = 1; i <= 5; i++) s += '<option ' + (i === sel ? 'selected' : '') + '>' + i + '</option>'; return s; }
     function confOpts(sel) {
@@ -340,7 +362,7 @@ window.ADP_CANVAS = (function () {
       }
       if (!has) {
         return '<div class="mx-evstrip" data-i="' + i + '" data-k="' + k + '">'
-          + '<span class="val none">Sem evidência adicionada</span>'
+          + '<span class="val none">Por que você deu essa nota? (opcional)</span>'
           + '<span class="sep">·</span><span class="act">adicionar</span>'
           + '</div>';
       }
@@ -405,15 +427,15 @@ window.ADP_CANVAS = (function () {
         // candidato colapsado (acordeão) — linha resumida clicável
         if (i !== openIdx && rows.length > 1) {
           return '<div class="mx-cbar" data-i="' + i + '">'
-            + '<span class="mx-cbtitle">Candidato ' + (i + 1) + (row.name ? ' · ' + esc(row.name) : '') + '</span>'
+            + '<span class="mx-cbtitle">Hipótese ' + (i + 1) + (row.name ? ' · ' + esc(row.name) : '') + '</span>'
             + '<span class="mx-cbread">Mercado ' + sm + '/20 · Você ' + sv + '/15</span>'
             + '<svg class="chev" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></div>';
         }
         var stt = stateChip(row);
         return '<div class="mx-cand" data-i="' + i + '">'
           + '<div class="mx-cand-h">'
-          +   '<div class="mx-idc"><span class="mx-lead">Candidato ' + (i + 1) + '</span>'
-          +     '<input class="mx-name" data-i="' + i + '" value="' + esc(row.name) + '" placeholder="dá um nome (ex: clínicas de estética premium)"></div>'
+          +   '<div class="mx-idc"><span class="mx-lead">Hipótese ' + (i + 1) + '</span>'
+          +     '<input class="mx-name" data-i="' + i + '" value="' + esc(row.name) + '" placeholder="ex: clínicas de estética que precisam atrair cliente pelo digital"></div>'
           +   '<span class="mx-state ' + stt.cls + '">' + stt.txt + '</span>'
           +   (rows.length > 1 ? '<button type="button" class="mx-del" data-i="' + i + '">remover</button>' : '')
           +   (rows.length > 1 ? '<button type="button" class="mx-collapse" data-i="' + i + '" aria-label="Recolher"><svg viewBox="0 0 24 24"><path d="m6 15 6-6 6 6"/></svg></button>' : '')
@@ -440,6 +462,9 @@ window.ADP_CANVAS = (function () {
     });
     container.addEventListener('click', function (e) {
       var C = e.target.closest ? e.target.closest.bind(e.target) : function () { return null; };
+      // falha da geração de hipóteses: tentar de novo ou seguir manual
+      if (e.target.classList.contains('mx-hipretry')) { genHipoteses(); return; }
+      if (e.target.classList.contains('mx-hipmanual')) { if (mxNote) mxNote.textContent = NOTE_OK; return; }
       // nota (1–5): clica o número, o escolhido cresce/fica preto
       var nn = C('.mx-nn');
       if (nn) { var ni = +nn.dataset.i, nk = nn.dataset.k, nv = +nn.dataset.v; rows[ni].cells[nk].nota = (rows[ni].cells[nk].nota === nv ? 0 : nv); paint(); persist(); return; }

@@ -39,6 +39,8 @@ window.ADP = (function () {
     // 🎯 Ikigai do Nicho (Bônus): mesma função do Estrategista, roteada por task (limite de serverless functions).
     // circles = { amo:[], bom:[], precisam:[], pagam:[] }
     ikigai: (circles) => api("/api/ai/estrategista", { method: "POST", body: JSON.stringify({ task: "ikigai", circles }) }),
+    // Hipóteses de nicho pra Matriz (Bloco 2) — a IA lê a matéria-prima (Bloco 0) do próprio aluno no servidor.
+    hipoteses: () => api("/api/ai/estrategista", { method: "POST", body: JSON.stringify({ task: "hipoteses" }) }),
     // 🛠️ Escavador (Aula 1 — VOCÊ): 1 turno da conversa. Cliente guarda o estado (history + voce) e manda a cada chamada.
     escavador: (payload) => api("/api/ai/escavador", { method: "POST", body: JSON.stringify(payload || {}) }),
     // aulas + progresso

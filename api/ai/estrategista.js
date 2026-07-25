@@ -154,6 +154,50 @@ Cruza as 4 e devolve o JSON (candidatos + cruzamentos).`;
   }
 }
 
+// 💡 Gerador de Hipóteses de Nicho — tira o aluno do campo vazio na Matriz (Bloco 2).
+// Reusa a rota /api/ai/estrategista, task === 'hipoteses'. Puxa a matéria-prima (Bloco 0) do próprio aluno.
+const HIPOTESES_SYSTEM = `Você é o gerador de hipóteses de nicho do curso De Genérico a Especialista (Rodrigo Bondioli, movimento Anti Designer Pato).
+Voz: direta, seca, anti-guru, tiozão. Zero emoji, zero marketingês ("potencial", "jornada", "alta performance").
+CONTEXTO: um designer que faz de tudo e ganha mal acabou de despejar a matéria-prima dele (comunidades/mundos que vive, o que faz bem, provas, história). Ele NÃO sabe ainda qual é o nicho — é isso que o curso ajuda a descobrir. Seu trabalho NÃO é cravar o nicho perfeito; é tirar ele do campo vazio dando 2 hipóteses concretas pra ele pontuar.
+TAREFA: a partir da matéria-prima, devolva EXATAMENTE 2 hipóteses de nicho, cada uma no formato VERTICAL (o mercado/tipo de cliente) + HORIZONTAL (a situação/dor/momento). Ex: "sites para pequenos negócios que recebem muitas dúvidas repetidas no WhatsApp".
+Regras:
+- Puxa das comunidades/mundos que ELE já vive e das provas que ele já tem — onde valida mais rápido.
+- Proibido genérico ("pequenas empresas", "empreendedores", "profissionais liberais"). Tem que doer de específico, com a situação junto.
+- Ancora no problema que resolve dinheiro/tempo pro cliente, não em estética.
+- São HIPÓTESES pra investigar, não verdades. Direção coerente e utilizável vale mais que "perfeita".
+- LINGUAGEM SIMPLES, do jeito que um designer normal fala. PROIBIDO corporativês e sofisticação vazia: nada de "soluções digitais estratégicas", "transformação comercial", "otimização de processos", "ecossistema", "alta performance". Diz a coisa na lata.
+  RUIM (não faça): "Soluções digitais estratégicas para PMEs em processo de transformação comercial."
+  BOM (faça): "Sites para pequenos negócios que recebem muitas dúvidas repetidas no WhatsApp."
+- A matéria-prima pode vir VAGA ou rala (o aluno é um designer comum, sem visão estratégica ainda). MESMO assim, extraia a melhor direção concreta possível com o que tem. NÃO devolva vazio por causa de resposta fraca — devolva a aposta mais útil.
+Responda SÓ em JSON, sem texto fora:
+{ "hipoteses": [ {"nicho":"vertical + horizontal numa frase","porque":"1 frase seca: de onde na matéria-prima dele isso saiu"}, {"nicho":"...","porque":"..."} ] }`;
+
+async function handleHipoteses(req, res, user) {
+  const url = process.env.SUPABASE_URL, svc = process.env.SUPABASE_SERVICE_ROLE;
+  const course = 'p1-generico-especialista';
+  let voce = {};
+  try {
+    const r = await fetch(`${url}/rest/v1/canvas_answers?user_id=eq.${user.id}&course_id=eq.${encodeURIComponent(course)}&block=eq.0&select=data`,
+      { headers: { apikey: svc, Authorization: `Bearer ${svc}` } });
+    if (r.ok) { const rows = await r.json(); voce = (rows[0] && rows[0].data) || {}; }
+  } catch (e) {}
+  // Sem matéria-prima (aluno não fez o Escavador) → não inventa nada; devolve vazio e o campo fica editável.
+  const has = (a, f) => Array.isArray(a) && a.some(x => x && String((f ? x[f] : x) || '').trim());
+  const temBase = has(voce.comunidades, 'nome') || has(voce.competencias, 'o_que') || String(voce.mundos || '').trim() || String(voce.forte || '').trim();
+  if (!temBase) return res.status(200).json({ ok: true, data: { hipoteses: [] } });
+  const user_msg = `Matéria-prima do designer (Bloco 0, JSON):\n${JSON.stringify(voce, null, 2)}\n\nDevolve 2 hipóteses de nicho (vertical + horizontal) no JSON pedido.`;
+  try {
+    const out = await ai(MODEL_SMART(), [
+      { role: 'system', content: HIPOTESES_SYSTEM },
+      { role: 'user', content: user_msg },
+    ], 900, 0.7);
+    const data = extractJSON(out) || { hipoteses: [] };
+    return res.status(200).json({ ok: true, data });
+  } catch (e) {
+    return res.status(500).json({ error: String(e.message || e) });
+  }
+}
+
 export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
   const user = await getUser(req);
@@ -164,6 +208,8 @@ export default async function handler(req, res) {
 
   // Bônus Ikigai do Nicho — mesma rota, task diferente.
   if (body && body.task === 'ikigai') return handleIkigai(req, res, body);
+  // Gerador de hipóteses de nicho (Matriz / Bloco 2) — mesma rota, task diferente.
+  if (body && body.task === 'hipoteses') return handleHipoteses(req, res, user);
 
   const { canvas } = body || {};
   if (!canvas) return res.status(400).json({ error: 'Canvas vazio.' });
