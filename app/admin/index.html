@@ -218,18 +218,10 @@ function openForm(l){
       </div>
       <div class="field"><label>Descrição (Sobre a aula)</label><textarea id="f_desc" placeholder="Do que trata a aula...">${esc(l.description)}</textarea></div>
 
-      <div class="sec-title">Exercício</div>
+      <div class="sec-title">Exercício <span style="text-transform:none;letter-spacing:0;font-weight:400;color:var(--faint)">— título e intro só aparecem nas aulas de formulário (blocos 1/3/4). A aula do Escavador ignora.</span></div>
       <div class="field"><label>Título do exercício</label><input id="f_ex_title" type="text" value="${esc(ex.title)}" placeholder="Ex: Rode a Matriz do Nicho"></div>
       <div class="field"><label>Introdução</label><input id="f_ex_intro" type="text" value="${esc(ex.intro)}" placeholder="Abra o Meu Canvas e faça agora..."></div>
-      <div class="field"><label>Passos <span class="hint">(um por linha)</span></label><textarea id="f_ex_steps" placeholder="Liste seus 3 nichos&#10;Pontue de 1 a 5&#10;Some — o maior vence">${esc((ex.steps||[]).join('\n'))}</textarea></div>
-      <div class="grid2">
-        <div class="field"><label>Rótulo dos critérios</label><input id="f_ex_clabel" type="text" value="${esc(ex.criteria_label)}" placeholder="Os 5 critérios da Matriz"></div>
-        <div class="field"><label>Critérios <span class="hint">(separados por vírgula)</span></label><input id="f_ex_crit" type="text" value="${esc((ex.criteria||[]).join(', '))}" placeholder="Repertório, Necessidade, ..."></div>
-      </div>
-      <div class="grid2">
-        <div class="field"><label>Bloco do Canvas que alimenta <span class="hint">(0 a 4, ou vazio)</span></label><input id="f_block" type="text" value="${l.canvas_block!=null?l.canvas_block:''}" placeholder="2"></div>
-        <div class="field"><label>Texto do botão</label><input id="f_ex_cta" type="text" value="${esc(ex.cta_label||'Abrir Meu Canvas')}" placeholder="Abrir Meu Canvas"></div>
-      </div>
+      <div class="field"><label>Bloco do Canvas que alimenta <span class="hint">(0 a 4, ou vazio — define o formato do exercício)</span></label><input id="f_block" type="text" value="${l.canvas_block!=null?l.canvas_block:''}" placeholder="2"></div>
 
       <div class="sec-title">Materiais <span style="text-transform:none;letter-spacing:0;font-weight:400">(opcional — link, template, PDF)</span></div>
       <div id="matList">
@@ -282,10 +274,6 @@ async function saveAula(){
     exercise:{
       title:val('f_ex_title'),
       intro:val('f_ex_intro'),
-      steps:val('f_ex_steps').split('\n').map(s=>s.trim()).filter(Boolean),
-      criteria_label:val('f_ex_clabel'),
-      criteria:val('f_ex_crit').split(',').map(s=>s.trim()).filter(Boolean),
-      cta_label:val('f_ex_cta')||'Abrir Meu Canvas',
     },
     materials: collectMats(),
   };
