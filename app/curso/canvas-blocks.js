@@ -5,15 +5,15 @@ window.ADP_CANVAS = (function () {
   // Matriz v2 — 2 eixos, 7 critérios. Cada nota (1-5) leva EVIDÊNCIA + CONFIANÇA. Sem soma ponderada: dois totais por eixo + regras de inviabilidade.
   var EIXOS = [
     { key: 'mercado', h: 'Mercado', max: 20, crit: [
-      { k: 'intensidade', h: 'Intensidade',      hint: 'A dor é forte de verdade — ou só "seria bom ter"?' },
-      { k: 'urgencia',    h: 'Urgência',         hint: 'Resolve AGORA ou dá pra empurrar? Sem urgência, o mercado elogia e não compra.' },
-      { k: 'crescimento', h: 'Crescimento',      hint: 'Esse mercado cresce, estabiliza ou encolhe?' },
-      { k: 'poder',       h: 'Poder de compra',  hint: 'Tem verba e decide gastar com isso? Sem poder de compra, mata o nicho.' }
+      { k: 'intensidade', h: 'Intensidade',      hint: 'Essa dor é forte ou só seria bom resolver?' },
+      { k: 'urgencia',    h: 'Urgência',         hint: 'Resolve agora ou dá pra empurrar?' },
+      { k: 'crescimento', h: 'Crescimento',      hint: 'Esse mercado cresce, para ou encolhe?' },
+      { k: 'poder',       h: 'Poder de compra',  hint: 'Tem verba e decide gastar com isso?' }
     ]},
     { key: 'voce', h: 'Você', max: 15, crit: [
       { k: 'repertorio', h: 'Repertório',       hint: 'Você já conhece esse mundo por dentro?' },
-      { k: 'acesso',     h: 'Acesso',           hint: 'Consegue chegar no decisor em 30 dias (rede, conteúdo, prospecção)?' },
-      { k: 'aderencia',  h: 'Aderência / Prova', hint: 'Você já tem caso ou prova que gruda nesse nicho?' }
+      { k: 'acesso',     h: 'Acesso',           hint: 'Consegue chegar no decisor em 30 dias?' },
+      { k: 'aderencia',  h: 'Aderência / Prova', hint: 'Já tem caso ou prova que gruda aqui?' }
     ]}
   ];
   var CRIT7 = EIXOS.reduce(function (a, e) { return a.concat(e.crit.map(function (c) { return { k: c.k, eixo: e.key, h: c.h, hint: c.hint }; })); }, []);
@@ -406,12 +406,10 @@ window.ADP_CANVAS = (function () {
     function activeHTML(row, i, k) {
       var c = CRITDEF[k], nb = '';
       for (var v = 1; v <= 5; v++) nb += '<button type="button" class="mx2-nb' + (critNota(row, k) === v ? ' on' : '') + '" data-i="' + i + '" data-k="' + k + '" data-v="' + v + '">' + v + '</button>';
-      return '<div class="mx2-sec">' + SEC[critEixo(k)] + '</div>'
-        + '<div class="mx2-active">'
+      return '<div class="mx2-active">'
         +   '<div class="mx2-ctitle">' + esc(c.h) + '</div>'
         +   '<div class="mx2-cq">' + esc(c.hint) + '</div>'
         +   '<div class="mx2-notes">' + nb + '</div>'
-        +   '<div class="mx2-scale"><span>fraco</span><span>forte</span></div>'
         + '</div>';
     }
     function dotsHTML(row, i) {
@@ -433,13 +431,17 @@ window.ADP_CANVAS = (function () {
       var body = '';
       dones.forEach(function (k) { body += doneRowHTML(row, i, k); });
       if (ak) body += activeHTML(row, i, ak);
+      var actions = '<button type="button" class="mx2-link mx2-editar" data-i="' + i + '">editar</button>'
+        + '<button type="button" class="mx2-link mx2-trocar" data-i="' + i + '">trocar</button>'
+        + (multi ? '<button type="button" class="mx2-link mx2-rm" data-i="' + i + '">remover</button>' : '')
+        + (multi ? '<button type="button" class="mx2-link mx2-recolher" data-i="' + i + '">recolher</button>' : '');
+      var lead = ak ? (SEC[critEixo(ak)] + ' · ' + (STEP_ORDER.indexOf(ak) + 1) + ' de 7') : '7 de 7 ✓';
       return '<div class="mx-cand" data-i="' + i + '">'
         + '<div class="mx2-head">'
-        +   '<div class="mx2-metatop"><span class="mx2-lead">Hipótese ' + (i + 1) + '</span>' + (multi ? '<button type="button" class="mx2-recolher" data-i="' + i + '">recolher</button>' : '') + '</div>'
         +   '<textarea class="mx-name" data-i="' + i + '" rows="1" placeholder="ex: clínicas de estética que precisam atrair cliente pelo digital">' + esc(row.name) + '</textarea>'
-        +   '<div class="mx2-links"><button type="button" class="mx2-link mx2-editar" data-i="' + i + '">editar</button><button type="button" class="mx2-link mx2-trocar" data-i="' + i + '">trocar</button>' + (multi ? '<button type="button" class="mx2-link mx2-rm" data-i="' + i + '">remover</button>' : '') + '</div>'
+        +   '<div class="mx2-links">' + actions + '</div>'
         + '</div>'
-        + '<div class="mx2-prog"><span class="mx2-progn">' + (ak ? ('Critério ' + (STEP_ORDER.indexOf(ak) + 1) + ' de 7') : '7 de 7 ✓') + '</span><span class="mx2-dots">' + dotsHTML(row, i) + '</span></div>'
+        + '<div class="mx2-prog"><span class="mx2-progn">' + lead + '</span><span class="mx2-dots">' + dotsHTML(row, i) + '</span></div>'
         + body
         + vdHTML(row)
         + '</div>';
@@ -447,11 +449,12 @@ window.ADP_CANVAS = (function () {
     // hipótese recolhida = barra resumida (ponto 5: "ainda não avaliada" / "Mercado X/20 · Afinidade Y/15")
     function barHTML(row, i) {
       var read;
-      if (!anyScore(row)) read = 'ainda não avaliada';
-      else if (!isScored(row)) read = STEP_ORDER.filter(function (k) { return critNota(row, k) >= 1; }).length + ' de 7 critérios';
+      if (!anyScore(row)) read = 'não avaliada';
+      else if (!isScored(row)) read = STEP_ORDER.filter(function (k) { return critNota(row, k) >= 1; }).length + ' de 7';
       else read = 'Mercado ' + somaEixo(row, 'mercado') + '/20 · Afinidade ' + somaEixo(row, 'voce') + '/15';
+      var title = (row.name && row.name.trim()) ? esc(row.name) : ('Hipótese ' + (i + 1));
       return '<div class="mx-cbar" data-i="' + i + '">'
-        + '<span class="mx-cbtitle">Hipótese ' + (i + 1) + (row.name ? ' · ' + esc(row.name) : '') + '</span>'
+        + '<span class="mx-cbtitle">' + title + '</span>'
         + '<span class="mx-cbread">' + read + '</span>'
         + '<svg class="chev" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></div>';
     }
@@ -530,6 +533,12 @@ window.ADP_CANVAS = (function () {
     var pool = notInv.length ? notInv : named;
     pool.sort(function (a, b) { return (somaEixo(b, 'mercado') + somaEixo(b, 'voce')) - (somaEixo(a, 'mercado') + somaEixo(a, 'voce')); });
     return pool[0].name;
+  }
+
+  // pronta pra seguir = pelo menos UMA hipótese com os 7 critérios pontuados
+  function matrizReady(data2) {
+    if (!data2 || !data2.rows) return false;
+    return data2.rows.map(normRow).some(function (r) { return (r.name || '').trim() && isScored(r); });
   }
 
   // quão preenchido está um bloco (0..1) — pros pontinhos ●●●○○ do dashboard/cards
@@ -647,5 +656,5 @@ window.ADP_CANVAS = (function () {
     if (blockNum === 3) appendRuminacao(container, opts || {});
   }
 
-  return { BLOCKS: BLOCKS, byBlock: byBlock, isFilled: isFilled, renderBlock: renderBlock, nichoFromBlock2: nichoFromBlock2, gateForBlock: gateForBlock, blockCompletion: blockCompletion };
+  return { BLOCKS: BLOCKS, byBlock: byBlock, isFilled: isFilled, renderBlock: renderBlock, nichoFromBlock2: nichoFromBlock2, matrizReady: matrizReady, gateForBlock: gateForBlock, blockCompletion: blockCompletion };
 })();

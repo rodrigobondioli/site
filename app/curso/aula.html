@@ -285,6 +285,9 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .esc-done .dt b{font-weight:700}
 .esc-cont{font-weight:700;font-size:14px;padding:11px 22px;border-radius:999px;background:var(--pink);color:#fff;white-space:nowrap}
 .esc-cont:hover{filter:brightness(1.06)}
+.esc-cont[disabled]{background:var(--soft);color:var(--muted);cursor:not-allowed;filter:none}
+.esc-cont[disabled]:hover{filter:none}
+.fw-saved{font-size:12px;color:var(--faint)}
 /* blocos de formulário (1/3/4) — wizard 1 pergunta por vez, mesmo registro da Aula 1 */
 .applyhere-form{padding-top:22px}
 .applyhere-form .esc-head{margin-bottom:16px}
@@ -300,7 +303,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .fw-send{flex:none;width:40px;height:40px;border-radius:13px;background:var(--pink);border:none;display:grid;place-items:center;cursor:pointer}
 .fw-send svg{width:18px;height:18px;fill:none;stroke:#fff;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .fw-send:hover{filter:brightness(1.06)}
-.esc-formfoot{margin-top:24px;padding-top:20px;border-top:1px solid var(--line);display:flex;align-items:center;justify-content:flex-end}
+.esc-formfoot{margin-top:24px;padding-top:20px;border-top:1px solid var(--line);display:flex;align-items:center;justify-content:flex-end;gap:14px}
 .esc-formfoot.gone{display:none}
 .fw-back{margin-left:auto;font-size:12px;color:var(--muted);text-decoration:underline;cursor:pointer;flex:none;background:none;border:0;font-family:inherit;padding:0}
 .fw-back:hover{color:var(--ink)}
@@ -429,7 +432,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
     if(!def) return '';
     // bloco 0 (VOCÊ) é conversa: o card começa DIRETO na ferramenta (abinha + 2 colunas), sem título/intro redundante
     if(l.canvas_block===0){
-      return '<div class="applyhere applyhere-esc"><div id="canvasInline"></div><p class="adp-syncnote">Salva sozinho — isto é o teu <a href="canvas.html">Meu Canvas</a>. Dá pra continuar aqui ou lá.</p></div>';
+      return '<div class="applyhere applyhere-esc"><div id="canvasInline"></div></div>';
     }
     // blocos de formulário (1/3/4): wizard 1 pergunta por vez — MESMO padrão da Aula 1 (card + barra N de M + pergunta grande + botão avança). initFormWizard() liga a navegação.
     var ex = l.exercise||{};
@@ -440,8 +443,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
       +(ex.intro?'<p class="esc-formsub" id="fwIntro">'+esc(ex.intro)+'</p>':'')
       +'<div class="esc-q" id="fwQ"></div>'
       +'<div id="canvasInline" class="esc-fieldwrap"></div>'
-      +'<div class="esc-formfoot gone" id="fwFoot"><button class="esc-cont" id="fwNext">Continuar →</button></div>'
-      +'<p class="adp-syncnote">Salva sozinho — isto é o teu <a href="canvas.html">Meu Canvas</a>. Dá pra continuar aqui ou lá.</p>'
+      +'<div class="esc-formfoot gone" id="fwFoot"><span class="fw-saved" id="fwSaved">salvo automaticamente</span><button class="esc-cont" id="fwNext">Continuar →</button></div>'
       +'</div>';
   }
 
@@ -603,6 +605,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
   // 🧭 Wizard dos blocos de formulário (1/3/4): mostra 1 campo por vez com barra N de M — mesmo comportamento do Escavador.
   // Reusa o renderBlock (salvamento testado): todos os campos existem no DOM, só escondemos os que não são o passo atual.
   function initFormWizard(l){
+    window.__matrizGate=null; // evita gate órfão de uma aula anterior
     var def = window.ADP_CANVAS && window.ADP_CANVAS.byBlock(l.canvas_block);
     var card = document.querySelector('.applyhere-form'); if(!card || !def) return;
     var qEl=card.querySelector('#fwQ'), bar=card.querySelector('#fwBar'), stepEl=card.querySelector('#fwStep'),
@@ -617,7 +620,15 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
       if(qbar) qbar.style.display='none';
       if(intro) intro.style.display='none';
       if(foot){ foot.classList.remove('gone'); }
-      if(nextBtn) nextBtn.addEventListener('click', finish);
+      // Continuar só ativa quando UMA hipótese tem os 7 critérios pontuados (ponto 8)
+      var savedEl=card.querySelector('#fwSaved');
+      var gate=function(){
+        var ready = !window.ADP_CANVAS.matrizReady || window.ADP_CANVAS.matrizReady(CANVAS[2]||{});
+        if(nextBtn){ nextBtn.disabled=!ready; }
+        if(savedEl){ savedEl.textContent = ready ? 'salvo automaticamente' : 'pontue os 7 critérios pra seguir'; }
+      };
+      window.__matrizGate=gate; gate();
+      if(nextBtn) nextBtn.addEventListener('click', function(){ if(nextBtn.disabled) return; finish(); });
       return;
     }
     // MESMO comportamento do Escavador: botão enviar (aviãozinho rosa) DENTRO do campo; Enter envia; a pergunta troca na hora.
@@ -678,7 +689,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
     if(ci && window.ADP_CANVAS && l.canvas_block!=null){
       if(l.canvas_block===0){ mountEscavador(ci); }
       else {
-        window.ADP_CANVAS.renderBlock(ci, l.canvas_block, CANVAS[l.canvas_block]||{}, function(b,data){ CANVAS[b]=data; },
+        window.ADP_CANVAS.renderBlock(ci, l.canvas_block, CANVAS[l.canvas_block]||{}, function(b,data){ CANVAS[b]=data; if(window.__matrizGate) window.__matrizGate(); },
           { getNicho:function(){ return window.ADP_CANVAS.nichoFromBlock2(CANVAS[2]); } });
         initFormWizard(l);
       }
