@@ -11,6 +11,26 @@ import { resolveUserByEmail } from '../_auth.js';
 const PAID = ['paid'];
 const REVOKE = ['refunded', 'chargedback'];
 
+// Alerta o Rodrigo por e-mail (Resend) quando uma venda paga NÃO consegue liberar acesso.
+// Assim ninguém fica "pagou e não entrou" sem alguém saber. Silencioso se RESEND faltar.
+async function alertAdmin(subject, lines) {
+  const key = process.env.RESEND_API_KEY;
+  if (!key) return;
+  try {
+    await fetch('https://api.resend.com/emails', {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${key}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        from: 'Anti Designer Pato <acesso@send.rodrigobondioli.com>',
+        to: ['hello@rodrigobondioli.com'],
+        subject,
+        html: '<div style="font-family:Arial,sans-serif;font-size:15px;line-height:1.6;color:#111">'
+          + lines.map(function (l) { return '<p>' + l + '</p>'; }).join('') + '</div>',
+      }),
+    });
+  } catch (e) {}
+}
+
 export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
@@ -40,11 +60,27 @@ export default async function handler(req, res) {
 
   if (PAID.includes(status)) {
     const userId = await resolveUser();
-    if (!userId) return res.status(502).json({ error: 'não resolvi o usuário' });
+    if (!userId) {
+      await alertAdmin('🔴 Pagou e NÃO entrou — usuário não resolvido', [
+        '<b>Venda paga sem acesso liberado:</b> não consegui criar/achar o usuário.',
+        'E-mail: <b>' + email + '</b>',
+        'Produto: ' + productId + ' · Curso: ' + courseId,
+        'Ação: libera na mão em /admin → Alunos → Liberar acesso.',
+      ]);
+      return res.status(502).json({ error: 'não resolvi o usuário' });
+    }
     const r = await fetch(`${url}/rest/v1/course_access?on_conflict=user_id,course_id`, {
       method: 'POST', headers: { ...H, Prefer: 'resolution=merge-duplicates' },
       body: JSON.stringify({ user_id: userId, course_id: courseId, granted_at: new Date().toISOString() }),
     });
+    if (!r.ok) {
+      await alertAdmin('🔴 Pagou e NÃO entrou — acesso não gravou', [
+        '<b>Usuário existe mas o acesso não foi gravado no banco.</b>',
+        'E-mail: <b>' + email + '</b> · Curso: ' + courseId,
+        'Detalhe: ' + (await r.text()),
+        'Ação: libera na mão em /admin → Alunos → Liberar acesso.',
+      ]);
+    }
     return res.status(r.ok ? 200 : 502).json({ ok: r.ok, action: 'granted', course: courseId, email });
   }
 
