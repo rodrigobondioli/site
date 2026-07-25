@@ -711,8 +711,9 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
         if(frame) return;
         var src='https://iframe.mediadelivery.net/embed/'+encodeURIComponent(th.dataset.lib)+'/'+encodeURIComponent(th.dataset.vid)+'?autoplay=true&loop=true&muted=true&preload=true&responsive=true';
         frame=document.createElement('iframe');
-        frame.src=src; frame.loading='lazy'; frame.tabIndex=-1;
-        frame.setAttribute('allow','autoplay;encrypted-media;');
+        frame.src=src; frame.tabIndex=-1;
+        frame.style.pointerEvents='none';
+        frame.setAttribute('allow','accelerometer;gyroscope;autoplay;encrypted-media;picture-in-picture;');
         th.appendChild(frame);
       });
       th.addEventListener('mouseleave', function(){ if(frame){ th.removeChild(frame); frame=null; } });
