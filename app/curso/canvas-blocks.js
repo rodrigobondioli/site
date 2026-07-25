@@ -177,7 +177,7 @@ window.ADP_CANVAS = (function () {
     + '.mx-lead{font-weight:700;font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--faint,#a1a1aa)}'
     // segundo eixo respira mais que o gap padrão (separa seção sem virar card)
     + '.mx-eixomod + .mx-eixomod{margin-top:14px}'
-    + '.mx-name{width:100%;border:none;border-bottom:1px solid transparent;background:transparent;font:inherit;font-weight:700;font-size:19px;letter-spacing:-.01em;color:var(--ink,#18181b);padding:1px 0}'
+    + '.mx-name{width:100%;border:none;border-bottom:1px solid transparent;background:transparent;font:inherit;font-weight:700;font-size:19px;line-height:1.28;letter-spacing:-.01em;color:var(--ink,#18181b);padding:1px 0;display:block;resize:none;overflow:hidden;white-space:pre-wrap;word-break:break-word}'
     + '.mx-name::placeholder{color:var(--faint,#a1a1aa);font-weight:400}'
     + '.mx-name:hover{border-bottom-color:var(--line,#d4d4d8)}'
     + '.mx-name:focus{outline:none;border-bottom-color:var(--ink,#18181b)}'
@@ -435,7 +435,7 @@ window.ADP_CANVAS = (function () {
         return '<div class="mx-cand" data-i="' + i + '">'
           + '<div class="mx-cand-h">'
           +   '<div class="mx-idc"><span class="mx-lead">Hipótese ' + (i + 1) + '</span>'
-          +     '<input class="mx-name" data-i="' + i + '" value="' + esc(row.name) + '" placeholder="ex: clínicas de estética que precisam atrair cliente pelo digital"></div>'
+          +     '<textarea class="mx-name" data-i="' + i + '" rows="1" placeholder="ex: clínicas de estética que precisam atrair cliente pelo digital">' + esc(row.name) + '</textarea></div>'
           +   '<span class="mx-state ' + stt.cls + '">' + stt.txt + '</span>'
           +   (rows.length > 1 ? '<button type="button" class="mx-del" data-i="' + i + '">remover</button>' : '')
           +   (rows.length > 1 ? '<button type="button" class="mx-collapse" data-i="' + i + '" aria-label="Recolher"><svg viewBox="0 0 24 24"><path d="m6 15 6-6 6 6"/></svg></button>' : '')
@@ -443,6 +443,8 @@ window.ADP_CANVAS = (function () {
           + EIXOS.map(function (e) { return eixoHTML(row, i, e); }).join('')
           + vereditoHTML(row) + '</div>';
       }).join('');
+      // textarea da hipótese cresce com o texto (sem cortar linhas longas)
+      Array.prototype.forEach.call(mx.querySelectorAll('.mx-name'), function (t) { t.style.height = 'auto'; t.style.height = t.scrollHeight + 'px'; });
     }
     function matData() {
       return {
@@ -457,7 +459,7 @@ window.ADP_CANVAS = (function () {
     // digitar o nome não deve re-renderizar (perderia o foco) — só atualiza o campeão
     container.addEventListener('input', function (e) {
       var t = e.target, i = +t.dataset.i;
-      if (t.classList.contains('mx-name')) { rows[i].name = t.value; persist(); }
+      if (t.classList.contains('mx-name')) { rows[i].name = t.value; t.style.height = 'auto'; t.style.height = t.scrollHeight + 'px'; persist(); }
       else if (t.classList.contains('mx-ev')) { var cc = rows[i].cells[t.dataset.k]; cc.ev = t.value; cc.conf = inferConf(t.value); persist(); }
     });
     container.addEventListener('click', function (e) {
