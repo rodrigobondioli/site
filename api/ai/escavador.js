@@ -19,7 +19,7 @@ Voz nos textos: direta, seca, anti-guru, tiozão sem frescura. Sem emoji, sem mo
 LER a última resposta do aluno e EXTRAIR o que der pros campos do schema. Você NÃO escolhe a próxima pergunta — quem faz isso é o sistema. NÃO faça perguntas. NÃO conduza a conversa. Só extraia + dê uma reação curtíssima ("ack") se couber.
 
 ## O QUE CADA CAMPO GUARDA
-- comunidades: mercado/comunidade/tipo de cliente que o aluno conhece (viveu, atendeu, convive). "nome" = o mundo; "problema" = o que ele via de mal resolvido ali; "como_conhece" = por que conhece.
+- comunidades: mercado/comunidade/tipo de cliente que o aluno conhece OU gostaria de atender. "nome" = o mundo; "problema" = o que ele via de mal resolvido ali OU, se for um mercado que ele só quer atender, o que o cativa/atrai nele; "como_conhece" = por que conhece (ou que é interesse).
 - competencias: o que o aluno faz bem. "o_que" = a competência (concreta, nas palavras dele); "exemplo" = o caso concreto que ele contou.
 - provas: resultado concreto de um trabalho. "consequencia" = o que melhorou pro cliente (aceita qualitativo: menos alteração, aprovação mais rápida, cliente mais seguro).
 - medos: o medo REAL do próprio aluno ligado a nichar/se posicionar (ex: "medo de perder trabalhos se me fechar"). NÃO é a dor do cliente. Se ele disser que não tem, registre "não tem".
@@ -134,8 +134,9 @@ export function decide(v, skip) {
   var comp = arr(v.competencias);
 
   if (comu.length === 0) return mk('comunidades', 'comunidade_1', v, skip);
-  if (comu.length < 2 && !str(comu[0].problema).trim()) return mk('comunidades', 'comunidade_problema', v, skip);
+  if (!str(comu[0].problema).trim()) return mk('comunidades', 'comunidade_problema', v, skip);   // 1ª: aprofunda (problema visto ali)
   if (comu.length < 2) return mk('comunidades', 'comunidade_2', v, skip);
+  if (!str(comu[1].problema).trim()) return mk('comunidades', 'comunidade_porque', v, skip);      // 2ª: aprofunda (o que te cativa / por que quer atender)
 
   if (!has(v.competencias, 'o_que')) return mk('competencias', 'comp_identificar', v, skip);
   // exemplo e resultado são DOIS micro-passos curtos (mas se já vierem juntos, pula ambos).
@@ -154,6 +155,7 @@ export function gapHint(v) { return decide(v, (v && v._skip) ? (v._skip.reduce(f
 
 // ---------- PERGUNTAS: templates contextuais (usam as palavras do aluno) ----------
 function firstComuName(v) { var c = arr(v.comunidades).find(function (x) { return x && str(x.nome).trim(); }); return c ? str(c.nome).trim() : ''; }
+function secondComuName(v) { var a = arr(v.comunidades).filter(function (x) { return x && str(x.nome).trim(); }); return a[1] ? str(a[1].nome).trim() : ''; }
 function compSemExemplo(v) { var c = arr(v.competencias).find(function (x) { return x && str(x.o_que).trim() && !str(x.exemplo).trim(); }); return c ? str(c.o_que).trim() : ''; }
 
 function questionFor(gap, v) {
@@ -166,6 +168,10 @@ function questionFor(gap, v) {
     }
     case 'comunidade_2':
       return 'Me diz outro mercado, comunidade ou tipo de cliente que você conhece ou gostaria de atender.';
+    case 'comunidade_porque': {
+      var n2 = secondComuName(v);
+      return 'O que te cativa em trabalhar com ' + (n2 ? n2 : 'isso') + '?';
+    }
     case 'comp_identificar':
       return 'Agora sobre você: qual parte do teu trabalho costuma sair bem na tua mão? Pode ser organizar um site confuso, entender rápido o cliente, apresentar uma direção que ele aprova…';
     case 'comp_exemplo':
@@ -300,6 +306,9 @@ export async function escavadorTurn(body) {
   } else if (g0 === 'comp_resultado' && lu && /melhorou|resultado/i.test(la)) {
     mn.provas = arr(mn.provas).concat([{ consequencia: lu, raw: lu }]);
     merged = withLegacy(mn); forced = true;
+  } else if ((g0 === 'comunidade_problema' || g0 === 'comunidade_porque') && lu && /problema|resolvia|te cativa|te atrai|te interessa/i.test(la)) {
+    var ci = g0 === 'comunidade_problema' ? 0 : 1;
+    if (mn.comunidades[ci] && !str(mn.comunidades[ci].problema).trim()) { mn.comunidades[ci].problema = lu; merged = withLegacy(mn); forced = true; }
   }
 
   var mudou = forced || JSON.stringify(normalizeVoce(merged)) !== JSON.stringify(normalizeVoce(voceBefore));
