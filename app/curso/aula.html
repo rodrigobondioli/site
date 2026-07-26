@@ -120,6 +120,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .nextstep{margin-top:34px}
 /* rodapé de ações padrão: [secundária]  [principal] à direita, quebra no mobile mantendo a ordem */
 .action-row{display:flex;align-items:center;justify-content:flex-end;gap:16px;flex-wrap:wrap}
+.nextstep .action-row{justify-content:center}
 /* SecondaryButton oficial (herdado do antigo "Concluir aula"): branco, borda neutra, MESMA altura/typo do primário .esc-cont */
 .sbtn{display:inline-flex;align-items:center;gap:8px;font-family:inherit;font-weight:700;font-size:14px;padding:11px 22px;border-radius:999px;border:1.5px solid var(--line);color:var(--ink);background:none;cursor:pointer;transition:background .15s,border-color .15s}
 .sbtn:hover{background:var(--soft)}
@@ -591,6 +592,8 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
       }catch(e){ qEl.textContent='Deu ruim aqui. Manda de novo.'; }
       setBusy(false);
     }
+    var OPENER='Me diz uma comunidade ou "mundo" que você conhece por dentro. Que problema você vê ali que ninguém resolve direito?';
+    function showOpener(){ qEl.textContent=OPENER; history.push({role:'assistant',content:OPENER}); qCount=1; renderCards(); persist(); } // abertura fixa (sem gastar chamada de IA)
     function submit(){ var t=input.value.trim(); if(!t) return; input.value=''; turn(t); }
     send.addEventListener('click', submit);
     input.addEventListener('keydown', function(e){ if(e.key==='Enter' && !e.shiftKey){ e.preventDefault(); submit(); } });
@@ -598,7 +601,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
     var resetBtn=container.querySelector('#escReset');
     if(resetBtn) resetBtn.addEventListener('click', function(){
       if(!window.confirm('Recomeçar? Isso apaga o que o Escavador montou até agora no teu bloco VOCÊ.')) return;
-      voce={}; history=[]; qCount=0; done=false; lastEl.classList.add('gone'); lastEl.innerHTML=''; persist(); renderCards(); renderChips(); renderDone(); turn(null);
+      voce={}; history=[]; qCount=0; done=false; lastEl.classList.add('gone'); lastEl.innerHTML=''; persist(); renderChips(); renderDone(); showOpener();
     });
 
     // placeholder que fica trocando a frase (exemplos que guiam), só quando vazio e sem foco
@@ -609,7 +612,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
     renderCards(); renderChips(); renderDone();
     var lastAssistant=''; for(var i=history.length-1;i>=0;i--){ if(history[i].role==='assistant'){ lastAssistant=history[i].content; break; } }
     if(lastAssistant){ qEl.textContent=lastAssistant; }
-    else { turn(null); }
+    else { showOpener(); }
   }
 
   // 🧭 Wizard dos blocos de formulário (1/3/4): mostra 1 campo por vez com barra N de M — mesmo comportamento do Escavador.
