@@ -21,7 +21,7 @@ LER a última resposta do aluno e EXTRAIR o que der pros campos do schema. Você
 ## O QUE CADA CAMPO GUARDA
 - comunidades: mercado/comunidade/tipo de cliente. Campos:
   · "nome" = o mercado/mundo.
-  · "relacao" = como o aluno se relaciona com esse mundo: "viveu" | "atendeu" | "conhece" | "convive" | "interesse" (interesse = só GOSTARIA de atender, nunca viveu/atendeu).
+  · "como_conhece" = como o aluno se relaciona com esse mundo: "viveu" | "atendeu" | "conhece" | "convive" | "interesse" (interesse = só GOSTARIA de atender, nunca viveu/atendeu). Pode ser uma frase curta ("foi dono de estúdio por 10 anos").
   · "problemas" = lista de problemas REALMENTE observados/relatados ali, cada um {"publico": subgrupo específico afetado, "problema": a dor observada, "raw": palavras literais}. Dois públicos/problemas distintos no MESMO mercado são DOIS itens — nunca junte num só.
   · "motivacao" = por que ele gostaria de atender esse mercado (só quando é interesse). NÃO é problema.
   · "raw" = palavras literais.
@@ -41,11 +41,11 @@ Ex: "fiz o redesign de um site, identifiquei vários problemas e ele converteu 1
 ## COMUNIDADES — separe problema de afinidade, e não junte públicos (regra dura)
 Ex real: "no mercado de tatuagem, donos de estúdio sabem tatuar mas não sabem gerir o negócio; e tatuadores bons tecnicamente mas pouco conhecidos não conseguem lotar a agenda. Já skate eu só gostaria de trabalhar." →
   "comunidades":[
-    {"nome":"tatuagem","relacao":"conhece","problemas":[
+    {"nome":"tatuagem","como_conhece":"conhece","problemas":[
         {"publico":"donos de estúdio","problema":"sabem tatuar mas não sabem gerir o negócio","raw":"donos de estúdio sabem tatuar mas não sabem gerir o negócio"},
         {"publico":"tatuadores bons mas pouco conhecidos","problema":"não conseguem lotar a agenda","raw":"tatuadores bons tecnicamente mas pouco conhecidos não conseguem lotar a agenda"}
     ],"raw":"mercado de tatuagem"},
-    {"nome":"skate","relacao":"interesse","problemas":[],"motivacao":"gostaria de trabalhar","raw":"skate eu só gostaria de trabalhar"}
+    {"nome":"skate","como_conhece":"interesse","problemas":[],"motivacao":"gostaria de trabalhar","raw":"skate eu só gostaria de trabalhar"}
   ]
 NUNCA invente dor no skate ("vender mais", "comunicação ruim") — problemas fica VAZIO. NUNCA funda os dois problemas da tatuagem num só.
 
@@ -59,7 +59,7 @@ Em cada item de lista, "raw" guarda as palavras LITERAIS do aluno.
 {
  "ack": "reação curtíssima ao que ele disse — no MÁXIMO 1 frase, SEM pergunta, SEM '?'. Pode ser \\"\\" se não couber nada honesto.",
  "delta": {
-   "comunidades": [{"nome":"","relacao":"viveu|atendeu|conhece|convive|interesse","problemas":[{"publico":"","problema":"","raw":""}],"motivacao":"","raw":""}],
+   "comunidades": [{"nome":"","como_conhece":"viveu|atendeu|conhece|convive|interesse","problemas":[{"publico":"","problema":"","raw":""}],"motivacao":"","raw":""}],
    "competencias": [{"o_que":"","exemplo":"","raw":""}],
    "provas": [{"situacao":"","acao":"","consequencia":"","raw":""}],
    "historia": "",
@@ -74,25 +74,18 @@ function arr(x) { return Array.isArray(x) ? x : []; }
 function str(x) { return x == null ? '' : String(x); }
 function norm(s) { return str(s).toLowerCase().replace(/\s+/g, ' ').trim(); }
 
-// SCHEMA de comunidade: { nome, relacao, problemas:[{publico,problema,raw}], motivacao, raw }
+// SCHEMA de comunidade: { nome, como_conhece, problemas:[{publico,problema,raw}], motivacao, raw }
+// - como_conhece: como o aluno se relaciona (viveu/atendeu/conhece/convive/interesse, ou frase curta).
 // - problemas: SÓ problemas realmente observados/relatados (nunca afinidade).
 // - motivacao: por que gostaria de atender, quando é só interesse (NÃO vira problema).
 function normComu(c) {
   c = c || {};
   var problemas = arr(c.problemas).map(function (p) { p = p || {}; return { publico: str(p.publico), problema: str(p.problema), raw: str(p.raw) }; })
     .filter(function (p) { return p.publico || p.problema || p.raw; });
-  // migração do schema antigo (problema string único) → primeiro item de problemas[]
+  // compat: schema antigo tinha "problema" (string única) → vira o primeiro item de problemas[]
   if (!problemas.length && str(c.problema).trim()) problemas = [{ publico: '', problema: str(c.problema), raw: str(c.problema) }];
-  // migração do schema antigo (como_conhece) → relacao, quando dá pra inferir
-  var relacao = str(c.relacao);
-  if (!relacao && str(c.como_conhece).trim()) {
-    var cc = norm(c.como_conhece);
-    if (/interesse|gostaria|quero|queria/.test(cc)) relacao = 'interesse';
-    else if (/atend/.test(cc)) relacao = 'atendeu';
-    else if (/viv|trabalh|fui|dono|trampo|famíl|famil/.test(cc)) relacao = 'viveu';
-    else relacao = 'conhece';
-  }
-  return { nome: str(c.nome), relacao: relacao, problemas: problemas, motivacao: str(c.motivacao), raw: str(c.raw) };
+  // como_conhece é preservado como está (mesmo campo do schema antigo) — aceita "relacao" como sinônimo legado
+  return { nome: str(c.nome), como_conhece: str(c.como_conhece || c.relacao), problemas: problemas, motivacao: str(c.motivacao), raw: str(c.raw) };
 }
 
 export function normalizeVoce(v) {
@@ -117,9 +110,9 @@ export function withLegacy(v) {
   return Object.assign({}, v, { mundos: comu, forte: forte, turmas: comu, historia: v.historia });
 }
 
-// ---------- merge de comunidades (schema aninhado: problemas[] + relacao + motivacao) ----------
+// ---------- merge de comunidades (schema aninhado: problemas[] + como_conhece + motivacao) ----------
 function enrichComu(t, d) {
-  if (d.relacao) t.relacao = d.relacao;
+  if (d.como_conhece) t.como_conhece = d.como_conhece;
   if (d.motivacao) t.motivacao = d.motivacao;
   if (d.raw && !t.raw) t.raw = d.raw;
   d.problemas.forEach(function (np) {
@@ -138,7 +131,7 @@ function mergeComuArr(prevArr, deltaArr) {
     var d = normComu(item);
     var id = d.nome.trim().toLowerCase();
     if (!id) {
-      if (!d.problemas.length && !d.motivacao && !d.relacao) return;      // vazio
+      if (!d.problemas.length && !d.motivacao && !d.como_conhece) return; // vazio
       if (out.length) { enrichComu(out[out.length - 1], d); return; }      // sem nome → enriquece a última (mercado atual)
       if (d.problemas.length) out.push(d);                                  // sem base: só cria se tiver problema real
       return;
@@ -182,7 +175,7 @@ export function mergeDelta(prev, delta) {
 function has(a, f) { return arr(a).some(function (x) { return x && String((f ? x[f] : x) || '').trim(); }); }
 
 // relação do aluno com o mercado: 'interesse' = só quer atender (aprofunda com MOTIVAÇÃO, não com problema)
-function isInteresse(c) { return /interesse|gostaria|quero/i.test(str(c && c.relacao)); }
+function isInteresse(c) { return /interesse|gostaria|quero|queria/i.test(str(c && c.como_conhece)); }
 function comuSemProblema(c) { return !arr(c && c.problemas).some(function (p) { return p && str(p.problema).trim(); }); }
 function comuSemMotiv(c) { return !str(c && c.motivacao).trim(); }
 // o que falta aprofundar nesta comunidade: 'problema' (experiência) | 'motivacao' (interesse) | ''
