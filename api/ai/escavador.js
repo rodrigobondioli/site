@@ -138,9 +138,10 @@ export function decide(v, skip) {
   if (comu.length < 2) return mk('comunidades', 'comunidade_2', v, skip);
 
   if (!has(v.competencias, 'o_que')) return mk('competencias', 'comp_identificar', v, skip);
-  // exemplo satisfeito por QUALQUER caminho: exemplo na competência OU uma prova/consequência já captada (o resultado É o exemplo).
+  // exemplo e resultado são DOIS micro-passos curtos (mas se já vierem juntos, pula ambos).
   var temExemplo = comp.some(function (c) { return c && str(c.exemplo).trim(); }) || has(v.provas, 'consequencia') || has(v.provas, 'situacao');
   if (!temExemplo) return mk('competencias', 'comp_exemplo', v, skip);
+  if (!has(v.provas, 'consequencia')) return mk('competencias', 'comp_resultado', v, skip);
 
   if (!str(v.medos).trim()) return mk('medos', 'medos', v, skip);
 
@@ -164,13 +165,13 @@ function questionFor(gap, v) {
       return 'Que problema você mais via ' + (n ? ('em ' + n) : 'ali') + ' que ninguém resolvia direito?';
     }
     case 'comunidade_2':
-      return 'Me diz outro mercado, comunidade ou tipo de cliente que você conhece ou gostaria de atender — e, se tiver, um problema que você via ali.';
+      return 'Me diz outro mercado, comunidade ou tipo de cliente que você conhece ou gostaria de atender.';
     case 'comp_identificar':
       return 'Agora sobre você: qual parte do teu trabalho costuma sair bem na tua mão? Pode ser organizar um site confuso, entender rápido o cliente, apresentar uma direção que ele aprova…';
-    case 'comp_exemplo': {
-      var o = compSemExemplo(v);
-      return 'Me dá um exemplo rápido de um projeto onde ' + (o ? o : 'isso') + ' fez diferença — e o que melhorou pro cliente por causa disso.';
-    }
+    case 'comp_exemplo':
+      return 'Me dá um exemplo rápido de quando isso fez diferença.';
+    case 'comp_resultado':
+      return 'E o que melhorou por causa disso?';
     case 'medos':
       return 'Falta entender o que pode te travar nessa escolha. O que mais te dá medo quando você pensa em escolher um nicho e se posicionar de forma mais específica?';
     case 'historia':
@@ -287,16 +288,18 @@ export async function escavadorTurn(body) {
   var ex = await extractAI(voceBefore, history, askArea);
   var merged = mergeDelta(voceBefore, ex.delta);
 
-  // ANTI-REASK do exemplo: se JÁ pedimos o exemplo e o aluno respondeu, mas a extração não preencheu,
-  // conta a resposta crua como exemplo e SEGUE — nunca pede o mesmo exemplo duas vezes.
+  // ANTI-REASK: se JÁ pedimos exemplo/resultado e o aluno respondeu, mas a extração não preencheu,
+  // conta a resposta crua e SEGUE — nunca pede a mesma coisa duas vezes.
   var forced = false;
   var mn = normalizeVoce(merged);
-  if (decide(mn, skip).gap === 'comp_exemplo') {
-    var la = lastAssistant(history), lu = lastUser(history);
-    if (lu && /exemplo|fez diferen|melhorou/i.test(la)) {
-      var alvo = mn.competencias.find(function (c) { return c && str(c.o_que).trim() && !str(c.exemplo).trim(); });
-      if (alvo) { alvo.exemplo = lu; merged = withLegacy(mn); forced = true; }
-    }
+  var g0 = decide(mn, skip).gap;
+  var la = lastAssistant(history), lu = lastUser(history);
+  if (g0 === 'comp_exemplo' && lu && /exemplo|fez diferen/i.test(la)) {
+    var alvo = mn.competencias.find(function (c) { return c && str(c.o_que).trim() && !str(c.exemplo).trim(); });
+    if (alvo) { alvo.exemplo = lu; merged = withLegacy(mn); forced = true; }
+  } else if (g0 === 'comp_resultado' && lu && /melhorou|resultado/i.test(la)) {
+    mn.provas = arr(mn.provas).concat([{ consequencia: lu, raw: lu }]);
+    merged = withLegacy(mn); forced = true;
   }
 
   var mudou = forced || JSON.stringify(normalizeVoce(merged)) !== JSON.stringify(normalizeVoce(voceBefore));
