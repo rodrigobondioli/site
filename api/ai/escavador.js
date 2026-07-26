@@ -19,7 +19,13 @@ Voz nos textos: direta, seca, anti-guru, tiozão sem frescura. Sem emoji, sem mo
 LER a última resposta do aluno e EXTRAIR o que der pros campos do schema. Você NÃO escolhe a próxima pergunta — quem faz isso é o sistema. NÃO faça perguntas. NÃO conduza a conversa. Só extraia + dê uma reação curtíssima ("ack") se couber.
 
 ## O QUE CADA CAMPO GUARDA
-- comunidades: mercado/comunidade/tipo de cliente que o aluno conhece OU gostaria de atender. "nome" = o mundo; "problema" = o que ele via de mal resolvido ali OU, se for um mercado que ele só quer atender, o que o cativa/atrai nele; "como_conhece" = por que conhece (ou que é interesse).
+- comunidades: mercado/comunidade/tipo de cliente. Campos:
+  · "nome" = o mercado/mundo.
+  · "relacao" = como o aluno se relaciona com esse mundo: "viveu" | "atendeu" | "conhece" | "convive" | "interesse" (interesse = só GOSTARIA de atender, nunca viveu/atendeu).
+  · "problemas" = lista de problemas REALMENTE observados/relatados ali, cada um {"publico": subgrupo específico afetado, "problema": a dor observada, "raw": palavras literais}. Dois públicos/problemas distintos no MESMO mercado são DOIS itens — nunca junte num só.
+  · "motivacao" = por que ele gostaria de atender esse mercado (só quando é interesse). NÃO é problema.
+  · "raw" = palavras literais.
+  REGRA DURA: NUNCA use "problemas" pra guardar motivação/afinidade. Se é só interesse e ele não citou problema concreto, "problemas" fica VAZIO e o motivo vai em "motivacao". Interesse por um mercado NÃO é dor validada.
 - competencias: o que o aluno faz bem. "o_que" = a competência (concreta, nas palavras dele); "exemplo" = o caso concreto que ele contou.
 - provas: resultado concreto de um trabalho. "consequencia" = o que melhorou pro cliente (aceita qualitativo: menos alteração, aprovação mais rápida, cliente mais seguro).
 - medos: o medo REAL do próprio aluno ligado a nichar/se posicionar (ex: "medo de perder trabalhos se me fechar"). NÃO é a dor do cliente. Se ele disser que não tem, registre "não tem".
@@ -32,6 +38,17 @@ Ex: "fiz o redesign de um site, identifiquei vários problemas e ele converteu 1
   "competencias":[{"o_que":"redesign de site / identificar problemas","exemplo":"redesign de um site identificando vários problemas","raw":"fiz o redesign de um site, identifiquei vários problemas"}]
   "provas":[{"consequencia":"converteu 10% mais","raw":"converteu 10% mais"}]
 
+## COMUNIDADES — separe problema de afinidade, e não junte públicos (regra dura)
+Ex real: "no mercado de tatuagem, donos de estúdio sabem tatuar mas não sabem gerir o negócio; e tatuadores bons tecnicamente mas pouco conhecidos não conseguem lotar a agenda. Já skate eu só gostaria de trabalhar." →
+  "comunidades":[
+    {"nome":"tatuagem","relacao":"conhece","problemas":[
+        {"publico":"donos de estúdio","problema":"sabem tatuar mas não sabem gerir o negócio","raw":"donos de estúdio sabem tatuar mas não sabem gerir o negócio"},
+        {"publico":"tatuadores bons mas pouco conhecidos","problema":"não conseguem lotar a agenda","raw":"tatuadores bons tecnicamente mas pouco conhecidos não conseguem lotar a agenda"}
+    ],"raw":"mercado de tatuagem"},
+    {"nome":"skate","relacao":"interesse","problemas":[],"motivacao":"gostaria de trabalhar","raw":"skate eu só gostaria de trabalhar"}
+  ]
+NUNCA invente dor no skate ("vender mais", "comunicação ruim") — problemas fica VAZIO. NUNCA funda os dois problemas da tatuagem num só.
+
 ## NORMALIZAR, NÃO REINTERPRETAR (regra dura)
 O que você salva tem que ser FIEL ao que o aluno disse. Preserve as palavras e o sentido dele. Pode limpar repetição — NÃO pode criar método, nome, resultado ou "consultorês" que ele não falou.
 Aluno: "Meus layouts costumam ser aprovados rápido." → OK: "Aprovação rápida dos layouts." → PROIBIDO: "Entregas de design mais objetivas e estratégicas."
@@ -42,7 +59,7 @@ Em cada item de lista, "raw" guarda as palavras LITERAIS do aluno.
 {
  "ack": "reação curtíssima ao que ele disse — no MÁXIMO 1 frase, SEM pergunta, SEM '?'. Pode ser \\"\\" se não couber nada honesto.",
  "delta": {
-   "comunidades": [{"nome":"","como_conhece":"","problema":"","raw":""}],
+   "comunidades": [{"nome":"","relacao":"viveu|atendeu|conhece|convive|interesse","problemas":[{"publico":"","problema":"","raw":""}],"motivacao":"","raw":""}],
    "competencias": [{"o_que":"","exemplo":"","raw":""}],
    "provas": [{"situacao":"","acao":"","consequencia":"","raw":""}],
    "historia": "",
@@ -57,11 +74,23 @@ function arr(x) { return Array.isArray(x) ? x : []; }
 function str(x) { return x == null ? '' : String(x); }
 function norm(s) { return str(s).toLowerCase().replace(/\s+/g, ' ').trim(); }
 
+// SCHEMA de comunidade: { nome, relacao, problemas:[{publico,problema,raw}], motivacao, raw }
+// - problemas: SÓ problemas realmente observados/relatados (nunca afinidade).
+// - motivacao: por que gostaria de atender, quando é só interesse (NÃO vira problema).
+function normComu(c) {
+  c = c || {};
+  var problemas = arr(c.problemas).map(function (p) { p = p || {}; return { publico: str(p.publico), problema: str(p.problema), raw: str(p.raw) }; })
+    .filter(function (p) { return p.publico || p.problema || p.raw; });
+  // migração do schema antigo (problema string único) → problemas[]
+  if (!problemas.length && str(c.problema).trim()) problemas = [{ publico: '', problema: str(c.problema), raw: str(c.problema) }];
+  return { nome: str(c.nome), relacao: str(c.relacao), problemas: problemas, motivacao: str(c.motivacao), raw: str(c.raw) };
+}
+
 export function normalizeVoce(v) {
   v = v || {};
   var pref = v.preferencias || {};
   return {
-    comunidades: arr(v.comunidades),
+    comunidades: arr(v.comunidades).map(normComu),
     competencias: arr(v.competencias),
     provas: arr(v.provas),
     historia: str(v.historia),
@@ -77,6 +106,38 @@ export function withLegacy(v) {
   if (v.provas[0]) forte = 'prova: ' + [v.provas[0].situacao, v.provas[0].acao, v.provas[0].consequencia].map(str).filter(function (s) { return s.trim(); }).join(' → ');
   else if (v.competencias[0]) forte = 'competência: ' + [v.competencias[0].o_que, v.competencias[0].exemplo].map(str).filter(function (s) { return s.trim(); }).join(' — ');
   return Object.assign({}, v, { mundos: comu, forte: forte, turmas: comu, historia: v.historia });
+}
+
+// ---------- merge de comunidades (schema aninhado: problemas[] + relacao + motivacao) ----------
+function enrichComu(t, d) {
+  if (d.relacao) t.relacao = d.relacao;
+  if (d.motivacao) t.motivacao = d.motivacao;
+  if (d.raw && !t.raw) t.raw = d.raw;
+  d.problemas.forEach(function (np) {
+    if (!str(np.problema).trim()) return;
+    var pid = np.problema.trim().toLowerCase();
+    var ex = t.problemas.find(function (x) { return str(x.problema).trim().toLowerCase() === pid; });
+    if (ex) { if (!ex.publico) ex.publico = np.publico; if (!ex.raw) ex.raw = np.raw; }
+    else t.problemas.push(np); // problema NOVO (dois públicos/problemas no mesmo mercado convivem)
+  });
+}
+function mergeComuArr(prevArr, deltaArr) {
+  var out = arr(prevArr).map(normComu);
+  arr(deltaArr).forEach(function (item) {
+    if (!item || typeof item !== 'object') return;
+    var d = normComu(item);
+    var id = d.nome.trim().toLowerCase();
+    if (!id) {
+      if (!d.problemas.length && !d.motivacao && !d.relacao) return;      // vazio
+      if (out.length) { enrichComu(out[out.length - 1], d); return; }      // sem nome → enriquece a última (mercado atual)
+      if (d.problemas.length) out.push(d);                                  // sem base: só cria se tiver problema real
+      return;
+    }
+    var idx = out.findIndex(function (p) { return p.nome.trim().toLowerCase() === id; });
+    if (idx >= 0) enrichComu(out[idx], d);
+    else out.push(d);
+  });
+  return out;
 }
 
 // ---------- merge por DELTA (nunca perde o que já tinha; mescla por identidade) ----------
@@ -96,7 +157,7 @@ export function mergeDelta(prev, delta) {
   prev = normalizeVoce(prev);
   if (!delta || typeof delta !== 'object') return withLegacy(prev);
   var out = { comunidades: prev.comunidades, competencias: prev.competencias, provas: prev.provas, historia: prev.historia, preferencias: prev.preferencias, medos: prev.medos };
-  if (delta.comunidades != null) out.comunidades = mergeArr(prev.comunidades, delta.comunidades, 'nome');
+  if (delta.comunidades != null) out.comunidades = mergeComuArr(prev.comunidades, delta.comunidades);
   if (delta.competencias != null) out.competencias = mergeArr(prev.competencias, delta.competencias, 'o_que');
   if (delta.provas != null) out.provas = mergeArr(prev.provas, delta.provas, 'consequencia');
   if (typeof delta.historia === 'string' && delta.historia.trim()) out.historia = delta.historia;
@@ -109,6 +170,18 @@ export function mergeDelta(prev, delta) {
 
 // ---------- CÉREBRO: decisão determinística da próxima área/gap ----------
 function has(a, f) { return arr(a).some(function (x) { return x && String((f ? x[f] : x) || '').trim(); }); }
+
+// relação do aluno com o mercado: 'interesse' = só quer atender (aprofunda com MOTIVAÇÃO, não com problema)
+function isInteresse(c) { return /interesse|gostaria|quero/i.test(str(c && c.relacao)); }
+function comuSemProblema(c) { return !arr(c && c.problemas).some(function (p) { return p && str(p.problema).trim(); }); }
+function comuSemMotiv(c) { return !str(c && c.motivacao).trim(); }
+// o que falta aprofundar nesta comunidade: 'problema' (experiência) | 'motivacao' (interesse) | ''
+function deepenGap(c) {
+  if (isInteresse(c)) return comuSemMotiv(c) ? 'motivacao' : '';
+  return comuSemProblema(c) ? 'problema' : '';
+}
+function comuNeedProblema(v) { return arr(v.comunidades).find(function (c) { return c && str(c.nome).trim() && !isInteresse(c) && comuSemProblema(c); }); }
+function comuNeedMotiv(v) { return arr(v.comunidades).find(function (c) { return c && str(c.nome).trim() && isInteresse(c) && comuSemMotiv(c); }); }
 
 export function suficiente(v) {
   v = normalizeVoce(v);
@@ -134,9 +207,15 @@ export function decide(v, skip) {
   var comp = arr(v.competencias);
 
   if (comu.length === 0) return mk('comunidades', 'comunidade_1', v, skip);
-  if (!str(comu[0].problema).trim()) return mk('comunidades', 'comunidade_problema', v, skip);   // 1ª: aprofunda (problema visto ali)
+  // 1ª comunidade: aprofunda conforme a relação — experiência pede PROBLEMA, interesse pede MOTIVAÇÃO.
+  var d0 = deepenGap(comu[0]);
+  if (d0 === 'problema') return mk('comunidades', 'comunidade_problema', v, skip);
+  if (d0 === 'motivacao') return mk('comunidades', 'comunidade_motivacao', v, skip);
   if (comu.length < 2) return mk('comunidades', 'comunidade_2', v, skip);
-  if (!str(comu[1].problema).trim()) return mk('comunidades', 'comunidade_porque', v, skip);      // 2ª: aprofunda (o que te cativa / por que quer atender)
+  // 2ª comunidade: mesmo critério.
+  var d1 = deepenGap(comu[1]);
+  if (d1 === 'problema') return mk('comunidades', 'comunidade_problema', v, skip);
+  if (d1 === 'motivacao') return mk('comunidades', 'comunidade_motivacao', v, skip);
 
   if (!has(v.competencias, 'o_que')) return mk('competencias', 'comp_identificar', v, skip);
   // exemplo e resultado são DOIS micro-passos curtos (mas se já vierem juntos, pula ambos).
@@ -154,8 +233,6 @@ export function decide(v, skip) {
 export function gapHint(v) { return decide(v, (v && v._skip) ? (v._skip.reduce(function (o, k) { o[k] = 1; return o; }, {})) : {}).gap; }
 
 // ---------- PERGUNTAS: templates contextuais (usam as palavras do aluno) ----------
-function firstComuName(v) { var c = arr(v.comunidades).find(function (x) { return x && str(x.nome).trim(); }); return c ? str(c.nome).trim() : ''; }
-function secondComuName(v) { var a = arr(v.comunidades).filter(function (x) { return x && str(x.nome).trim(); }); return a[1] ? str(a[1].nome).trim() : ''; }
 function compSemExemplo(v) { var c = arr(v.competencias).find(function (x) { return x && str(x.o_que).trim() && !str(x.exemplo).trim(); }); return c ? str(c.o_que).trim() : ''; }
 
 function questionFor(gap, v) {
@@ -163,13 +240,13 @@ function questionFor(gap, v) {
     case 'comunidade_1':
       return 'Me diz um mercado, comunidade ou tipo de cliente que você conhece por experiência — porque viveu nesse meio, já atendeu ou convive de perto.';
     case 'comunidade_problema': {
-      var n = firstComuName(v);
+      var cp = comuNeedProblema(v); var n = cp ? str(cp.nome).trim() : '';
       return 'Que problema você mais via ' + (n ? ('em ' + n) : 'ali') + ' que ninguém resolvia direito?';
     }
     case 'comunidade_2':
       return 'Me diz outro mercado, comunidade ou tipo de cliente que você conhece ou gostaria de atender.';
-    case 'comunidade_porque': {
-      var n2 = secondComuName(v);
+    case 'comunidade_motivacao': {
+      var cm = comuNeedMotiv(v); var n2 = cm ? str(cm.nome).trim() : '';
       return 'O que te cativa em trabalhar com ' + (n2 ? n2 : 'isso') + '?';
     }
     case 'comp_identificar':
@@ -306,9 +383,12 @@ export async function escavadorTurn(body) {
   } else if (g0 === 'comp_resultado' && lu && /melhorou|resultado/i.test(la)) {
     mn.provas = arr(mn.provas).concat([{ consequencia: lu, raw: lu }]);
     merged = withLegacy(mn); forced = true;
-  } else if ((g0 === 'comunidade_problema' || g0 === 'comunidade_porque') && lu && /problema|resolvia|te cativa|te atrai|te interessa/i.test(la)) {
-    var ci = g0 === 'comunidade_problema' ? 0 : 1;
-    if (mn.comunidades[ci] && !str(mn.comunidades[ci].problema).trim()) { mn.comunidades[ci].problema = lu; merged = withLegacy(mn); forced = true; }
+  } else if (g0 === 'comunidade_problema' && lu && /problema|resolvia/i.test(la)) {
+    var cp2 = comuNeedProblema(mn);
+    if (cp2) { cp2.problemas.push({ publico: '', problema: lu, raw: lu }); merged = withLegacy(mn); forced = true; }
+  } else if (g0 === 'comunidade_motivacao' && lu && /cativa|te atrai|te interessa|trabalhar com/i.test(la)) {
+    var cm2 = comuNeedMotiv(mn);
+    if (cm2) { cm2.motivacao = lu; merged = withLegacy(mn); forced = true; }
   }
 
   var mudou = forced || JSON.stringify(normalizeVoce(merged)) !== JSON.stringify(normalizeVoce(voceBefore));

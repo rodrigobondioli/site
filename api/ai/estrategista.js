@@ -162,7 +162,10 @@ CONTEXTO: um designer que faz de tudo e ganha mal acabou de despejar a matéria-
 TAREFA: a partir da matéria-prima, devolva EXATAMENTE 2 hipóteses de nicho no formato: [entrega] para [público] que [vive uma situação ou problema percebido]. Ex: "Sites para donos de estúdios de tatuagem que dominam a técnica mas têm dificuldade pra estruturar o negócio."
 Regras:
 - A RUMINAÇÃO VEM DEPOIS. A geração de hipóteses acontece ANTES da Caça à Ruminação. Aqui a hipótese tem SÓ: público + contexto + problema PERCEBIDO (visto de fora). NÃO antecipe a dor final, emocional ou em 1ª pessoa — nada de "tenho medo de falir", "meu estúdio depende de mim pra tudo", "não sei como lotar a agenda". Essas frases pertencem à Caça à Ruminação (etapa seguinte). A Matriz define a DIREÇÃO; a Ruminação aprofunda a DOR. NÃO misture as duas.
-- Puxa das comunidades/mundos que ELE já vive e das provas que ele já tem — onde valida mais rápido.
+- COMO LER AS COMUNIDADES (schema): cada comunidade tem "relacao" (viveu/atendeu/conhece/convive/interesse), "problemas" (lista de {publico, problema} REALMENTE observados) e "motivacao" (só afinidade, quando é interesse).
+  · Prioriza mercados com "relacao" de EXPERIÊNCIA (viveu/atendeu/conhece/convive) e com "problemas" preenchidos — é onde ele valida mais rápido. Cada {publico + problema} observado pode virar UMA hipótese.
+  · Mercado com "relacao":"interesse" e "problemas" VAZIO é só afinidade: NÃO invente dor pra ele ("vender mais", "comunicação ruim" etc.). Se usar, deixa claro que é interesse (evidência fraca) e ancora no "motivacao" dele — nunca numa dor que ele não relatou.
+  · NUNCA funda dois problemas/públicos distintos do mesmo mercado numa hipótese só — são direções separadas.
 - Proibido genérico ("pequenas empresas", "empreendedores", "profissionais liberais"). Tem que doer de específico, com a situação junto.
 - Ancora no problema que resolve dinheiro/tempo pro cliente, não em estética.
 - São HIPÓTESES pra investigar, não verdades. Direção coerente e utilizável vale mais que "perfeita".
