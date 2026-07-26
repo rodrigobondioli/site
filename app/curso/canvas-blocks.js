@@ -273,6 +273,12 @@ window.ADP_CANVAS = (function () {
     + '.mx2-vd .vdt b{font-size:14.5px;color:var(--ink,#18181b);font-weight:700}'
     + '.mx2-vd .vdt p{margin:4px 0 0;font-size:13px;color:var(--muted,#71717a);line-height:1.5}'
     + '.mx2-decide{margin-top:14px;display:flex;flex-direction:column;gap:11px;align-items:flex-end;text-align:right}'
+    // rodapé de ações padrão (decisão final): [terciárias]  [secundária branca]  [primária rosa] à direita
+    + '.adp-actions{display:flex;align-items:center;justify-content:flex-end;gap:16px;flex-wrap:wrap;margin-top:16px}'
+    + '.adp-actions .adp-tert{display:inline-flex;align-items:center;gap:12px;flex-wrap:wrap}'
+    + '.adp-sbtn{display:inline-flex;align-items:center;gap:8px;font:inherit;font-weight:700;font-size:14px;padding:11px 22px;border-radius:999px;border:1.5px solid var(--line,#d4d4d8);color:var(--ink,#18181b);background:none;cursor:pointer;white-space:nowrap;transition:background .15s,border-color .15s}'
+    + '.adp-sbtn:hover{background:var(--soft,#e6e6e8)}'
+    + '@media(max-width:560px){.adp-actions{justify-content:stretch}.adp-actions .mx2-cta,.adp-actions .adp-sbtn{flex:1;justify-content:center}}'
     + '.mx2-cta{font-weight:700;font-size:14px;padding:11px 22px;border-radius:999px;background:var(--pink,#ff00d7);color:#fff;border:none;cursor:pointer;white-space:nowrap}'
     + '.mx2-cta:hover{filter:brightness(1.06)}'
     + '.mx2-sec2{font-size:13.5px;font-weight:700;color:var(--ink,#18181b);text-decoration:underline;text-underline-offset:2px;background:none;border:none;cursor:pointer;padding:2px 0}'
@@ -526,10 +532,11 @@ window.ADP_CANVAS = (function () {
         else { primary = { act: 'continuar', label: 'Continuar com esta →' }; secondary = { act: 'adjust', label: 'Ajustar esta hipótese' }; }
       }
       var html = '<div class="mx2-vd"><span class="vdi ' + tm[1] + '"></span><div class="vdt"><b>' + tm[0] + '</b><p>' + esc(guide) + '</p></div></div>';
-      html += '<div class="mx2-decide"><button type="button" class="mx2-cta" data-act="' + primary.act + '" data-i="' + i + '">' + esc(primary.label) + '</button>';
-      if (secondary) html += '<button type="button" class="mx2-sec2" data-act="' + secondary.act + '" data-i="' + i + '">' + esc(secondary.label) + '</button>';
-      if (tertiary.length) html += '<div class="mx2-secacts">' + tertiary.map(function (s) { return '<button type="button" class="mx2-seclink" data-act="' + s.act + '" data-i="' + i + '">' + esc(s.label) + '</button>'; }).join('<span class="mx2-secdot">·</span>') + '</div>';
-      html += '</div>';
+      // rodapé: [terciárias em link]  [secundária botão branco]  [primária botão rosa] — mesma linha, à direita
+      var tertHtml = tertiary.length ? '<span class="adp-tert">' + tertiary.map(function (s) { return '<button type="button" class="mx2-seclink" data-act="' + s.act + '" data-i="' + i + '">' + esc(s.label) + '</button>'; }).join('<span class="mx2-secdot">·</span>') + '</span>' : '';
+      var secHtml = secondary ? '<button type="button" class="adp-sbtn" data-act="' + secondary.act + '" data-i="' + i + '">' + esc(secondary.label) + '</button>' : '';
+      var primHtml = '<button type="button" class="mx2-cta" data-act="' + primary.act + '" data-i="' + i + '">' + esc(primary.label) + '</button>';
+      html += '<div class="adp-actions">' + tertHtml + secHtml + primHtml + '</div>';
       return html;
     }
     // hipótese aberta = header (nome protagonista) + progresso + respondidos compactos + critério ativo + veredito

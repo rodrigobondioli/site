@@ -117,17 +117,16 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .btn-done .ck{width:20px;height:20px;border-radius:999px;background:var(--lime);display:grid;place-items:center;flex:none}
 .btn-done .ck svg{width:11px;height:11px;fill:none;stroke:var(--ink);stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}
 /* próximo passo — centralizado; botão vira rosa+check quando concluído */
-.nextstep{margin-top:34px;display:flex;flex-direction:column;gap:14px;align-items:center;text-align:center}
-.nextstep .ns-kicker{font-size:12px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--muted)}
-.ns-toggle{display:inline-flex;align-items:center;gap:9px;font-weight:700;font-size:15px;padding:13px 28px;border-radius:999px;border:1.5px solid var(--line);color:var(--ink);background:none;transition:background .15s,border-color .15s,color .15s}
-.ns-toggle:hover{background:var(--soft)}
-.ns-toggle.done{background:var(--pink);border-color:var(--pink);color:#fff}
-.ns-toggle.done:hover{filter:brightness(1.06);background:var(--pink)}
-.ns-toggle .ck{display:none;align-items:center}
-.ns-toggle.done .ck{display:inline-flex}
-.ns-toggle .ck svg{width:16px;height:16px;fill:none;stroke:#fff;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}
-.nextstep .ns-next{font-size:14px;color:var(--muted);font-weight:700}
-.nextstep .ns-next:hover{color:var(--ink)}
+.nextstep{margin-top:34px}
+/* rodapé de ações padrão: [secundária]  [principal] à direita, quebra no mobile mantendo a ordem */
+.action-row{display:flex;align-items:center;justify-content:flex-end;gap:16px;flex-wrap:wrap}
+/* SecondaryButton oficial (herdado do antigo "Concluir aula"): branco, borda neutra, MESMA altura/typo do primário .esc-cont */
+.sbtn{display:inline-flex;align-items:center;gap:8px;font-family:inherit;font-weight:700;font-size:14px;padding:11px 22px;border-radius:999px;border:1.5px solid var(--line);color:var(--ink);background:none;cursor:pointer;transition:background .15s,border-color .15s}
+.sbtn:hover{background:var(--soft)}
+/* status passivo (não é botão) */
+.done-status{display:inline-flex;align-items:center;gap:7px;font-size:13.5px;font-weight:700;color:var(--muted)}
+.done-status svg{width:16px;height:16px;fill:none;stroke:var(--muted);stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+@media(max-width:560px){.action-row{justify-content:stretch}.action-row .esc-cont,.action-row .sbtn{flex:1;justify-content:center}}
 /* aplique aqui (bloco do Canvas embaixo do vídeo) */
 .applyhere{position:relative;margin-top:44px;border:1px solid var(--line);border-radius:var(--r);padding:26px 24px 22px}
 .applyhere .adp-syncnote{font-size:12.5px;color:var(--muted);margin-top:18px;padding-top:13px;border-top:1px solid var(--line)}
@@ -283,7 +282,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .esc-done.gone{display:none}
 .esc-done .dt{font-size:14px;flex:1;min-width:200px;line-height:1.55;text-wrap:balance}
 .esc-done .dt b{font-weight:700}
-.esc-cont{font-weight:700;font-size:14px;padding:11px 22px;border-radius:999px;background:var(--pink);color:#fff;white-space:nowrap}
+.esc-cont{display:inline-flex;align-items:center;font-weight:700;font-size:14px;padding:11px 22px;border-radius:999px;background:var(--pink);color:#fff;white-space:nowrap;cursor:pointer;border:none;font-family:inherit;text-decoration:none}
 .esc-cont:hover{filter:brightness(1.06)}
 .esc-cont[disabled]{background:var(--soft);color:var(--muted);cursor:not-allowed;filter:none}
 .esc-cont[disabled]:hover{filter:none}
@@ -711,18 +710,34 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
     var next=idx<total-1?LESSONS[idx+1]:null;
     var isDone=DONE.has(cur.id);
     var nextHref = next? ('aula.html?a='+next.id) : 'posicionamento.html';
-    var nextLabel = next? ('Próxima aula: '+esc(next.title)) : 'Montar meu posicionamento com a IA';
-    var kicker = isDone ? '' : '<div class="ns-kicker">Terminou? Salva e segue</div>';
-    var btn = '<button class="ns-toggle'+(isDone?' done':'')+'" id="doneBtn"><span class="ck">'+ICON_DONE+'</span>'+(isDone?'Aula concluída':'Concluir aula')+'</button>';
-    var link = '<a class="ns-next" href="'+nextHref+'">'+(isDone? (nextLabel+' →') : 'ir pra próxima →')+'</a>';
-    return '<div class="nextstep">'+kicker+btn+link+'</div>';
+    if(isDone){
+      // já concluída: "Aula concluída" vira STATUS passivo (não botão); a ação real é avançar (CTA rosa)
+      var lbl = next? 'Próxima aula →' : 'Montar meu posicionamento →';
+      return '<div class="nextstep"><div class="action-row">'
+        + '<span class="done-status">'+ICON_DONE+'Aula concluída</span>'
+        + '<a class="esc-cont" href="'+nextHref+'">'+lbl+'</a></div></div>';
+    }
+    // não concluída: um CTA principal que conclui E avança + secundário branco "só marcar"
+    var lbl2 = next? 'Concluir e ir pra próxima →' : 'Concluir e montar posicionamento →';
+    return '<div class="nextstep"><div class="action-row">'
+      + '<button class="sbtn" id="doneOnly" type="button">Só marcar concluída</button>'
+      + '<button class="esc-cont" id="doneNext" type="button">'+lbl2+'</button></div></div>';
   }
   function paintNextStep(){
     var w=document.getElementById('nextStepWrap'); if(!w) return;
     // nas aulas com Canvas (Escavador OU form) o CTA "Continuar" vive DENTRO do card — não duplica footer externo
     if(cur && cur.canvas_block!=null){ w.innerHTML=''; return; }
     w.innerHTML=buildNextStep();
-    var b=document.getElementById('doneBtn'); if(b) b.addEventListener('click', toggleDone);
+    var total=LESSONS.length, next=idx<total-1?LESSONS[idx+1]:null;
+    var nextHref = next? ('aula.html?a='+next.id) : 'posicionamento.html';
+    var dn=document.getElementById('doneNext'); if(dn) dn.addEventListener('click', function(){ markDone(nextHref); });
+    var doo=document.getElementById('doneOnly'); if(doo) doo.addEventListener('click', function(){ markDone(null); });
+  }
+  async function markDone(gotoHref){
+    DONE.add(cur.id);
+    if(!gotoHref){ paintNextStep(); renderPanel(); }
+    try{ await window.ADP.setDone(cur.id, true); }catch(e){}
+    if(gotoHref) location.href=gotoHref;
   }
 
   function renderPanel(){
