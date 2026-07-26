@@ -524,13 +524,12 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
         doneEl=container.querySelector('#escDone'), progEl=container.querySelector('#escProgTxt'),
         inbar=container.querySelector('.esc-inbar');
     var qCount = history.filter(function(m){return m.role==='assistant';}).length;
-    var suf=false, suffDismissed=false;
-    var campoAtual = (voce && voce._campo) || 'comunidades';
     var skipped = {}; (Array.isArray(voce._skip)?voce._skip:[]).forEach(function(k){ skipped[k]=1; });
+    // ESTADO DO FLUXO vem do SERVIDOR (fonte de verdade única). O cliente só renderiza + guarda cache pra recarregar.
+    var curArea = (voce && voce._area) || 'comunidades';
+    var canSkip = !!(voce && voce._pular);
+    var fechado = !!(voce && voce._fechado);
     var CAMPO_LABEL={comunidades:'Comunidades',competencias:'Competências',provas:'Provas',historia:'História',preferencias:'Preferências',medos:'Medos',fechamento:'Fechando'};
-    // perguntas fixas dos complementares (garante que SEMPRE tem pergunta, sem depender da IA acertar o próximo passo)
-    var Q_HARD={ historia:'Última coisa: como você entrou nesse mundo? Conta rapidinho de onde vem essa tua história com design.',
-                 preferencias:'E o que você AMA fazer no trabalho — e o que te dá preguiça? Manda os dois.' };
 
     function setBusy(b){ send.disabled=b; typing.classList.toggle('gone', !b); }
     function cardData(k){
@@ -566,10 +565,9 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
       }).join('');
       var areas=ESC_CARDS.filter(function(c){return cardData(c.k).n>0;}).length;
       var ess = cardData('comunidades').n>0 && cardData('competencias').n>0 && (cardData('provas').n>0 || (voce.competencias||[]).some(function(c){return c&&(c.exemplo||'').trim();}));
-      var g=clientGap(); var fim=(g==='fechamento');
-      // rótulo reflete a PERGUNTA ATUAL (derivada do gap do cliente, sem lag)
-      stepEl.textContent = fim ? '· concluído' : ('· Explorando: '+(CAMPO_LABEL[g]||'Comunidades'));
-      var qb=container.querySelector('#escQbar'); if(qb) qb.style.width = (fim?100:areas/6*100)+'%';
+      // rótulo e barra vêm do estado do SERVIDOR (curArea/fechado) — o cliente não recomputa gap.
+      stepEl.textContent = fechado ? '· concluído' : ('· Explorando: '+(CAMPO_LABEL[curArea]||'Comunidades'));
+      var qb=container.querySelector('#escQbar'); if(qb) qb.style.width = (fechado?100:areas/6*100)+'%';
       progEl.textContent = ess ? 'Já dá pra seguir. Quanto mais contexto, mais afiado.' : (filledCount()+' preenchidos · quanto mais, mais afiado');
     }
     function renderChips(){
@@ -578,8 +576,8 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
       chips.classList.remove('gone');
     }
     function renderDone(){
-      // fecho aparece SÓ quando não falta mais nada pra perguntar (tudo preenchido ou pulado). Aí some o input e fica UM botão.
-      var terminal = done || clientGap()==='fechamento';
+      // fecho: SÓ quando o servidor diz fechado (nada mais a perguntar) OU o aluno clicou Continuar. Aí some o input e fica UM botão.
+      var terminal = done || fechado;
       if(!terminal){ doneEl.classList.add('gone'); if(inbar) inbar.classList.remove('gone'); return; }
       if(inbar) inbar.classList.add('gone'); if(chips) chips.classList.add('gone'); if(qEl) qEl.textContent='';
       var next=(LESSONS[idx+1])?('aula.html?a='+LESSONS[idx+1].id):'canvas.html';
@@ -589,65 +587,42 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
       var cont=doneEl.querySelector('#escCont');
       if(cont) cont.addEventListener('click', function(){ try{ done=true; if(cur && !DONE.has(cur.id)){ DONE.add(cur.id); window.ADP.setDone(cur.id,true).catch(function(){}); } persist(); }catch(e){} });
     }
-    // suficiência calculada no cliente (pra também acender ao VOLTAR, sem depender de um turno novo)
-    function sufClient(){
-      var ess = cardData('comunidades').n>0 && cardData('competencias').n>0 && (cardData('provas').n>0 || (voce.competencias||[]).some(function(c){return c&&(c.exemplo||'').trim();}));
-      return ess && cardData('medos').n>0; // Medos é obrigatório (História/Preferências são complementares)
-    }
-    // gap do cliente — espelha o gapHint do servidor (ordem: comunidades→competencias→provas→medos→historia→preferencias→fechamento)
-    function clientGap(){
-      if(cardData('comunidades').n===0) return 'comunidades';
-      if(cardData('competencias').n===0) return 'competencias';
-      var provaOk = cardData('provas').n>0 || (voce.competencias||[]).some(function(c){return c&&(c.exemplo||'').trim();});
-      if(!provaOk) return 'provas';
-      if(cardData('medos').n===0) return 'medos';
-      if(cardData('historia').n===0 && !skipped.historia) return 'historia';
-      if(cardData('preferencias').n===0 && !skipped.preferencias) return 'preferencias';
-      return 'fechamento';
-    }
-    // "pular essa" — só nos complementares (História/Preferências). Sem banner, só um link discreto acima do input.
+    // "pular essa" — só nos complementares. Visibilidade decidida pelo SERVIDOR (pode_pular → canSkip).
     function renderSkip(){
       var el=container.querySelector('#escSuff'); if(!el) return;
-      var g=clientGap();
-      if((g==='historia'||g==='preferencias') && !done){
+      if(canSkip && !done && !fechado){
         el.innerHTML='<button type="button" class="esc-skip" id="escSkip">pular essa →</button>';
         el.classList.remove('gone');
-        var b=el.querySelector('#escSkip'); if(b) b.addEventListener('click', function(){ doSkip(g); });
+        var b=el.querySelector('#escSkip'); if(b) b.addEventListener('click', function(){ doSkip(curArea); });
       } else { el.classList.add('gone'); el.innerHTML=''; }
     }
     function doSkip(field){
       if(field!=='historia' && field!=='preferencias') return;
-      skipped[field]=1;
-      var g=clientGap();
-      if(g==='historia'||g==='preferencias'){ qEl.textContent=Q_HARD[g]; history.push({role:'assistant',content:qEl.textContent}); }
-      else { qEl.textContent=''; }
-      syncPH(); renderCards(); renderSkip(); renderDone(); persist();
-      if(input && clientGap()!=='fechamento') input.focus();
+      skipped[field]=1; persist();
+      turn(null, field); // servidor recomputa e devolve a próxima (sem gastar IA)
     }
-    function persist(){ voce._chat=history.slice(-16); voce._done=done; voce._campo=campoAtual; voce._skip=Object.keys(skipped); CANVAS[0]=voce; window.ADP.saveBlock(0, voce).catch(function(){}); }
+    function persist(){ voce._chat=history.slice(-16); voce._done=done; voce._skip=Object.keys(skipped); voce._area=curArea; voce._pular=canSkip; voce._fechado=fechado; CANVAS[0]=voce; window.ADP.saveBlock(0, voce).catch(function(){}); }
 
-    async function turn(userText){
+    async function turn(userText, skipField){
       if(userText){ history.push({role:'user',content:userText}); lastEl.innerHTML='<b>Você:</b> '+esc(userText); lastEl.classList.remove('gone'); }
       setBusy(true);
       try{
-        var r=await window.ADP.escavador({ history: history.slice(-8), voce: voce });
+        var r=await window.ADP.escavador({ history: history.slice(-8), voce: voce, skip: skipField||undefined });
         var d=(r&&r.data)?r.data:r;
-        if(d&&d.voce) voce=d.voce;
-        // o Escavador NUNCA fecha sozinho — quem encerra é o aluno clicando em "Continuar"
-        if(d&&d.campo_atual) campoAtual=d.campo_atual;
-        suf=!!(d&&d.suficiente);
+        if(d&&d.voce){ d.voce._chat=voce._chat; d.voce._skip=Object.keys(skipped); voce=d.voce; } // preserva chat/skip do cliente
+        // TUDO que decide o fluxo vem do servidor — o cliente só reflete.
+        if(d&&d.area_atual) curArea=d.area_atual;
+        canSkip=!!(d&&d.pode_pular);
+        fechado=!!(d&&d.fechado);
         var reply=(d&&d.reply)||'';
-        // garante que SEMPRE tem uma pergunta nos complementares: se a IA não perguntou, usa a fixa
-        var g=clientGap();
-        if((g==='historia'||g==='preferencias') && !/\?/.test(reply)) reply=Q_HARD[g];
-        history.push({role:'assistant',content:reply}); qCount++;
-        qEl.textContent = reply;
+        if(reply){ history.push({role:'assistant',content:reply}); qCount++; }
+        qEl.textContent = fechado ? '' : reply;
         syncPH(); renderCards(); renderChips(); renderDone(); renderSkip(); persist();
       }catch(e){ qEl.textContent='Deu ruim aqui. Manda de novo.'; }
       setBusy(false);
     }
     var OPENER='Me diz um mercado, comunidade ou tipo de cliente que você conhece por experiência — porque viveu nesse meio, já atendeu ou convive de perto.';
-    function showOpener(){ qEl.textContent=OPENER; syncPH(); history.push({role:'assistant',content:OPENER}); qCount=1; renderCards(); persist(); } // abertura fixa (sem gastar chamada de IA)
+    function showOpener(){ qEl.textContent=OPENER; syncPH(); history.push({role:'assistant',content:OPENER}); qCount=1; curArea='comunidades'; canSkip=false; fechado=false; renderCards(); persist(); } // abertura fixa (sem gastar chamada de IA)
     function submit(){ var t=input.value.trim(); if(!t) return; input.value=''; turn(t); }
     send.addEventListener('click', submit);
     input.addEventListener('keydown', function(e){ if(e.key==='Enter' && !e.shiftKey){ e.preventDefault(); submit(); } });
@@ -655,7 +630,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
     var resetBtn=container.querySelector('#escReset');
     if(resetBtn) resetBtn.addEventListener('click', function(){
       if(!window.confirm('Recomeçar? Isso apaga o que o Escavador montou até agora no teu bloco VOCÊ.')) return;
-      voce={}; history=[]; qCount=0; done=false; suf=false; suffDismissed=false; campoAtual='comunidades'; skipped={}; lastEl.classList.add('gone'); lastEl.innerHTML=''; persist(); renderChips(); renderDone(); renderSkip(); showOpener();
+      voce={}; history=[]; qCount=0; done=false; skipped={}; curArea='comunidades'; canSkip=false; fechado=false; lastEl.classList.add('gone'); lastEl.innerHTML=''; persist(); renderChips(); renderDone(); renderSkip(); showOpener();
     });
 
     // placeholder CONTEXTUAL: casa com a pergunta atual (o exemplo nunca contradiz o que foi perguntado)
