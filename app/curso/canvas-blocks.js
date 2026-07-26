@@ -336,13 +336,11 @@ window.ADP_CANVAS = (function () {
     + '.adp-sg .mono-card-h .mono-h{font-size:12.5px;font-weight:700;color:var(--ink,#18181b)}'
     + '.adp-sg .mono-corr{font-size:12.5px;color:var(--muted,#71717a);text-decoration:underline;text-underline-offset:2px;background:none;border:0;cursor:pointer;font:inherit;padding:0;white-space:nowrap}'
     + '.adp-sg .mono-corr:hover{color:var(--ink,#18181b)}'
-    + '.adp-sg .mono-sec{padding:13px 0;border-top:1px solid var(--line,#ececef)}'
-    + '.adp-sg .mono-sec-t{display:flex;align-items:center;gap:7px;font-size:12px;font-weight:700;color:var(--muted,#71717a);margin:0 0 5px}'
-    + '.adp-sg .mono-chk{flex:none;width:17px;height:17px;border-radius:999px;display:inline-grid;place-items:center}'
-    + '.adp-sg .mono-chk.ok{background:var(--lime,#e7f99a);color:var(--ink,#18181b)}'
-    + '.adp-sg .mono-chk.ok svg{width:11px;height:11px;fill:none;stroke:currentColor;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}'
-    + '.adp-sg .mono-chk.empty{border:1.6px solid var(--line,#d4d4d8)}'
-    + '.adp-sg .mono-sec-x{font-size:14.5px;line-height:1.55;color:var(--ink,#18181b);text-wrap:pretty;padding-left:24px}'
+    + '.adp-sg .mono-sec{padding:12px 0;border-top:1px solid var(--line,#ececef)}'
+    + '.adp-sg .mono-sec-t{display:flex;align-items:center;gap:8px;font-size:12.5px;font-weight:700;color:var(--ink,#18181b);margin:0 0 6px}'
+    + '.adp-sg .mono-chk{flex:none;width:18px;height:18px;border-radius:999px;display:inline-grid;place-items:center;background:var(--lime,#e7f99a);color:var(--ink,#18181b)}'
+    + '.adp-sg .mono-chk svg{width:11px;height:11px;fill:none;stroke:currentColor;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}'
+    + '.adp-sg .mono-sec-x{font-size:13.5px;line-height:1.5;color:var(--ink,#18181b);text-wrap:pretty}'
     + '.adp-sg .mono-sec-x.soft{color:var(--muted,#71717a)}'
     + '.adp-sg .mono-deep{margin:0 0 4px}'
     + '.adp-sg .mono-deep-t{font-size:15px;font-weight:700;color:var(--ink,#18181b);margin:2px 0 6px}'
@@ -983,7 +981,8 @@ window.ADP_CANVAS = (function () {
       return { txt: 'Você ainda não registrou uma prova concreta — dá pra completar depois.', forte: false };
     }
     function secHTML(t, x, soft) {
-      var chk = soft ? '<span class="mono-chk empty"></span>' : '<span class="mono-chk ok"><svg viewBox="0 0 24 24"><path d="m5 13 4 4L19 7"/></svg></span>';
+      // check lime SÓ quando há dado real (igual aos cards da Aula 1); vazio não mostra ícone (não é radio, não finge certeza)
+      var chk = soft ? '' : '<span class="mono-chk"><svg viewBox="0 0 24 24"><path d="m5 13 4 4L19 7"/></svg></span>';
       return '<div class="mono-sec"><div class="mono-sec-t">' + chk + esc(t) + '</div><div class="mono-sec-x' + (soft ? ' soft' : '') + '">' + esc(x) + '</div></div>';
     }
     function provaDraft() {
