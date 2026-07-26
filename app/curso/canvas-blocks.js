@@ -321,10 +321,8 @@ window.ADP_CANVAS = (function () {
     + '.adp-sg .rbtn.rbtn-primary:hover{filter:brightness(1.06);background:var(--pink,#ff00d7);color:#fff}'
     + '.adp-sg .rlbl{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--faint,#a1a1aa);margin:0 0 8px}'
     + '.adp-sg .rnote{font-size:12px;color:var(--faint,#a1a1aa);margin:14px 0 0;line-height:1.5;text-wrap:balance}'
-    // BLOCO DE CONFIRMAÇÃO (pós-escolha) — compacto, alinhado à esquerda, parece uma confirmação da tela anterior
-    + '.adp-sg .sg-chosen{border:1px solid var(--line,#d4d4d8);background:rgba(255,0,215,.04);border-radius:14px;padding:14px 16px;margin-top:4px}'
-    + '.adp-sg .sg-cdot{display:block;width:8px;height:8px;border-radius:999px;background:var(--pink,#ff00d7);margin:0 0 9px}'
-    + '.adp-sg .sg-chosen .sg-opt-t{font-size:15.5px}'
+    // CONFIRMAÇÃO (pós-escolha) — sem card/decoração: resposta + ações no mesmo eixo à esquerda, botão padrão (.esc-cont)
+    + '.adp-sg .sg-chosen{margin:2px 0 0}'
     + '.adp-sg .sg-chosen .sg-opt-d{margin-top:5px}'
     + '.adp-sg .sg-confirm-acts{display:flex;flex-direction:column;align-items:flex-start;gap:12px;margin-top:20px}'
     + '.adp-sg .sg-subacts{display:flex;align-items:center;gap:20px;flex-wrap:wrap}'
@@ -332,7 +330,7 @@ window.ADP_CANVAS = (function () {
     + '.adp-sg .sg-lnk:hover{color:var(--ink,#18181b)}'
     + '.adp-sg .sg-tert{display:flex;align-items:center;justify-content:flex-end;gap:22px;flex-wrap:wrap;margin-top:20px}'
     + '.adp-sg .sg-tert .sg-lnk{color:var(--faint,#a1a1aa);font-weight:600}'
-    + '@media(max-width:560px){.adp-sg .sg-confirm-acts{align-self:stretch}.adp-sg .sg-confirm-acts .rbtn-primary{width:100%;justify-content:center}}'
+    + '@media(max-width:560px){.adp-sg .sg-confirm-acts{align-self:stretch}.adp-sg .sg-confirm-acts .esc-cont{width:100%;text-align:center}}'
     // --- Matriz responsiva no mobile: empilha a nota abaixo da pergunta (cabe em 390px) ---
     + '@media(max-width:640px){'
     +   '.mx-rtop{flex-direction:column;align-items:stretch;gap:10px}'
@@ -836,9 +834,9 @@ window.ADP_CANVAS = (function () {
       }
       if (chosen) { // estado enxuto de confirmação: escolha + ações à direita
         var pdesc = pickedDescOf(k);
-        var h = '<div class="sg-chosen"><span class="sg-cdot"></span><div class="sg-opt-t">' + esc(chosen) + '</div>' + (pdesc ? '<div class="sg-opt-d">' + esc(pdesc) + '</div>' : '') + '</div>'
+        var h = '<div class="sg-chosen"><div class="sg-opt-t">' + esc(chosen) + '</div>' + (pdesc ? '<div class="sg-opt-d">' + esc(pdesc) + '</div>' : '') + '</div>'
           + '<div class="sg-confirm-acts">'
-          + (window.__rumWizard ? '<button class="rbtn rbtn-primary" type="button" data-act="continue">Continuar →</button>' : '')
+          + (window.__rumWizard ? '<button class="esc-cont" type="button" data-act="continue">Continuar →</button>' : '')
           + '<div class="sg-subacts"><button class="sg-lnk" type="button" data-act="trocar">Trocar escolha</button><button class="sg-lnk" type="button" data-act="edit">Editar</button></div>'
           + '</div>'
           + (cfg.note ? '<p class="rnote">Esta é uma hipótese. Confirme depois em conversas, avaliações ou grupos.</p>' : '');
