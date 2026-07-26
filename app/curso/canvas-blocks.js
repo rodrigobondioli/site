@@ -330,6 +330,22 @@ window.ADP_CANVAS = (function () {
     + '.adp-sg .mono-box{border:1px solid var(--line,#d4d4d8);background:var(--soft,#f4f4f5);border-radius:12px;padding:14px 16px;margin:0 0 12px;font-size:13.5px;line-height:1.6;color:var(--ink,#18181b);text-wrap:pretty}'
     + '.adp-sg .mono-edit{width:100%;font:inherit;font-size:14px;line-height:1.5;color:var(--ink,#18181b);border:1.5px solid var(--line,#d4d4d8);border-radius:12px;padding:12px 14px;margin:0 0 12px;resize:vertical;box-sizing:border-box}'
     + '.adp-sg .mono-edit:focus{outline:none;border-color:var(--ink,#18181b)}'
+    + '.adp-sg .mono-lead{font-size:13.5px;color:var(--muted,#71717a);margin:0 0 16px;line-height:1.55;max-width:60ch}'
+    + '.adp-sg .mono-card{background:#fff;border:1px solid var(--line,#d4d4d8);border-radius:14px;padding:2px 18px 6px;margin:0 0 24px}'
+    + '.adp-sg .mono-card-h{display:flex;align-items:baseline;justify-content:space-between;gap:12px;padding:15px 0 4px}'
+    + '.adp-sg .mono-card-h .mono-h{font-size:12.5px;font-weight:700;color:var(--ink,#18181b)}'
+    + '.adp-sg .mono-corr{font-size:12.5px;color:var(--muted,#71717a);text-decoration:underline;text-underline-offset:2px;background:none;border:0;cursor:pointer;font:inherit;padding:0;white-space:nowrap}'
+    + '.adp-sg .mono-corr:hover{color:var(--ink,#18181b)}'
+    + '.adp-sg .mono-sec{padding:13px 0;border-top:1px solid var(--line,#ececef)}'
+    + '.adp-sg .mono-sec-t{font-size:12px;font-weight:700;color:var(--muted,#71717a);margin:0 0 4px}'
+    + '.adp-sg .mono-sec-x{font-size:14.5px;line-height:1.55;color:var(--ink,#18181b);text-wrap:pretty}'
+    + '.adp-sg .mono-sec-x.soft{color:var(--muted,#71717a)}'
+    + '.adp-sg .mono-deep{margin:0 0 4px}'
+    + '.adp-sg .mono-deep-t{font-size:15px;font-weight:700;color:var(--ink,#18181b);margin:2px 0 6px}'
+    + '.adp-sg .mono-foot{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-top:18px}'
+    + '.adp-sg .mono-cta-right{display:flex;justify-content:flex-end;margin-top:4px}'
+    + '.adp-sg .rbtn:disabled{opacity:.45;cursor:not-allowed;pointer-events:none}'
+    + '@media(max-width:560px){.adp-sg .mono-foot{flex-direction:column-reverse;align-items:stretch}.adp-sg .mono-foot .rbtn{width:100%;justify-content:center}.adp-sg .mono-cta-right .rbtn{width:100%;justify-content:center}}'
     + '.adp-sg .rlbl{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--faint,#a1a1aa);margin:0 0 8px}'
     + '.adp-sg .rnote{font-size:12px;color:var(--faint,#a1a1aa);margin:14px 0 0;line-height:1.5;text-wrap:balance}'
     // CONFIRMAÇÃO (pós-escolha) — sem card/decoração: resposta + ações no mesmo eixo à esquerda, botão padrão (.esc-cont)
@@ -942,15 +958,20 @@ window.ADP_CANVAS = (function () {
     function stopR() { if (rt) { clearInterval(rt); rt = null; } }
     function startR() { stopR(); ri = 0; rt = setInterval(function () { ri = (ri + 1) % ROT.length; var e = host.querySelector('.rmsg-t'); if (e) e.textContent = ROT[ri]; else stopR(); }, 1400); }
 
-    function histResumo() {
-      var v = voce(), parts = [];
-      var h = String(v.historia || '').trim(); if (h) parts.push(h);
-      var comps = (v.competencias || []).map(function (c) { return c && c.o_que; }).filter(Boolean);
-      if (comps.length) parts.push('O que você faz bem: ' + comps.join(', ') + '.');
-      var provs = (v.provas || []).map(function (p) { return p && (p.consequencia || p.situacao); }).filter(Boolean);
-      if (provs.length) parts.push('Provas que você trouxe: ' + provs.join(' · ') + '.');
-      return parts.join(' ');
+    // três recortes da matéria-prima, separados (trajetória / competência / prova) — sem fingir certeza
+    function trajetoria() { return String(voce().historia || '').trim(); }
+    function competenciaResumo() { return (voce().competencias || []).map(function (c) { return c && c.o_que; }).filter(Boolean).join(', '); }
+    function provasResumo() {
+      var v = voce();
+      var fortes = (v.provas || []).map(function (p) { return p && p.consequencia; }).filter(Boolean);
+      if (fortes.length) return { txt: fortes.join(' · '), forte: true };
+      var situ = (v.provas || []).map(function (p) { return p && p.situacao; }).filter(Boolean);
+      if (situ.length) return { txt: situ.join(' · ') + ' — falta amarrar o resultado.', forte: false };
+      var temEx = (v.competencias || []).some(function (c) { return c && String(c.exemplo || '').trim(); });
+      if (temEx) return { txt: 'Você relatou entregas com resultado, mas ainda falta registrar um caso concreto.', forte: false };
+      return { txt: 'Você ainda não registrou uma prova concreta — dá pra completar depois.', forte: false };
     }
+    function secHTML(t, x, soft) { return '<div class="mono-sec"><div class="mono-sec-t">' + esc(t) + '</div><div class="mono-sec-x' + (soft ? ' soft' : '') + '">' + esc(x) + '</div></div>'; }
     function provaDraft() {
       var v = voce();
       var ps = (v.provas || []).map(function (p) { if (!p) return ''; return [p.situacao, p.acao, p.consequencia].filter(Boolean).join(' → '); }).filter(Boolean);
@@ -978,15 +999,22 @@ window.ADP_CANVAS = (function () {
     }
 
     function renderHist() {
-      var resumo = histResumo();
-      var body = '<h4 class="rum-intro-t">A história que você já trouxe</h4>';
-      body += resumo ? '<div class="mono-box">' + esc(resumo) + '</div>' : '<div class="mono-box">Você ainda não contou muito da tua história no Escavador — dá pra aprofundar agora.</div>';
-      body += '<div class="sg-tert" style="margin:0 0 16px"><button class="sg-lnk" type="button" data-act="corr">Corrigir minha história</button></div>';
-      body += '<p class="rum-intro-x"><b>Agora que você viu por que sua história importa, vale aprofundar um pouco.</b> Não é pra contar tua biografia inteira. É pra achar a parte da tua trajetória que, cruzada com o nicho escolhido, torna teu trabalho difícil de copiar.</p>';
-      body += '<p class="sg-q">Tem alguma experiência, virada, erro, trabalho ou vivência fora do design que influencia a forma como você resolve problemas hoje?</p>';
-      body += '<textarea class="mono-edit" id="monoDeep" rows="3" placeholder="Responde aqui, do teu jeito…"></textarea>';
-      body += '<div class="rum-acts"><button class="rbtn rbtn-primary" type="button" data-act="deepAdd">Adicionar à minha história</button><button class="rbtn rbtn-sec" type="button" data-act="toIntro">Minha história já está suficiente</button></div>';
+      var traj = trajetoria(), comp = competenciaResumo(), pr = provasResumo();
+      var body = '<p class="mono-lead">Antes de cruzar tudo, vamos revisar a matéria-prima que você já trouxe.</p>';
+      body += '<div class="mono-card">';
+      body += '<div class="mono-card-h"><span class="mono-h">O que já sabemos</span><button class="mono-corr" type="button" data-act="corr">Corrigir informações</button></div>';
+      body += secHTML('Sua trajetória', traj || 'Você contou pouco da tua trajetória no Escavador — dá pra aprofundar abaixo.', !traj);
+      body += secHTML('O que você faz bem', comp || 'Você ainda não destacou o que faz bem.', !comp);
+      body += secHTML('Provas que você trouxe', pr.txt, !pr.forte);
+      body += '</div>';
+      body += '<div class="mono-deep"><div class="mono-deep-t">Quer aprofundar alguma parte?</div>';
+      body += '<p class="rum-intro-x">Não precisa contar tua biografia. Só vale adicionar algo que mudou a forma como você trabalha ou resolve problemas.</p>';
+      body += '<p class="sg-q">Tem alguma experiência, virada, erro, trabalho ou vivência que mudou a forma como você resolve problemas hoje?</p>';
+      body += '<textarea class="mono-edit" id="monoDeep" rows="3" style="min-height:110px" placeholder="Escreva só o que realmente acrescenta algo novo…"></textarea></div>';
+      body += '<div class="mono-foot"><button class="rbtn rbtn-sec" type="button" data-act="toIntro">Minha história já está suficiente</button><button class="rbtn rbtn-primary" type="button" data-act="deepAdd" disabled>Adicionar à minha história →</button></div>';
       host.innerHTML = body; bind();
+      var dta = host.querySelector('#monoDeep'), ab = host.querySelector('[data-act="deepAdd"]');
+      if (dta && ab) { var upd = function () { ab.disabled = !dta.value.trim(); }; upd(); dta.addEventListener('input', upd); }
     }
     function renderChosen() {
       var s = st('diferencial'), chosen = valOf('diferencial');
@@ -1019,7 +1047,7 @@ window.ADP_CANVAS = (function () {
       if (s.phase === 'intro') {
         host.innerHTML = '<h4 class="rum-intro-t">Agora vamos cruzar tudo</h4>'
           + '<p class="rum-intro-x">A IA vai juntar tua história, competência, prova, nicho e a dor do cliente pra encontrar o começo do teu monopólio.</p>'
-          + '<button class="rbtn rbtn-primary" type="button" data-act="rodar">Encontrar o que ninguém copia →</button>';
+          + '<div class="mono-cta-right"><button class="rbtn rbtn-primary" type="button" data-act="rodar">Encontrar o que ninguém copia →</button></div>';
         bind(); return;
       }
       renderHist(); // fase inicial (Fatia 2)
