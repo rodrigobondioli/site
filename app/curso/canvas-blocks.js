@@ -34,7 +34,7 @@ window.ADP_CANVAS = (function () {
     { block: 2, title: 'A Matriz do Nicho', type: 'matrix' },
     { block: 3, title: 'Quem Você Atende (a dor)', type: 'fields', fields: [
       { key: 'nao',           label: 'Quem eu NÃO atendo (obrigatório)',  ph: 'Quem você recusa. Começa por aqui — posicionamento é dizer não.' },
-      { key: 'ideal',         label: 'Cliente ideal — situação e dor',    sub: 'Quem é esse cliente e o que está acontecendo quando ele percebe que precisa de ajuda?', ph: 'Ex.: Personal trainer com agenda rodando, mas que recebe sempre as mesmas dúvidas porque o site não explica direito o trabalho dele.' },
+      { key: 'ideal',         label: 'Quem você quer atender primeiro dentro desse nicho?', sub: 'Quem é esse cliente e o que está acontecendo quando ele percebe que precisa de ajuda?', ph: 'Ex.: Personal trainer com agenda rodando, mas que recebe sempre as mesmas dúvidas porque o site não explica direito o trabalho dele.' },
       { key: 'intermediario', label: 'Quem também pode contratar você, mas não é prioridade?', sub: 'Alguém parecido com o cliente ideal, mas com dor menos forte, menos urgente ou menor potencial de projeto.', ph: 'Ex.: Personal trainer que já tem site, mas ele está desatualizado e não ajuda muito a vender.' },
       { key: 'dor',           label: 'A dor-loop principal',              sub: 'Agora vamos transformar a situação do cliente na frase que fica rodando na cabeça dele.', ph: 'Ex.: “Será que as pessoas desistem de me contratar porque não entendem direito o que eu faço?”' },
       { key: 'desejo',        label: 'O que ele quer no lugar?',          sub: 'Se esse problema fosse resolvido, o que mudaria na prática para esse cliente?', ph: 'Ex.: Quero que o site explique meu trabalho, tire as dúvidas mais comuns e ajude as pessoas a entender por que deveriam me contratar.' }
@@ -295,8 +295,11 @@ window.ADP_CANVAS = (function () {
     + '.mx2-seledit{font-size:12.5px;color:var(--muted,#71717a);text-decoration:underline;text-underline-offset:2px;background:none;border:none;cursor:pointer}'
     + '.mx2-seledit:hover{color:var(--ink,#18181b)}'
     + '@media(max-width:560px){.mx2-selcard{flex-direction:column;align-items:stretch;gap:12px}.mx2-selacts{justify-content:flex-end}}'
-    // --- Caça à Ruminação (IA é o caminho principal desta etapa) ---
+    // --- Motor contextual do Bloco 3 / Caça à Ruminação (IA é o caminho principal) ---
     + '.adp-fld.rum-hide{display:none}'
+    + '.adp-sg{margin-top:2px}'
+    + '.adp-sg .sg-ctx{font-size:12.5px;color:var(--muted,#71717a);background:var(--soft,#e6e6e8);border-radius:10px;padding:9px 13px;line-height:1.5;margin:0 0 12px;text-wrap:balance}'
+    + '.adp-sg .sg-q{font-size:14px;font-weight:600;color:var(--ink,#18181b);margin:0 0 14px;line-height:1.45;text-wrap:balance}'
     + '.adp-rum{margin-top:6px}'
     + '.adp-rum .rh{display:flex;align-items:center;gap:8px;font-weight:700;font-size:14.5px}'
     + '.adp-rum .rsub{font-size:13.5px;color:var(--muted,#71717a);margin:0 0 14px;line-height:1.55;max-width:64ch;text-wrap:balance}'
@@ -734,122 +737,127 @@ window.ADP_CANVAS = (function () {
     return res;
   }
 
-  // 🧠 Caça à Ruminação — a IA é o CAMINHO PRINCIPAL da etapa da dor-loop (Bloco 3).
-  // Fluxo: IA sugere → aluno reconhece → escolhe → pode editar. Nunca joga campo vazio primeiro.
-  function appendRuminacao(container, opts) {
-    var wrap = document.createElement('div');
-    wrap.className = 'adp-rum';
-    container.appendChild(wrap);
-    var dorEl = container.querySelector('textarea[data-key="dor"]');
-    var dorFld = dorEl ? (dorEl.closest ? dorEl.closest('.adp-fld') : null) : null;
-    var options = [];      // sugestões efêmeras da IA (não são salvas)
-    var editing = false;   // editando a frase escolhida
-    var errorState = false;// IA falhou
-    var simpleState = false;// mostrando modelos guiados (fallback)
-    var prevVal = '';      // valor antes de editar (pra Cancelar)
-    var SIMPLE = [
+  // 🔗 Motor contextual do Bloco 3 (Quem Você Atende): cada etapa lê o que veio antes,
+  // a IA gera opções coerentes com o nicho/cliente/dor, o aluno reconhece → escolhe → pode editar.
+  // Um único host renderiza a etapa ATIVA (o wizard avisa qual via window.__sgShow(key)).
+  function attachSuggestEngine(container, def, opts) {
+    var host = document.createElement('div'); host.className = 'adp-sg'; container.appendChild(host);
+    var active = null;            // campo ativo (definido pelo wizard)
+    var cache = {};               // por campo: { options, error, simple, editing, prev }
+    var SIMPLE_DOR = [
       'Será que as pessoas desistem de me contratar porque não entendem direito o que eu faço?',
       'Eu perco tempo respondendo as mesmas dúvidas que o meu site já deveria explicar.',
       'Tenho medo de estar passando uma imagem que não mostra o meu valor de verdade.'
     ];
-    function nichoOf() { return (opts && opts.getNicho && opts.getNicho()) || ''; }
-    function valOf(k) { var e = container.querySelector('textarea[data-key="' + k + '"]'); return e ? e.value.trim() : ''; }
-    function hasMaterial() { return !!(nichoOf() && valOf('ideal')); }
-    function showComposer(on) { if (dorFld) dorFld.classList.toggle('rum-hide', !on); }
-    function setDor(v) { if (dorEl) { dorEl.value = v; dorEl.dispatchEvent(new Event('input', { bubbles: true })); } }
-    function focusDor() { if (dorEl) setTimeout(function () { try { dorEl.focus(); var L = dorEl.value.length; dorEl.setSelectionRange(L, L); } catch (e) {} }, 0); }
-    function chip(x) { return '<button type="button" class="rchip" data-dor="' + esc(x) + '">' + esc(x) + '</button>'; }
-
-    async function generate() {
-      if (!hasMaterial()) { paint(); return; }
-      errorState = false; simpleState = false;
-      showComposer(false);
-      wrap.innerHTML = '<p class="rmsg"><span class="spin"></span>Encontrando as ruminações do teu cliente…</p>';
-      try {
-        var cliente = [valOf('ideal'), valOf('intermediario')].filter(Boolean).join(' | ');
-        var r = await window.ADP.ruminacao(nichoOf(), cliente);
-        var d = (r && r.data) ? r.data : r;
-        var all = [];
-        if (d && d.dor_central) all.push(d.dor_central);
-        ((d && d.ruminacoes) || []).forEach(function (x) { if (x && all.indexOf(x) < 0) all.push(x); });
-        options = all.slice(0, 5);
-        if (!options.length) errorState = true;
-      } catch (e) { errorState = true; }
-      paint();
+    var CFG = {
+      nao:           { intro: 'A IA sugere cortes coerentes com o teu nicho — quem fica de fora dessa direção.', btn: 'Ver quem fica de fora →', load: 'Pensando nos cortes do teu nicho…', optHead: 'Escolha um corte (ou edite)' },
+      ideal:         { intro: 'A IA sugere perfis de cliente dentro do teu nicho, com a situação e a dor.', btn: 'Ver perfis de cliente →', load: 'Montando os perfis de cliente…', optHead: 'Escolha o cliente que mais combina' },
+      intermediario: { intro: 'A IA parte do teu cliente ideal pra sugerir quem também serve, mas não é prioridade.', btn: 'Ver clientes secundários →', load: 'Buscando clientes secundários…', optHead: 'Escolha o cliente secundário' },
+      dor:           { intro: 'A IA usa suas respostas para sugerir os pensamentos mais prováveis desse cliente.', btn: 'Encontrar as ruminações →', load: 'Encontrando as ruminações do teu cliente…', optHead: 'Escolha a que mais parece com o que esse cliente realmente pensaria', note: true, simple: true },
+      desejo:        { intro: 'A IA parte da dor que você escolheu pra sugerir o que o cliente quer no lugar.', btn: 'Ver o que ele quer no lugar →', load: 'Pensando no que ele quer no lugar…', optHead: 'Escolha o desejo mais coerente' }
+    };
+    function st(k) { return cache[k] || (cache[k] = { options: [], error: false, simple: false, editing: false, prev: '' }); }
+    function taEl(k) { return container.querySelector('textarea[data-key="' + k + '"]'); }
+    function fldEl(k) { var t = taEl(k); return t ? (t.closest ? t.closest('.adp-fld') : null) : null; }
+    function valOf(k) { var t = taEl(k); return t ? t.value.trim() : ''; }
+    function setVal(k, v) { var t = taEl(k); if (t) { t.value = v; t.dispatchEvent(new Event('input', { bubbles: true })); } }
+    function focusFld(k) { var t = taEl(k); if (t) setTimeout(function () { try { t.focus(); var L = t.value.length; t.setSelectionRange(L, L); } catch (e) {} }, 0); }
+    function showComposer(k, on) { var f = fldEl(k); if (f) f.classList.toggle('rum-hide', !on); }
+    function nichoNow() { return (opts && opts.getNicho && opts.getNicho()) || ''; }
+    function clip(s) { s = String(s || ''); return s.length > 88 ? s.slice(0, 86) + '…' : s; }
+    function chip(x) { return '<button type="button" class="rchip" data-pick="' + esc(x) + '">' + esc(x) + '</button>'; }
+    // microcopy do encadeamento — mostra de ONDE a sugestão veio
+    function ctxLine(k) {
+      var n = nichoNow(), ideal = valOf('ideal'), dor = valOf('dor');
+      if (k === 'nao') return n ? ('Com base no nicho “' + clip(n) + '”, quem claramente fica de fora dessa direção?') : '';
+      if (k === 'ideal') return n ? ('Você escolheu o nicho “' + clip(n) + '”. Agora, qual tipo de cliente dentro dele faz mais sentido pra você?') : '';
+      if (k === 'intermediario') return ideal ? ('Você vai atender primeiro: “' + clip(ideal) + '”. Quem se parece, mas com dor menor?') : '';
+      if (k === 'dor') return ideal ? ('Você atende “' + clip(ideal) + '”. Vamos achar o pensamento que fica na cabeça desse cliente.') : '';
+      if (k === 'desejo') return dor ? ('A dor escolhida foi: “' + clip(dor) + '”. Se isso fosse resolvido, o que ele quer no lugar?') : '';
+      return '';
+    }
+    function faltaTxt(f) {
+      if (f === 'nicho') return 'Falta escolher o nicho na Matriz pra IA sugerir com precisão.';
+      if (f === 'ideal') return 'Falta definir o cliente ideal antes desta etapa.';
+      if (f === 'dor') return 'Falta escolher a dor-loop antes desta etapa.';
+      return 'Faltam respostas anteriores.';
     }
 
-    function paint() {
-      if (editing) { // modo edição: mostra o composer + Salvar/Cancelar
-        showComposer(true);
-        wrap.innerHTML = '<div class="rum-acts"><button class="rbtn rbtn-primary" type="button" data-act="save">Salvar ajuste</button>'
-          + '<button class="rbtn rbtn-sec" type="button" data-act="cancel">Cancelar</button></div>';
+    async function gen(k) {
+      var s = st(k); s.error = false; s.simple = false; s.falta = '';
+      active = k; showComposer(k, false);
+      host.innerHTML = ctxHTML(k) + '<p class="rmsg"><span class="spin"></span>' + esc(CFG[k].load) + '</p>';
+      try {
+        var ops = [];
+        if (k === 'dor') {
+          if (!(nichoNow() && valOf('ideal'))) { s.falta = nichoNow() ? 'ideal' : 'nicho'; render(); return; }
+          var r = await window.ADP.ruminacao(nichoNow(), [valOf('ideal'), valOf('intermediario')].filter(Boolean).join(' | '));
+          var d = (r && r.data) ? r.data : r;
+          if (d && d.dor_central) ops.push(d.dor_central);
+          ((d && d.ruminacoes) || []).forEach(function (x) { if (x && ops.indexOf(x) < 0) ops.push(x); });
+        } else {
+          var r2 = await window.ADP.sugestoes(k); var d2 = (r2 && r2.data) ? r2.data : r2;
+          if (d2 && d2.falta) { s.falta = d2.falta; render(); return; }
+          ops = (d2 && d2.opcoes) || [];
+        }
+        s.options = ops.slice(0, 5);
+        if (!s.options.length) s.error = true;
+      } catch (e) { s.error = true; }
+      render();
+    }
+
+    function ctxHTML(k) { var c = ctxLine(k); return c ? '<p class="sg-ctx">' + esc(c) + '</p>' : ''; }
+    function subHTML(k) { var f = byBlock(3).fields.filter(function (x) { return x.key === k; })[0]; return (f && f.sub) ? '<p class="sg-q">' + esc(f.sub) + '</p>' : ''; }
+
+    function render() {
+      if (!active) { host.innerHTML = ''; return; }
+      var k = active, s = st(k), cfg = CFG[k] || {}, chosen = valOf(k);
+      if (s.editing) { showComposer(k, true); host.innerHTML = '<div class="rum-acts"><button class="rbtn rbtn-primary" type="button" data-act="save">Salvar ajuste</button><button class="rbtn rbtn-sec" type="button" data-act="cancel">Cancelar</button></div>'; bind(); return; }
+      showComposer(k, false);
+      var head = ctxHTML(k) + subHTML(k);
+      if (s.falta) { host.innerHTML = head + '<p class="rsub">' + esc(faltaTxt(s.falta)) + '</p>' + (s.falta === 'nicho' ? '' : '<button class="rbtn rbtn-primary" type="button" data-act="fix" data-fix="' + s.falta + '">Completar respostas anteriores</button>'); bind(); return; }
+      if (s.error && !chosen) {
+        host.innerHTML = head + '<p class="rsub">Não consegui gerar as opções agora.</p><div class="rum-acts"><button class="rbtn rbtn-primary" type="button" data-act="gen">Tentar novamente</button>'
+          + (cfg.simple ? '<button class="rbtn rbtn-sec" type="button" data-act="simple">Usar uma sugestão simples</button>' : '<button class="rbtn rbtn-sec" type="button" data-act="manual">Escrever manualmente</button>') + '</div>';
         bind(); return;
       }
-      showComposer(false);
-      var chosen = dorEl ? dorEl.value.trim() : '';
-      // sem matéria-prima suficiente → não inventa
-      if (!chosen && !hasMaterial()) {
-        wrap.innerHTML = '<p class="rsub">Ainda faltam algumas respostas para a IA encontrar uma dor específica.</p>'
-          + '<button class="rbtn rbtn-primary" type="button" data-act="fix">Completar respostas anteriores</button>';
-        bind(); return;
-      }
-      // falha da IA
-      if (errorState && !chosen) {
-        wrap.innerHTML = '<p class="rsub">Não consegui gerar as ruminações agora.</p>'
-          + '<div class="rum-acts"><button class="rbtn rbtn-primary" type="button" data-act="gen">Tentar novamente</button>'
-          + '<button class="rbtn rbtn-sec" type="button" data-act="simple">Usar uma sugestão simples</button></div>';
-        bind(); return;
-      }
-      // fallback: modelos guiados
-      if (simpleState && !chosen) {
-        wrap.innerHTML = '<div class="rlbl">Escolhe a que mais parece com o teu cliente</div>' + SIMPLE.map(chip).join('')
-          + '<button class="rbtn rbtn-sec" type="button" data-act="manual">Prefiro escrever do zero</button>';
-        bind(); return;
-      }
-      // já escolheu (ou editou): a frase é a protagonista
+      if (s.simple && !chosen) { host.innerHTML = head + '<div class="rlbl">Escolhe a que mais parece com o teu cliente</div>' + SIMPLE_DOR.map(chip).join('') + '<button class="rbtn rbtn-sec" type="button" data-act="manual">Prefiro escrever do zero</button>'; bind(); return; }
       if (chosen) {
-        var h = '<div class="rlbl">Sua escolha</div><div class="rchosen">' + esc(chosen) + '</div>'
-          + '<div class="rum-acts">'
-          + (window.__rumWizard ? '<button class="rbtn rbtn-primary" type="button" data-act="continue">Continuar com esta →</button>' : '')
-          + '<button class="rbtn rbtn-sec" type="button" data-act="edit">Editar</button></div>'
-          + '<p class="rnote">Esta é uma hipótese. Confirme depois em conversas, avaliações ou grupos.</p>';
-        var rest = options.filter(function (x) { return x !== chosen; });
+        var h = head + '<div class="rlbl">Sua escolha</div><div class="rchosen">' + esc(chosen) + '</div>'
+          + '<div class="rum-acts">' + (window.__rumWizard ? '<button class="rbtn rbtn-primary" type="button" data-act="continue">Continuar com esta →</button>' : '') + '<button class="rbtn rbtn-sec" type="button" data-act="edit">Editar</button></div>'
+          + (cfg.note ? '<p class="rnote">Esta é uma hipótese. Confirme depois em conversas, avaliações ou grupos.</p>' : '');
+        var rest = s.options.filter(function (x) { return x !== chosen; });
         if (rest.length) h += '<div class="rlbl">Outras opções</div>' + rest.map(chip).join('');
         h += '<button class="rbtn rbtn-sec" type="button" data-act="gen">Gerar novas opções</button>';
-        wrap.innerHTML = h; bind(); return;
+        host.innerHTML = h; bind(); return;
       }
-      // opções geradas, aguardando reconhecimento (sem auto-seleção)
-      if (options.length) {
-        wrap.innerHTML = '<div class="rlbl">Escolha a que mais parece com o que esse cliente realmente pensaria</div>'
-          + options.map(chip).join('')
-          + '<button class="rbtn rbtn-sec" type="button" data-act="gen">Gerar novas opções</button>';
-        bind(); return;
-      }
-      // inicial — IA é a ação principal, sem campo vazio
-      wrap.innerHTML = '<p class="rsub">A IA usa suas respostas para sugerir os pensamentos mais prováveis desse cliente.</p>'
-        + '<button class="rbtn rbtn-primary" type="button" data-act="gen">Encontrar as ruminações →</button>';
+      if (s.options.length) { host.innerHTML = head + '<div class="rlbl">' + esc(cfg.optHead || 'Escolha a que mais combina') + '</div>' + s.options.map(chip).join('') + '<button class="rbtn rbtn-sec" type="button" data-act="gen">Gerar novas opções</button>'; bind(); return; }
+      host.innerHTML = head + '<p class="rsub">' + esc(cfg.intro || '') + '</p><button class="rbtn rbtn-primary" type="button" data-act="gen">' + esc(cfg.btn || 'Ver sugestões da IA →') + '</button>';
       bind();
     }
 
     function bind() {
-      Array.prototype.forEach.call(wrap.querySelectorAll('[data-dor]'), function (b) {
-        b.addEventListener('click', function () { setDor(this.getAttribute('data-dor')); simpleState = false; paint(); });
+      Array.prototype.forEach.call(host.querySelectorAll('[data-pick]'), function (b) {
+        b.addEventListener('click', function () { var s = st(active); setVal(active, this.getAttribute('data-pick')); s.simple = false; render(); });
       });
-      Array.prototype.forEach.call(wrap.querySelectorAll('[data-act]'), function (b) {
+      Array.prototype.forEach.call(host.querySelectorAll('[data-act]'), function (b) {
         b.addEventListener('click', function () {
-          var a = this.getAttribute('data-act');
-          if (a === 'gen') { generate(); return; }
-          if (a === 'simple') { simpleState = true; errorState = false; paint(); return; }
-          if (a === 'manual') { setDor(''); simpleState = false; editing = true; prevVal = ''; paint(); focusDor(); return; }
-          if (a === 'fix') { if (window.__rumWizard && window.__rumWizard.gotoField) window.__rumWizard.gotoField('ideal'); else { var e = container.querySelector('textarea[data-key="ideal"]'); if (e) e.focus(); } return; }
+          var a = this.getAttribute('data-act'), k = active, s = st(k);
+          if (a === 'gen') { gen(k); return; }
+          if (a === 'simple') { s.simple = true; s.error = false; render(); return; }
+          if (a === 'manual') { setVal(k, ''); s.simple = false; s.editing = true; s.prev = ''; render(); focusFld(k); return; }
+          if (a === 'fix') { var fx = this.getAttribute('data-fix'); if (window.__rumWizard && window.__rumWizard.gotoField) window.__rumWizard.gotoField(fx === 'nicho' ? 'ideal' : fx); return; }
           if (a === 'continue') { if (window.__rumWizard && window.__rumWizard.cont) window.__rumWizard.cont(); return; }
-          if (a === 'edit') { editing = true; prevVal = dorEl ? dorEl.value : ''; paint(); focusDor(); return; }
-          if (a === 'save') { editing = false; paint(); return; }
-          if (a === 'cancel') { setDor(prevVal); editing = false; paint(); return; }
+          if (a === 'edit') { s.editing = true; s.prev = valOf(k); render(); focusFld(k); return; }
+          if (a === 'save') { s.editing = false; render(); return; }
+          if (a === 'cancel') { setVal(k, s.prev); s.editing = false; render(); return; }
         });
       });
     }
-    paint();
+
+    // esconde todos os composers do bloco (IA-first) e expõe o "mostrar etapa" pro wizard
+    (def.fields || []).forEach(function (f) { showComposer(f.key, false); });
+    window.__sgShow = function (key) { active = key; render(); };
   }
 
   // renderiza o editor de UM bloco dentro de container. data = objeto salvo desse bloco (ou {}).
@@ -860,7 +868,7 @@ window.ADP_CANVAS = (function () {
     data = data || {};
     if (def.type === 'matrix') { renderMatrix(container, data, onSaved); return; }
     renderFields(container, def, data, onSaved);
-    if (blockNum === 3) appendRuminacao(container, opts || {});
+    if (blockNum === 3) attachSuggestEngine(container, def, opts || {});
   }
 
   return { BLOCKS: BLOCKS, byBlock: byBlock, isFilled: isFilled, renderBlock: renderBlock, nichoFromBlock2: nichoFromBlock2, matrizReady: matrizReady, matrizRemaining: matrizRemaining, gateForBlock: gateForBlock, blockCompletion: blockCompletion };

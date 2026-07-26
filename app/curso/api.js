@@ -41,6 +41,8 @@ window.ADP = (function () {
     ikigai: (circles) => api("/api/ai/estrategista", { method: "POST", body: JSON.stringify({ task: "ikigai", circles }) }),
     // Hipóteses de nicho pra Matriz (Bloco 2) — a IA lê a matéria-prima (Bloco 0) do próprio aluno no servidor.
     hipoteses: () => api("/api/ai/estrategista", { method: "POST", body: JSON.stringify({ task: "hipoteses" }) }),
+    // Sugestões contextuais do Bloco 3 (Quem Você Atende) — a IA lê o Canvas acumulado no servidor. campo: nao|ideal|intermediario|desejo
+    sugestoes: (campo) => api("/api/ai/estrategista", { method: "POST", body: JSON.stringify({ task: "sugestoes", campo }) }),
     // 🛠️ Escavador (Aula 1 — VOCÊ): 1 turno da conversa. Cliente guarda o estado (history + voce) e manda a cada chamada.
     escavador: (payload) => api("/api/ai/escavador", { method: "POST", body: JSON.stringify(payload || {}) }),
     // aulas + progresso

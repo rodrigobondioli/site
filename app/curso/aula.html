@@ -608,7 +608,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
   // 🧭 Wizard dos blocos de formulário (1/3/4): mostra 1 campo por vez com barra N de M — mesmo comportamento do Escavador.
   // Reusa o renderBlock (salvamento testado): todos os campos existem no DOM, só escondemos os que não são o passo atual.
   function initFormWizard(l){
-    window.__matrizGate=null; window.__matrizContinue=null; window.__rumWizard=null; // evita hooks órfãos de uma aula anterior
+    window.__matrizGate=null; window.__matrizContinue=null; window.__rumWizard=null; // evita hooks órfãos de uma aula anterior (__sgShow é limpo antes do renderBlock)
     var def = window.ADP_CANVAS && window.ADP_CANVAS.byBlock(l.canvas_block);
     var card = document.querySelector('.applyhere-form'); if(!card || !def) return;
     var qEl=card.querySelector('#fwQ'), bar=card.querySelector('#fwBar'), stepEl=card.querySelector('#fwStep'),
@@ -627,8 +627,8 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
       return;
     }
     // MESMO comportamento do Escavador: botão enviar (aviãozinho rosa) DENTRO do campo; Enter envia; a pergunta troca na hora.
-    var rum = card.querySelector('.adp-rum'); // só no bloco 3 (aparece no passo da "dor")
-    var dorIdx = def.fields.findIndex(function(f){return f.key==='dor';});
+    // Bloco 3 é IA-first em TODAS as etapas (motor contextual): sem aviãozinho, o avanço vem da escolha.
+    var engineBlock = (l.canvas_block===3);
     var step=0;
     var backBtn=card.querySelector('#fwBack');
     function advance(){ if(step<fields.length-1){ step++; render(); } else { finish(); } }
@@ -637,32 +637,36 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
     var SEND='<svg viewBox="0 0 24 24"><path d="M22 2 11 13"/><path d="M22 2 15 22l-4-9-9-4z"/></svg>';
     fields.forEach(function(f){
       var ta=f.querySelector('textarea');
-      var isDor = ta && ta.getAttribute('data-key')==='dor'; // a dor-loop é conduzida pela IA — sem aviãozinho de avanço
-      if(!isDor){ var b=document.createElement('button'); b.type='button'; b.className='fw-send'; b.setAttribute('aria-label','Próxima'); b.innerHTML=SEND; b.addEventListener('click', advance); f.appendChild(b); }
+      if(!engineBlock){ var b=document.createElement('button'); b.type='button'; b.className='fw-send'; b.setAttribute('aria-label','Próxima'); b.innerHTML=SEND; b.addEventListener('click', advance); f.appendChild(b); }
       if(ta){
         ta.rows=1; // começa 1 linha (igual ao composer) e cresce conforme digita
         var __h=f.querySelector('.adp-hint'); if(__h){ ta.placeholder=__h.textContent; __h.style.display='none'; } // no wizard a dica vira o placeholder do composer (sem duplicar)
         ta.__grow=function(){ ta.style.height='auto'; ta.style.height=Math.min(ta.scrollHeight,140)+'px'; };
         ta.addEventListener('input', ta.__grow);
-        if(!isDor) ta.addEventListener('keydown', function(e){ if(e.key==='Enter' && !e.shiftKey){ e.preventDefault(); advance(); } });
+        if(!engineBlock) ta.addEventListener('keydown', function(e){ if(e.key==='Enter' && !e.shiftKey){ e.preventDefault(); advance(); } });
       }
     });
-    // a etapa da dor-loop é conduzida pela IA (Caça à Ruminação): ela dispara o avanço e o "completar respostas"
-    window.__rumWizard = { cont: function(){ advance(); }, gotoField: function(key){ var gi=def.fields.findIndex(function(f){ return f.key===key; }); if(gi>=0){ step=gi; render(); } } };
+    // o motor contextual (Bloco 3) dispara o avanço e o "completar respostas"
+    if(engineBlock) window.__rumWizard = { cont: function(){ advance(); }, gotoField: function(key){ var gi=def.fields.findIndex(function(f){ return f.key===key; }); if(gi>=0){ step=gi; render(); } } };
     var subEl=card.querySelector('#fwSub');
     function render(){
       fields.forEach(function(f,i){ f.classList.toggle('fw-hide', i!==step); });
       if(qEl) qEl.textContent = def.fields[step].label;
       var _sub = def.fields[step].sub || '';
-      if(subEl){ subEl.textContent=_sub; subEl.style.display=_sub?'':'none'; }
-      if(qEl) qEl.style.marginBottom = _sub ? '8px' : '';
+      if(engineBlock){ // o motor contextual (host) mostra o contexto + a pergunta; some com o fwSub pra não duplicar
+        if(subEl){ subEl.textContent=''; subEl.style.display='none'; }
+        if(qEl) qEl.style.marginBottom='';
+        if(window.__sgShow) window.__sgShow(def.fields[step].key);
+      } else {
+        if(subEl){ subEl.textContent=_sub; subEl.style.display=_sub?'':'none'; }
+        if(qEl) qEl.style.marginBottom = _sub ? '8px' : '';
+      }
       if(bar) bar.style.width = ((step+1)/fields.length*100)+'%';
       if(stepEl) stepEl.textContent = '· pergunta '+(step+1)+' de '+fields.length;
       if(backBtn) backBtn.classList.toggle('gone', step===0);
       if(intro) intro.style.display = step===0 ? '' : 'none';
-      if(rum) rum.style.display = (step===dorIdx) ? '' : 'none';
       var ta=fields[step].querySelector('textarea');
-      if(ta){ if(ta.__grow) ta.__grow(); setTimeout(function(){ try{ta.focus();}catch(e){} },0); }
+      if(ta && !engineBlock){ if(ta.__grow) ta.__grow(); setTimeout(function(){ try{ta.focus();}catch(e){} },0); }
     }
     render();
   }
@@ -690,6 +694,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
     if(ci && window.ADP_CANVAS && l.canvas_block!=null){
       if(l.canvas_block===0){ mountEscavador(ci); }
       else {
+        window.__sgShow=null; // motor contextual do bloco 3 se registra dentro do renderBlock
         window.ADP_CANVAS.renderBlock(ci, l.canvas_block, CANVAS[l.canvas_block]||{}, function(b,data){ CANVAS[b]=data; if(window.__matrizGate) window.__matrizGate(); },
           { getNicho:function(){ return window.ADP_CANVAS.nichoFromBlock2(CANVAS[2]); } });
         initFormWizard(l);
