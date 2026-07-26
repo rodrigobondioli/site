@@ -42,22 +42,26 @@ Fallbacks: resposta ampla ("faço design bem") → "Em que parte exatamente? Org
 ## FECHAMENTO
 Só FECHA (done=true) depois de ter feito a pergunta dos medos E ter no mínimo: comunidade + (competência com exemplo OU prova concreta) + história. reply = resumo seco de 1-2 linhas do que captou + uma frase que PUXA pra completar (espírito: "isso já te dá uma base — e quanto mais você trouxer aqui, mais afiado o teu posicionamento sai lá no fim"). NUNCA diga "tá bom assim" nem incentive pular; o tom é "cada coisa que você despeja deixa o resultado melhor". SEM jargão (nada de "Território"/"nicho"/"ICP"). Nunca fecha fingindo que o raso é rico. Enquanto NÃO fecha (done=false), faz só a próxima pergunta.
 
-## SAÍDA — responda SOMENTE um JSON, nada fora dele:
+## NORMALIZAR, NÃO REINTERPRETAR (regra dura)
+O que você salva tem que ser FIEL ao que o aluno disse. Preserve as palavras e o sentido dele. Pode limpar repetição e organizar — NÃO pode criar método, nome, linguagem técnica, resultado ou "consultorês" que ele não falou.
+Aluno: "Meus layouts costumam ser aprovados rápido." → ACEITÁVEL: "Aprovação rápida dos layouts." → INACEITÁVEL: "Entregas de design mais objetivas e estratégicas."
+Em cada item, o campo "raw" guarda as palavras LITERAIS do aluno (rastreabilidade); os outros campos são a versão limpa (normalizada, NÃO reinterpretada).
+
+## SAÍDA — responda SOMENTE um JSON, nada fora dele. Devolva SÓ O DELTA (o que MUDOU nesta resposta), NUNCA o Canvas inteiro:
 {
  "reply": "sua próxima fala — UMA pergunta, ou o fechamento. Seca e direta.",
- "voce": {
-   "comunidades": [{"nome":"","como_conhece":"","problema":"","evidencia":""}],
-   "competencias": [{"o_que":"","exemplo":""}],
-   "provas": [{"situacao":"","acao":"","consequencia":""}],
+ "campo_atual": "comunidades|competencias|provas|historia|preferencias|medos|fechamento",
+ "delta": {
+   "comunidades": [{"nome":"","como_conhece":"","problema":"","raw":""}],
+   "competencias": [{"o_que":"","exemplo":"","raw":""}],
+   "provas": [{"situacao":"","acao":"","consequencia":"","raw":""}],
    "historia": "",
    "preferencias": {"ama":[],"odeia":[]},
    "medos": ""
  },
- "campo_atual": "comunidades|competencias|provas|historia|preferencias|medos|fechamento",
- "done": false,
- "suficiencia": {"diagnostico":"1 frase seca do que já tem e do que falta","faltando":["ex: prova concreta"]}
+ "done": false
 }
-Devolva SEMPRE o objeto "voce" COMPLETO e atualizado (tudo captado até agora, não só o novo). Campo sem info = vazio/array vazio.`;
+REGRAS DO DELTA: inclua APENAS o(s) campo(s) que você mexeu AGORA — os que NÃO tocou, NÃO coloque (o servidor preserva o que já existe). Em listas, mande só o item NOVO ou o item ENRIQUECIDO (o servidor mescla por identidade e NUNCA perde os antigos). Se esta resposta não captou nada novo (ex: pediu pra repetir), "delta": {}.`;
 
 // ---------- helpers puros (testáveis sem API) ----------
 function arr(x) { return Array.isArray(x) ? x : []; }
@@ -98,24 +102,95 @@ export function mergeVoce(prev, modelV) {
   return withLegacy(m);
 }
 
+// ---------- merge por DELTA (nunca perde o que já tinha; mescla por identidade) ----------
+function mergeArr(prevArr, deltaArr, key) {
+  var out = arr(prevArr).slice();
+  arr(deltaArr).forEach(function (item) {
+    if (!item || typeof item !== 'object') return;
+    var id = String(item[key] || '').trim().toLowerCase();
+    var idx = id ? out.findIndex(function (p) { return String(p[key] || '').trim().toLowerCase() === id; }) : -1;
+    if (idx >= 0) out[idx] = Object.assign({}, out[idx], item); // enriquece o existente (ex: add exemplo à competência)
+    else out.push(item);                                        // item novo
+  });
+  return out;
+}
+export function mergeDelta(prev, delta) {
+  prev = normalizeVoce(prev);
+  if (!delta || typeof delta !== 'object') return withLegacy(prev);
+  var out = { comunidades: prev.comunidades, competencias: prev.competencias, provas: prev.provas, historia: prev.historia, preferencias: prev.preferencias, medos: prev.medos };
+  if (delta.comunidades != null) out.comunidades = mergeArr(prev.comunidades, delta.comunidades, 'nome');
+  if (delta.competencias != null) out.competencias = mergeArr(prev.competencias, delta.competencias, 'o_que');
+  if (delta.provas != null) out.provas = mergeArr(prev.provas, delta.provas, 'consequencia');
+  if (typeof delta.historia === 'string' && delta.historia.trim()) out.historia = delta.historia;
+  if (typeof delta.medos === 'string' && delta.medos.trim()) out.medos = delta.medos;
+  if (delta.preferencias && typeof delta.preferencias === 'object') {
+    out.preferencias = { ama: arr(delta.preferencias.ama).length ? arr(delta.preferencias.ama) : prev.preferencias.ama, odeia: arr(delta.preferencias.odeia).length ? arr(delta.preferencias.odeia) : prev.preferencias.odeia };
+  }
+  return withLegacy(normalizeVoce(out));
+}
+
+// ---------- estado: próximo gap + suficiência (determinístico) ----------
+function has(a, f) { return arr(a).some(function (x) { return x && String((f ? x[f] : x) || '').trim(); }); }
+export function gapHint(v) {
+  v = normalizeVoce(v);
+  var comp = arr(v.competencias);
+  if (!has(v.comunidades, 'nome')) return 'comunidades';
+  if (!has(v.competencias, 'o_que')) return 'competencias';
+  if (comp.length && !comp.some(function (c) { return c && String(c.exemplo || '').trim(); })) return 'competencias'; // falta exemplo
+  if (!has(v.provas, 'consequencia') && !has(v.provas, 'situacao') && !comp.some(function (c) { return c && String(c.exemplo || '').trim(); })) return 'provas';
+  if (!String(v.historia || '').trim()) return 'historia';
+  if (!(v.preferencias.ama.length || v.preferencias.odeia.length)) return 'preferencias';
+  if (!String(v.medos || '').trim()) return 'medos';
+  return 'fechamento';
+}
+export function suficiente(v) {
+  v = normalizeVoce(v);
+  var essComunidade = has(v.comunidades, 'nome');
+  var essCompetencia = has(v.competencias, 'o_que');
+  var essProva = has(v.provas, 'consequencia') || has(v.provas, 'situacao') || arr(v.competencias).some(function (c) { return c && String(c.exemplo || '').trim(); });
+  var complementar = !!String(v.historia || '').trim() || (v.preferencias.ama.length || v.preferencias.odeia.length) || !!String(v.medos || '').trim();
+  return !!(essComunidade && essCompetencia && essProva && complementar);
+}
+
+// parse resiliente: tenta o extractJSON, e se falhar tenta 1 recuperação técnica (fences/{...})
+function parseLoose(out) {
+  var d = extractJSON(out);
+  if (d) return d;
+  try {
+    var s = String(out || '').replace(/```json/gi, '').replace(/```/g, '');
+    var a = s.indexOf('{'), b = s.lastIndexOf('}');
+    if (a >= 0 && b > a) return JSON.parse(s.slice(a, b + 1));
+  } catch (e) {}
+  return null;
+}
+
 // lógica de UM turno (pura menos a chamada de IA — o harness usa isto direto)
 export async function escavadorTurn(body) {
   var voce = normalizeVoce(body && body.voce);
   var history = arr(body && body.history).slice(-8);
-  // UMA system só (Gemini engasga com múltiplas system) — o estado do voce entra no fim do system.
-  var sys = SYSTEM + '\n\n## ESTADO ATUAL DO voce (JSON já captado — atualize e devolva COMPLETO):\n' + JSON.stringify(voce);
+  var gap = gapHint(voce), suf = suficiente(voce);
+  // O estado ENTRA no system (input, não trunca); a IA devolve só o DELTA (output pequeno).
+  var sys = SYSTEM
+    + '\n\n## ESTADO ATUAL DO voce (já captado — NÃO repita o que já tem; devolve só o DELTA do que mudar):\n' + JSON.stringify(voce)
+    + '\n## PRÓXIMO GAP sugerido (não re-pergunte o que já veio): ' + gap
+    + (suf ? '\n## JÁ HÁ BASE SUFICIENTE: pode fechar (done=true) OU seguir aprofundando — NÃO force, não invente pergunta só pra encher.' : '');
   var msgs = [{ role: 'system', content: sys }];
   if (!history.length) msgs.push({ role: 'user', content: 'Começa a entrevista — abre com UMA pergunta curta.' });
   else history.forEach(function (m) { if (m && m.role && m.content) msgs.push({ role: m.role === 'assistant' ? 'assistant' : 'user', content: str(m.content) }); });
 
-  var out = await ai(MODEL_FAST(), msgs, 2048, 0.5);
-  var data = extractJSON(out) || {};
+  var out = await ai(MODEL_FAST(), msgs, 2048, 0.5); // 2048 fica só como proteção — o delta é pequeno
+  var data = parseLoose(out);
+  if (!data) {
+    // recuperação falhou: PRESERVA voce e campo_atual, NÃO volta pra comunidades, NÃO reseta nada.
+    return { reply: 'Não consegui processar essa resposta. Pode mandar de novo, de forma mais curta?', voce: withLegacy(voce), campo_atual: gap, done: false, suficiente: suf, parse_error: true };
+  }
+  var merged = mergeDelta(voce, data.delta);
   return {
-    reply: data.reply || 'Me conta um exemplo concreto: um mercado ou lugar que você já viveu por dentro — e um problema que você viu lá.',
-    voce: mergeVoce(voce, data.voce),
-    campo_atual: data.campo_atual || 'comunidades',
+    reply: data.reply || 'Beleza. Me conta um pouco mais sobre isso.',
+    voce: merged,
+    campo_atual: data.campo_atual || gapHint(merged),
     done: !!data.done,
-    suficiencia: (data.suficiencia && typeof data.suficiencia === 'object') ? data.suficiencia : { diagnostico: '', faltando: [] }
+    suficiente: suficiente(merged)
   };
 }
 

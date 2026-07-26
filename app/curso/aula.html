@@ -295,6 +295,11 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .esc-cont:hover{filter:brightness(1.06)}
 .esc-cont[disabled]{background:var(--soft);color:var(--muted);cursor:not-allowed;filter:none}
 .esc-cont[disabled]:hover{filter:none}
+.esc-suff{border:1px solid var(--line);border-radius:14px;padding:15px 17px;background:var(--soft);margin:2px 0 16px}
+.esc-suff.gone{display:none}
+.esc-suff b{font-size:14.5px;color:var(--ink)}
+.esc-suff p{font-size:13px;color:var(--muted);line-height:1.5;margin:5px 0 14px;text-wrap:balance}
+.esc-suff-acts{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
 .fw-saved{font-size:12px;color:var(--faint)}
 /* blocos de formulário (1/3/4) — wizard 1 pergunta por vez, mesmo registro da Aula 1 */
 .applyhere-form{padding-top:22px}
@@ -503,6 +508,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
       + '<div class="esc-ask">'
       +   '<div class="esc-last gone" id="escLast"></div>'
       +   '<div class="esc-q" id="escQ"></div>'
+      +   '<div class="esc-suff gone" id="escSuff"></div>'
       +   '<div class="esc-typing gone" id="escTyping"><span class="esc-spin"></span>O Escavador está montando teu bloco…</div>'
       +   '<div class="esc-inbar"><div class="esc-inrow"><span class="esc-spark"><svg viewBox="0 0 24 24"><path d="M12 3l1.7 4.8L18.5 9.5l-4.8 1.7L12 16l-1.7-4.8L5.5 9.5l4.8-1.7z"/></svg></span><textarea id="escInput" rows="1"></textarea><button class="esc-send" id="escSend" aria-label="Enviar"><svg viewBox="0 0 24 24"><path d="M22 2 11 13"/><path d="M22 2 15 22l-4-9-9-4z"/></svg></button></div><div class="esc-chips gone" id="escChips"></div></div>'
       + '</div>'
@@ -519,6 +525,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
         doneEl=container.querySelector('#escDone'), progEl=container.querySelector('#escProgTxt'),
         inbar=container.querySelector('.esc-inbar');
     var qCount = history.filter(function(m){return m.role==='assistant';}).length;
+    var suf=false, suffDismissed=false;
 
     function setBusy(b){ send.disabled=b; typing.classList.toggle('gone', !b); }
     function cardData(k){
@@ -552,9 +559,11 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
         return '<div class="esc-c'+(d.n===0?' empty':'')+'"><div class="ctop"><span class="ic">'+c.ic+'</span><span class="ct">'+c.t+'</span>'+stHTML+'</div>'
           +'<div class="cs">'+(d.s?esc(d.s):'—')+'</div></div>';
       }).join('');
-      stepEl.textContent = qCount ? ('· pergunta '+Math.min(qCount,5)+' de ~5') : '';
-      var qb=container.querySelector('#escQbar'); if(qb) qb.style.width = (done?100:Math.min(qCount,5)/5*100)+'%';
-      progEl.textContent = filledCount()+' preenchidos · quanto mais, mais afiado';
+      var areas=ESC_CARDS.filter(function(c){return cardData(c.k).n>0;}).length;
+      var ess = cardData('comunidades').n>0 && cardData('competencias').n>0 && (cardData('provas').n>0 || (voce.competencias||[]).some(function(c){return c&&(c.exemplo||'').trim();}));
+      stepEl.textContent = areas ? ('· '+areas+' de 6 áreas') : '';
+      var qb=container.querySelector('#escQbar'); if(qb) qb.style.width = (done?100:areas/6*100)+'%';
+      progEl.textContent = ess ? 'Já dá pra seguir. Quanto mais contexto, mais afiado.' : (filledCount()+' preenchidos · quanto mais, mais afiado');
     }
     function renderChips(){
       if(hasAny()){ chips.classList.add('gone'); chips.innerHTML=''; return; }
@@ -576,6 +585,22 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
       var cont=doneEl.querySelector('#escCont');
       if(cont) cont.addEventListener('click', function(){ try{ if(cur && !DONE.has(cur.id)){ DONE.add(cur.id); window.ADP.setDone(cur.id,true).catch(function(){}); } }catch(e){} });
     }
+    // suficiência calculada no cliente (pra também acender ao VOLTAR, sem depender de um turno novo)
+    function sufClient(){
+      var ess = cardData('comunidades').n>0 && cardData('competencias').n>0 && (cardData('provas').n>0 || (voce.competencias||[]).some(function(c){return c&&(c.exemplo||'').trim();}));
+      return ess && (cardData('historia').n>0 || cardData('preferencias').n>0 || cardData('medos').n>0);
+    }
+    // banner de suficiência — quando já há base boa (essenciais + 1 complementar) e ainda NÃO fechou.
+    function renderSuff(){
+      var el=container.querySelector('#escSuff'); if(!el) return;
+      if(done || suffDismissed || !(suf||sufClient())){ el.classList.add('gone'); el.innerHTML=''; return; }
+      var next=(LESSONS[idx+1])?('aula.html?a='+LESSONS[idx+1].id):'canvas.html';
+      el.innerHTML='<b>Já temos uma boa base.</b><p>Encontrei comunidades, competências e provas suficientes pra gerar hipóteses coerentes.</p>'
+        +'<div class="esc-suff-acts"><a class="esc-cont" id="escUse" href="'+next+'">Usar esta matéria-prima →</a><button class="sbtn" type="button" id="escDeep">Aprofundar mais</button></div>';
+      el.classList.remove('gone');
+      var use=el.querySelector('#escUse'); if(use) use.addEventListener('click', function(){ try{ if(cur && !DONE.has(cur.id)){ DONE.add(cur.id); window.ADP.setDone(cur.id,true).catch(function(){}); } }catch(e){} });
+      var deep=el.querySelector('#escDeep'); if(deep) deep.addEventListener('click', function(){ suffDismissed=true; renderSuff(); });
+    }
     function persist(){ voce._chat=history.slice(-16); voce._done=done; CANVAS[0]=voce; window.ADP.saveBlock(0, voce).catch(function(){}); }
 
     async function turn(userText){
@@ -586,9 +611,10 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
         var d=(r&&r.data)?r.data:r;
         if(d&&d.voce) voce=d.voce;
         if(d&&d.done) done=true;
+        suf=!!(d&&d.suficiente);
         history.push({role:'assistant',content:(d&&d.reply)||''}); qCount++;
         qEl.textContent = (d&&d.reply) || '';
-        syncPH(); renderCards(); renderChips(); renderDone(); persist();
+        syncPH(); renderCards(); renderChips(); renderDone(); renderSuff(); persist();
       }catch(e){ qEl.textContent='Deu ruim aqui. Manda de novo.'; }
       setBusy(false);
     }
@@ -601,7 +627,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
     var resetBtn=container.querySelector('#escReset');
     if(resetBtn) resetBtn.addEventListener('click', function(){
       if(!window.confirm('Recomeçar? Isso apaga o que o Escavador montou até agora no teu bloco VOCÊ.')) return;
-      voce={}; history=[]; qCount=0; done=false; lastEl.classList.add('gone'); lastEl.innerHTML=''; persist(); renderChips(); renderDone(); showOpener();
+      voce={}; history=[]; qCount=0; done=false; suf=false; suffDismissed=false; lastEl.classList.add('gone'); lastEl.innerHTML=''; persist(); renderChips(); renderDone(); renderSuff(); showOpener();
     });
 
     // placeholder CONTEXTUAL: casa com a pergunta atual (o exemplo nunca contradiz o que foi perguntado)
@@ -618,7 +644,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
     }
     function syncPH(){ if(input) input.placeholder = phForQuestion(qEl.textContent); }
 
-    renderCards(); renderChips(); renderDone();
+    renderCards(); renderChips(); renderDone(); renderSuff();
     var lastAssistant=''; for(var i=history.length-1;i>=0;i--){ if(history[i].role==='assistant'){ lastAssistant=history[i].content; break; } }
     if(lastAssistant){ qEl.textContent=lastAssistant; syncPH(); }
     else { showOpener(); }
