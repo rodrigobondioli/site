@@ -590,14 +590,14 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
     // suficiência calculada no cliente (pra também acender ao VOLTAR, sem depender de um turno novo)
     function sufClient(){
       var ess = cardData('comunidades').n>0 && cardData('competencias').n>0 && (cardData('provas').n>0 || (voce.competencias||[]).some(function(c){return c&&(c.exemplo||'').trim();}));
-      return ess && (cardData('historia').n>0 || cardData('preferencias').n>0 || cardData('medos').n>0);
+      return ess && cardData('medos').n>0; // Medos é obrigatório (História/Preferências são complementares)
     }
     // banner de suficiência — quando já há base boa (essenciais + 1 complementar) e ainda NÃO fechou.
     function renderSuff(){
       var el=container.querySelector('#escSuff'); if(!el) return;
       if(done || suffDismissed || !(suf||sufClient())){ el.classList.add('gone'); el.innerHTML=''; return; }
       var next=(LESSONS[idx+1])?('aula.html?a='+LESSONS[idx+1].id):'canvas.html';
-      el.innerHTML='<b>Já temos uma boa base.</b><p>Encontrei comunidades, competências e provas suficientes pra gerar hipóteses coerentes.</p>'
+      el.innerHTML='<b>Agora sim, já temos uma boa base.</b><p>Encontrei comunidades, competências, provas e o principal medo que pode travar essa escolha.</p>'
         +'<div class="esc-suff-acts"><a class="esc-cont" id="escUse" href="'+next+'">Usar esta matéria-prima →</a><button class="sbtn" type="button" id="escDeep">Aprofundar mais</button></div>';
       el.classList.remove('gone');
       var use=el.querySelector('#escUse'); if(use) use.addEventListener('click', function(){ try{ if(cur && !DONE.has(cur.id)){ DONE.add(cur.id); window.ADP.setDone(cur.id,true).catch(function(){}); } }catch(e){} });

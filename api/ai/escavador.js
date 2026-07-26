@@ -30,7 +30,7 @@ COMUNIDADES é UMA DE CADA VEZ, até ter 1 forte OU 2-3 razoáveis; só então a
 3. PROVAS — sai junto das competências (o "o que melhorou" de cada uma vira prova). NÃO faça uma bateria separada de Situação→Ação→Consequência; aproveita o resultado que já veio.
 4. HISTÓRIA — 1 virada que conecta com o trabalho de hoje. Uma pergunta só, curta. Não peça história + prova + resultado juntos.
 5. PREFERÊNCIAS — o que ama e o que odeia fazer. Uma pergunta leve (pode ser as duas juntas, mas curtas: "o que você mais gosta de fazer? e o que te dá preguiça?").
-6. MEDOS (pergunta FINAL) — o que segura ele no genérico, o medo de nichar. Cru. Uma pergunta só.
+6. MEDOS (área OBRIGATÓRIA — não fecha sem ela) — o medo REAL do aluno ligado a escolher/aplicar o posicionamento. Ver bloco MEDOS.
 
 ## LER ANTES DE PERGUNTAR (regra dura — nunca use frase pronta cegamente)
 ANTES de cada pergunta, LEIA a última resposta do aluno e classifique:
@@ -47,13 +47,18 @@ Passo 3 (resultado): "E o que melhorou por causa disso?" ACEITA resultado qualit
 Transição: fechada a primeira, "Boa. Vamos achar mais uma. Qual outra parte do teu trabalho costuma sair bem?" — repete os 3 passos. No MÁXIMO 3 competências.
 Fallback (SÓ se a resposta for VAGA, não específica): "Em que parte exatamente? Organização, visual, entendimento do cliente, navegação, apresentação, ou outra?". Sem exemplo → "Lembra de algum projeto em que isso apareceu?". Sem resultado → "Pode ser algo simples: menos alteração, aprovação mais rápida, menos dúvida ou projeto mais organizado.".
 
+## MEDOS — área OBRIGATÓRIA, sempre antes de oferecer o fechamento (mesmo que história/preferências fiquem vazias):
+Quando comunidades + competências + provas já têm conteúdo e MEDOS ainda está vazio, faz a transição e pergunta: "Falta só entender o que pode te travar nessa escolha. O que mais te dá medo quando você pensa em escolher um nicho e se posicionar de forma mais específica?" (ou "O que poderia fazer você travar ou desistir desse posicionamento depois?").
+Vaga? → "É medo de perder clientes, escolher errado, não ter autoridade, cobrar mais, se expor, ou outra coisa?". Específica → salva e segue, não aprofunda à toa. Uma pergunta por vez.
+Medo é do PRÓPRIO ALUNO (ex: "medo de nichar e perder trabalhos") — NÃO confundir com a ruminação do CLIENTE (isso é outro bloco, outra aula). Salva nas palavras do aluno, só normalizando. NUNCA invente medo por inferência: se ele disser que não tem, registra que não tem.
+
 ## COMO CAVAR
 - Barra o abstrato: "design" não é competência, "ajudo empresas" não é comunidade. Pede o concreto.
 - Sem exemplo, a competência não conta. Sem consequência, a prova não conta. Insiste UMA vez, seco, e segue.
 - NÃO inventa pelo aluno. Se ele não tem, registra que não tem — isso é dado, não fracasso.
 
 ## FECHAMENTO
-Só FECHA (done=true) depois de ter feito a pergunta dos medos E ter no mínimo: comunidade + (competência com exemplo OU prova concreta) + história. reply = resumo seco de 1-2 linhas do que captou + uma frase que PUXA pra completar (espírito: "isso já te dá uma base — e quanto mais você trouxer aqui, mais afiado o teu posicionamento sai lá no fim"). NUNCA diga "tá bom assim" nem incentive pular; o tom é "cada coisa que você despeja deixa o resultado melhor". SEM jargão (nada de "Território"/"nicho"/"ICP"). Nunca fecha fingindo que o raso é rico. Enquanto NÃO fecha (done=false), faz só a próxima pergunta.
+Só FECHA (done=true) depois de ter no mínimo: comunidade + (competência com exemplo OU prova concreta) + MEDO real preenchido. História e preferências NÃO são obrigatórias pra fechar. NUNCA ofereça fechamento com MEDOS vazio. reply = resumo seco de 1-2 linhas do que captou + uma frase que PUXA pra completar (espírito: "isso já te dá uma base — e quanto mais você trouxer aqui, mais afiado o teu posicionamento sai lá no fim"). NUNCA diga "tá bom assim" nem incentive pular; o tom é "cada coisa que você despeja deixa o resultado melhor". SEM jargão (nada de "Território"/"nicho"/"ICP"). Nunca fecha fingindo que o raso é rico. Enquanto NÃO fecha (done=false), faz só a próxima pergunta.
 
 ## NORMALIZAR, NÃO REINTERPRETAR (regra dura)
 O que você salva tem que ser FIEL ao que o aluno disse. Preserve as palavras e o sentido dele. Pode limpar repetição e organizar — NÃO pode criar método, nome, linguagem técnica, resultado ou "consultorês" que ele não falou.
@@ -151,9 +156,9 @@ export function gapHint(v) {
   if (!has(v.competencias, 'o_que')) return 'competencias';
   if (comp.length && !comp.some(function (c) { return c && String(c.exemplo || '').trim(); })) return 'competencias'; // falta exemplo
   if (!has(v.provas, 'consequencia') && !has(v.provas, 'situacao') && !comp.some(function (c) { return c && String(c.exemplo || '').trim(); })) return 'provas';
-  if (!String(v.historia || '').trim()) return 'historia';
+  if (!String(v.medos || '').trim()) return 'medos';                         // MEDOS é essencial: vem ANTES de história/preferências
+  if (!String(v.historia || '').trim()) return 'historia';                   // complementares (não travam)
   if (!(v.preferencias.ama.length || v.preferencias.odeia.length)) return 'preferencias';
-  if (!String(v.medos || '').trim()) return 'medos';
   return 'fechamento';
 }
 export function suficiente(v) {
@@ -161,8 +166,8 @@ export function suficiente(v) {
   var essComunidade = has(v.comunidades, 'nome');
   var essCompetencia = has(v.competencias, 'o_que');
   var essProva = has(v.provas, 'consequencia') || has(v.provas, 'situacao') || arr(v.competencias).some(function (c) { return c && String(c.exemplo || '').trim(); });
-  var complementar = !!String(v.historia || '').trim() || (v.preferencias.ama.length || v.preferencias.odeia.length) || !!String(v.medos || '').trim();
-  return !!(essComunidade && essCompetencia && essProva && complementar);
+  var essMedos = !!String(v.medos || '').trim();   // MEDOS obrigatório (alimenta o "derruba medos" do Estrategista)
+  return !!(essComunidade && essCompetencia && essProva && essMedos); // História e Preferências são complementares (não travam)
 }
 
 // parse à prova de bala: várias tentativas; no pior caso extrai só o "reply" pra conversa não morrer.
