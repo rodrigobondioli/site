@@ -183,11 +183,19 @@ export async function escavadorTurn(body) {
   if (!history.length) msgs.push({ role: 'user', content: 'Começa a entrevista — abre com UMA pergunta curta.' });
   else history.forEach(function (m) { if (m && m.role && m.content) msgs.push({ role: m.role === 'assistant' ? 'assistant' : 'user', content: str(m.content) }); });
 
-  var out = await ai(MODEL_FAST(), msgs, 2048, 0.5); // 2048 fica só como proteção — o delta é pequeno
+  async function askAI(m, tokens, temp) { try { return await ai(MODEL_FAST(), m, tokens, temp); } catch (e) { return ''; } }
+  var out = await askAI(msgs, 4096, 0.4);   // teto alto: Gemini 2.5 "pensa" e come tokens antes de escrever
   var data = parseLoose(out);
   if (!data) {
-    // recuperação falhou: PRESERVA voce e campo_atual, NÃO volta pra comunidades, NÃO reseta nada.
-    return { reply: 'Não consegui processar essa resposta. Pode mandar de novo, de forma mais curta?', voce: withLegacy(voce), campo_atual: gap, done: false, suficiente: suf, parse_error: true };
+    // 1 retry reforçando o JSON (cobre resposta vazia por "thinking" ou hiccup transitório)
+    var msgs2 = msgs.concat([{ role: 'user', content: 'Responda AGORA somente o JSON pedido — campos "reply", "campo_atual", "delta", "done". Nada fora do JSON.' }]);
+    var out2 = await askAI(msgs2, 4096, 0.2);
+    data = parseLoose(out2);
+    if (!data) { var raw = String(out2 || out || '').trim(); if (raw && raw.indexOf('{') < 0) data = { reply: raw }; } // prosa vira a pergunta (não trava)
+  }
+  if (!data) {
+    // só chega aqui se a IA devolveu VAZIO 2x — PRESERVA tudo, NÃO reseta, NÃO volta pra comunidades.
+    return { reply: 'Beleza — me manda de novo, numa frase curtinha.', voce: withLegacy(voce), campo_atual: gap, done: false, suficiente: suf, parse_error: true };
   }
   var merged = mergeDelta(voce, data.delta);
   return {
