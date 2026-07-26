@@ -592,7 +592,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
       }catch(e){ qEl.textContent='Deu ruim aqui. Manda de novo.'; }
       setBusy(false);
     }
-    var OPENER='Me diz uma comunidade ou "mundo" que você conhece por dentro. Que problema você vê ali que ninguém resolve direito?';
+    var OPENER='Me diz uma comunidade ou "mundo" que você conhece por dentro. Que problema você via ali que ninguém resolvia direito?';
     function showOpener(){ qEl.textContent=OPENER; history.push({role:'assistant',content:OPENER}); qCount=1; renderCards(); persist(); } // abertura fixa (sem gastar chamada de IA)
     function submit(){ var t=input.value.trim(); if(!t) return; input.value=''; turn(t); }
     send.addEventListener('click', submit);
