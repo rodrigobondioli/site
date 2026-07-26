@@ -81,9 +81,18 @@ function normComu(c) {
   c = c || {};
   var problemas = arr(c.problemas).map(function (p) { p = p || {}; return { publico: str(p.publico), problema: str(p.problema), raw: str(p.raw) }; })
     .filter(function (p) { return p.publico || p.problema || p.raw; });
-  // migração do schema antigo (problema string único) → problemas[]
+  // migração do schema antigo (problema string único) → primeiro item de problemas[]
   if (!problemas.length && str(c.problema).trim()) problemas = [{ publico: '', problema: str(c.problema), raw: str(c.problema) }];
-  return { nome: str(c.nome), relacao: str(c.relacao), problemas: problemas, motivacao: str(c.motivacao), raw: str(c.raw) };
+  // migração do schema antigo (como_conhece) → relacao, quando dá pra inferir
+  var relacao = str(c.relacao);
+  if (!relacao && str(c.como_conhece).trim()) {
+    var cc = norm(c.como_conhece);
+    if (/interesse|gostaria|quero|queria/.test(cc)) relacao = 'interesse';
+    else if (/atend/.test(cc)) relacao = 'atendeu';
+    else if (/viv|trabalh|fui|dono|trampo|famíl|famil/.test(cc)) relacao = 'viveu';
+    else relacao = 'conhece';
+  }
+  return { nome: str(c.nome), relacao: relacao, problemas: problemas, motivacao: str(c.motivacao), raw: str(c.raw) };
 }
 
 export function normalizeVoce(v) {
@@ -114,11 +123,12 @@ function enrichComu(t, d) {
   if (d.motivacao) t.motivacao = d.motivacao;
   if (d.raw && !t.raw) t.raw = d.raw;
   d.problemas.forEach(function (np) {
-    if (!str(np.problema).trim()) return;
-    var pid = np.problema.trim().toLowerCase();
-    var ex = t.problemas.find(function (x) { return str(x.problema).trim().toLowerCase() === pid; });
-    if (ex) { if (!ex.publico) ex.publico = np.publico; if (!ex.raw) ex.raw = np.raw; }
-    else t.problemas.push(np); // problema NOVO (dois públicos/problemas no mesmo mercado convivem)
+    if (!str(np.problema).trim() && !str(np.publico).trim()) return;
+    // identidade por publico + problema (dois públicos/problemas distintos no mesmo mercado convivem, não fundem)
+    var pid = norm(np.publico) + '|' + norm(np.problema);
+    var ex = t.problemas.find(function (x) { return (norm(x.publico) + '|' + norm(x.problema)) === pid; });
+    if (ex) { if (!ex.publico) ex.publico = np.publico; if (!ex.problema) ex.problema = np.problema; if (!ex.raw) ex.raw = np.raw; }
+    else t.problemas.push(np); // problema NOVO
   });
 }
 function mergeComuArr(prevArr, deltaArr) {
@@ -241,13 +251,13 @@ function questionFor(gap, v) {
       return 'Me diz um mercado, comunidade ou tipo de cliente que você conhece por experiência — porque viveu nesse meio, já atendeu ou convive de perto.';
     case 'comunidade_problema': {
       var cp = comuNeedProblema(v); var n = cp ? str(cp.nome).trim() : '';
-      return 'Que problema você mais via ' + (n ? ('em ' + n) : 'ali') + ' que ninguém resolvia direito?';
+      return 'Que problema você mais percebia ' + (n ? ('em ' + n) : 'nesse mercado') + '?';
     }
     case 'comunidade_2':
       return 'Me diz outro mercado, comunidade ou tipo de cliente que você conhece ou gostaria de atender.';
     case 'comunidade_motivacao': {
       var cm = comuNeedMotiv(v); var n2 = cm ? str(cm.nome).trim() : '';
-      return 'O que te cativa em trabalhar com ' + (n2 ? n2 : 'isso') + '?';
+      return 'O que te atrai em trabalhar com ' + (n2 ? n2 : 'esse mercado') + '?';
     }
     case 'comp_identificar':
       return 'Agora sobre você: qual parte do teu trabalho costuma sair bem na tua mão? Pode ser organizar um site confuso, entender rápido o cliente, apresentar uma direção que ele aprova…';

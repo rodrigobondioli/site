@@ -159,7 +159,8 @@ Cruza as 4 e devolve o JSON (candidatos + cruzamentos).`;
 const HIPOTESES_SYSTEM = `Você é o gerador de hipóteses de nicho do curso De Genérico a Especialista (Rodrigo Bondioli, movimento Anti Designer Pato).
 Voz: direta, seca, anti-guru, tiozão. Zero emoji, zero marketingês ("potencial", "jornada", "alta performance").
 CONTEXTO: um designer que faz de tudo e ganha mal acabou de despejar a matéria-prima dele (comunidades/mundos que vive, o que faz bem, provas, história). Ele NÃO sabe ainda qual é o nicho — é isso que o curso ajuda a descobrir. Seu trabalho NÃO é cravar o nicho perfeito; é tirar ele do campo vazio dando 2 hipóteses concretas pra ele pontuar.
-TAREFA: a partir da matéria-prima, devolva EXATAMENTE 2 hipóteses de nicho no formato: [entrega] para [público] que [vive uma situação ou problema percebido]. Ex: "Sites para donos de estúdios de tatuagem que dominam a técnica mas têm dificuldade pra estruturar o negócio."
+TAREFA: gere as hipóteses de nicho no formato: [entrega] para [público] que [vive uma situação ou problema percebido]. Ex: "Sites para donos de estúdios de tatuagem que dominam a técnica mas têm dificuldade pra estruturar o negócio."
+QUANTAS: UMA hipótese por PROBLEMA REAL observado (cada par {publico + problema} em comunidades[].problemas vira UMA hipótese separada). MAIS uma única DIREÇÃO EXPLORATÓRIA por mercado que é só "interesse" (relacao="interesse", sem problemas). No total, no máximo 4 — priorizando os de experiência com problema real. Nunca menos de 1.
 Regras:
 - A RUMINAÇÃO VEM DEPOIS. A geração de hipóteses acontece ANTES da Caça à Ruminação. Aqui a hipótese tem SÓ: público + contexto + problema PERCEBIDO (visto de fora). NÃO antecipe a dor final, emocional ou em 1ª pessoa — nada de "tenho medo de falir", "meu estúdio depende de mim pra tudo", "não sei como lotar a agenda". Essas frases pertencem à Caça à Ruminação (etapa seguinte). A Matriz define a DIREÇÃO; a Ruminação aprofunda a DOR. NÃO misture as duas.
 - COMO LER AS COMUNIDADES (schema): cada comunidade tem "relacao" (viveu/atendeu/conhece/convive/interesse), "problemas" (lista de {publico, problema} REALMENTE observados) e "motivacao" (só afinidade, quando é interesse).
@@ -173,8 +174,9 @@ Regras:
   RUIM (não faça): "Soluções digitais estratégicas para PMEs em processo de transformação comercial."
   BOM (faça): "Sites para pequenos negócios que recebem muitas dúvidas repetidas no WhatsApp."
 - A matéria-prima pode vir VAGA ou rala (o aluno é um designer comum, sem visão estratégica ainda). MESMO assim, extraia a melhor direção concreta possível com o que tem. NÃO devolva vazio por causa de resposta fraca — devolva a aposta mais útil.
+- METADADOS por hipótese: "origem" = "experiencia" (saiu de um problema observado) ou "afinidade" (só interesse); "problema_validado" = false SEMPRE nesta etapa (ninguém confirmou com cliente real ainda); "forca" = "observada" (veio de problema real relatado) ou "exploratoria" (mercado de interesse, sem dor). Direção de interesse é SEMPRE origem "afinidade", forca "exploratoria" — e NÃO inventa dor ("querem vender mais", "precisam melhorar a comunicação" e afins são PROIBIDOS).
 Responda SÓ em JSON, sem texto fora:
-{ "hipoteses": [ {"nicho":"vertical + horizontal numa frase","porque":"1 frase seca: de onde na matéria-prima dele isso saiu"}, {"nicho":"...","porque":"..."} ] }`;
+{ "hipoteses": [ {"nicho":"[entrega] para [público] que [situação/problema percebido]","porque":"1 frase seca: de onde na matéria-prima dele isso saiu","origem":"experiencia|afinidade","problema_validado":false,"forca":"observada|exploratoria"} ] }`;
 
 async function handleHipoteses(req, res, user) {
   const url = process.env.SUPABASE_URL, svc = process.env.SUPABASE_SERVICE_ROLE;
@@ -189,7 +191,7 @@ async function handleHipoteses(req, res, user) {
   const has = (a, f) => Array.isArray(a) && a.some(x => x && String((f ? x[f] : x) || '').trim());
   const temBase = has(voce.comunidades, 'nome') || has(voce.competencias, 'o_que') || String(voce.mundos || '').trim() || String(voce.forte || '').trim();
   if (!temBase) return res.status(200).json({ ok: true, data: { hipoteses: [] } });
-  const user_msg = `Matéria-prima do designer (Bloco 0, JSON):\n${JSON.stringify(voce, null, 2)}\n\nDevolve 2 hipóteses de nicho (vertical + horizontal) no JSON pedido.`;
+  const user_msg = `Matéria-prima do designer (Bloco 0, JSON):\n${JSON.stringify(voce, null, 2)}\n\nUma hipótese por problema real observado (comunidades[].problemas), mais uma direção exploratória por mercado de interesse. Devolve no JSON pedido.`;
   try {
     const out = await ai(MODEL_SMART(), [
       { role: 'system', content: HIPOTESES_SYSTEM },

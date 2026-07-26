@@ -413,7 +413,8 @@ window.ADP_CANVAS = (function () {
         var hs = (r && r.data && r.data.hipoteses) || [];
         if (mxNote) mxNote.textContent = NOTE_OK;
         if (!hs.length || anyName()) return; // sem base ou o aluno já digitou → não mexe
-        for (var k = 0; k < Math.min(2, hs.length); k++) { if (rows[k]) rows[k].name = hs[k].nicho || hs[k].name || ''; }
+        // consome TODAS as hipóteses geradas (uma por problema real + exploratória), criando linhas se faltar. Teto 4.
+        for (var k = 0; k < Math.min(4, hs.length); k++) { if (!rows[k]) rows.push(normRow()); rows[k].name = hs[k].nicho || hs[k].name || ''; }
         paint(); persist();
       }).catch(function () {
         if (mxNote) mxNote.innerHTML = 'Não consegui gerar agora. Você pode escrever uma hipótese ou tentar de novo. '
