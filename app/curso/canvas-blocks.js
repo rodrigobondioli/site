@@ -5,15 +5,15 @@ window.ADP_CANVAS = (function () {
   // Matriz v2 — 2 eixos, 7 critérios. Cada nota (1-5) leva EVIDÊNCIA + CONFIANÇA. Sem soma ponderada: dois totais por eixo + regras de inviabilidade.
   var EIXOS = [
     { key: 'mercado', h: 'Mercado', max: 20, crit: [
-      { k: 'intensidade', h: 'Intensidade',      hint: 'Essa dor é forte ou só seria bom resolver?' },
-      { k: 'urgencia',    h: 'Urgência',         hint: 'Resolve agora ou dá pra empurrar?' },
-      { k: 'crescimento', h: 'Crescimento',      hint: 'Esse mercado cresce, para ou encolhe?' },
-      { k: 'poder',       h: 'Poder de compra',  hint: 'Tem verba e decide gastar com isso?' }
+      { k: 'intensidade', h: 'Intensidade',      hint: 'Essa dor incomoda de verdade ou só seria bom resolver?' },
+      { k: 'urgencia',    h: 'Urgência',         hint: 'O cliente quer resolver agora ou consegue adiar?' },
+      { k: 'crescimento', h: 'Crescimento',      hint: 'Tem cada vez mais gente entrando nesse mercado ou ele está esfriando?' },
+      { k: 'poder',       h: 'Poder de compra',  hint: 'Esse público tem dinheiro e costuma pagar para resolver isso?' }
     ]},
     { key: 'voce', h: 'Você', max: 15, crit: [
-      { k: 'repertorio', h: 'Repertório',       hint: 'Você já conhece esse mundo por dentro?' },
-      { k: 'acesso',     h: 'Acesso',           hint: 'Consegue chegar no decisor em 30 dias?' },
-      { k: 'aderencia',  h: 'Aderência / Prova', hint: 'Já tem caso ou prova que gruda aqui?' }
+      { k: 'repertorio', h: 'Repertório',       hint: 'Você já conhece esse mercado, a linguagem e os problemas dele?' },
+      { k: 'acesso',     h: 'Acesso',           hint: 'Você consegue chegar em quem decide em até 30 dias?' },
+      { k: 'aderencia',  h: 'Aderência / Prova', hint: 'Você já fez algo parecido ou tem alguma experiência que ajude a convencer esse público?' }
     ]}
   ];
   var CRIT7 = EIXOS.reduce(function (a, e) { return a.concat(e.crit.map(function (c) { return { k: c.k, eixo: e.key, h: c.h, hint: c.hint }; })); }, []);
