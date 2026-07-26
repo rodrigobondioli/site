@@ -526,6 +526,8 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
         inbar=container.querySelector('.esc-inbar');
     var qCount = history.filter(function(m){return m.role==='assistant';}).length;
     var suf=false, suffDismissed=false;
+    var campoAtual = (voce && voce._campo) || 'comunidades';
+    var CAMPO_LABEL={comunidades:'Comunidades',competencias:'Competências',provas:'Provas',historia:'História',preferencias:'Preferências',medos:'Medos',fechamento:'Fechando'};
 
     function setBusy(b){ send.disabled=b; typing.classList.toggle('gone', !b); }
     function cardData(k){
@@ -561,7 +563,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
       }).join('');
       var areas=ESC_CARDS.filter(function(c){return cardData(c.k).n>0;}).length;
       var ess = cardData('comunidades').n>0 && cardData('competencias').n>0 && (cardData('provas').n>0 || (voce.competencias||[]).some(function(c){return c&&(c.exemplo||'').trim();}));
-      stepEl.textContent = areas ? ('· '+areas+' de 6 áreas') : '';
+      stepEl.textContent = done ? '· concluído' : ('· Explorando: '+(CAMPO_LABEL[campoAtual]||'Comunidades'));
       var qb=container.querySelector('#escQbar'); if(qb) qb.style.width = (done?100:areas/6*100)+'%';
       progEl.textContent = ess ? 'Já dá pra seguir. Quanto mais contexto, mais afiado.' : (filledCount()+' preenchidos · quanto mais, mais afiado');
     }
@@ -601,7 +603,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
       var use=el.querySelector('#escUse'); if(use) use.addEventListener('click', function(){ try{ if(cur && !DONE.has(cur.id)){ DONE.add(cur.id); window.ADP.setDone(cur.id,true).catch(function(){}); } }catch(e){} });
       var deep=el.querySelector('#escDeep'); if(deep) deep.addEventListener('click', function(){ suffDismissed=true; renderSuff(); });
     }
-    function persist(){ voce._chat=history.slice(-16); voce._done=done; CANVAS[0]=voce; window.ADP.saveBlock(0, voce).catch(function(){}); }
+    function persist(){ voce._chat=history.slice(-16); voce._done=done; voce._campo=campoAtual; CANVAS[0]=voce; window.ADP.saveBlock(0, voce).catch(function(){}); }
 
     async function turn(userText){
       if(userText){ history.push({role:'user',content:userText}); lastEl.innerHTML='<b>Você:</b> '+esc(userText); lastEl.classList.remove('gone'); }
@@ -611,6 +613,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
         var d=(r&&r.data)?r.data:r;
         if(d&&d.voce) voce=d.voce;
         if(d&&d.done) done=true;
+        if(d&&d.campo_atual) campoAtual=d.campo_atual;
         suf=!!(d&&d.suficiente);
         history.push({role:'assistant',content:(d&&d.reply)||''}); qCount++;
         qEl.textContent = (d&&d.reply) || '';
@@ -627,7 +630,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
     var resetBtn=container.querySelector('#escReset');
     if(resetBtn) resetBtn.addEventListener('click', function(){
       if(!window.confirm('Recomeçar? Isso apaga o que o Escavador montou até agora no teu bloco VOCÊ.')) return;
-      voce={}; history=[]; qCount=0; done=false; suf=false; suffDismissed=false; lastEl.classList.add('gone'); lastEl.innerHTML=''; persist(); renderChips(); renderDone(); renderSuff(); showOpener();
+      voce={}; history=[]; qCount=0; done=false; suf=false; suffDismissed=false; campoAtual='comunidades'; lastEl.classList.add('gone'); lastEl.innerHTML=''; persist(); renderChips(); renderDone(); renderSuff(); showOpener();
     });
 
     // placeholder CONTEXTUAL: casa com a pergunta atual (o exemplo nunca contradiz o que foi perguntado)
