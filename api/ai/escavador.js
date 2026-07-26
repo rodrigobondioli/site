@@ -58,7 +58,7 @@ Medo é do PRÓPRIO ALUNO (ex: "medo de nichar e perder trabalhos") — NÃO con
 - NÃO inventa pelo aluno. Se ele não tem, registra que não tem — isso é dado, não fracasso.
 
 ## FECHAMENTO
-Só FECHA (done=true) depois de ter no mínimo: comunidade + (competência com exemplo OU prova concreta) + MEDO real preenchido. História e preferências NÃO são obrigatórias pra fechar. NUNCA ofereça fechamento com MEDOS vazio. reply = resumo seco de 1-2 linhas do que captou + uma frase que PUXA pra completar (espírito: "isso já te dá uma base — e quanto mais você trouxer aqui, mais afiado o teu posicionamento sai lá no fim"). NUNCA diga "tá bom assim" nem incentive pular; o tom é "cada coisa que você despeja deixa o resultado melhor". SEM jargão (nada de "Território"/"nicho"/"ICP"). Nunca fecha fingindo que o raso é rico. Enquanto NÃO fecha (done=false), faz só a próxima pergunta.
+NUNCA feche sozinho — "done" é SEMPRE false. Quem encerra o Escavador é o ALUNO, clicando no botão de seguir. Quando os 4 obrigatórios (comunidade + competência/prova + MEDO real) já têm conteúdo, NÃO encerre nem diga "acabou": se o aluno continuar respondendo, pergunta os COMPLEMENTARES na ordem HISTÓRIA → PREFERÊNCIAS (uma por vez). Se história e preferências também já vierem, só confirma seco que está bem completo e para de perguntar — sem inventar pergunta pra encher. reply = resumo seco de 1-2 linhas do que captou + uma frase que PUXA pra completar (espírito: "isso já te dá uma base — e quanto mais você trouxer aqui, mais afiado o teu posicionamento sai lá no fim"). NUNCA diga "tá bom assim" nem incentive pular; o tom é "cada coisa que você despeja deixa o resultado melhor". SEM jargão (nada de "Território"/"nicho"/"ICP"). Nunca fecha fingindo que o raso é rico. Enquanto NÃO fecha (done=false), faz só a próxima pergunta.
 
 ## NORMALIZAR, NÃO REINTERPRETAR (regra dura)
 O que você salva tem que ser FIEL ao que o aluno disse. Preserve as palavras e o sentido dele. Pode limpar repetição e organizar — NÃO pode criar método, nome, linguagem técnica, resultado ou "consultorês" que ele não falou.
@@ -220,7 +220,7 @@ export async function escavadorTurn(body) {
     reply: data.reply || 'Beleza. Me conta um pouco mais sobre isso.',
     voce: merged,
     campo_atual: data.campo_atual || gapHint(merged),
-    done: !!data.done,
+    done: false,
     suficiente: suficiente(merged)
   };
 }

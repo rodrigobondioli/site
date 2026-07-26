@@ -501,7 +501,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
   function mountEscavador(container){
     var voce = CANVAS[0] || {};
     var history = Array.isArray(voce._chat) ? voce._chat.slice() : [];
-    var done = !!(voce && voce._done);
+    var done = false; // "done" é flag de sessão — só o clique em "Continuar" fecha; conclusão da aula vive no DONE/setDone
     container.innerHTML = '<div class="esc">'
       + '<div class="esc-head"><span class="ex"><svg viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg>Exercício</span><span class="sep">·</span><span class="nm">O Escavador</span><span class="step" id="escStep"></span><span class="esc-reset" id="escReset">recomeçar</span></div>'
       + '<div class="esc-qbar"><i id="escQbar"></i></div>'
@@ -563,8 +563,10 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
       }).join('');
       var areas=ESC_CARDS.filter(function(c){return cardData(c.k).n>0;}).length;
       var ess = cardData('comunidades').n>0 && cardData('competencias').n>0 && (cardData('provas').n>0 || (voce.competencias||[]).some(function(c){return c&&(c.exemplo||'').trim();}));
-      stepEl.textContent = done ? '· concluído' : ('· Explorando: '+(CAMPO_LABEL[campoAtual]||'Comunidades'));
-      var qb=container.querySelector('#escQbar'); if(qb) qb.style.width = (done?100:areas/6*100)+'%';
+      var baseReady = sufClient() && (!suffDismissed || clientGap()==='fechamento');
+      // rótulo reflete a PERGUNTA ATUAL (derivada do gap do cliente, sem lag), ou "Base pronta" quando os obrigatórios já entraram
+      stepEl.textContent = baseReady ? '· Base pronta' : ('· Explorando: '+(CAMPO_LABEL[clientGap()]||'Comunidades'));
+      var qb=container.querySelector('#escQbar'); if(qb) qb.style.width = (baseReady?100:areas/6*100)+'%';
       progEl.textContent = ess ? 'Já dá pra seguir. Quanto mais contexto, mais afiado.' : (filledCount()+' preenchidos · quanto mais, mais afiado');
     }
     function renderChips(){
@@ -589,16 +591,32 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
       var ess = cardData('comunidades').n>0 && cardData('competencias').n>0 && (cardData('provas').n>0 || (voce.competencias||[]).some(function(c){return c&&(c.exemplo||'').trim();}));
       return ess && cardData('medos').n>0; // Medos é obrigatório (História/Preferências são complementares)
     }
+    // gap do cliente — espelha o gapHint do servidor (ordem: comunidades→competencias→provas→medos→historia→preferencias→fechamento)
+    function clientGap(){
+      if(cardData('comunidades').n===0) return 'comunidades';
+      if(cardData('competencias').n===0) return 'competencias';
+      var provaOk = cardData('provas').n>0 || (voce.competencias||[]).some(function(c){return c&&(c.exemplo||'').trim();});
+      if(!provaOk) return 'provas';
+      if(cardData('medos').n===0) return 'medos';
+      if(cardData('historia').n===0) return 'historia';
+      if(cardData('preferencias').n===0) return 'preferencias';
+      return 'fechamento';
+    }
     // banner de suficiência — quando já há base boa (essenciais + 1 complementar) e ainda NÃO fechou.
     function renderSuff(){
       var el=container.querySelector('#escSuff'); if(!el) return;
-      if(done || suffDismissed || !(suf||sufClient())){ el.classList.add('gone'); el.innerHTML=''; return; }
+      // "Base pronta": aparece quando os obrigatórios entraram e o aluno ainda não escolheu aprofundar
+      // — reaparece se ele aprofundou e já não falta nada (clientGap==='fechamento').
+      var show = sufClient() && (!suffDismissed || clientGap()==='fechamento');
+      if(!show){ el.classList.add('gone'); el.innerHTML=''; return; }
       var next=(LESSONS[idx+1])?('aula.html?a='+LESSONS[idx+1].id):'canvas.html';
-      el.innerHTML='<b>Agora sim, já temos uma boa base.</b><p>Encontrei comunidades, competências, provas e o principal medo que pode travar essa escolha.</p>'
-        +'<div class="esc-suff-acts"><a class="esc-cont" id="escUse" href="'+next+'">Usar esta matéria-prima →</a><button class="sbtn" type="button" id="escDeep">Aprofundar mais</button></div>';
+      el.innerHTML='<b>Base pronta.</b><p>Já temos comunidades, competências, provas e medos suficientes para seguir. História e preferências são opcionais, mas podem deixar o resultado ainda mais afiado.</p>'
+        +'<div class="esc-suff-acts"><a class="esc-cont" id="escUse" href="'+next+'">Continuar →</a><button class="sbtn" type="button" id="escDeep">Aprofundar mais</button></div>';
       el.classList.remove('gone');
-      var use=el.querySelector('#escUse'); if(use) use.addEventListener('click', function(){ try{ if(cur && !DONE.has(cur.id)){ DONE.add(cur.id); window.ADP.setDone(cur.id,true).catch(function(){}); } }catch(e){} });
-      var deep=el.querySelector('#escDeep'); if(deep) deep.addEventListener('click', function(){ suffDismissed=true; renderSuff(); });
+      // "Continuar" é o ÚNICO ponto de encerramento do Escavador (marca a aula como concluída e sai)
+      var use=el.querySelector('#escUse'); if(use) use.addEventListener('click', function(){ try{ done=true; if(cur && !DONE.has(cur.id)){ DONE.add(cur.id); window.ADP.setDone(cur.id,true).catch(function(){}); } persist(); }catch(e){} });
+      // "Aprofundar mais": mantém a conversa aberta e volta a perguntar História → Preferências
+      var deep=el.querySelector('#escDeep'); if(deep) deep.addEventListener('click', function(){ suffDismissed=true; renderSuff(); renderCards(); if(input) input.focus(); });
     }
     function persist(){ voce._chat=history.slice(-16); voce._done=done; voce._campo=campoAtual; CANVAS[0]=voce; window.ADP.saveBlock(0, voce).catch(function(){}); }
 
@@ -609,7 +627,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
         var r=await window.ADP.escavador({ history: history.slice(-8), voce: voce });
         var d=(r&&r.data)?r.data:r;
         if(d&&d.voce) voce=d.voce;
-        if(d&&d.done) done=true;
+        // o Escavador NUNCA fecha sozinho — quem encerra é o aluno clicando em "Continuar"
         if(d&&d.campo_atual) campoAtual=d.campo_atual;
         suf=!!(d&&d.suficiente);
         history.push({role:'assistant',content:(d&&d.reply)||''}); qCount++;
