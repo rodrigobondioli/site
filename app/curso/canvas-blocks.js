@@ -331,18 +331,29 @@ window.ADP_CANVAS = (function () {
     + '.adp-sg .mono-edit{width:100%;font:inherit;font-size:14px;line-height:1.5;color:var(--ink,#18181b);border:1.5px solid var(--line,#d4d4d8);border-radius:12px;padding:12px 14px;margin:0 0 12px;resize:vertical;box-sizing:border-box}'
     + '.adp-sg .mono-edit:focus{outline:none;border-color:var(--ink,#18181b)}'
     + '.adp-sg .mono-lead{font-size:13.5px;color:var(--muted,#71717a);margin:0 0 16px;line-height:1.55;max-width:60ch}'
-    + '.adp-sg .mono-card{background:#fff;border:1px solid var(--line,#d4d4d8);border-radius:14px;padding:2px 18px 6px;margin:0 0 24px}'
+    + '.adp-sg .mono-card{background:none;border:1px solid var(--line,#d4d4d8);border-radius:14px;padding:2px 18px 6px;margin:0 0 24px}'
     + '.adp-sg .mono-card-h{display:flex;align-items:baseline;justify-content:space-between;gap:12px;padding:15px 0 4px}'
     + '.adp-sg .mono-card-h .mono-h{font-size:12.5px;font-weight:700;color:var(--ink,#18181b)}'
     + '.adp-sg .mono-corr{font-size:12.5px;color:var(--muted,#71717a);text-decoration:underline;text-underline-offset:2px;background:none;border:0;cursor:pointer;font:inherit;padding:0;white-space:nowrap}'
     + '.adp-sg .mono-corr:hover{color:var(--ink,#18181b)}'
     + '.adp-sg .mono-sec{padding:13px 0;border-top:1px solid var(--line,#ececef)}'
-    + '.adp-sg .mono-sec-t{font-size:12px;font-weight:700;color:var(--muted,#71717a);margin:0 0 4px}'
-    + '.adp-sg .mono-sec-x{font-size:14.5px;line-height:1.55;color:var(--ink,#18181b);text-wrap:pretty}'
+    + '.adp-sg .mono-sec-t{display:flex;align-items:center;gap:7px;font-size:12px;font-weight:700;color:var(--muted,#71717a);margin:0 0 5px}'
+    + '.adp-sg .mono-chk{flex:none;width:17px;height:17px;border-radius:999px;display:inline-grid;place-items:center}'
+    + '.adp-sg .mono-chk.ok{background:var(--lime,#e7f99a);color:var(--ink,#18181b)}'
+    + '.adp-sg .mono-chk.ok svg{width:11px;height:11px;fill:none;stroke:currentColor;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}'
+    + '.adp-sg .mono-chk.empty{border:1.6px solid var(--line,#d4d4d8)}'
+    + '.adp-sg .mono-sec-x{font-size:14.5px;line-height:1.55;color:var(--ink,#18181b);text-wrap:pretty;padding-left:24px}'
     + '.adp-sg .mono-sec-x.soft{color:var(--muted,#71717a)}'
     + '.adp-sg .mono-deep{margin:0 0 4px}'
     + '.adp-sg .mono-deep-t{font-size:15px;font-weight:700;color:var(--ink,#18181b);margin:2px 0 6px}'
-    + '.adp-sg .mono-foot{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-top:18px}'
+    + '.adp-sg .mono-composer{background:none;border:1px solid var(--line,#d4d4d8);border-radius:16px;padding:8px;margin:0 0 4px}'
+    + '.adp-sg .mono-comp-row{display:flex;align-items:flex-start;gap:9px;padding:2px 2px 2px 12px}'
+    + '.adp-sg .mono-spark{flex:none;display:flex;color:var(--muted,#a1a1aa);padding-top:9px}'
+    + '.adp-sg .mono-spark svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}'
+    + '.adp-sg .mono-comp-row textarea{flex:1;min-width:0;border:none;background:none;padding:8px 0;font:inherit;font-size:14.5px;resize:none;min-height:88px;max-height:220px;line-height:1.5;color:var(--ink,#18181b)}'
+    + '.adp-sg .mono-comp-row textarea::placeholder{color:var(--muted,#a1a1aa)}'
+    + '.adp-sg .mono-comp-row textarea:focus{outline:none}'
+    + '.adp-sg .mono-foot{display:flex;align-items:center;justify-content:flex-end;gap:12px;margin-top:18px}'
     + '.adp-sg .mono-cta-right{display:flex;justify-content:flex-end;margin-top:4px}'
     + '.adp-sg .rbtn:disabled{opacity:.45;cursor:not-allowed;pointer-events:none}'
     + '@media(max-width:560px){.adp-sg .mono-foot{flex-direction:column-reverse;align-items:stretch}.adp-sg .mono-foot .rbtn{width:100%;justify-content:center}.adp-sg .mono-cta-right .rbtn{width:100%;justify-content:center}}'
@@ -971,7 +982,10 @@ window.ADP_CANVAS = (function () {
       if (temEx) return { txt: 'Você relatou entregas com resultado, mas ainda falta registrar um caso concreto.', forte: false };
       return { txt: 'Você ainda não registrou uma prova concreta — dá pra completar depois.', forte: false };
     }
-    function secHTML(t, x, soft) { return '<div class="mono-sec"><div class="mono-sec-t">' + esc(t) + '</div><div class="mono-sec-x' + (soft ? ' soft' : '') + '">' + esc(x) + '</div></div>'; }
+    function secHTML(t, x, soft) {
+      var chk = soft ? '<span class="mono-chk empty"></span>' : '<span class="mono-chk ok"><svg viewBox="0 0 24 24"><path d="m5 13 4 4L19 7"/></svg></span>';
+      return '<div class="mono-sec"><div class="mono-sec-t">' + chk + esc(t) + '</div><div class="mono-sec-x' + (soft ? ' soft' : '') + '">' + esc(x) + '</div></div>';
+    }
     function provaDraft() {
       var v = voce();
       var ps = (v.provas || []).map(function (p) { if (!p) return ''; return [p.situacao, p.acao, p.consequencia].filter(Boolean).join(' → '); }).filter(Boolean);
@@ -1010,7 +1024,7 @@ window.ADP_CANVAS = (function () {
       body += '<div class="mono-deep"><div class="mono-deep-t">Quer aprofundar alguma parte?</div>';
       body += '<p class="rum-intro-x">Não precisa contar tua biografia. Só vale adicionar algo que mudou a forma como você trabalha ou resolve problemas.</p>';
       body += '<p class="sg-q">Tem alguma experiência, virada, erro, trabalho ou vivência que mudou a forma como você resolve problemas hoje?</p>';
-      body += '<textarea class="mono-edit" id="monoDeep" rows="3" style="min-height:110px" placeholder="Escreva só o que realmente acrescenta algo novo…"></textarea></div>';
+      body += '<div class="mono-composer"><div class="mono-comp-row"><span class="mono-spark"><svg viewBox="0 0 24 24"><path d="M12 3l1.7 4.8L18.5 9.5l-4.8 1.7L12 16l-1.7-4.8L5.5 9.5l4.8-1.7z"/></svg></span><textarea id="monoDeep" rows="3" placeholder="Escreva só o que realmente acrescenta algo novo…"></textarea></div></div></div>';
       body += '<div class="mono-foot"><button class="rbtn rbtn-sec" type="button" data-act="toIntro">Minha história já está suficiente</button><button class="rbtn rbtn-primary" type="button" data-act="deepAdd" disabled>Adicionar à minha história →</button></div>';
       host.innerHTML = body; bind();
       var dta = host.querySelector('#monoDeep'), ab = host.querySelector('[data-act="deepAdd"]');
