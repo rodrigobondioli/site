@@ -664,7 +664,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
       if(bar) bar.style.width = ((step+1)/fields.length*100)+'%';
       if(stepEl) stepEl.textContent = '· pergunta '+(step+1)+' de '+fields.length;
       if(backBtn) backBtn.classList.toggle('gone', step===0);
-      if(intro) intro.style.display = step===0 ? '' : 'none';
+      if(intro) intro.style.display = (engineBlock || step!==0) ? 'none' : ''; // bloco 3 é enxuto: sem intro filosófico
       var ta=fields[step].querySelector('textarea');
       if(ta && !engineBlock){ if(ta.__grow) ta.__grow(); setTimeout(function(){ try{ta.focus();}catch(e){} },0); }
     }

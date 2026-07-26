@@ -301,8 +301,8 @@ window.ADP_CANVAS = (function () {
     + '.adp-sg .sg-q{font-size:14px;font-weight:600;color:var(--ink,#18181b);margin:0 0 12px;line-height:1.45;text-wrap:balance}'
     // rótulo + chips PASSIVOS (contexto, não ação): sem cara de botão, cursor normal, sem hover
     + '.adp-sg .sg-ctxlbl{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--faint,#a1a1aa);margin:0 0 8px}'
-    + '.adp-sg .sg-chips{display:flex;flex-wrap:wrap;gap:7px;margin:0 0 20px}'
-    + '.adp-sg .sg-chip{font-size:12px;font-weight:500;color:var(--muted,#71717a);background:transparent;border:1px solid var(--line,#d4d4d8);border-radius:999px;padding:4px 11px;line-height:1.2;cursor:default;user-select:none}'
+    + '.adp-sg .sg-chips{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 18px}'
+    + '.adp-sg .sg-chip{font-size:11px;font-weight:500;color:var(--faint,#a1a1aa);background:transparent;border:1px solid var(--line,#d4d4d8);border-radius:6px;padding:2px 8px;line-height:1.35;cursor:default;user-select:none}'
     // cards de opção
     + '.adp-sg .sg-opt{display:flex;flex-direction:column;align-items:flex-start;gap:9px;border:1px solid var(--line,#d4d4d8);border-radius:14px;padding:14px 16px;margin-bottom:10px}'
     + '.adp-sg .sg-opt-t{font-size:15px;font-weight:700;color:var(--ink,#18181b);line-height:1.35;text-wrap:balance}'
@@ -321,18 +321,15 @@ window.ADP_CANVAS = (function () {
     + '.adp-sg .rbtn.rbtn-primary:hover{filter:brightness(1.06);background:var(--pink,#ff00d7);color:#fff}'
     + '.adp-sg .rlbl{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--faint,#a1a1aa);margin:0 0 8px}'
     + '.adp-sg .rnote{font-size:12px;color:var(--faint,#a1a1aa);margin:14px 0 0;line-height:1.5;text-wrap:balance}'
-    // BLOCO DE CONFIRMAÇÃO (pós-escolha)
-    + '.adp-sg .sg-picked-sub{font-size:12.5px;color:var(--muted,#71717a);margin:0 0 10px;line-height:1.5}'
-    + '.adp-sg .sg-chosen{border:1.5px solid var(--pink,#ff00d7);border-radius:14px;padding:15px 17px;background:rgba(255,0,215,.045)}'
-    + '.adp-sg .sg-chosen .sg-opt-t{font-size:15.5px}'
-    + '.adp-sg .sg-chosen .sg-opt-d{margin-top:6px}'
-    + '.adp-sg .sg-cta{margin-top:16px}'
-    + '.adp-sg .sg-subacts{display:flex;align-items:center;gap:20px;flex-wrap:wrap;margin-top:14px}'
+    // BLOCO DE CONFIRMAÇÃO (pós-escolha) — enxuto: escolha + ações à direita
+    + '.adp-sg .sg-chosen{border-left:3px solid var(--pink,#ff00d7);padding:2px 0 2px 14px;margin:2px 0 0}'
+    + '.adp-sg .sg-chosen .sg-opt-t{font-size:16px}'
+    + '.adp-sg .sg-chosen .sg-opt-d{margin-top:5px}'
+    + '.adp-sg .sg-confirm-acts{display:flex;flex-direction:column;align-items:flex-end;gap:12px;margin-top:18px}'
+    + '.adp-sg .sg-subacts{display:flex;align-items:center;gap:20px;flex-wrap:wrap}'
     + '.adp-sg .sg-lnk{font-size:12.5px;font-weight:700;color:var(--muted,#71717a);text-decoration:underline;text-underline-offset:2px;background:none;border:none;padding:0;cursor:pointer}'
     + '.adp-sg .sg-lnk:hover{color:var(--ink,#18181b)}'
-    + '.adp-sg .sg-others{margin-top:24px;padding-top:18px;border-top:1px solid var(--line,#d4d4d8)}'
-    + '.adp-sg .sg-others .sg-opt{background:var(--soft,#e6e6e8);border-color:transparent}'
-    + '.adp-sg .sg-tert{display:flex;align-items:center;gap:22px;flex-wrap:wrap;margin-top:24px;padding-top:16px;border-top:1px solid var(--line,#d4d4d8)}'
+    + '.adp-sg .sg-tert{display:flex;align-items:center;justify-content:flex-end;gap:22px;flex-wrap:wrap;margin-top:20px}'
     + '.adp-sg .sg-tert .sg-lnk{color:var(--faint,#a1a1aa);font-weight:600}'
     // --- Matriz responsiva no mobile: empilha a nota abaixo da pergunta (cabe em 390px) ---
     + '@media(max-width:640px){'
@@ -802,14 +799,13 @@ window.ADP_CANVAS = (function () {
     function subHTML(k) { var f = byBlock(3).fields.filter(function (x) { return x.key === k; })[0]; return (f && f.sub) ? '<p class="sg-q">' + esc(f.sub) + '</p>' : ''; }
     function headHTML(k) {
       var s = st(k);
-      var chips = (s.chips && s.chips.length) ? '<div class="sg-ctxlbl">Contexto da direção</div><div class="sg-chips">' + s.chips.slice(0, 3).map(function (c) { return '<span class="sg-chip">' + esc(c) + '</span>'; }).join('') + '</div>' : '';
-      return subHTML(k) + chips;
+      return (s.chips && s.chips.length) ? '<div class="sg-chips">' + s.chips.slice(0, 2).map(function (c) { return '<span class="sg-chip">' + esc(c) + '</span>'; }).join('') + '</div>' : '';
     }
     function pickedDescOf(k) { var s = st(k); return (s.pickedTitulo && s.pickedTitulo === valOf(k)) ? (s.pickedDesc || '') : ''; }
     function optCard(o) {
       return '<div class="sg-opt"><div class="sg-opt-t">' + esc(o.titulo) + '</div>'
         + (o.desc ? '<div class="sg-opt-d">' + esc(o.desc) + '</div>' : '')
-        + '<button type="button" class="sg-pick" data-pick="' + esc(o.val) + '">Escolher esta</button></div>';
+        + '<button type="button" class="sg-pick" data-pick="' + esc(o.val) + '">Escolher</button></div>';
     }
 
     async function gen(k) {
@@ -836,23 +832,19 @@ window.ADP_CANVAS = (function () {
         host.innerHTML = head + '<p class="rsub">Não consegui gerar as opções agora.</p><div class="rum-acts"><button class="rbtn rbtn-primary" type="button" data-act="gen">Tentar novamente</button><button class="rbtn rbtn-sec" type="button" data-act="manual">Escrever minha própria resposta</button></div>';
         bind(); return;
       }
-      if (chosen) {
+      if (chosen) { // estado enxuto de confirmação: escolha + ações à direita
         var pdesc = pickedDescOf(k);
-        var rest = s.options.filter(function (o) { return o.val !== chosen; });
-        var h = head
-          + '<div class="rlbl">Sua escolha</div>'
-          + '<p class="sg-picked-sub">' + esc(cfg.chosenSub || 'Você vai usar esta escolha nesta etapa.') + '</p>'
-          + '<div class="sg-chosen"><div class="sg-opt-t">' + esc(chosen) + '</div>' + (pdesc ? '<div class="sg-opt-d">' + esc(pdesc) + '</div>' : '') + '</div>'
-          + (window.__rumWizard ? '<div class="sg-cta"><button class="rbtn rbtn-primary" type="button" data-act="continue">Continuar com esta →</button></div>' : '')
-          + '<div class="sg-subacts"><button class="sg-lnk" type="button" data-act="edit">Editar escolha</button>' + (rest.length ? '<button class="sg-lnk" type="button" data-act="others">' + (s.othersOpen ? 'Ocultar outras opções' : 'Ver outras opções') + '</button>' : '') + '</div>'
+        var h = '<div class="sg-chosen"><div class="sg-opt-t">' + esc(chosen) + '</div>' + (pdesc ? '<div class="sg-opt-d">' + esc(pdesc) + '</div>' : '') + '</div>'
+          + '<div class="sg-confirm-acts">'
+          + (window.__rumWizard ? '<button class="rbtn rbtn-primary" type="button" data-act="continue">Continuar →</button>' : '')
+          + '<div class="sg-subacts"><button class="sg-lnk" type="button" data-act="trocar">Trocar escolha</button><button class="sg-lnk" type="button" data-act="edit">Editar</button></div>'
+          + '</div>'
           + (cfg.note ? '<p class="rnote">Esta é uma hipótese. Confirme depois em conversas, avaliações ou grupos.</p>' : '');
-        if (rest.length && s.othersOpen) h += '<div class="sg-others"><div class="rlbl">Outras opções</div>' + rest.map(optCard).join('') + '</div>';
-        h += '<div class="sg-tert"><button class="sg-lnk" type="button" data-act="gen">Gerar outras opções</button><button class="sg-lnk" type="button" data-act="manual">Prefiro escrever minha própria resposta</button></div>';
         host.innerHTML = h; bind(); return;
       }
       if (s.options.length) {
         host.innerHTML = head + s.options.map(optCard).join('')
-          + '<div class="sg-tert"><button class="sg-lnk" type="button" data-act="gen">Gerar outras opções</button><button class="sg-lnk" type="button" data-act="manual">Prefiro escrever minha própria resposta</button></div>';
+          + '<div class="sg-tert"><button class="sg-lnk" type="button" data-act="gen">Gerar outras opções</button><button class="sg-lnk" type="button" data-act="manual">Escrever minha resposta</button></div>';
         bind(); return;
       }
       // fallback raro (não gerou e não está carregando): oferece gerar
@@ -873,7 +865,7 @@ window.ADP_CANVAS = (function () {
         b.addEventListener('click', function () {
           var a = this.getAttribute('data-act'), k = active, s = st(k);
           if (a === 'gen') { gen(k); return; }
-          if (a === 'others') { s.othersOpen = !s.othersOpen; render(); return; }
+          if (a === 'trocar') { setVal(k, ''); s.pickedDesc = ''; s.pickedTitulo = ''; render(); return; }
           if (a === 'manual') { setVal(k, ''); s.pickedDesc = ''; s.pickedTitulo = ''; s.editing = true; s.prev = ''; render(); focusFld(k); return; }
           if (a === 'fix') { var fx = this.getAttribute('data-fix'); if (window.__rumWizard && window.__rumWizard.gotoField) window.__rumWizard.gotoField(fx === 'nicho' ? 'ideal' : fx); return; }
           if (a === 'continue') { if (window.__rumWizard && window.__rumWizard.cont) window.__rumWizard.cont(); return; }
