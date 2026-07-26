@@ -26,9 +26,16 @@ LER a última resposta do aluno e EXTRAIR o que der pros campos do schema. Você
 - historia: como ele entrou nesse mundo / virada que conecta com o trabalho de hoje.
 - preferencias: {ama:[], odeia:[]} — o que gosta e o que dá preguiça.
 
+## CAPTURE A RESPOSTA INTEIRA (regra dura)
+Se numa resposta só o aluno já traz competência + exemplo + resultado, PREENCHA TUDO de uma vez — nunca deixe "exemplo" nem a prova vazios quando ele já contou o caso.
+Ex: "fiz o redesign de um site, identifiquei vários problemas e ele converteu 10% mais" →
+  "competencias":[{"o_que":"redesign de site / identificar problemas","exemplo":"redesign de um site identificando vários problemas","raw":"fiz o redesign de um site, identifiquei vários problemas"}]
+  "provas":[{"consequencia":"converteu 10% mais","raw":"converteu 10% mais"}]
+
 ## NORMALIZAR, NÃO REINTERPRETAR (regra dura)
 O que você salva tem que ser FIEL ao que o aluno disse. Preserve as palavras e o sentido dele. Pode limpar repetição — NÃO pode criar método, nome, resultado ou "consultorês" que ele não falou.
 Aluno: "Meus layouts costumam ser aprovados rápido." → OK: "Aprovação rápida dos layouts." → PROIBIDO: "Entregas de design mais objetivas e estratégicas."
+NUNCA vire "fiz o redesign de um site que converteu mais" em rótulo tipo "interfaces web de alta conversão". São as palavras DELE, não uma etiqueta tua.
 Em cada item de lista, "raw" guarda as palavras LITERAIS do aluno.
 
 ## SAÍDA — responda SOMENTE um JSON, nada fora dele:
@@ -131,8 +138,9 @@ export function decide(v, skip) {
   if (comu.length < 2) return mk('comunidades', 'comunidade_2', v, skip);
 
   if (!has(v.competencias, 'o_que')) return mk('competencias', 'comp_identificar', v, skip);
-  var semEx = comp.find(function (c) { return c && str(c.o_que).trim() && !str(c.exemplo).trim(); });
-  if (semEx) return mk('competencias', 'comp_exemplo', v, skip);
+  // exemplo satisfeito por QUALQUER caminho: exemplo na competência OU uma prova/consequência já captada (o resultado É o exemplo).
+  var temExemplo = comp.some(function (c) { return c && str(c.exemplo).trim(); }) || has(v.provas, 'consequencia') || has(v.provas, 'situacao');
+  if (!temExemplo) return mk('competencias', 'comp_exemplo', v, skip);
 
   if (!str(v.medos).trim()) return mk('medos', 'medos', v, skip);
 
@@ -223,6 +231,10 @@ function lastAssistant(history) {
   for (var i = arr(history).length - 1; i >= 0; i--) { if (history[i] && history[i].role === 'assistant') return str(history[i].content); }
   return '';
 }
+function lastUser(history) {
+  for (var i = arr(history).length - 1; i >= 0; i--) { if (history[i] && history[i].role === 'user') return str(history[i].content); }
+  return '';
+}
 
 // monta a devolução (decisão + pergunta) a partir do estado já mesclado
 function build(voce, skip, ack, repeatGuardLast) {
@@ -239,14 +251,18 @@ function build(voce, skip, ack, repeatGuardLast) {
   }
   var out = withLegacy(voce);
   out._skip = Object.keys(skip);
+  // ESTADO (contrato): 'coletando' enquanto falta obrigatório · 'base_pronta' quando os 4 obrigatórios entraram.
+  // 'concluido' NÃO existe aqui — quem conclui é o ALUNO no clique (o servidor NUNCA manda done=true).
   return {
     reply: reply,
     voce: out,
     area_atual: D.area,
     proximo_gap: D.gap,
-    pode_pular: D.pode_pular,
-    pode_encerrar: D.pode_encerrar,
-    fechado: D.fechado,
+    pode_pular: D.pode_pular,        // só nos complementares (história/preferências)
+    pode_encerrar: D.pode_encerrar,  // 4 obrigatórios ok → aluno JÁ pode seguir, mesmo com complementar vazio
+    base_pronta: D.pode_encerrar,
+    estado: D.pode_encerrar ? 'base_pronta' : 'coletando',
+    fechado: D.fechado,              // nada mais a perguntar (obrigatórios ok + complementares preenchidos ou pulados)
     done: false,
     suficiente: D.pode_encerrar
   };
@@ -270,7 +286,20 @@ export async function escavadorTurn(body) {
   var askArea = decide(voceBefore, skip).area;
   var ex = await extractAI(voceBefore, history, askArea);
   var merged = mergeDelta(voceBefore, ex.delta);
-  var mudou = JSON.stringify(normalizeVoce(merged)) !== JSON.stringify(normalizeVoce(voceBefore));
+
+  // ANTI-REASK do exemplo: se JÁ pedimos o exemplo e o aluno respondeu, mas a extração não preencheu,
+  // conta a resposta crua como exemplo e SEGUE — nunca pede o mesmo exemplo duas vezes.
+  var forced = false;
+  var mn = normalizeVoce(merged);
+  if (decide(mn, skip).gap === 'comp_exemplo') {
+    var la = lastAssistant(history), lu = lastUser(history);
+    if (lu && /exemplo|fez diferen|melhorou/i.test(la)) {
+      var alvo = mn.competencias.find(function (c) { return c && str(c.o_que).trim() && !str(c.exemplo).trim(); });
+      if (alvo) { alvo.exemplo = lu; merged = withLegacy(mn); forced = true; }
+    }
+  }
+
+  var mudou = forced || JSON.stringify(normalizeVoce(merged)) !== JSON.stringify(normalizeVoce(voceBefore));
   return build(merged, skip, ex.ack, mudou ? null : lastAssistant(history));
 }
 

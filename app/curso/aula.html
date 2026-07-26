@@ -529,6 +529,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
     var curArea = (voce && voce._area) || 'comunidades';
     var canSkip = !!(voce && voce._pular);
     var fechado = !!(voce && voce._fechado);
+    var basePronta = !!(voce && voce._base); // 4 obrigatórios ok — aluno já pode seguir (complementares nunca travam)
     var CAMPO_LABEL={comunidades:'Comunidades',competencias:'Competências',provas:'Provas',historia:'História',preferencias:'Preferências',medos:'Medos',fechamento:'Fechando'};
 
     function setBusy(b){ send.disabled=b; typing.classList.toggle('gone', !b); }
@@ -565,9 +566,10 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
       }).join('');
       var areas=ESC_CARDS.filter(function(c){return cardData(c.k).n>0;}).length;
       var ess = cardData('comunidades').n>0 && cardData('competencias').n>0 && (cardData('provas').n>0 || (voce.competencias||[]).some(function(c){return c&&(c.exemplo||'').trim();}));
-      // rótulo e barra vêm do estado do SERVIDOR (curArea/fechado) — o cliente não recomputa gap.
-      stepEl.textContent = fechado ? '· concluído' : ('· Explorando: '+(CAMPO_LABEL[curArea]||'Comunidades'));
-      var qb=container.querySelector('#escQbar'); if(qb) qb.style.width = (fechado?100:areas/6*100)+'%';
+      // rótulo e barra vêm do estado do SERVIDOR — o cliente não recomputa gap.
+      // done = aluno clicou Continuar · base_pronta = 4 obrigatórios ok (segue coletando complementares) · senão, área atual.
+      stepEl.textContent = done ? '· concluído' : (basePronta ? '· Base pronta' : ('· Explorando: '+(CAMPO_LABEL[curArea]||'Comunidades')));
+      var qb=container.querySelector('#escQbar'); if(qb) qb.style.width = ((fechado||done)?100:areas/6*100)+'%';
       progEl.textContent = ess ? 'Já dá pra seguir. Quanto mais contexto, mais afiado.' : (filledCount()+' preenchidos · quanto mais, mais afiado');
     }
     function renderChips(){
@@ -601,7 +603,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
       skipped[field]=1; persist();
       turn(null, field); // servidor recomputa e devolve a próxima (sem gastar IA)
     }
-    function persist(){ voce._chat=history.slice(-16); voce._done=done; voce._skip=Object.keys(skipped); voce._area=curArea; voce._pular=canSkip; voce._fechado=fechado; CANVAS[0]=voce; window.ADP.saveBlock(0, voce).catch(function(){}); }
+    function persist(){ voce._chat=history.slice(-16); voce._done=done; voce._skip=Object.keys(skipped); voce._area=curArea; voce._pular=canSkip; voce._fechado=fechado; voce._base=basePronta; CANVAS[0]=voce; window.ADP.saveBlock(0, voce).catch(function(){}); }
 
     async function turn(userText, skipField){
       if(userText){ history.push({role:'user',content:userText}); lastEl.innerHTML='<b>Você:</b> '+esc(userText); lastEl.classList.remove('gone'); }
@@ -614,6 +616,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
         if(d&&d.area_atual) curArea=d.area_atual;
         canSkip=!!(d&&d.pode_pular);
         fechado=!!(d&&d.fechado);
+        basePronta=!!(d&&d.pode_encerrar); // obrigatórios ok — complementares nunca viram obrigatórios
         var reply=(d&&d.reply)||'';
         if(reply){ history.push({role:'assistant',content:reply}); qCount++; }
         qEl.textContent = fechado ? '' : reply;
@@ -622,7 +625,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
       setBusy(false);
     }
     var OPENER='Me diz um mercado, comunidade ou tipo de cliente que você conhece por experiência — porque viveu nesse meio, já atendeu ou convive de perto.';
-    function showOpener(){ qEl.textContent=OPENER; syncPH(); history.push({role:'assistant',content:OPENER}); qCount=1; curArea='comunidades'; canSkip=false; fechado=false; renderCards(); persist(); } // abertura fixa (sem gastar chamada de IA)
+    function showOpener(){ qEl.textContent=OPENER; syncPH(); history.push({role:'assistant',content:OPENER}); qCount=1; curArea='comunidades'; canSkip=false; fechado=false; basePronta=false; renderCards(); persist(); } // abertura fixa (sem gastar chamada de IA)
     function submit(){ var t=input.value.trim(); if(!t) return; input.value=''; turn(t); }
     send.addEventListener('click', submit);
     input.addEventListener('keydown', function(e){ if(e.key==='Enter' && !e.shiftKey){ e.preventDefault(); submit(); } });
