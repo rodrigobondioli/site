@@ -34,10 +34,10 @@ window.ADP_CANVAS = (function () {
     { block: 2, title: 'A Matriz do Nicho', type: 'matrix' },
     { block: 3, title: 'Quem Você Atende (a dor)', type: 'fields', fields: [
       { key: 'nao',           label: 'Quem eu NÃO atendo (obrigatório)',  ph: 'Quem você recusa. Começa por aqui — posicionamento é dizer não.' },
-      { key: 'ideal',         label: 'Cliente ideal — situação e dor',    ph: 'Não idade e CEP. A situação que ele vive e a dor que o mantém acordado.' },
-      { key: 'intermediario', label: 'Cliente intermediário',             ph: 'Serve, mas não é o sonho.' },
-      { key: 'dor',           label: 'A dor-loop principal',              ph: 'A vozinha que não cala na cabeça dele. Roda a Caça à Ruminação se travar.' },
-      { key: 'desejo',        label: 'O que ele quer no lugar (o desejo)',ph: 'Não a dor — o estado que ele quer alcançar. Pra onde ele quer chegar quando a dor sumir.' }
+      { key: 'ideal',         label: 'Cliente ideal — situação e dor',    sub: 'Quem é esse cliente e o que está acontecendo quando ele percebe que precisa de ajuda?', ph: 'Ex.: Personal trainer com agenda rodando, mas que recebe sempre as mesmas dúvidas porque o site não explica direito o trabalho dele.' },
+      { key: 'intermediario', label: 'Quem também pode contratar você, mas não é prioridade?', sub: 'Alguém parecido com o cliente ideal, mas com dor menos forte, menos urgente ou menor potencial de projeto.', ph: 'Ex.: Personal trainer que já tem site, mas ele está desatualizado e não ajuda muito a vender.' },
+      { key: 'dor',           label: 'A dor-loop principal',              sub: 'Agora transforme essa situação na frase que fica rodando na cabeça dele.', ph: 'Ex.: “Será que as pessoas desistem de me contratar porque não entendem direito o que eu faço?”' },
+      { key: 'desejo',        label: 'O que ele quer no lugar?',          sub: 'Se esse problema fosse resolvido, o que mudaria na prática para esse cliente?', ph: 'Ex.: Quero que o site explique meu trabalho, tire as dúvidas mais comuns e ajude as pessoas a entender por que deveriam me contratar.' }
     ]},
     { block: 4, title: 'Seu Monopólio', type: 'fields', fields: [
       { key: 'diferencial', label: 'Seu diferencial que ninguém copia', ph: 'Tua história, o que só você tem — o cruzamento do nicho com quem você é.' },
@@ -158,6 +158,7 @@ window.ADP_CANVAS = (function () {
   var STYLE = ''
     + '.adp-fld{margin-top:18px}'
     + '.adp-fld label{display:block;font-size:16px;font-weight:700;color:var(--ink,#18181b);margin-bottom:5px;letter-spacing:-.01em;line-height:1.4}'
+    + '.adp-fld .adp-sub{font-size:13px;color:var(--muted,#71717a);margin:0 0 8px;line-height:1.5;max-width:64ch;text-wrap:balance}'
     + '.adp-fld .adp-hint{font-size:12.5px;color:var(--muted,#71717a);margin:0 0 9px;line-height:1.45;max-width:70ch}'
     + '.adp-fld textarea{width:100%;border:1px solid var(--line,#d4d4d8);border-radius:16px;background:none;padding:13px 15px;font:inherit;font-size:14.5px;color:var(--ink,#18181b);resize:none;min-height:70px;line-height:1.55;transition:border-color .15s}'
     + '.adp-fld textarea::placeholder{color:var(--faint,#a1a1aa)}'
@@ -301,6 +302,10 @@ window.ADP_CANVAS = (function () {
     + '.adp-rum .rbtn{display:inline-flex;align-items:center;gap:8px;font-weight:700;font-size:13.5px;padding:10px 18px;border-radius:999px;border:1.5px solid var(--ink,#18181b);color:var(--ink,#18181b);background:none;cursor:pointer}'
     + '.adp-rum .rbtn:hover{background:var(--ink,#18181b);color:#fff}'
     + '.adp-rum .rbtn[disabled]{opacity:.5;cursor:not-allowed}'
+    + '.adp-rum .rnote{font-size:12px;color:var(--faint,#a1a1aa);margin:9px 0 0;line-height:1.5}'
+    + '.adp-rum .rchosen{display:block;border:1.5px solid var(--pink,#ff00d7);border-radius:10px;padding:12px 14px;font-size:15px;font-weight:700;color:var(--ink,#18181b);background:rgba(255,0,215,.04);line-height:1.4;margin-bottom:8px;text-wrap:balance}'
+    + '.adp-rum .rbtn.rbtn-sec{border:none;background:none;padding:6px 0;font-size:12.5px;font-weight:700;color:var(--muted,#71717a);text-decoration:underline;text-underline-offset:2px;border-radius:0;margin-top:12px}'
+    + '.adp-rum .rbtn.rbtn-sec:hover{background:none;color:var(--ink,#18181b)}'
     + '.adp-rum .rout{margin-top:14px;display:none}'
     + '.adp-rum .rlbl{font-size:12px;font-weight:700;color:var(--muted,#71717a);margin:14px 0 8px;letter-spacing:.02em}'
     + '.adp-rum .rchip{display:block;width:100%;text-align:left;border:1px solid var(--line,#d4d4d8);border-radius:10px;padding:11px 14px;margin-bottom:8px;font-size:14px;color:#3f3f46;background:#fff;cursor:pointer;line-height:1.4}'
@@ -342,6 +347,7 @@ window.ADP_CANVAS = (function () {
   function renderFields(container, def, data, onSaved) {
     var html = def.fields.map(function (f) {
       return '<div class="adp-fld"><label>' + esc(f.label) + '</label>'
+        + (f.sub ? '<div class="adp-sub">' + esc(f.sub) + '</div>' : '')
         + '<div class="adp-hint">' + esc(f.ph) + '</div>'
         + '<textarea data-key="' + f.key + '" placeholder="Escreva aqui…">' + esc(data[f.key] != null ? data[f.key] : '') + '</textarea></div>';
     }).join('');
@@ -729,11 +735,13 @@ window.ADP_CANVAS = (function () {
     var wrap = document.createElement('div');
     wrap.className = 'adp-rum';
     wrap.innerHTML = '<div class="rh">🧠 Caça à Ruminação</div>'
-      + '<p class="rsub">Não sabe a dor do teu cliente? A IA acha as ruminações mais prováveis do dono do teu nicho — em 1ª pessoa. Clica na que mais bate pra jogar no campo da dor. (Depois confirma no campo: reviews 1★, grupos, autocomplete do Google.)</p>'
+      + '<p class="rsub">Travou na dor? A IA sugere os pensamentos que o dono desse nicho provavelmente tem.</p>'
+      + '<p class="rnote">Depois, valide isso em conversas, avaliações e grupos.</p>'
       + '<button class="rbtn" type="button">Rodar a Caça à Ruminação</button><div class="rout"></div>';
     container.appendChild(wrap);
     var btn = wrap.querySelector('.rbtn');
     var out = wrap.querySelector('.rout');
+    var rsub = wrap.querySelector('.rsub');
     btn.addEventListener('click', async function () {
       var nicho = (opts && opts.getNicho && opts.getNicho()) || '';
       var idealEl = container.querySelector('textarea[data-key="ideal"]');
@@ -744,6 +752,11 @@ window.ADP_CANVAS = (function () {
       try {
         var r = await window.ADP.ruminacao(nicho, cliente);
         renderRumResult(out, (r && r.data) ? r.data : r, container);
+        // depois de gerar: o foco vira as frases; o botão vira ação secundária e desce pro fim
+        if (rsub) rsub.textContent = 'A IA encontrou pensamentos que esse cliente provavelmente tem. Escolhe o que mais combina com a dor que você identificou.';
+        btn.textContent = 'Gerar novas opções';
+        btn.classList.add('rbtn-sec');
+        wrap.appendChild(btn);
       } catch (e) { out.innerHTML = '<p class="rmsg">' + esc(e.message || 'Não consegui rodar agora. Tenta de novo.') + '</p>'; }
       btn.disabled = false;
     });
@@ -751,18 +764,28 @@ window.ADP_CANVAS = (function () {
 
   function renderRumResult(out, d, container) {
     if (!d || (!d.ruminacoes && !d.dor_central)) { out.innerHTML = '<p class="rmsg">A IA não devolveu nada útil. Tenta de novo.</p>'; return; }
-    var rums = d.ruminacoes || [];
-    var html = '';
-    if (d.dor_central) html += '<div class="rlbl">A dor central (clica pra usar)</div><button type="button" class="rcentral" data-dor="' + esc(d.dor_central) + '">' + esc(d.dor_central) + '</button>';
-    if (rums.length) html += '<div class="rlbl">Outras ruminações (clica pra usar como a tua)</div>' + rums.map(function (x) { return '<button type="button" class="rchip" data-dor="' + esc(x) + '">' + esc(x) + '</button>'; }).join('');
-    if (d.porque) html += '<p class="rmsg">' + esc(d.porque) + '</p>';
-    out.innerHTML = html;
-    Array.prototype.forEach.call(out.querySelectorAll('[data-dor]'), function (b) {
-      b.addEventListener('click', function () {
-        var dorEl = container.querySelector('textarea[data-key="dor"]');
-        if (dorEl) { dorEl.value = this.getAttribute('data-dor'); dorEl.dispatchEvent(new Event('input', { bubbles: true })); dorEl.focus(); }
+    var all = [];
+    if (d.dor_central) all.push(d.dor_central);
+    (d.ruminacoes || []).forEach(function (x) { if (all.indexOf(x) < 0) all.push(x); });
+    var dorEl = container.querySelector('textarea[data-key="dor"]');
+    function paintRum() {
+      var chosen = dorEl ? dorEl.value.trim() : '';
+      var picked = all.filter(function (x) { return x === chosen; });
+      var rest = all.filter(function (x) { return x !== chosen; });
+      var html = '';
+      if (picked.length) html += '<div class="rlbl">Sua escolha</div><div class="rchosen">' + esc(picked[0]) + '</div>';
+      if (rest.length) html += '<div class="rlbl">' + (picked.length ? 'Outras opções' : 'Escolha a que mais combina') + '</div>'
+        + rest.map(function (x) { return '<button type="button" class="rchip" data-dor="' + esc(x) + '">' + esc(x) + '</button>'; }).join('');
+      if (d.porque) html += '<p class="rmsg">' + esc(d.porque) + '</p>';
+      out.innerHTML = html;
+      Array.prototype.forEach.call(out.querySelectorAll('[data-dor]'), function (b) {
+        b.addEventListener('click', function () {
+          if (dorEl) { dorEl.value = this.getAttribute('data-dor'); dorEl.dispatchEvent(new Event('input', { bubbles: true })); }
+          paintRum();
+        });
       });
-    });
+    }
+    paintRum();
   }
 
   // renderiza o editor de UM bloco dentro de container. data = objeto salvo desse bloco (ou {}).
