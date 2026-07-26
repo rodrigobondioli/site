@@ -679,7 +679,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
     }
     // MESMO comportamento do Escavador: botão enviar (aviãozinho rosa) DENTRO do campo; Enter envia; a pergunta troca na hora.
     // Bloco 3 é IA-first em TODAS as etapas (motor contextual): sem aviãozinho, o avanço vem da escolha.
-    var engineBlock = (l.canvas_block===3);
+    var engineBlock = (l.canvas_block===3 || l.canvas_block===4);
     var step=0;
     var backBtn=card.querySelector('#fwBack');
     function advance(){ if(step<fields.length-1){ step++; render(); } else { finish(); } }
@@ -747,7 +747,9 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
       else {
         window.__sgShow=null; // motor contextual do bloco 3 se registra dentro do renderBlock
         window.ADP_CANVAS.renderBlock(ci, l.canvas_block, CANVAS[l.canvas_block]||{}, function(b,data){ CANVAS[b]=data; if(window.__matrizGate) window.__matrizGate(); },
-          { getNicho:function(){ return window.ADP_CANVAS.nichoFromBlock2(CANVAS[2]); } });
+          { getNicho:function(){ return window.ADP_CANVAS.nichoFromBlock2(CANVAS[2]); },
+            getCanvas:function(){ return CANVAS; },
+            saveVoce:function(v){ CANVAS[0]=v; window.ADP.saveBlock(0, v).catch(function(){}); } });
         initFormWizard(l);
       }
     }
@@ -765,9 +767,9 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
       // AULA FINAL — clímax: a entrega é o posicionamento. Leva direto pro Estrategista (gera sozinho lá).
       return '<div class="nextstep-final">'
         + (isDone?'<span class="done-status">'+ICON_DONE+'Curso concluído</span>':'')
-        + '<h3 class="nsf-title">Sua matéria-prima está pronta</h3>'
-        + '<p class="nsf-sub">Você já definiu nicho, cliente, dor e monopólio. Agora a IA junta tudo e transforma num posicionamento pronto pra usar.</p>'
-        + '<button class="esc-cont esc-cont-lg" id="finalGen" type="button">Montar meu posicionamento com a IA →</button>'
+        + '<h3 class="nsf-title">A matéria-prima está pronta.</h3>'
+        + '<p class="nsf-sub">Você já definiu a direção, escolheu o cliente, encontrou a ruminação e identificou o que torna teu trabalho difícil de copiar. Agora a IA vai juntar tudo e transformar isso em posicionamento.</p>'
+        + '<button class="esc-cont esc-cont-lg" id="finalGen" type="button">Juntar tudo e encontrar meu posicionamento →</button>'
         + '<a class="sbtn" href="canvas.html">Revisar meu Canvas</a>'
         + '</div>';
     }

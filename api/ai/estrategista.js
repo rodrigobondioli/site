@@ -257,6 +257,55 @@ async function handleSugestoes(req, res, user, body) {
   }
 }
 
+// 🏰 IA do MONOPÓLIO (Bloco 4 — Seu diferencial) — cruza a matéria-prima REAL e devolve 2-3 diferenciais.
+// Reusa a rota /api/ai/estrategista, task === 'monopolio'. Só usa fatos do Canvas do próprio aluno.
+const MONOPOLIO_SYSTEM = `Você é o gerador do DIFERENCIAL (monopólio pessoal) do curso De Genérico a Especialista (Rodrigo Bondioli, movimento Anti Designer Pato).
+Voz: direta, seca, anti-guru, tiozão. Zero emoji, zero marketingês ("potencial", "jornada", "alta performance").
+TAREFA: cruzar a matéria-prima REAL do aluno (história, competências, provas, preferências, nicho escolhido, cliente ideal e a ruminação/dor dele) e devolver de 2 a 3 possibilidades de DIFERENCIAL — o começo do monopólio dele: o que torna o trabalho dele DIFÍCIL DE COPIAR.
+Cada opção = um cruzamento CONCRETO: [o que ele já viveu / faz bem / provou] + [o nicho e o cliente] → por que isso é difícil de copiar. O "porque" diz de QUAL fato da matéria-prima aquilo saiu.
+REGRA DE FONTE (dura): use EXCLUSIVAMENTE fatos presentes no JSON do aluno. NÃO invente experiência, prova, método, autoridade, número, vivência ou história que ele não informou. Se o fato não está no JSON, ele não existe.
+REGRA DE ISOLAMENTO: nunca use mercados, históricos, públicos ou exemplos que não estejam no JSON do aluno atual.
+PROIBIDO adjetivo vazio sem lastro: "estratégico", "inovador", "criativo", "personalizado", "visão única", "abordagem diferenciada" — só pode aparecer se explicado concretamente com um fato real do aluno.
+LINGUAGEM SIMPLES, na lata. Cada opção tem que ser impossível de reutilizar pra outro aluno — específica da história DELE. Se a matéria-prima for rala, gere a melhor aposta possível com o que tem; não invente pra encher.
+Responda SÓ em JSON, sem texto fora:
+{ "opcoes": [ {"titulo":"o diferencial numa frase concreta, na 2ª pessoa ('Você...')","porque":"1 frase seca: de qual fato da matéria-prima isso saiu"} ] }`;
+
+async function handleMonopolio(req, res, user) {
+  const url = process.env.SUPABASE_URL, svc = process.env.SUPABASE_SERVICE_ROLE;
+  const course = 'p1-generico-especialista';
+  async function block(n) {
+    try {
+      const r = await fetch(`${url}/rest/v1/canvas_answers?user_id=eq.${user.id}&course_id=eq.${encodeURIComponent(course)}&block=eq.${n}&select=data`,
+        { headers: { apikey: svc, Authorization: `Bearer ${svc}` } });
+      if (r.ok) { const rows = await r.json(); return (rows[0] && rows[0].data) || {}; }
+    } catch (e) {}
+    return {};
+  }
+  const [b0, b2, b3] = await Promise.all([block(0), block(2), block(3)]);
+  let nicho = '';
+  if (b2 && b2.hipotese_principal && b2.hipotese_principal.nicho) nicho = b2.hipotese_principal.nicho;
+  else if (b2 && Array.isArray(b2.rows)) { const named = b2.rows.filter(r => r && String(r.name || '').trim()); if (named.length) { named.sort((a, b) => ((b.total || 0) - (a.total || 0))); nicho = named[0].name; } }
+  const ctx = {
+    historia: b0.historia || '',
+    competencias: b0.competencias || b0.forte || '',
+    provas: b0.provas || b0.forte || '',
+    preferencias: b0.preferencias || '',
+    nicho: nicho,
+    cliente_ideal: (b3 && b3.ideal) || '',
+    ruminacao: (b3 && b3.dor) || ''
+  };
+  const temBase = String(ctx.historia).trim() || (Array.isArray(b0.competencias) && b0.competencias.length) || (Array.isArray(b0.provas) && b0.provas.length) || String(b0.forte || '').trim();
+  if (!temBase) return res.status(200).json({ ok: true, data: { opcoes: [], falta: 'historia' } });
+  const user_msg = `Matéria-prima REAL do aluno (JSON):\n${JSON.stringify(ctx)}\n\nGera 2 a 3 diferenciais no JSON pedido, usando SÓ esses fatos.`;
+  try {
+    const out = await ai(MODEL_SMART(), [{ role: 'system', content: MONOPOLIO_SYSTEM }, { role: 'user', content: user_msg }], 900, 0.7);
+    const data = extractJSON(out) || { opcoes: [] };
+    return res.status(200).json({ ok: true, data });
+  } catch (e) {
+    return res.status(500).json({ error: String(e.message || e) });
+  }
+}
+
 export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
   const user = await getUser(req);
@@ -271,6 +320,8 @@ export default async function handler(req, res) {
   if (body && body.task === 'hipoteses') return handleHipoteses(req, res, user);
   // Sugestões contextuais do Bloco 3 (Quem Você Atende) — mesma rota, task diferente.
   if (body && body.task === 'sugestoes') return handleSugestoes(req, res, user, body);
+  // IA do Monopólio (Bloco 4 — diferencial) — mesma rota, task diferente.
+  if (body && body.task === 'monopolio') return handleMonopolio(req, res, user);
 
   const { canvas } = body || {};
   if (!canvas) return res.status(400).json({ error: 'Canvas vazio.' });

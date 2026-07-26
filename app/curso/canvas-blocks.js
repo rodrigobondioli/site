@@ -325,6 +325,11 @@ window.ADP_CANVAS = (function () {
     + '.adp-sg .rbtn:hover{background:var(--ink,#18181b);color:#fff}'
     + '.adp-sg .rbtn.rbtn-primary{border:none;background:var(--pink,#ff00d7);color:#fff;padding:12px 24px}'
     + '.adp-sg .rbtn.rbtn-primary:hover{filter:brightness(1.06);background:var(--pink,#ff00d7);color:#fff}'
+    + '.adp-sg .rum-intro-t{font-size:16px;font-weight:700;color:var(--ink,#18181b);margin:0 0 8px;line-height:1.3;text-wrap:balance}'
+    + '.adp-sg .rum-intro-x{font-size:13.5px;color:var(--muted,#71717a);margin:0 0 16px;line-height:1.55;max-width:64ch;text-wrap:balance}'
+    + '.adp-sg .mono-box{border:1px solid var(--line,#d4d4d8);background:var(--soft,#f4f4f5);border-radius:12px;padding:14px 16px;margin:0 0 12px;font-size:13.5px;line-height:1.6;color:var(--ink,#18181b);text-wrap:pretty}'
+    + '.adp-sg .mono-edit{width:100%;font:inherit;font-size:14px;line-height:1.5;color:var(--ink,#18181b);border:1.5px solid var(--line,#d4d4d8);border-radius:12px;padding:12px 14px;margin:0 0 12px;resize:vertical;box-sizing:border-box}'
+    + '.adp-sg .mono-edit:focus{outline:none;border-color:var(--ink,#18181b)}'
     + '.adp-sg .rlbl{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--faint,#a1a1aa);margin:0 0 8px}'
     + '.adp-sg .rnote{font-size:12px;color:var(--faint,#a1a1aa);margin:14px 0 0;line-height:1.5;text-wrap:balance}'
     // CONFIRMAÇÃO (pós-escolha) — sem card/decoração: resposta + ações no mesmo eixo à esquerda, botão padrão (.esc-cont)
@@ -766,9 +771,14 @@ window.ADP_CANVAS = (function () {
       nao:           { load: 'Encontrando os cortes mais coerentes…', chosenSub: 'Esta é a direção de corte que você vai usar nesta etapa.' },
       ideal:         { load: 'Montando os perfis de cliente…', chosenSub: 'Este é o cliente que você vai atender primeiro.' },
       intermediario: { load: 'Buscando clientes secundários…', chosenSub: 'Este é o cliente secundário desta etapa.' },
-      dor:           { load: 'Encontrando as frases que ficam na cabeça do cliente…', note: true, chosenSub: 'Esta é a frase que você vai usar como dor principal.' },
+      dor:           { load: 'Encontrando as frases que ficam na cabeça do cliente…', note: true, chosenSub: 'Esta é a dor que vai orientar teu posicionamento.' },
       desejo:        { load: 'Pensando no que ele quer no lugar…', chosenSub: 'Este é o desejo que você vai usar nesta etapa.' }
     };
+    // frases de processamento da IA de Ruminação (só visível na etapa "dor")
+    var ROT = ['Cruzando o cliente com a situação…', 'Procurando o pensamento por trás do problema…', 'Separando sintoma de ruminação…', 'Transformando o problema em uma frase real…'];
+    var rotTimer = null, rotI = 0;
+    function stopRotate() { if (rotTimer) { clearInterval(rotTimer); rotTimer = null; } }
+    function startRotate() { stopRotate(); rotI = 0; rotTimer = setInterval(function () { rotI = (rotI + 1) % ROT.length; var el = host.querySelector('.rmsg-t'); if (el) el.textContent = ROT[rotI]; else stopRotate(); }, 1400); }
     function st(k) { return cache[k] || (cache[k] = { options: [], chips: [], error: false, loading: false, editing: false, tried: false, prev: '' }); }
     function taEl(k) { return container.querySelector('textarea[data-key="' + k + '"]'); }
     function fldEl(k) { var t = taEl(k); return t ? (t.closest ? t.closest('.adp-fld') : null) : null; }
@@ -829,13 +839,26 @@ window.ADP_CANVAS = (function () {
     }
 
     function render() {
+      stopRotate();
       if (!active) { host.innerHTML = ''; return; }
       var k = active, s = st(k), cfg = CFG[k] || {}, chosen = valOf(k);
       if (s.editing) { showComposer(k, true); host.innerHTML = '<div class="rum-acts"><button class="rbtn rbtn-primary" type="button" data-act="save">Salvar ajuste</button><button class="rbtn rbtn-sec" type="button" data-act="cancel">Cancelar</button></div>'; bind(); return; }
       showComposer(k, false);
       var head = headHTML(k);
       if (s.falta) { host.innerHTML = head + '<p class="rsub">' + esc(faltaTxt(s.falta)) + '</p>' + (s.falta === 'nicho' ? '' : '<button class="rbtn rbtn-primary" type="button" data-act="fix" data-fix="' + s.falta + '">Completar respostas anteriores</button>'); bind(); return; }
-      if (s.loading) { host.innerHTML = head + '<p class="rmsg"><span class="spin"></span>' + esc(cfg.load || 'Gerando…') + '</p>'; return; }
+      // RUMINAÇÃO (dor): antes de gerar, mostra a IA como ENTREGA (título + CTA), não auto-gera escondido
+      if (s.intro && !chosen) {
+        host.innerHTML = '<h4 class="rum-intro-t">Agora vamos entrar na cabeça desse cliente</h4>'
+          + '<p class="rum-intro-x">A IA vai cruzar a direção escolhida, o cliente que você quer atender e o problema percebido pra encontrar a frase que fica rodando na cabeça dele.</p>'
+          + '<button class="rbtn rbtn-primary" type="button" data-act="rodar">Rodar a IA de Ruminação →</button>';
+        bind(); return;
+      }
+      if (s.loading) {
+        var lmsg = (k === 'dor') ? ROT[0] : (cfg.load || 'Gerando…');
+        host.innerHTML = head + '<p class="rmsg"><span class="spin"></span><span class="rmsg-t">' + esc(lmsg) + '</span></p>';
+        if (k === 'dor') startRotate();
+        return;
+      }
       if (s.error && !chosen) {
         host.innerHTML = head + '<p class="rsub">Não consegui gerar as opções agora.</p><div class="rum-acts"><button class="rbtn rbtn-primary" type="button" data-act="gen">Tentar novamente</button><button class="rbtn rbtn-sec" type="button" data-act="manual">Escrever minha própria resposta</button></div>';
         bind(); return;
@@ -843,6 +866,7 @@ window.ADP_CANVAS = (function () {
       if (chosen) { // estado enxuto de confirmação: escolha + ações à direita
         var pdesc = pickedDescOf(k);
         var h = '<div class="sg-chosen"><div class="sg-opt-t">' + esc(chosen) + '</div>' + (pdesc ? '<div class="sg-opt-d">' + esc(pdesc) + '</div>' : '') + '</div>'
+          + (k === 'dor' && cfg.chosenSub ? '<p class="rsub" style="margin:10px 0 4px">' + esc(cfg.chosenSub) + '</p>' : '')
           + '<div class="sg-confirm-acts">'
           + (window.__rumWizard ? '<button class="esc-cont" type="button" data-act="continue">Continuar →</button>' : '')
           + '<div class="sg-subacts"><button class="sg-lnk" type="button" data-act="trocar">Trocar escolha</button><button class="sg-lnk" type="button" data-act="edit">Editar</button></div>'
@@ -851,7 +875,8 @@ window.ADP_CANVAS = (function () {
         host.innerHTML = h; bind(); return;
       }
       if (s.options.length) {
-        host.innerHTML = head + s.options.map(optCard).join('')
+        var lead = (k === 'dor') ? '<h4 class="rum-intro-t">A IA encontrou estas ruminações:</h4><p class="rum-intro-x">Escolhe a que mais parece algo que esse cliente pensaria sozinho, sem falar pra ninguém.</p>' : '';
+        host.innerHTML = head + lead + s.options.map(optCard).join('')
           + '<div class="sg-tert"><button class="sg-lnk" type="button" data-act="gen">Gerar outras opções</button><button class="sg-lnk" type="button" data-act="manual">Escrever minha resposta</button></div>';
         bind(); return;
       }
@@ -872,6 +897,7 @@ window.ADP_CANVAS = (function () {
       Array.prototype.forEach.call(host.querySelectorAll('[data-act]'), function (b) {
         b.addEventListener('click', function () {
           var a = this.getAttribute('data-act'), k = active, s = st(k);
+          if (a === 'rodar') { s.intro = false; gen(k); return; }
           if (a === 'gen') { gen(k); return; }
           if (a === 'trocar') { setVal(k, ''); s.pickedDesc = ''; s.pickedTitulo = ''; render(); return; }
           if (a === 'manual') { setVal(k, ''); s.pickedDesc = ''; s.pickedTitulo = ''; s.editing = true; s.prev = ''; render(); focusFld(k); return; }
@@ -890,7 +916,157 @@ window.ADP_CANVAS = (function () {
       active = key; var s = st(key);
       if (valOf(key)) { render(); return; }          // já escolheu antes → mostra a escolha
       if (!depOK(key)) { s.falta = missingDep(key); s.loading = false; render(); return; }
+      if (key === 'dor' && !s.tried) { s.intro = true; render(); return; } // Ruminação: mostra a IA como entrega (não auto-gera)
       if (!s.tried) { gen(key); return; }            // primeira vez nesta etapa → gera sozinho
+      render();
+    };
+  }
+
+  // 🏰 Engine do Bloco 4 (Seu Monopólio): história reutilizada + IA do Monopólio visível. Independente da engine do Bloco 3.
+  function attachMonopolioEngine(container, def, opts) {
+    var host = document.createElement('div'); host.className = 'adp-sg'; container.appendChild(host);
+    var active = null, S = {};
+    function st(k) { return S[k] || (S[k] = { options: [], loading: false, tried: false, editing: false, corr: false, prev: '', pickedTitulo: '', pickedDesc: '', phase: '' }); }
+    function CV() { return (opts && opts.getCanvas && opts.getCanvas()) || {}; }
+    function voce() { return CV()[0] || {}; }
+    function b3() { return CV()[3] || {}; }
+    function nichoNow() { return (opts && opts.getNicho && opts.getNicho()) || ''; }
+    function taEl(k) { return container.querySelector('textarea[data-key="' + k + '"]'); }
+    function valOf(k) { var t = taEl(k); return t ? t.value.trim() : ''; }
+    function setVal(k, v) { var t = taEl(k); if (t) { t.value = v; t.dispatchEvent(new Event('input', { bubbles: true })); } }
+    function showComposer(k, on) { var t = taEl(k); var f = t && t.closest ? t.closest('.adp-fld') : null; if (f) f.classList.toggle('rum-hide', !on); }
+    function focusFld(k) { var t = taEl(k); if (t) setTimeout(function () { try { t.focus(); var L = t.value.length; t.setSelectionRange(L, L); } catch (e) {} }, 0); }
+
+    var ROT = ['Cruzando tua história com o nicho…', 'Procurando o que só você viveu…', 'Separando o que é copiável do que não é…', 'Montando teu diferencial…'];
+    var rt = null, ri = 0;
+    function stopR() { if (rt) { clearInterval(rt); rt = null; } }
+    function startR() { stopR(); ri = 0; rt = setInterval(function () { ri = (ri + 1) % ROT.length; var e = host.querySelector('.rmsg-t'); if (e) e.textContent = ROT[ri]; else stopR(); }, 1400); }
+
+    function histResumo() {
+      var v = voce(), parts = [];
+      var h = String(v.historia || '').trim(); if (h) parts.push(h);
+      var comps = (v.competencias || []).map(function (c) { return c && c.o_que; }).filter(Boolean);
+      if (comps.length) parts.push('O que você faz bem: ' + comps.join(', ') + '.');
+      var provs = (v.provas || []).map(function (p) { return p && (p.consequencia || p.situacao); }).filter(Boolean);
+      if (provs.length) parts.push('Provas que você trouxe: ' + provs.join(' · ') + '.');
+      return parts.join(' ');
+    }
+    function provaDraft() {
+      var v = voce();
+      var ps = (v.provas || []).map(function (p) { if (!p) return ''; return [p.situacao, p.acao, p.consequencia].filter(Boolean).join(' → '); }).filter(Boolean);
+      if (ps.length) return ps.join('\n');
+      var ce = (v.competencias || []).filter(function (c) { return c && c.exemplo; }).map(function (c) { return (c.o_que ? c.o_que + ': ' : '') + c.exemplo; });
+      return ce.join('\n');
+    }
+    function fraseDraft() {
+      var dor = String(b3().dor || '').trim(), nicho = nichoNow(), dif = valOf('diferencial');
+      if (!dor && !nicho && !dif) return '';
+      return 'Eu resolvo ' + (dor ? ('“' + dor + '”') : '[a dor]') + ' para ' + (nicho || '[o nicho]') + (dif ? (' através de ' + dif) : ' através de [o teu recorte]') + '.';
+    }
+    function normOpts(a) { return (a || []).map(function (o) { if (typeof o === 'string') return { titulo: o, desc: '', val: o }; var t = (o && o.titulo) || ''; return { titulo: t, desc: (o && o.porque) || (o && o.desc) || '', val: t }; }).filter(function (o) { return o.val && o.val.trim(); }).slice(0, 3); }
+    function optCard(o) { return '<div class="sg-opt"><div class="sg-opt-t">' + esc(o.titulo) + '</div>' + (o.desc ? '<div class="sg-opt-d">' + esc(o.desc) + '</div>' : '') + '<button type="button" class="sg-pick" data-pick="' + esc(o.val) + '">Escolher esta</button></div>'; }
+
+    async function genDif() {
+      var s = st('diferencial'); s.tried = true; s.loading = true; s.phase = 'loading'; showComposer('diferencial', false); render();
+      try {
+        var r = await window.ADP.monopolio(); var d = (r && r.data) ? r.data : r;
+        if (d && d.falta) { s.loading = false; s.phase = 'falta'; render(); return; }
+        s.options = normOpts(d && d.opcoes);
+        s.phase = s.options.length ? 'options' : 'error';
+      } catch (e) { s.phase = 'error'; }
+      s.loading = false; render();
+    }
+
+    function renderHist() {
+      var resumo = histResumo();
+      var body = '<h4 class="rum-intro-t">A história que você já trouxe</h4>';
+      body += resumo ? '<div class="mono-box">' + esc(resumo) + '</div>' : '<div class="mono-box">Você ainda não contou muito da tua história no Escavador — dá pra aprofundar agora.</div>';
+      body += '<div class="sg-tert" style="margin:0 0 16px"><button class="sg-lnk" type="button" data-act="corr">Corrigir minha história</button></div>';
+      body += '<p class="rum-intro-x"><b>Agora que você viu por que sua história importa, vale aprofundar um pouco.</b> Não é pra contar tua biografia inteira. É pra achar a parte da tua trajetória que, cruzada com o nicho escolhido, torna teu trabalho difícil de copiar.</p>';
+      body += '<p class="sg-q">Tem alguma experiência, virada, erro, trabalho ou vivência fora do design que influencia a forma como você resolve problemas hoje?</p>';
+      body += '<textarea class="mono-edit" id="monoDeep" rows="3" placeholder="Responde aqui, do teu jeito…"></textarea>';
+      body += '<div class="rum-acts"><button class="rbtn rbtn-primary" type="button" data-act="deepAdd">Adicionar à minha história</button><button class="rbtn rbtn-sec" type="button" data-act="toIntro">Minha história já está suficiente</button></div>';
+      host.innerHTML = body; bind();
+    }
+    function renderChosen() {
+      var s = st('diferencial'), chosen = valOf('diferencial');
+      var pdesc = (s.pickedTitulo === chosen) ? s.pickedDesc : '';
+      host.innerHTML = '<div class="sg-chosen"><div class="sg-opt-t">' + esc(chosen) + '</div>' + (pdesc ? '<div class="sg-opt-d">' + esc(pdesc) + '</div>' : '') + '</div>'
+        + '<p class="rsub" style="margin:10px 0 4px">Este é o começo do teu monopólio.</p>'
+        + '<div class="sg-confirm-acts"><button class="esc-cont" type="button" data-act="continue">Continuar →</button><div class="sg-subacts"><button class="sg-lnk" type="button" data-act="rodar">Gerar outras</button><button class="sg-lnk" type="button" data-act="edit">Ajustar</button></div></div>';
+      bind();
+    }
+    function renderDif() {
+      var s = st('diferencial'), chosen = valOf('diferencial');
+      if (s.corr) {
+        showComposer('diferencial', false);
+        host.innerHTML = '<h4 class="rum-intro-t">Corrigir minha história</h4><textarea class="mono-edit" id="monoHist" rows="4">' + esc(String(voce().historia || '')) + '</textarea>'
+          + '<div class="rum-acts"><button class="rbtn rbtn-primary" type="button" data-act="histSave">Salvar história</button><button class="rbtn rbtn-sec" type="button" data-act="histCancel">Cancelar</button></div>';
+        bind(); var mh = host.querySelector('#monoHist'); if (mh) setTimeout(function () { try { mh.focus(); } catch (e) {} }, 0); return;
+      }
+      if (s.editing) { showComposer('diferencial', true); host.innerHTML = '<div class="rum-acts"><button class="rbtn rbtn-primary" type="button" data-act="save">Salvar</button><button class="rbtn rbtn-sec" type="button" data-act="cancel">Cancelar</button></div>'; bind(); return; }
+      showComposer('diferencial', false);
+      if (chosen && s.phase !== 'options') { renderChosen(); return; }
+      if (s.loading) { host.innerHTML = '<p class="rmsg"><span class="spin"></span><span class="rmsg-t">' + esc(ROT[0]) + '</span></p>'; startR(); return; }
+      if (s.phase === 'falta') { host.innerHTML = '<p class="rsub">Falta a matéria-prima da tua história (Aula 1) pra cruzar. Volta e completa o Escavador.</p>'; return; }
+      if (s.phase === 'error') { host.innerHTML = '<p class="rsub">Não consegui gerar agora.</p><div class="rum-acts"><button class="rbtn rbtn-primary" type="button" data-act="rodar">Tentar de novo</button><button class="rbtn rbtn-sec" type="button" data-act="manual">Escrever do meu jeito</button></div>'; bind(); return; }
+      if (s.phase === 'options') {
+        host.innerHTML = '<h4 class="rum-intro-t">A IA encontrou o que ninguém copia:</h4><p class="rum-intro-x">Escolhe o cruzamento que mais parece verdade sobre você.</p>'
+          + s.options.map(optCard).join('')
+          + '<div class="sg-tert"><button class="sg-lnk" type="button" data-act="rodar">Gerar outras</button><button class="sg-lnk" type="button" data-act="manual">Escrever do meu jeito</button></div>';
+        bind(); return;
+      }
+      if (s.phase === 'intro') {
+        host.innerHTML = '<h4 class="rum-intro-t">Agora vamos cruzar tudo</h4>'
+          + '<p class="rum-intro-x">A IA vai juntar tua história, competência, prova, nicho e a dor do cliente pra encontrar o começo do teu monopólio.</p>'
+          + '<button class="rbtn rbtn-primary" type="button" data-act="rodar">Encontrar o que ninguém copia →</button>';
+        bind(); return;
+      }
+      renderHist(); // fase inicial (Fatia 2)
+    }
+    function renderPlain(k) {
+      if (k === 'prova' && !valOf('prova')) { var pd = provaDraft(); if (pd) setVal('prova', pd); }
+      if (k === 'frase' && !valOf('frase')) { var fd = fraseDraft(); if (fd) setVal('frase', fd); }
+      showComposer(k, true);
+      var hint = k === 'prova' ? '<p class="rum-intro-x">Puxei as provas que você já contou no Escavador. Ajusta ou complementa — não invente.</p>'
+        : k === 'frase' ? '<p class="rum-intro-x">Rascunho montado com teu nicho, tua dor e teu diferencial. Deixa do teu jeito.</p>'
+          : '<p class="rum-intro-x">Os passos reais de como você resolve, em ordem. Sem nome bonito — só as fases.</p>';
+      host.innerHTML = hint + '<div class="rum-acts"><button class="rbtn rbtn-primary" type="button" data-act="contPlain">Continuar →</button></div>';
+      bind();
+    }
+    function render() { stopR(); if (!active) { host.innerHTML = ''; return; } if (active === 'diferencial') renderDif(); else renderPlain(active); }
+
+    function bind() {
+      Array.prototype.forEach.call(host.querySelectorAll('[data-pick]'), function (b) {
+        b.addEventListener('click', function () {
+          var s = st('diferencial'), v = this.getAttribute('data-pick');
+          var o = s.options.filter(function (x) { return x.val === v; })[0];
+          s.pickedTitulo = v; s.pickedDesc = o ? o.desc : ''; s.phase = 'chosen';
+          setVal('diferencial', v); render();
+        });
+      });
+      Array.prototype.forEach.call(host.querySelectorAll('[data-act]'), function (b) {
+        b.addEventListener('click', function () {
+          var a = this.getAttribute('data-act'), s = st('diferencial');
+          if (a === 'corr') { s.corr = true; render(); return; }
+          if (a === 'histSave') { var t = host.querySelector('#monoHist'); var v = voce(); v.historia = t ? t.value.trim() : (v.historia || ''); if (opts && opts.saveVoce) opts.saveVoce(v); s.corr = false; render(); return; }
+          if (a === 'histCancel') { s.corr = false; render(); return; }
+          if (a === 'deepAdd') { var d = host.querySelector('#monoDeep'); var add = d ? d.value.trim() : ''; if (add) { var vv = voce(); vv.historia = ((vv.historia || '').trim() + ' ' + add).trim(); if (opts && opts.saveVoce) opts.saveVoce(vv); } s.phase = 'intro'; render(); return; }
+          if (a === 'toIntro') { s.phase = 'intro'; render(); return; }
+          if (a === 'rodar') { genDif(); return; }
+          if (a === 'manual') { setVal('diferencial', ''); s.pickedTitulo = ''; s.pickedDesc = ''; s.editing = true; s.prev = ''; render(); focusFld('diferencial'); return; }
+          if (a === 'edit') { s.editing = true; s.prev = valOf('diferencial'); render(); focusFld('diferencial'); return; }
+          if (a === 'save') { s.editing = false; render(); return; }
+          if (a === 'cancel') { setVal('diferencial', s.prev); s.editing = false; render(); return; }
+          if (a === 'continue' || a === 'contPlain') { if (window.__rumWizard && window.__rumWizard.cont) window.__rumWizard.cont(); return; }
+        });
+      });
+    }
+
+    (def.fields || []).forEach(function (f) { showComposer(f.key, false); });
+    window.__sgShow = function (key) {
+      active = key; var s = st(key);
+      if (key === 'diferencial') { if (valOf('diferencial')) { s.phase = 'chosen'; } render(); return; }
       render();
     };
   }
@@ -904,6 +1080,8 @@ window.ADP_CANVAS = (function () {
     if (def.type === 'matrix') { renderMatrix(container, data, onSaved); return; }
     renderFields(container, def, data, onSaved);
     if (blockNum === 3) attachSuggestEngine(container, def, opts || {});
+    // Bloco 4: engine visível só no wizard da aula (tem getCanvas). No canvas.html (revisão) fica campo editável normal, sem esconder nada.
+    if (blockNum === 4 && opts && opts.getCanvas) attachMonopolioEngine(container, def, opts);
   }
 
   return { BLOCKS: BLOCKS, byBlock: byBlock, isFilled: isFilled, renderBlock: renderBlock, nichoFromBlock2: nichoFromBlock2, matrizReady: matrizReady, matrizRemaining: matrizRemaining, gateForBlock: gateForBlock, blockCompletion: blockCompletion };
