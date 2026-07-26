@@ -271,7 +271,7 @@ window.ADP_CANVAS = (function () {
     + '.mx2-vd .vdi.ok{background:var(--lime,#e7f99a)}.mx2-vd .vdi.mid{background:var(--faint,#a1a1aa)}.mx2-vd .vdi.bad{background:var(--ink,#18181b)}'
     + '.mx2-vd .vdt b{font-size:14.5px;color:var(--ink,#18181b);font-weight:700}'
     + '.mx2-vd .vdt p{margin:4px 0 0;font-size:13px;color:var(--muted,#71717a);line-height:1.5}'
-    + '.mx2-decide{margin-top:14px;display:flex;flex-direction:column;gap:11px;align-items:flex-start}'
+    + '.mx2-decide{margin-top:14px;display:flex;flex-direction:column;gap:11px;align-items:flex-end;text-align:right}'
     + '.mx2-cta{font-weight:700;font-size:14px;padding:12px 24px;border-radius:999px;background:var(--pink,#ff00d7);color:#fff;border:none;cursor:pointer;white-space:nowrap}'
     + '.mx2-cta:hover{filter:brightness(1.06)}'
     + '.mx2-sec2{font-size:13.5px;font-weight:700;color:var(--ink,#18181b);text-decoration:underline;text-underline-offset:2px;background:none;border:none;cursor:pointer;padding:2px 0}'
