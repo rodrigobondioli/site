@@ -372,21 +372,26 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
     return canvas;
   }
 
-  $("gerar").addEventListener("click", async ()=>{
+  // mensagens progressivas do loading (sem % falso)
+  var LOAD_MSGS=['Lendo sua matéria-prima…','Cruzando nicho, cliente e dor…','Encontrando seu monopólio…','Montando sua frase e seu plano…'];
+  async function doGerar(){
     if(window.ADP.devMode){ say("Modo dev: publique com as chaves (Supabase + OpenAI) pra gerar de verdade."); return; }
-    const btn = $("gerar"); btn.disabled = true;
-    msg.innerHTML = '<span class="spin"></span>O Estrategista está lendo teu Canvas inteiro… leva uns segundos.'; msg.classList.remove("gone");
+    const btn = $("gerar"); if(btn.disabled) return; btn.disabled = true;   // trava clique-duplo / envio novo durante o loading
+    var li=0; msg.innerHTML='<span class="spin"></span>'+LOAD_MSGS[0]; msg.classList.remove("gone");
+    var iv=setInterval(function(){ li=(li+1)%LOAD_MSGS.length; msg.innerHTML='<span class="spin"></span>'+LOAD_MSGS[li]; }, 2500);
     try{
       const canvas = await buildCanvas();
-      if(!canvas || Object.keys(canvas).length===0){ say("Preenche o Canvas primeiro — sem matéria-prima não tem plano."); btn.disabled=false; return; }
+      if(!canvas || Object.keys(canvas).length===0){ clearInterval(iv); say("Preenche o Canvas primeiro — sem matéria-prima não tem plano."); btn.disabled=false; return; }
       const out = await window.ADP.estrategista(canvas);
       const d = out.data || out;
+      clearInterval(iv);
       render(d);
       window.ADP.savePlan(d).catch(function(){});   // persiste — não some mais ao recarregar
       say("Pronto. Gerado a partir do seu Canvas.");
-    }catch(err){ say(err.message || "Não consegui gerar agora. Tenta de novo."); }
+    }catch(err){ clearInterval(iv); say(err.message || "Não consegui montar seu posicionamento agora. Tenta de novo."); }
     btn.disabled = false;
-  });
+  }
+  $("gerar").addEventListener("click", doGerar);
 
   // copiar
   $("copiar").addEventListener("click", ()=>{
@@ -404,14 +409,16 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
     var fr=$("f-frase"); if(fr) fr.textContent="Seu posicionamento ainda não foi gerado.";
   }
 
-  // no boot: recarrega o último posicionamento salvo. Se não existe, mostra estado vazio.
+  // no boot: recarrega o último posicionamento salvo. Se veio do fim do curso (?gerar=1) e ainda não tem, gera sozinho.
   async function boot(){
     if(window.ADP.devMode) return; // dev mantém o exemplo pra prototipar
+    var wantGen = /[?&]gerar=1/.test(location.search);
     try{
       const r = await window.ADP.loadPlan();
-      if(r && r.plan){ render(r.plan); say("Gerado a partir do seu Canvas."); }
+      if(r && r.plan){ render(r.plan); say("Gerado a partir do seu Canvas."); }        // já existe → NÃO sobrescreve automático
+      else if(wantGen){ doGerar(); }                                                    // veio do curso e ainda não tem → gera automaticamente
       else { clearExample(); say("Preenche os 5 blocos do Canvas e clica em Gerar com o Estrategista — ele lê tua matéria-prima e monta a frase de especialista, o nicho, a frase de valor e o plano de 90 dias."); }
-    }catch(e){ /* se o load falhar, deixa como está */ }
+    }catch(e){ if(wantGen){ doGerar(); } }
   }
   boot();
 })();

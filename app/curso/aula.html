@@ -127,6 +127,14 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .done-status{display:inline-flex;align-items:center;gap:7px;font-size:13.5px;font-weight:700;color:var(--muted)}
 .done-status svg{width:16px;height:16px;fill:none;stroke:var(--muted);stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
 @media(max-width:560px){.action-row{justify-content:stretch}.action-row .esc-cont,.action-row .sbtn{flex:1;justify-content:center}}
+/* clímax: bloco final da última aula — a entrega (posicionamento) é o maior CTA da tela */
+.nextstep-final{margin-top:38px;padding-top:28px;border-top:1px solid var(--line);display:flex;flex-direction:column;align-items:flex-start}
+.nextstep-final .done-status{margin-bottom:14px}
+.nsf-title{font-size:22px;font-weight:700;letter-spacing:-.01em;color:var(--ink);margin:0 0 8px;line-height:1.25}
+.nsf-sub{font-size:14px;color:var(--muted);line-height:1.6;margin:0 0 22px;max-width:60ch;text-wrap:balance}
+.esc-cont-lg{font-size:15.5px;padding:15px 28px}
+.nextstep-final .sbtn{margin-top:14px}
+@media(max-width:560px){.nextstep-final .esc-cont-lg{width:100%;justify-content:center}.nextstep-final .sbtn{width:100%;justify-content:center}}
 /* aplique aqui (bloco do Canvas embaixo do vídeo) */
 .applyhere{position:relative;margin-top:44px;border:1px solid var(--line);border-radius:var(--r);padding:26px 24px 22px}
 .applyhere .adp-syncnote{font-size:12.5px;color:var(--muted);margin-top:18px;padding-top:13px;border-top:1px solid var(--line)}
@@ -709,19 +717,27 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
     var total=LESSONS.length;
     var next=idx<total-1?LESSONS[idx+1]:null;
     var isDone=DONE.has(cur.id);
-    var nextHref = next? ('aula.html?a='+next.id) : 'posicionamento.html';
+    if(!next){
+      // AULA FINAL — clímax: a entrega é o posicionamento. Leva direto pro Estrategista (gera sozinho lá).
+      return '<div class="nextstep-final">'
+        + (isDone?'<span class="done-status">'+ICON_DONE+'Curso concluído</span>':'')
+        + '<h3 class="nsf-title">Sua matéria-prima está pronta</h3>'
+        + '<p class="nsf-sub">Você já definiu nicho, cliente, dor e monopólio. Agora a IA junta tudo e transforma num posicionamento pronto pra usar.</p>'
+        + '<button class="esc-cont esc-cont-lg" id="finalGen" type="button">Montar meu posicionamento com a IA →</button>'
+        + '<a class="sbtn" href="canvas.html">Revisar meu Canvas</a>'
+        + '</div>';
+    }
+    var nextHref='aula.html?a='+next.id;
     if(isDone){
-      // já concluída: "Aula concluída" vira STATUS passivo (não botão); a ação real é avançar (CTA rosa)
-      var lbl = next? 'Próxima aula →' : 'Montar meu posicionamento →';
+      // "Aula concluída" vira STATUS passivo (não botão); a ação real é avançar (CTA rosa)
       return '<div class="nextstep"><div class="action-row">'
         + '<span class="done-status">'+ICON_DONE+'Aula concluída</span>'
-        + '<a class="esc-cont" href="'+nextHref+'">'+lbl+'</a></div></div>';
+        + '<a class="esc-cont" href="'+nextHref+'">Próxima aula →</a></div></div>';
     }
-    // não concluída: um CTA principal que conclui E avança + secundário branco "só marcar"
-    var lbl2 = next? 'Concluir e ir pra próxima →' : 'Concluir e montar posicionamento →';
+    // um CTA principal que conclui E avança + secundário branco "só marcar"
     return '<div class="nextstep"><div class="action-row">'
       + '<button class="sbtn" id="doneOnly" type="button">Só marcar concluída</button>'
-      + '<button class="esc-cont" id="doneNext" type="button">'+lbl2+'</button></div></div>';
+      + '<button class="esc-cont" id="doneNext" type="button">Concluir e ir pra próxima →</button></div></div>';
   }
   function paintNextStep(){
     var w=document.getElementById('nextStepWrap'); if(!w) return;
@@ -730,6 +746,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
     w.innerHTML=buildNextStep();
     var total=LESSONS.length, next=idx<total-1?LESSONS[idx+1]:null;
     var nextHref = next? ('aula.html?a='+next.id) : 'posicionamento.html';
+    var fg=document.getElementById('finalGen'); if(fg) fg.addEventListener('click', function(){ markDone('posicionamento.html?gerar=1'); }); // conclui a aula final e vai gerar a entrega
     var dn=document.getElementById('doneNext'); if(dn) dn.addEventListener('click', function(){ markDone(nextHref); });
     var doo=document.getElementById('doneOnly'); if(doo) doo.addEventListener('click', function(){ markDone(null); });
   }
