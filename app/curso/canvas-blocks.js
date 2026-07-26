@@ -33,11 +33,11 @@ window.ADP_CANVAS = (function () {
     ]},
     { block: 2, title: 'A Matriz do Nicho', type: 'matrix' },
     { block: 3, title: 'Quem Você Atende (a dor)', type: 'fields', fields: [
-      { key: 'nao',           label: 'Quem eu NÃO atendo (obrigatório)',  ph: 'Quem você recusa. Começa por aqui — posicionamento é dizer não.' },
-      { key: 'ideal',         label: 'Quem você quer atender primeiro dentro desse nicho?', sub: 'Quem é esse cliente e o que está acontecendo quando ele percebe que precisa de ajuda?', ph: 'Ex.: Personal trainer com agenda rodando, mas que recebe sempre as mesmas dúvidas porque o site não explica direito o trabalho dele.' },
-      { key: 'intermediario', label: 'Quem também pode contratar você, mas não é prioridade?', sub: 'Alguém parecido com o cliente ideal, mas com dor menos forte, menos urgente ou menor potencial de projeto.', ph: 'Ex.: Personal trainer que já tem site, mas ele está desatualizado e não ajuda muito a vender.' },
-      { key: 'dor',           label: 'A dor-loop principal',              sub: 'Agora vamos transformar a situação do cliente na frase que fica rodando na cabeça dele.', ph: 'Ex.: “Será que as pessoas desistem de me contratar porque não entendem direito o que eu faço?”' },
-      { key: 'desejo',        label: 'O que ele quer no lugar?',          sub: 'Se esse problema fosse resolvido, o que mudaria na prática para esse cliente?', ph: 'Ex.: Quero que o site explique meu trabalho, tire as dúvidas mais comuns e ajude as pessoas a entender por que deveriam me contratar.' }
+      { key: 'nao',           label: 'Quem fica de fora?',                sub: 'Dentro da direção que você escolheu, quem não faz sentido atender?', ph: 'Ex.: Quem procura só post barato e não vê o site como parte da venda.' },
+      { key: 'ideal',         label: 'Quem você quer atender primeiro dentro dessa direção?', sub: 'Quem é esse cliente e o que acontece quando ele percebe que precisa de ajuda?', ph: 'Ex.: Personal trainer com agenda rodando, mas que recebe sempre as mesmas dúvidas porque o site não explica o trabalho dele.' },
+      { key: 'intermediario', label: 'Quem também pode contratar você, mas não é prioridade?', sub: 'Parecido com o cliente ideal, mas com dor menos forte, menos urgente ou menor projeto.', ph: 'Ex.: Personal trainer que já tem site, mas ele está só desatualizado e ainda não sente urgência.' },
+      { key: 'dor',           label: 'Qual frase fica rodando na cabeça desse cliente?', sub: 'O pensamento íntimo que não sai da cabeça dele.', ph: 'Ex.: “Será que as pessoas desistem de me contratar porque não entendem o que eu faço?”' },
+      { key: 'desejo',        label: 'O que ele quer que aconteça no lugar?', sub: 'Se a dor fosse resolvida, o que muda na prática pra ele?', ph: 'Ex.: Quero receber contatos que já entendem o serviço e chegam prontos pra fechar.' }
     ]},
     { block: 4, title: 'Seu Monopólio', type: 'fields', fields: [
       { key: 'diferencial', label: 'Seu diferencial que ninguém copia', ph: 'Tua história, o que só você tem — o cruzamento do nicho com quem você é.' },
@@ -298,8 +298,14 @@ window.ADP_CANVAS = (function () {
     // --- Motor contextual do Bloco 3 / Caça à Ruminação (IA é o caminho principal) ---
     + '.adp-fld.rum-hide{display:none}'
     + '.adp-sg{margin-top:2px}'
-    + '.adp-sg .sg-ctx{font-size:12.5px;color:var(--muted,#71717a);background:var(--soft,#e6e6e8);border-radius:10px;padding:9px 13px;line-height:1.5;margin:0 0 12px;text-wrap:balance}'
-    + '.adp-sg .sg-q{font-size:14px;font-weight:600;color:var(--ink,#18181b);margin:0 0 14px;line-height:1.45;text-wrap:balance}'
+    + '.adp-sg .sg-q{font-size:14px;font-weight:600;color:var(--ink,#18181b);margin:0 0 12px;line-height:1.45;text-wrap:balance}'
+    + '.adp-sg .sg-chips{display:flex;flex-wrap:wrap;gap:7px;margin:0 0 16px}'
+    + '.adp-sg .sg-chip{font-size:12px;font-weight:600;color:var(--muted,#71717a);background:var(--soft,#e6e6e8);border-radius:999px;padding:5px 12px;line-height:1.2}'
+    + '.adp-sg .sg-opt{display:flex;flex-direction:column;align-items:flex-start;gap:9px;border:1px solid var(--line,#d4d4d8);border-radius:14px;padding:14px 16px;margin-bottom:10px}'
+    + '.adp-sg .sg-opt-t{font-size:15px;font-weight:700;color:var(--ink,#18181b);line-height:1.35;text-wrap:balance}'
+    + '.adp-sg .sg-opt-d{font-size:13px;color:var(--muted,#71717a);line-height:1.5;margin:0;text-wrap:balance}'
+    + '.adp-sg .sg-pick{font-weight:700;font-size:12.5px;padding:8px 16px;border-radius:999px;border:1.5px solid var(--ink,#18181b);color:var(--ink,#18181b);background:none;cursor:pointer}'
+    + '.adp-sg .sg-pick:hover{background:var(--ink,#18181b);color:#fff}'
     + '.adp-rum{margin-top:6px}'
     + '.adp-rum .rh{display:flex;align-items:center;gap:8px;font-weight:700;font-size:14.5px}'
     + '.adp-rum .rsub{font-size:13.5px;color:var(--muted,#71717a);margin:0 0 14px;line-height:1.55;max-width:64ch;text-wrap:balance}'
@@ -743,20 +749,15 @@ window.ADP_CANVAS = (function () {
   function attachSuggestEngine(container, def, opts) {
     var host = document.createElement('div'); host.className = 'adp-sg'; container.appendChild(host);
     var active = null;            // campo ativo (definido pelo wizard)
-    var cache = {};               // por campo: { options, error, simple, editing, prev }
-    var SIMPLE_DOR = [
-      'Será que as pessoas desistem de me contratar porque não entendem direito o que eu faço?',
-      'Eu perco tempo respondendo as mesmas dúvidas que o meu site já deveria explicar.',
-      'Tenho medo de estar passando uma imagem que não mostra o meu valor de verdade.'
-    ];
+    var cache = {};               // por campo: { options, chips, error, loading, editing, tried, prev }
     var CFG = {
-      nao:           { intro: 'A IA sugere cortes coerentes com o teu nicho — quem fica de fora dessa direção.', btn: 'Ver quem fica de fora →', load: 'Pensando nos cortes do teu nicho…', optHead: 'Escolha um corte (ou edite)' },
-      ideal:         { intro: 'A IA sugere perfis de cliente dentro do teu nicho, com a situação e a dor.', btn: 'Ver perfis de cliente →', load: 'Montando os perfis de cliente…', optHead: 'Escolha o cliente que mais combina' },
-      intermediario: { intro: 'A IA parte do teu cliente ideal pra sugerir quem também serve, mas não é prioridade.', btn: 'Ver clientes secundários →', load: 'Buscando clientes secundários…', optHead: 'Escolha o cliente secundário' },
-      dor:           { intro: 'A IA usa suas respostas para sugerir os pensamentos mais prováveis desse cliente.', btn: 'Encontrar as ruminações →', load: 'Encontrando as ruminações do teu cliente…', optHead: 'Escolha a que mais parece com o que esse cliente realmente pensaria', note: true, simple: true },
-      desejo:        { intro: 'A IA parte da dor que você escolheu pra sugerir o que o cliente quer no lugar.', btn: 'Ver o que ele quer no lugar →', load: 'Pensando no que ele quer no lugar…', optHead: 'Escolha o desejo mais coerente' }
+      nao:           { load: 'Encontrando os cortes mais coerentes…' },
+      ideal:         { load: 'Montando os perfis de cliente…' },
+      intermediario: { load: 'Buscando clientes secundários…' },
+      dor:           { load: 'Encontrando as frases que ficam na cabeça do cliente…', note: true },
+      desejo:        { load: 'Pensando no que ele quer no lugar…' }
     };
-    function st(k) { return cache[k] || (cache[k] = { options: [], error: false, simple: false, editing: false, prev: '' }); }
+    function st(k) { return cache[k] || (cache[k] = { options: [], chips: [], error: false, loading: false, editing: false, tried: false, prev: '' }); }
     function taEl(k) { return container.querySelector('textarea[data-key="' + k + '"]'); }
     function fldEl(k) { var t = taEl(k); return t ? (t.closest ? t.closest('.adp-fld') : null) : null; }
     function valOf(k) { var t = taEl(k); return t ? t.value.trim() : ''; }
@@ -764,88 +765,97 @@ window.ADP_CANVAS = (function () {
     function focusFld(k) { var t = taEl(k); if (t) setTimeout(function () { try { t.focus(); var L = t.value.length; t.setSelectionRange(L, L); } catch (e) {} }, 0); }
     function showComposer(k, on) { var f = fldEl(k); if (f) f.classList.toggle('rum-hide', !on); }
     function nichoNow() { return (opts && opts.getNicho && opts.getNicho()) || ''; }
-    function clip(s) { s = String(s || ''); return s.length > 88 ? s.slice(0, 86) + '…' : s; }
-    function chip(x) { return '<button type="button" class="rchip" data-pick="' + esc(x) + '">' + esc(x) + '</button>'; }
-    // microcopy do encadeamento — mostra de ONDE a sugestão veio
-    function ctxLine(k) {
-      var n = nichoNow(), ideal = valOf('ideal'), dor = valOf('dor');
-      if (k === 'nao') return n ? ('Com base no nicho “' + clip(n) + '”, quem claramente fica de fora dessa direção?') : '';
-      if (k === 'ideal') return n ? ('Você escolheu o nicho “' + clip(n) + '”. Agora, qual tipo de cliente dentro dele faz mais sentido pra você?') : '';
-      if (k === 'intermediario') return ideal ? ('Você vai atender primeiro: “' + clip(ideal) + '”. Quem se parece, mas com dor menor?') : '';
-      if (k === 'dor') return ideal ? ('Você atende “' + clip(ideal) + '”. Vamos achar o pensamento que fica na cabeça desse cliente.') : '';
-      if (k === 'desejo') return dor ? ('A dor escolhida foi: “' + clip(dor) + '”. Se isso fosse resolvido, o que ele quer no lugar?') : '';
-      return '';
+
+    // dependência mínima de cada etapa (o que precisa estar definido antes)
+    function depOK(k) {
+      if (k === 'nao' || k === 'ideal') return !!nichoNow();
+      if (k === 'intermediario') return !!valOf('ideal');
+      if (k === 'dor') return !!(nichoNow() && valOf('ideal'));
+      if (k === 'desejo') return !!valOf('dor');
+      return true;
+    }
+    function missingDep(k) {
+      if (k === 'intermediario') return 'ideal';
+      if (k === 'dor') return nichoNow() ? 'ideal' : 'nicho';
+      if (k === 'desejo') return 'dor';
+      return 'nicho';
     }
     function faltaTxt(f) {
-      if (f === 'nicho') return 'Falta escolher o nicho na Matriz pra IA sugerir com precisão.';
+      if (f === 'nicho') return 'Falta escolher o nicho na Matriz pra guiar essa etapa.';
       if (f === 'ideal') return 'Falta definir o cliente ideal antes desta etapa.';
-      if (f === 'dor') return 'Falta escolher a dor-loop antes desta etapa.';
+      if (f === 'dor') return 'Falta escolher a dor antes desta etapa.';
       return 'Faltam respostas anteriores.';
+    }
+    function normOpts(arr) {
+      return (arr || []).map(function (o) {
+        if (typeof o === 'string') return { titulo: o, desc: '', val: o };
+        var t = (o && o.titulo) || ''; return { titulo: t, desc: (o && o.desc) || '', val: t };
+      }).filter(function (o) { return o.val && o.val.trim(); }).slice(0, 4);
+    }
+    function subHTML(k) { var f = byBlock(3).fields.filter(function (x) { return x.key === k; })[0]; return (f && f.sub) ? '<p class="sg-q">' + esc(f.sub) + '</p>' : ''; }
+    function headHTML(k) {
+      var s = st(k);
+      var chips = (s.chips && s.chips.length) ? '<div class="sg-chips">' + s.chips.slice(0, 3).map(function (c) { return '<span class="sg-chip">' + esc(c) + '</span>'; }).join('') + '</div>' : '';
+      return subHTML(k) + chips;
+    }
+    function optCard(o) {
+      return '<div class="sg-opt"><div class="sg-opt-t">' + esc(o.titulo) + '</div>'
+        + (o.desc ? '<div class="sg-opt-d">' + esc(o.desc) + '</div>' : '')
+        + '<button type="button" class="sg-pick" data-pick="' + esc(o.val) + '">Escolher esta</button></div>';
     }
 
     async function gen(k) {
-      var s = st(k); s.error = false; s.simple = false; s.falta = '';
-      active = k; showComposer(k, false);
-      host.innerHTML = ctxHTML(k) + '<p class="rmsg"><span class="spin"></span>' + esc(CFG[k].load) + '</p>';
+      var s = st(k); s.tried = true; s.error = false; s.falta = ''; s.loading = true; active = k; showComposer(k, false); render();
       try {
-        var ops = [];
-        if (k === 'dor') {
-          if (!(nichoNow() && valOf('ideal'))) { s.falta = nichoNow() ? 'ideal' : 'nicho'; render(); return; }
-          var r = await window.ADP.ruminacao(nichoNow(), [valOf('ideal'), valOf('intermediario')].filter(Boolean).join(' | '));
-          var d = (r && r.data) ? r.data : r;
-          if (d && d.dor_central) ops.push(d.dor_central);
-          ((d && d.ruminacoes) || []).forEach(function (x) { if (x && ops.indexOf(x) < 0) ops.push(x); });
-        } else {
-          var r2 = await window.ADP.sugestoes(k); var d2 = (r2 && r2.data) ? r2.data : r2;
-          if (d2 && d2.falta) { s.falta = d2.falta; render(); return; }
-          ops = (d2 && d2.opcoes) || [];
-        }
-        s.options = ops.slice(0, 5);
+        var r = await window.ADP.sugestoes(k); var d = (r && r.data) ? r.data : r;
+        if (d && d.falta) { s.falta = d.falta; s.loading = false; render(); return; }
+        s.chips = (d && d.chips) || [];
+        s.options = normOpts(d && d.opcoes);
         if (!s.options.length) s.error = true;
       } catch (e) { s.error = true; }
-      render();
+      s.loading = false; render();
     }
-
-    function ctxHTML(k) { var c = ctxLine(k); return c ? '<p class="sg-ctx">' + esc(c) + '</p>' : ''; }
-    function subHTML(k) { var f = byBlock(3).fields.filter(function (x) { return x.key === k; })[0]; return (f && f.sub) ? '<p class="sg-q">' + esc(f.sub) + '</p>' : ''; }
 
     function render() {
       if (!active) { host.innerHTML = ''; return; }
       var k = active, s = st(k), cfg = CFG[k] || {}, chosen = valOf(k);
       if (s.editing) { showComposer(k, true); host.innerHTML = '<div class="rum-acts"><button class="rbtn rbtn-primary" type="button" data-act="save">Salvar ajuste</button><button class="rbtn rbtn-sec" type="button" data-act="cancel">Cancelar</button></div>'; bind(); return; }
       showComposer(k, false);
-      var head = ctxHTML(k) + subHTML(k);
+      var head = headHTML(k);
       if (s.falta) { host.innerHTML = head + '<p class="rsub">' + esc(faltaTxt(s.falta)) + '</p>' + (s.falta === 'nicho' ? '' : '<button class="rbtn rbtn-primary" type="button" data-act="fix" data-fix="' + s.falta + '">Completar respostas anteriores</button>'); bind(); return; }
+      if (s.loading) { host.innerHTML = head + '<p class="rmsg"><span class="spin"></span>' + esc(cfg.load || 'Gerando…') + '</p>'; return; }
       if (s.error && !chosen) {
-        host.innerHTML = head + '<p class="rsub">Não consegui gerar as opções agora.</p><div class="rum-acts"><button class="rbtn rbtn-primary" type="button" data-act="gen">Tentar novamente</button>'
-          + (cfg.simple ? '<button class="rbtn rbtn-sec" type="button" data-act="simple">Usar uma sugestão simples</button>' : '<button class="rbtn rbtn-sec" type="button" data-act="manual">Escrever manualmente</button>') + '</div>';
+        host.innerHTML = head + '<p class="rsub">Não consegui gerar as opções agora.</p><div class="rum-acts"><button class="rbtn rbtn-primary" type="button" data-act="gen">Tentar novamente</button><button class="rbtn rbtn-sec" type="button" data-act="manual">Escrever minha própria resposta</button></div>';
         bind(); return;
       }
-      if (s.simple && !chosen) { host.innerHTML = head + '<div class="rlbl">Escolhe a que mais parece com o teu cliente</div>' + SIMPLE_DOR.map(chip).join('') + '<button class="rbtn rbtn-sec" type="button" data-act="manual">Prefiro escrever do zero</button>'; bind(); return; }
       if (chosen) {
         var h = head + '<div class="rlbl">Sua escolha</div><div class="rchosen">' + esc(chosen) + '</div>'
           + '<div class="rum-acts">' + (window.__rumWizard ? '<button class="rbtn rbtn-primary" type="button" data-act="continue">Continuar com esta →</button>' : '') + '<button class="rbtn rbtn-sec" type="button" data-act="edit">Editar</button></div>'
           + (cfg.note ? '<p class="rnote">Esta é uma hipótese. Confirme depois em conversas, avaliações ou grupos.</p>' : '');
-        var rest = s.options.filter(function (x) { return x !== chosen; });
-        if (rest.length) h += '<div class="rlbl">Outras opções</div>' + rest.map(chip).join('');
-        h += '<button class="rbtn rbtn-sec" type="button" data-act="gen">Gerar novas opções</button>';
+        var rest = s.options.filter(function (o) { return o.val !== chosen; });
+        if (rest.length) h += '<div class="rlbl">Outras opções</div>' + rest.map(optCard).join('');
+        h += '<button class="rbtn rbtn-sec" type="button" data-act="gen">Gerar outras opções</button>';
         host.innerHTML = h; bind(); return;
       }
-      if (s.options.length) { host.innerHTML = head + '<div class="rlbl">' + esc(cfg.optHead || 'Escolha a que mais combina') + '</div>' + s.options.map(chip).join('') + '<button class="rbtn rbtn-sec" type="button" data-act="gen">Gerar novas opções</button>'; bind(); return; }
-      host.innerHTML = head + '<p class="rsub">' + esc(cfg.intro || '') + '</p><button class="rbtn rbtn-primary" type="button" data-act="gen">' + esc(cfg.btn || 'Ver sugestões da IA →') + '</button>';
+      if (s.options.length) {
+        host.innerHTML = head + s.options.map(optCard).join('')
+          + '<div class="rum-acts"><button class="rbtn rbtn-sec" type="button" data-act="gen">Gerar outras opções</button><button class="rbtn rbtn-sec" type="button" data-act="manual">Prefiro escrever minha própria resposta</button></div>';
+        bind(); return;
+      }
+      // fallback raro (não gerou e não está carregando): oferece gerar
+      host.innerHTML = head + '<button class="rbtn rbtn-primary" type="button" data-act="gen">Ver sugestões</button>';
       bind();
     }
 
     function bind() {
       Array.prototype.forEach.call(host.querySelectorAll('[data-pick]'), function (b) {
-        b.addEventListener('click', function () { var s = st(active); setVal(active, this.getAttribute('data-pick')); s.simple = false; render(); });
+        b.addEventListener('click', function () { setVal(active, this.getAttribute('data-pick')); render(); });
       });
       Array.prototype.forEach.call(host.querySelectorAll('[data-act]'), function (b) {
         b.addEventListener('click', function () {
           var a = this.getAttribute('data-act'), k = active, s = st(k);
           if (a === 'gen') { gen(k); return; }
-          if (a === 'simple') { s.simple = true; s.error = false; render(); return; }
-          if (a === 'manual') { setVal(k, ''); s.simple = false; s.editing = true; s.prev = ''; render(); focusFld(k); return; }
+          if (a === 'manual') { setVal(k, ''); s.editing = true; s.prev = ''; render(); focusFld(k); return; }
           if (a === 'fix') { var fx = this.getAttribute('data-fix'); if (window.__rumWizard && window.__rumWizard.gotoField) window.__rumWizard.gotoField(fx === 'nicho' ? 'ideal' : fx); return; }
           if (a === 'continue') { if (window.__rumWizard && window.__rumWizard.cont) window.__rumWizard.cont(); return; }
           if (a === 'edit') { s.editing = true; s.prev = valOf(k); render(); focusFld(k); return; }
@@ -855,9 +865,15 @@ window.ADP_CANVAS = (function () {
       });
     }
 
-    // esconde todos os composers do bloco (IA-first) e expõe o "mostrar etapa" pro wizard
+    // esconde todos os composers do bloco (IA-first) e gera automaticamente ao abrir cada etapa
     (def.fields || []).forEach(function (f) { showComposer(f.key, false); });
-    window.__sgShow = function (key) { active = key; render(); };
+    window.__sgShow = function (key) {
+      active = key; var s = st(key);
+      if (valOf(key)) { render(); return; }          // já escolheu antes → mostra a escolha
+      if (!depOK(key)) { s.falta = missingDep(key); s.loading = false; render(); return; }
+      if (!s.tried) { gen(key); return; }            // primeira vez nesta etapa → gera sozinho
+      render();
+    };
   }
 
   // renderiza o editor de UM bloco dentro de container. data = objeto salvo desse bloco (ou {}).

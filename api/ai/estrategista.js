@@ -201,20 +201,23 @@ async function handleHipoteses(req, res, user) {
 // 🔗 Sugestões contextuais do exercício "Quem Você Atende" (Bloco 3).
 // Cada etapa lê o CANVAS acumulado (nicho da Matriz, comunidades/provas do Escavador, respostas anteriores)
 // e gera opções COERENTES com o caminho do aluno — nunca contradiz o nicho/cliente/dor já escolhidos.
-const SUGESTOES_SYSTEM = `Você gera opções curtas e concretas pra UMA etapa do exercício "Quem Você Atende" do curso De Genérico a Especialista (Rodrigo Bondioli, movimento Anti Designer Pato).
+const SUGESTOES_SYSTEM = `Você gera o conteúdo de UMA etapa do exercício "Quem Você Atende" do curso De Genérico a Especialista (Rodrigo Bondioli, movimento Anti Designer Pato).
 Voz: direta, seca, tiozão, linguagem de designer comum. PROIBIDO marketingês/consultorês: "otimizar presença digital", "soluções estratégicas", "alta performance", "conversão", "ecossistema", "potencial", "transformação".
-Você recebe o CONTEXTO já definido pelo aluno (nicho, comunidades/provas dele, cliente ideal, dor) e o CAMPO a gerar. TODA opção tem que ser COERENTE com o nicho e com o que já foi escolhido — nunca contradiz, nunca abre público novo fora do recorte, sempre AVANÇA o afunilamento.
+Você recebe o CONTEXTO já definido pelo aluno (nicho, comunidades/provas dele, cliente ideal, dor) e o CAMPO. Devolve DUAS coisas:
+(a) CHIPS — 2 a 3 lembretes CURTÍSSIMOS do contexto (poucas palavras cada), na língua do aluno. São só pra ele lembrar de onde a pergunta vem. Ex: "Personal trainers e coaches", "Comunicação confusa", "Sites". PROIBIDO chip de sistema/consultoria: "nicho escolhido", "hipótese validada", "mercado B2B", "cliente ideal".
+(b) OPÇÕES — 3 opções, cada uma { "titulo": frase curta e concreta, "desc": 1 linha que explica }. COERENTES com o nicho e o que já foi escolhido — nunca contradiz, nunca abre público fora do recorte, sempre AVANÇA o afunilamento.
 Regras por CAMPO:
-- nao (Quem você NÃO atende): cortes ESTRATÉGICOS coerentes com o nicho — quem não tem a dor central, quem só quer execução barata, quem não tem urgência/verba, quem está fora do recorte. PROIBIDO desabafo ("cliente chato", "pede alteração toda hora", "não valoriza design").
-- ideal (Cliente ideal dentro do nicho): tipos de cliente DENTRO do nicho, cada um com situação + dor concreta. Combina nicho + dor + maturidade + situação. Nunca público fora do nicho.
+- nao (Quem fica de fora): cortes ESTRATÉGICOS — quem não tem a dor central, quem só quer execução barata, quem não tem urgência/verba, quem está fora do recorte. PROIBIDO desabafo ("cliente chato", "pede alteração toda hora", "não valoriza design").
+- ideal (Cliente ideal dentro do nicho): tipos de cliente DENTRO do nicho, cada um com situação + dor concreta. Nunca público fora do nicho.
 - intermediario (Cliente secundário): derivado DIRETO do cliente ideal — parecido, mas com dor menos forte, menos urgente ou menor projeto. Nunca outro público totalmente diferente.
+- dor (A frase que fica na cabeça do cliente): titulo = pensamento ÍNTIMO em 1ª pessoa (ex: "Eu perco tempo respondendo no WhatsApp o que meu site já deveria explicar."), desc = "" (vazio). PROIBIDO frase de marketing.
 - desejo (O que ele quer no lugar): consequência DIRETA da dor escolhida, específica. PROIBIDO desejo amplo ("vender mais", "crescer", "melhorar presença digital", "ter mais sucesso").
-Cada opção: 1 frase, concreta, na língua do cliente/designer. Devolve 3 a 4 opções, diferentes entre si. Se a matéria-prima vier rala, extraia a melhor direção concreta — não devolva vazio por resposta fraca.
-Responda SÓ em JSON, sem texto fora: { "opcoes": ["...","...","..."] }`;
+Se a matéria-prima vier rala, extraia a melhor direção concreta — não devolva vazio por resposta fraca.
+Responda SÓ em JSON, sem texto fora: { "chips": ["...","..."], "opcoes": [ {"titulo":"...","desc":"..."} ] }`;
 
 async function handleSugestoes(req, res, user, body) {
   const campo = String((body && body.campo) || '');
-  if (['nao', 'ideal', 'intermediario', 'desejo'].indexOf(campo) < 0) return res.status(400).json({ error: 'campo inválido' });
+  if (['nao', 'ideal', 'intermediario', 'dor', 'desejo'].indexOf(campo) < 0) return res.status(400).json({ error: 'campo inválido' });
   const url = process.env.SUPABASE_URL, svc = process.env.SUPABASE_SERVICE_ROLE;
   const course = 'p1-generico-especialista';
   async function block(n) {
@@ -233,6 +236,7 @@ async function handleSugestoes(req, res, user, body) {
   // dependências mínimas → sem elas, não inventa (o cliente mostra "completar anteriores")
   if ((campo === 'nao' || campo === 'ideal') && !String(nicho).trim()) return res.status(200).json({ ok: true, data: { opcoes: [], falta: 'nicho' } });
   if (campo === 'intermediario' && !String(ideal).trim()) return res.status(200).json({ ok: true, data: { opcoes: [], falta: 'ideal' } });
+  if (campo === 'dor' && !(String(nicho).trim() && String(ideal).trim())) return res.status(200).json({ ok: true, data: { opcoes: [], falta: String(nicho).trim() ? 'ideal' : 'nicho' } });
   if (campo === 'desejo' && !String(dor).trim()) return res.status(200).json({ ok: true, data: { opcoes: [], falta: 'dor' } });
   const ctx = { nicho: nicho, comunidades: (b0.comunidades || b0.mundos || ''), provas: (b0.provas || b0.forte || ''), cliente_ideal: ideal, cliente_secundario: inter, dor_loop: dor };
   const user_msg = `CAMPO: ${campo}\nCONTEXTO já definido pelo aluno (JSON):\n${JSON.stringify(ctx)}\n\nGera 3 a 4 opções coerentes com esse contexto, no JSON pedido.`;
