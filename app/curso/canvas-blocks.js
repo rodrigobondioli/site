@@ -299,34 +299,41 @@ window.ADP_CANVAS = (function () {
     + '.adp-fld.rum-hide{display:none}'
     + '.adp-sg{margin-top:2px}'
     + '.adp-sg .sg-q{font-size:14px;font-weight:600;color:var(--ink,#18181b);margin:0 0 12px;line-height:1.45;text-wrap:balance}'
-    + '.adp-sg .sg-chips{display:flex;flex-wrap:wrap;gap:7px;margin:0 0 16px}'
-    + '.adp-sg .sg-chip{font-size:12px;font-weight:600;color:var(--muted,#71717a);background:var(--soft,#e6e6e8);border-radius:999px;padding:5px 12px;line-height:1.2}'
+    // rótulo + chips PASSIVOS (contexto, não ação): sem cara de botão, cursor normal, sem hover
+    + '.adp-sg .sg-ctxlbl{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--faint,#a1a1aa);margin:0 0 8px}'
+    + '.adp-sg .sg-chips{display:flex;flex-wrap:wrap;gap:7px;margin:0 0 20px}'
+    + '.adp-sg .sg-chip{font-size:12px;font-weight:500;color:var(--muted,#71717a);background:transparent;border:1px solid var(--line,#d4d4d8);border-radius:999px;padding:4px 11px;line-height:1.2;cursor:default;user-select:none}'
+    // cards de opção
     + '.adp-sg .sg-opt{display:flex;flex-direction:column;align-items:flex-start;gap:9px;border:1px solid var(--line,#d4d4d8);border-radius:14px;padding:14px 16px;margin-bottom:10px}'
     + '.adp-sg .sg-opt-t{font-size:15px;font-weight:700;color:var(--ink,#18181b);line-height:1.35;text-wrap:balance}'
     + '.adp-sg .sg-opt-d{font-size:13px;color:var(--muted,#71717a);line-height:1.5;margin:0;text-wrap:balance}'
     + '.adp-sg .sg-pick{font-weight:700;font-size:12.5px;padding:8px 16px;border-radius:999px;border:1.5px solid var(--ink,#18181b);color:var(--ink,#18181b);background:none;cursor:pointer}'
     + '.adp-sg .sg-pick:hover{background:var(--ink,#18181b);color:#fff}'
-    + '.adp-rum{margin-top:6px}'
-    + '.adp-rum .rh{display:flex;align-items:center;gap:8px;font-weight:700;font-size:14.5px}'
-    + '.adp-rum .rsub{font-size:13.5px;color:var(--muted,#71717a);margin:0 0 14px;line-height:1.55;max-width:64ch;text-wrap:balance}'
-    + '.adp-rum .rum-acts{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-top:4px}'
-    + '.adp-rum .rbtn{display:inline-flex;align-items:center;gap:8px;font-weight:700;font-size:13.5px;padding:10px 18px;border-radius:999px;border:1.5px solid var(--ink,#18181b);color:var(--ink,#18181b);background:none;cursor:pointer}'
-    + '.adp-rum .rbtn:hover{background:var(--ink,#18181b);color:#fff}'
-    + '.adp-rum .rbtn[disabled]{opacity:.5;cursor:not-allowed}'
-    + '.adp-rum .rbtn.rbtn-primary{border:none;background:var(--pink,#ff00d7);color:#fff;padding:12px 22px}'
-    + '.adp-rum .rbtn.rbtn-primary:hover{filter:brightness(1.06);background:var(--pink,#ff00d7);color:#fff}'
-    + '.adp-rum .rnote{font-size:12px;color:var(--faint,#a1a1aa);margin:10px 0 0;line-height:1.5}'
-    + '.adp-rum .rchosen{display:block;border:1.5px solid var(--pink,#ff00d7);border-radius:10px;padding:12px 14px;font-size:15px;font-weight:700;color:var(--ink,#18181b);background:rgba(255,0,215,.04);line-height:1.4;margin-bottom:8px;text-wrap:balance}'
-    + '.adp-rum .rbtn.rbtn-sec{border:none;background:none;padding:6px 0;font-size:12.5px;font-weight:700;color:var(--muted,#71717a);text-decoration:underline;text-underline-offset:2px;border-radius:0;margin-top:12px}'
-    + '.adp-rum .rbtn.rbtn-sec:hover{background:none;color:var(--ink,#18181b)}'
-    + '.adp-rum .rout{margin-top:14px;display:none}'
-    + '.adp-rum .rlbl{font-size:12px;font-weight:700;color:var(--muted,#71717a);margin:14px 0 8px;letter-spacing:.02em}'
-    + '.adp-rum .rchip{display:block;width:100%;text-align:left;border:1px solid var(--line,#d4d4d8);border-radius:10px;padding:11px 14px;margin-bottom:8px;font-size:14px;color:#3f3f46;background:#fff;cursor:pointer;line-height:1.4}'
-    + '.adp-rum .rchip:hover{border-color:var(--ink,#18181b)}'
-    + '.adp-rum .rcentral{display:block;width:100%;text-align:left;border:1.5px solid var(--pink,#ff00d7);border-radius:10px;padding:12px 14px;font-size:15px;font-weight:700;color:var(--ink,#18181b);background:rgba(255,0,215,.04);cursor:pointer;line-height:1.4}'
-    + '.adp-rum .rmsg{font-size:13px;color:var(--muted,#71717a);margin-top:10px;line-height:1.5}'
-    + '.adp-rum .spin{display:inline-block;width:12px;height:12px;border:2px solid currentColor;border-right-color:transparent;border-radius:50%;animation:adpspin .7s linear infinite;vertical-align:-1px;margin-right:8px}'
+    // estados gerais (loading, botões, rótulos)
+    + '.adp-sg .rmsg{font-size:13px;color:var(--muted,#71717a);margin-top:2px;line-height:1.5}'
+    + '.adp-sg .rsub{font-size:13.5px;color:var(--muted,#71717a);margin:0 0 14px;line-height:1.55;max-width:64ch;text-wrap:balance}'
+    + '.adp-sg .spin{display:inline-block;width:12px;height:12px;border:2px solid currentColor;border-right-color:transparent;border-radius:50%;animation:adpspin .7s linear infinite;vertical-align:-1px;margin-right:8px}'
     + '@keyframes adpspin{to{transform:rotate(360deg)}}'
+    + '.adp-sg .rum-acts{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-top:12px}'
+    + '.adp-sg .rbtn{display:inline-flex;align-items:center;gap:8px;font-weight:700;font-size:13.5px;padding:11px 20px;border-radius:999px;border:1.5px solid var(--ink,#18181b);color:var(--ink,#18181b);background:none;cursor:pointer}'
+    + '.adp-sg .rbtn:hover{background:var(--ink,#18181b);color:#fff}'
+    + '.adp-sg .rbtn.rbtn-primary{border:none;background:var(--pink,#ff00d7);color:#fff;padding:12px 24px}'
+    + '.adp-sg .rbtn.rbtn-primary:hover{filter:brightness(1.06);background:var(--pink,#ff00d7);color:#fff}'
+    + '.adp-sg .rlbl{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--faint,#a1a1aa);margin:0 0 8px}'
+    + '.adp-sg .rnote{font-size:12px;color:var(--faint,#a1a1aa);margin:14px 0 0;line-height:1.5;text-wrap:balance}'
+    // BLOCO DE CONFIRMAÇÃO (pós-escolha)
+    + '.adp-sg .sg-picked-sub{font-size:12.5px;color:var(--muted,#71717a);margin:0 0 10px;line-height:1.5}'
+    + '.adp-sg .sg-chosen{border:1.5px solid var(--pink,#ff00d7);border-radius:14px;padding:15px 17px;background:rgba(255,0,215,.045)}'
+    + '.adp-sg .sg-chosen .sg-opt-t{font-size:15.5px}'
+    + '.adp-sg .sg-chosen .sg-opt-d{margin-top:6px}'
+    + '.adp-sg .sg-cta{margin-top:16px}'
+    + '.adp-sg .sg-subacts{display:flex;align-items:center;gap:20px;flex-wrap:wrap;margin-top:14px}'
+    + '.adp-sg .sg-lnk{font-size:12.5px;font-weight:700;color:var(--muted,#71717a);text-decoration:underline;text-underline-offset:2px;background:none;border:none;padding:0;cursor:pointer}'
+    + '.adp-sg .sg-lnk:hover{color:var(--ink,#18181b)}'
+    + '.adp-sg .sg-others{margin-top:24px;padding-top:18px;border-top:1px solid var(--line,#d4d4d8)}'
+    + '.adp-sg .sg-others .sg-opt{background:var(--soft,#e6e6e8);border-color:transparent}'
+    + '.adp-sg .sg-tert{display:flex;align-items:center;gap:22px;flex-wrap:wrap;margin-top:24px;padding-top:16px;border-top:1px solid var(--line,#d4d4d8)}'
+    + '.adp-sg .sg-tert .sg-lnk{color:var(--faint,#a1a1aa);font-weight:600}'
     // --- Matriz responsiva no mobile: empilha a nota abaixo da pergunta (cabe em 390px) ---
     + '@media(max-width:640px){'
     +   '.mx-rtop{flex-direction:column;align-items:stretch;gap:10px}'
@@ -751,11 +758,11 @@ window.ADP_CANVAS = (function () {
     var active = null;            // campo ativo (definido pelo wizard)
     var cache = {};               // por campo: { options, chips, error, loading, editing, tried, prev }
     var CFG = {
-      nao:           { load: 'Encontrando os cortes mais coerentes…' },
-      ideal:         { load: 'Montando os perfis de cliente…' },
-      intermediario: { load: 'Buscando clientes secundários…' },
-      dor:           { load: 'Encontrando as frases que ficam na cabeça do cliente…', note: true },
-      desejo:        { load: 'Pensando no que ele quer no lugar…' }
+      nao:           { load: 'Encontrando os cortes mais coerentes…', chosenSub: 'Esta é a direção de corte que você vai usar nesta etapa.' },
+      ideal:         { load: 'Montando os perfis de cliente…', chosenSub: 'Este é o cliente que você vai atender primeiro.' },
+      intermediario: { load: 'Buscando clientes secundários…', chosenSub: 'Este é o cliente secundário desta etapa.' },
+      dor:           { load: 'Encontrando as frases que ficam na cabeça do cliente…', note: true, chosenSub: 'Esta é a frase que você vai usar como dor principal.' },
+      desejo:        { load: 'Pensando no que ele quer no lugar…', chosenSub: 'Este é o desejo que você vai usar nesta etapa.' }
     };
     function st(k) { return cache[k] || (cache[k] = { options: [], chips: [], error: false, loading: false, editing: false, tried: false, prev: '' }); }
     function taEl(k) { return container.querySelector('textarea[data-key="' + k + '"]'); }
@@ -795,9 +802,10 @@ window.ADP_CANVAS = (function () {
     function subHTML(k) { var f = byBlock(3).fields.filter(function (x) { return x.key === k; })[0]; return (f && f.sub) ? '<p class="sg-q">' + esc(f.sub) + '</p>' : ''; }
     function headHTML(k) {
       var s = st(k);
-      var chips = (s.chips && s.chips.length) ? '<div class="sg-chips">' + s.chips.slice(0, 3).map(function (c) { return '<span class="sg-chip">' + esc(c) + '</span>'; }).join('') + '</div>' : '';
+      var chips = (s.chips && s.chips.length) ? '<div class="sg-ctxlbl">Contexto da direção</div><div class="sg-chips">' + s.chips.slice(0, 3).map(function (c) { return '<span class="sg-chip">' + esc(c) + '</span>'; }).join('') + '</div>' : '';
       return subHTML(k) + chips;
     }
+    function pickedDescOf(k) { var s = st(k); return (s.pickedTitulo && s.pickedTitulo === valOf(k)) ? (s.pickedDesc || '') : ''; }
     function optCard(o) {
       return '<div class="sg-opt"><div class="sg-opt-t">' + esc(o.titulo) + '</div>'
         + (o.desc ? '<div class="sg-opt-d">' + esc(o.desc) + '</div>' : '')
@@ -829,17 +837,22 @@ window.ADP_CANVAS = (function () {
         bind(); return;
       }
       if (chosen) {
-        var h = head + '<div class="rlbl">Sua escolha</div><div class="rchosen">' + esc(chosen) + '</div>'
-          + '<div class="rum-acts">' + (window.__rumWizard ? '<button class="rbtn rbtn-primary" type="button" data-act="continue">Continuar com esta →</button>' : '') + '<button class="rbtn rbtn-sec" type="button" data-act="edit">Editar</button></div>'
-          + (cfg.note ? '<p class="rnote">Esta é uma hipótese. Confirme depois em conversas, avaliações ou grupos.</p>' : '');
+        var pdesc = pickedDescOf(k);
         var rest = s.options.filter(function (o) { return o.val !== chosen; });
-        if (rest.length) h += '<div class="rlbl">Outras opções</div>' + rest.map(optCard).join('');
-        h += '<button class="rbtn rbtn-sec" type="button" data-act="gen">Gerar outras opções</button>';
+        var h = head
+          + '<div class="rlbl">Sua escolha</div>'
+          + '<p class="sg-picked-sub">' + esc(cfg.chosenSub || 'Você vai usar esta escolha nesta etapa.') + '</p>'
+          + '<div class="sg-chosen"><div class="sg-opt-t">' + esc(chosen) + '</div>' + (pdesc ? '<div class="sg-opt-d">' + esc(pdesc) + '</div>' : '') + '</div>'
+          + (window.__rumWizard ? '<div class="sg-cta"><button class="rbtn rbtn-primary" type="button" data-act="continue">Continuar com esta →</button></div>' : '')
+          + '<div class="sg-subacts"><button class="sg-lnk" type="button" data-act="edit">Editar escolha</button>' + (rest.length ? '<button class="sg-lnk" type="button" data-act="others">' + (s.othersOpen ? 'Ocultar outras opções' : 'Ver outras opções') + '</button>' : '') + '</div>'
+          + (cfg.note ? '<p class="rnote">Esta é uma hipótese. Confirme depois em conversas, avaliações ou grupos.</p>' : '');
+        if (rest.length && s.othersOpen) h += '<div class="sg-others"><div class="rlbl">Outras opções</div>' + rest.map(optCard).join('') + '</div>';
+        h += '<div class="sg-tert"><button class="sg-lnk" type="button" data-act="gen">Gerar outras opções</button><button class="sg-lnk" type="button" data-act="manual">Prefiro escrever minha própria resposta</button></div>';
         host.innerHTML = h; bind(); return;
       }
       if (s.options.length) {
         host.innerHTML = head + s.options.map(optCard).join('')
-          + '<div class="rum-acts"><button class="rbtn rbtn-sec" type="button" data-act="gen">Gerar outras opções</button><button class="rbtn rbtn-sec" type="button" data-act="manual">Prefiro escrever minha própria resposta</button></div>';
+          + '<div class="sg-tert"><button class="sg-lnk" type="button" data-act="gen">Gerar outras opções</button><button class="sg-lnk" type="button" data-act="manual">Prefiro escrever minha própria resposta</button></div>';
         bind(); return;
       }
       // fallback raro (não gerou e não está carregando): oferece gerar
@@ -849,17 +862,23 @@ window.ADP_CANVAS = (function () {
 
     function bind() {
       Array.prototype.forEach.call(host.querySelectorAll('[data-pick]'), function (b) {
-        b.addEventListener('click', function () { setVal(active, this.getAttribute('data-pick')); render(); });
+        b.addEventListener('click', function () {
+          var k = active, s = st(k), v = this.getAttribute('data-pick');
+          var o = s.options.filter(function (x) { return x.val === v; })[0];
+          s.pickedTitulo = v; s.pickedDesc = o ? o.desc : ''; s.othersOpen = false;
+          setVal(k, v); render();
+        });
       });
       Array.prototype.forEach.call(host.querySelectorAll('[data-act]'), function (b) {
         b.addEventListener('click', function () {
           var a = this.getAttribute('data-act'), k = active, s = st(k);
           if (a === 'gen') { gen(k); return; }
-          if (a === 'manual') { setVal(k, ''); s.editing = true; s.prev = ''; render(); focusFld(k); return; }
+          if (a === 'others') { s.othersOpen = !s.othersOpen; render(); return; }
+          if (a === 'manual') { setVal(k, ''); s.pickedDesc = ''; s.pickedTitulo = ''; s.editing = true; s.prev = ''; render(); focusFld(k); return; }
           if (a === 'fix') { var fx = this.getAttribute('data-fix'); if (window.__rumWizard && window.__rumWizard.gotoField) window.__rumWizard.gotoField(fx === 'nicho' ? 'ideal' : fx); return; }
           if (a === 'continue') { if (window.__rumWizard && window.__rumWizard.cont) window.__rumWizard.cont(); return; }
           if (a === 'edit') { s.editing = true; s.prev = valOf(k); render(); focusFld(k); return; }
-          if (a === 'save') { s.editing = false; render(); return; }
+          if (a === 'save') { s.pickedDesc = ''; s.pickedTitulo = ''; s.editing = false; render(); return; }
           if (a === 'cancel') { setVal(k, s.prev); s.editing = false; render(); return; }
         });
       });
