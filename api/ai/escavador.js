@@ -152,15 +152,20 @@ export function suficiente(v) {
   return !!(essComunidade && essCompetencia && essProva && complementar);
 }
 
-// parse resiliente: tenta o extractJSON, e se falhar tenta 1 recuperação técnica (fences/{...})
+// parse à prova de bala: várias tentativas; no pior caso extrai só o "reply" pra conversa não morrer.
+function tryObj(str) {
+  try { return JSON.parse(str); } catch (e) {}
+  try { return JSON.parse(str.replace(/,\s*([}\]])/g, '$1')); } catch (e) {} // remove vírgula sobrando
+  return null;
+}
 function parseLoose(out) {
-  var d = extractJSON(out);
+  var s = String(out || '').replace(/```json/gi, '').replace(/```/g, '').trim();
+  var d = extractJSON(s) || tryObj(s);
   if (d) return d;
-  try {
-    var s = String(out || '').replace(/```json/gi, '').replace(/```/g, '');
-    var a = s.indexOf('{'), b = s.lastIndexOf('}');
-    if (a >= 0 && b > a) return JSON.parse(s.slice(a, b + 1));
-  } catch (e) {}
+  var a = s.indexOf('{'), b = s.lastIndexOf('}');
+  if (a >= 0 && b > a) { d = tryObj(s.slice(a, b + 1)); if (d) return d; } // do 1º { ao último }
+  var m = s.match(/"reply"\s*:\s*"((?:[^"\\]|\\.)*)"/);                     // último recurso: só a pergunta
+  if (m) { try { return { reply: JSON.parse('"' + m[1] + '"') }; } catch (e) { return { reply: m[1] }; } }
   return null;
 }
 
