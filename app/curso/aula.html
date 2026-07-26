@@ -588,12 +588,12 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
         if(d&&d.done) done=true;
         history.push({role:'assistant',content:(d&&d.reply)||''}); qCount++;
         qEl.textContent = (d&&d.reply) || '';
-        renderCards(); renderChips(); renderDone(); persist();
+        syncPH(); renderCards(); renderChips(); renderDone(); persist();
       }catch(e){ qEl.textContent='Deu ruim aqui. Manda de novo.'; }
       setBusy(false);
     }
     var OPENER='Me diz uma comunidade ou "mundo" que você conhece por dentro. Que problema você via ali que ninguém resolvia direito?';
-    function showOpener(){ qEl.textContent=OPENER; history.push({role:'assistant',content:OPENER}); qCount=1; renderCards(); persist(); } // abertura fixa (sem gastar chamada de IA)
+    function showOpener(){ qEl.textContent=OPENER; syncPH(); history.push({role:'assistant',content:OPENER}); qCount=1; renderCards(); persist(); } // abertura fixa (sem gastar chamada de IA)
     function submit(){ var t=input.value.trim(); if(!t) return; input.value=''; turn(t); }
     send.addEventListener('click', submit);
     input.addEventListener('keydown', function(e){ if(e.key==='Enter' && !e.shiftKey){ e.preventDefault(); submit(); } });
@@ -604,14 +604,23 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
       voce={}; history=[]; qCount=0; done=false; lastEl.classList.add('gone'); lastEl.innerHTML=''; persist(); renderChips(); renderDone(); showOpener();
     });
 
-    // placeholder que fica trocando a frase (exemplos que guiam), só quando vazio e sem foco
-    var PH=['Ex: trabalhei 4 anos em agência atendendo e-commerce…','Ex: tenho um negócio de família de autopeças…','Ex: faço parte de uma cena de tatuagem premium…','Ex: já atendi várias clínicas de estética…','Ex: cresci no meio de food trucks…','Ex: dou aula de música há 8 anos…'];
-    var phi=0; input.placeholder=PH[0];
-    setInterval(function(){ if(document.activeElement===input || input.value) return; phi=(phi+1)%PH.length; input.placeholder=PH[phi]; }, 3200);
+    // placeholder CONTEXTUAL: casa com a pergunta atual (o exemplo nunca contradiz o que foi perguntado)
+    function phForQuestion(q){
+      q=(q||'').toLowerCase();
+      if(/exemplo/.test(q)) return 'Ex: num projeto de um cliente, eu…';
+      if(/melhorou|resultado|mudou|no lugar/.test(q)) return 'Ex: o cliente aprovou mais rápido, precisou de menos alteração…';
+      if(/comunidade|mundo/.test(q)) return 'Ex: cresci no meio de food trucks…';
+      if(/parte do teu trabalho|sai bem|faz bem|manda bem/.test(q)) return 'Ex: organizar um site confuso, entender rápido o cliente…';
+      if(/medo|segura|trava/.test(q)) return 'Ex: tenho medo de perder cliente se me fechar num nicho…';
+      if(/hist[óo]ria|come[çc]|de onde|veio/.test(q)) return 'Ex: comecei fazendo flyer pro comércio do bairro…';
+      if(/gosta|pregui[çc]a|\bama\b|odeia|curte/.test(q)) return 'Ex: amo montar a estrutura, odeio ficar mexendo em detalhe…';
+      return 'Responde aqui, do teu jeito…';
+    }
+    function syncPH(){ if(input) input.placeholder = phForQuestion(qEl.textContent); }
 
     renderCards(); renderChips(); renderDone();
     var lastAssistant=''; for(var i=history.length-1;i>=0;i--){ if(history[i].role==='assistant'){ lastAssistant=history[i].content; break; } }
-    if(lastAssistant){ qEl.textContent=lastAssistant; }
+    if(lastAssistant){ qEl.textContent=lastAssistant; syncPH(); }
     else { showOpener(); }
   }
 
