@@ -617,7 +617,7 @@ window.ADP_CANVAS = (function () {
       if (cl.contains('mx2-cta') || cl.contains('mx2-sec2') || cl.contains('mx2-seclink')) {
         var act = el.dataset.act;
         if (act === 'continuar') { if (window.__matrizContinue) window.__matrizContinue(); return; }
-        if (act === 'add') { rows.push(normRow()); openIdx = rows.length - 1; paint(); persist(); return; }
+        if (act === 'add') { rows.push(normRow()); openIdx = rows.length - 1; picked = true; paint(); persist(); return; }
         if (act === 'adjust') { var nmA = container.querySelector('.mx-name[data-i="' + i + '"]'); if (nmA) { nmA.focus(); var LA = nmA.value.length; try { nmA.setSelectionRange(LA, LA); } catch (er) {} } return; }
         if (act === 'switch') {
           var target = -1, jj;
@@ -649,7 +649,7 @@ window.ADP_CANVAS = (function () {
       var bar = el.closest ? el.closest('.mx-cbar') : null;
       if (bar) { openIdx = +bar.dataset.i; paint(); return; }
       // criar outra hipótese
-      if (cl.contains('adp-addcand')) { rows.push(normRow()); openIdx = rows.length - 1; paint(); persist(); return; }
+      if (cl.contains('adp-addcand')) { rows.push(normRow()); openIdx = rows.length - 1; picked = true; paint(); persist(); return; }
     });
     container.addEventListener('focusout', function (e) {
       // sair do textarea de evidência: salva, infere confiança, fecha e repinta (vira linha compacta)
