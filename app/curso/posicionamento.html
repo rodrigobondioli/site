@@ -416,7 +416,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
       const d = out.data || out;
       clearInterval(iv);
       render(d);
-      window.ADP.savePlan(d).catch(function(){});   // persiste — não some mais ao recarregar
+      if(d && d.frase) window.ADP.savePlan(d).catch(function(){});   // só persiste posicionamento VÁLIDO (nunca um gate bloqueado)
       say("Pronto. Gerado a partir do seu Canvas.");
     }catch(err){ clearInterval(iv); say(err.message || "Não consegui montar seu posicionamento agora. Tenta de novo."); }
     btn.disabled = false;
@@ -445,8 +445,8 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
     var wantGen = /[?&]gerar=1/.test(location.search);
     try{
       const r = await window.ADP.loadPlan();
-      if(r && r.plan){ render(r.plan); say("Gerado a partir do seu Canvas."); }        // já existe → NÃO sobrescreve automático
-      else if(wantGen){ doGerar(); }                                                    // veio do curso e ainda não tem → gera automaticamente
+      if(r && r.plan && r.plan.frase){ render(r.plan); say("Gerado a partir do seu Canvas."); }   // só plano VÁLIDO (tem frase)
+      else if(wantGen || (r && r.plan)){ doGerar(); }                                          // sem plano válido, ou bloqueio velho salvo → gera de novo com o canvas atual
       else { clearExample(); say("Preenche os 5 blocos do Canvas e clica em Gerar com o Estrategista — ele lê tua matéria-prima e monta a frase de especialista, o nicho, a frase de valor e o plano de 90 dias."); }
     }catch(e){ if(wantGen){ doGerar(); } }
   }
