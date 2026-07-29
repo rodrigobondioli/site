@@ -53,7 +53,7 @@ Tudo limpo: gate.status="ok".
 10. topo_portfolio: 1-2 frases pro topo do portfólio (o que resolve, não a entrega).
 11. abertura_proposta: 2-3 frases pra abrir proposta — fala da DOR do cliente, nunca da entrega.
 12. onde_achar: array de 3 objetos {"local":"nome EXATO de evento/grupo/comunidade/canal real do nicho","abordagem":"primeiro movimento concreto ali"}.
-13. derruba_medos: pega o medo que o aluno escreveu (bloco_1) e derruba com argumento seco (2-3 frases). Não escreveu? "[faltou preencher no Canvas]".
+13. derruba_medos: se o aluno escreveu um medo (bloco_1), derruba ELE com argumento seco (2-3 frases). Se bloco_1 vier vazio, derruba o medo UNIVERSAL de quem vai nichar — o que trava todo designer generalista ("se eu me especializar, fecho portas e perco cliente" / "e se eu escolher o nicho errado?"). Seco, e específico do nicho dele quando der. NUNCA deixa este campo vazio nem escreve "[faltou preencher]" aqui — sempre há um medo a derrubar.
 14. plano: {"d30":[...],"d60":[...],"d90":[...]}. Cada ação: VERBO no infinitivo, até 15 palavras, produz evidência objetiva de progresso, depende SÓ do aluno. Nível de prova baixo → d30 inclui construir a 1ª prova.
 --- METADADOS (a plataforma salva; ainda não exibe) ---
 15. output_version: 2 (número).

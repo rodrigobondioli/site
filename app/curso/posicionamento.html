@@ -371,7 +371,9 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
     if(d.dor_central) $("f-dor").textContent = /["'“]/.test(d.dor_central) ? d.dor_central : `"${d.dor_central}"`;
     if(d.puv_curta) $("f-puvc").textContent = d.puv_curta;
     if(d.puv_falada) $("f-puvf").textContent = d.puv_falada;
-    if(d.derruba_medos) $("f-medos").textContent = d.derruba_medos;
+    var _medo=(d.derruba_medos||"").trim(); var _medoCard=($("f-medos")&&$("f-medos").closest)?$("f-medos").closest(".sec"):null;
+    if(_medo && _medo.indexOf("[faltou")<0){ $("f-medos").textContent=_medo; if(_medoCard) _medoCard.classList.remove("gone"); }
+    else if(_medoCard){ _medoCard.classList.add("gone"); }
     if(d.bio) $("f-bio").textContent = d.bio;
     if(d.topo_portfolio) $("f-portfolio").textContent = d.topo_portfolio;
     if(d.abertura_proposta) $("f-proposta").textContent = d.abertura_proposta;
