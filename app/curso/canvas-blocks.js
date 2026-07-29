@@ -1087,6 +1087,7 @@ window.ADP_CANVAS = (function () {
     }
     function renderMetodo() {
       var s = st('metodo');
+      if (s.editing) { showComposer('metodo', true); host.innerHTML = '<div class="rum-acts"><button class="rbtn rbtn-primary" type="button" data-act="metSave">Salvar</button><button class="rbtn rbtn-sec" type="button" data-act="metCancel">Cancelar</button></div>'; bind(); return; }
       if (s.loading) { host.innerHTML = '<p class="rmsg"><span class="spin"></span><span class="rmsg-t">Montando tuas fases a partir dos teus cases…</span></p>'; return; }
       if (s.phase === 'falta') {
         showComposer('metodo', true);
@@ -1103,8 +1104,11 @@ window.ADP_CANVAS = (function () {
         host.innerHTML = '<p class="rum-intro-x">Escreve em 2-3 passos como você resolve, na ordem.</p><div class="rum-acts"><button class="rbtn rbtn-primary" type="button" data-act="contPlain">Continuar →</button></div>';
         bind(); return;
       }
-      showComposer('metodo', true);
-      host.innerHTML = '<p class="rum-intro-x">Montei tuas fases a partir dos cases que você contou. Confirma ou ajusta — é assim que você trabalha?</p><div class="rum-acts"><button class="rbtn rbtn-primary" type="button" data-act="contPlain">Continuar →</button><button class="rbtn rbtn-sec" type="button" data-act="metRegen">Gerar outra</button></div>';
+      showComposer('metodo', false);
+      var val = valOf('metodo');
+      host.innerHTML = '<div class="sg-chosen">' + esc(val).replace(/\n/g, '<br>') + '</div>'
+        + '<p class="rsub" style="margin:10px 0 4px">É assim que você trabalha?</p>'
+        + '<div class="sg-confirm-acts"><button class="esc-cont" type="button" data-act="contPlain">Continuar →</button><div class="sg-subacts"><button class="sg-lnk" type="button" data-act="metRegen">Gerar outra</button><button class="sg-lnk" type="button" data-act="metEdit">Ajustar</button></div></div>';
       bind();
     }
     function render() { stopR(); if (!active) { host.innerHTML = ''; return; } if (active === 'diferencial') renderDif(); else if (active === 'metodo') renderMetodo(); else renderPlain(active); }
@@ -1123,6 +1127,9 @@ window.ADP_CANVAS = (function () {
           var a = this.getAttribute('data-act');
           if (a === 'metRegen') { genMetodo(); return; }
           if (a === 'metManual') { var sm = st('metodo'); setVal('metodo', ''); sm.phase = 'manual'; sm.tried = true; showComposer('metodo', true); render(); focusFld('metodo'); return; }
+          if (a === 'metEdit') { var se = st('metodo'); se.editing = true; se.prev = valOf('metodo'); render(); focusFld('metodo'); return; }
+          if (a === 'metSave') { st('metodo').editing = false; render(); return; }
+          if (a === 'metCancel') { var sc = st('metodo'); setVal('metodo', sc.prev || ''); sc.editing = false; render(); return; }
           var s = st('diferencial');
           if (a === 'corr') { s.corr = true; render(); return; }
           if (a === 'histSave') { var t = host.querySelector('#monoHist'); var v = voce(); v.historia = t ? t.value.trim() : (v.historia || ''); if (opts && opts.saveVoce) opts.saveVoce(v); s.corr = false; render(); return; }
