@@ -69,16 +69,16 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .genmsg{font-size:13px;color:var(--muted);margin:14px 0 24px;line-height:1.5}
 .gone{display:none!important}
 .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
-.gate{border-radius:16px;padding:16px 18px;margin:16px 0 4px;font-size:14.5px;line-height:1.55}
+.gate{border-radius:16px;padding:16px 18px;margin:16px 0;font-size:14.5px;line-height:1.55}
 .gate h3{font-size:15px;font-weight:700;margin-bottom:8px}
 .gate ul{margin:9px 0 0;padding-left:18px}
 .gate li{margin:5px 0}
 .gate.block{background:#18181b;color:#fff}
 .gate.block a{color:#e7f99a;text-decoration:underline}
-.gate.stamp{background:var(--lime);color:#18181b}
-.selo{display:flex;align-items:center;gap:10px;font-size:13.5px;color:var(--ink);background:var(--lime);border-radius:12px;padding:11px 15px;margin:14px 0 0}
+.gate.stamp{background:#fff;border:1px solid var(--line);color:#18181b}
+.selo{display:flex;align-items:center;gap:10px;font-size:13.5px;color:var(--ink);background:var(--lime);border-radius:12px;padding:11px 15px;margin:16px 0}
 .selo .sdot{width:9px;height:9px;border-radius:999px;background:var(--ink);flex:none}
-.cadeia{padding:2px 0 0;margin:22px 0 0}
+.cadeia{border:1px solid var(--line);border-radius:16px;padding:18px 20px;margin:16px 0}
 .cadeia h3{font-size:14px;font-weight:700;margin-bottom:6px}
 .cadeia .crow{display:flex;gap:12px;padding:9px 0;border-top:1px solid var(--line)}
 .cadeia .crow:first-of-type{border-top:none}
@@ -90,14 +90,14 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 @keyframes adpspin{to{transform:rotate(360deg)}}
 
 /* frase hero (cyan) */
-.frase{background:var(--cyan);border-radius:16px;padding:38px 40px;margin-bottom:26px}
+.frase{background:var(--cyan);border-radius:16px;padding:38px 40px;margin:16px 0}
 .frase .fk{font-size:12px;font-weight:700;letter-spacing:.04em;color:rgba(16,16,16,.55);margin-bottom:16px}
 .frase p{font-size:clamp(24px,2.9vw,34px);font-weight:700;line-height:1.24;letter-spacing:-.02em;color:#101010}
 .frase .hl{border-bottom:3px solid rgba(16,16,16,.9);padding-bottom:1px}
 
 /* grid seções */
 .grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-.sec{padding:18px 0}
+.sec{border:1px solid var(--line);border-radius:16px;padding:22px 24px}
 .sec.wide{grid-column:1/-1}
 .sec .k{font-size:12px;font-weight:700;letter-spacing:.03em;color:var(--muted);margin-bottom:10px}
 .sec p{font-size:15px;line-height:1.6;color:#3f3f46}
@@ -117,10 +117,21 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .plano .pcol ul{list-style:none;margin:0}
 .plano .pcol li{font-size:14px;line-height:1.5;color:#3f3f46;padding-left:18px;position:relative;margin-bottom:9px}
 .plano .pcol li::before{content:"";position:absolute;left:2px;top:8px;width:6px;height:6px;border-radius:999px;background:var(--ink)}
+.plano .acc{margin-top:6px}
+.plano .amod{border-top:1px solid var(--line)}
+.plano .amod:last-child{border-bottom:1px solid var(--line)}
+.plano .atitle{display:flex;align-items:center;gap:10px;width:100%;text-align:left;padding:14px 2px;font-weight:700;font-size:14.5px;color:var(--ink);background:none;border:0;cursor:pointer;font-family:inherit}
+.plano .atitle .chev{width:16px;height:16px;fill:none;stroke:var(--muted);stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex:none;transition:transform .18s}
+.plano .amod.collapsed .chev{transform:rotate(-90deg)}
+.plano .amod.collapsed .abody{display:none}
+.plano .abody{padding:0 2px 16px}
+.plano .abody ul{list-style:none;margin:0}
+.plano .abody li{font-size:14px;line-height:1.5;color:#3f3f46;padding-left:18px;position:relative;margin-bottom:9px}
+.plano .abody li::before{content:"";position:absolute;left:2px;top:8px;width:6px;height:6px;border-radius:999px;background:var(--ink)}
 
 @media(max-width:900px){.side{display:none}.tabs{display:none}.top{grid-template-columns:1fr auto}.grid{grid-template-columns:1fr}.plano .pcols{grid-template-columns:1fr}}
 /* chat do Estrategista (refino) */
-.chatwrap{padding:8px 0 0;margin-top:28px}
+.chatwrap{border:1px solid var(--line);border-radius:16px;padding:22px 22px 16px;margin-top:26px}
 .chatwrap .chatsub{color:var(--muted,#71717a);font-size:14px;margin-top:4px}
 .chatlog{display:flex;flex-direction:column;gap:12px;margin:18px 0;max-height:460px;overflow-y:auto}
 .cmsg{max-width:82%;padding:12px 15px;border-radius:14px;font-size:15px;line-height:1.5;white-space:pre-wrap;word-wrap:break-word}
@@ -128,8 +139,8 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .cmsg.me{align-self:flex-end;background:#101010;color:#fff;border-bottom-right-radius:4px}
 .cmsg.think{color:var(--muted,#71717a);font-style:italic}
 .cmsg strong{font-weight:700}
-.chatbar{display:flex;gap:10px;align-items:flex-end}
-.chatbar textarea{flex:1;resize:none;border:1px solid var(--line,#e2e2e2);border-radius:12px;padding:12px 14px;font:inherit;font-size:15px;line-height:1.4;background:#fff;color:var(--ink,#18181b);max-height:160px}
+.chatbar{display:flex;gap:10px;align-items:flex-end;border-top:1px solid var(--line);padding-top:14px;margin-top:6px}
+.chatbar textarea{flex:1;resize:none;border:none;border-radius:0;padding:8px 0;font:inherit;font-size:15px;line-height:1.4;background:none;color:var(--ink,#18181b);max-height:160px}
 .chatbar textarea:focus{outline:none;border-color:var(--ink,#18181b)}
 .chatbar .btn.prim{white-space:nowrap}
 .chatapply{display:flex;justify-content:flex-end;margin:0 0 14px}
@@ -260,10 +271,10 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 
         <div class="sec wide plano">
           <div class="k">Seu plano de 90 dias</div>
-          <div class="pcols">
-            <div class="pcol"><div class="pw">Primeiros 30 dias</div><ul id="f-d30"><li>—</li></ul></div>
-            <div class="pcol"><div class="pw">Até 60 dias</div><ul id="f-d60"><li>—</li></ul></div>
-            <div class="pcol"><div class="pw">Até 90 dias</div><ul id="f-d90"><li>—</li></ul></div>
+          <div class="acc">
+            <div class="amod" id="amod-d30"><button class="atitle atoggle" type="button"><svg class="chev" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg>Primeiros 30 dias</button><div class="abody"><ul id="f-d30"><li>—</li></ul></div></div>
+            <div class="amod collapsed" id="amod-d60"><button class="atitle atoggle" type="button"><svg class="chev" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg>Até 60 dias</button><div class="abody"><ul id="f-d60"><li>—</li></ul></div></div>
+            <div class="amod collapsed" id="amod-d90"><button class="atitle atoggle" type="button"><svg class="chev" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg>Até 90 dias</button><div class="abody"><ul id="f-d90"><li>—</li></ul></div></div>
           </div>
         </div>
 
@@ -493,6 +504,8 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
     if(i){ i.addEventListener("keydown", function(e){ if(e.key==="Enter" && !e.shiftKey){ e.preventDefault(); sendChat(); } });
            i.addEventListener("input", function(){ this.style.height="auto"; this.style.height=Math.min(160,this.scrollHeight)+"px"; }); }
   })();
+
+  Array.prototype.forEach.call(document.querySelectorAll('.plano .atoggle'), function(b){ b.addEventListener('click', function(){ var m=b.closest('.amod'); if(m) m.classList.toggle('collapsed'); }); });
 
   boot();
 })();
