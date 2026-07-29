@@ -134,8 +134,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .nsf-title{font-size:22px;font-weight:700;letter-spacing:-.01em;color:var(--ink);margin:0 0 8px;line-height:1.25}
 .nsf-sub{font-size:14px;color:var(--muted);line-height:1.6;margin:0 0 22px;max-width:none;text-wrap:pretty}
 .esc-cont-lg{font-size:15.5px;padding:15px 28px}
-.nsf-acts{display:flex;align-items:center;gap:14px;flex-wrap:wrap;width:100%;margin-top:8px}
-.nsf-acts .esc-cont-lg{margin-left:auto}
+.nsf-acts{display:flex;align-items:center;justify-content:flex-end;gap:14px;flex-wrap:wrap;width:100%;margin-top:8px}
 @media(max-width:560px){.nsf-acts{flex-direction:column-reverse;align-items:stretch;gap:12px}.nsf-acts .esc-cont-lg,.nsf-acts .sbtn{width:100%;justify-content:center;margin-left:0}}
 /* aplique aqui (bloco do Canvas embaixo do vídeo) */
 .applyhere{position:relative;margin-top:44px;border:1px solid var(--line);border-radius:var(--r);padding:26px 24px 22px}
@@ -769,7 +768,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
       return '<div class="nextstep-final">'
         + (isDone?'<span class="done-status">'+ICON_DONE+'Curso concluído</span>':'')
         + '<h3 class="nsf-title">A matéria-prima está pronta.</h3>'
-        + '<p class="nsf-sub">Você já definiu a direção, escolheu o cliente, encontrou a ruminação e identificou o que torna teu trabalho difícil de copiar. Agora a IA vai juntar tudo e transformar isso em posicionamento.</p>'
+        + '<p class="nsf-sub">Você já definiu a direção, escolheu o cliente, encontrou a ruminação e identificou o que torna teu trabalho difícil de copiar.<br>Agora a IA vai juntar tudo e transformar isso em posicionamento.</p>'
         + '<div class="nsf-acts"><a class="sbtn" href="canvas.html">Revisar meu Canvas</a><button class="esc-cont esc-cont-lg" id="finalGen" type="button">Finalizar e encontrar meu posicionamento</button></div>'
         + '</div>';
     }

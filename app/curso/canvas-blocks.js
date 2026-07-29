@@ -372,8 +372,7 @@ window.ADP_CANVAS = (function () {
     // CONFIRMAÇÃO (pós-escolha) — sem card/decoração: resposta + ações no mesmo eixo à esquerda, botão padrão (.esc-cont)
     + '.adp-sg .sg-chosen{margin:2px 0 0}'
     + '.adp-sg .sg-chosen .sg-opt-d{margin-top:5px}'
-    + '.adp-sg .sg-confirm-acts{display:flex;align-items:center;gap:22px;margin-top:20px;flex-wrap:wrap}'
-    + '.adp-sg .sg-confirm-acts .esc-cont,.adp-sg .sg-confirm-acts .rbtn-primary{margin-left:auto}'
+    + '.adp-sg .sg-confirm-acts{display:flex;align-items:center;justify-content:flex-end;gap:22px;margin-top:20px;flex-wrap:wrap}'
     + '.adp-sg .sg-subacts{display:flex;align-items:center;gap:20px;flex-wrap:wrap}'
     + '.adp-sg .sg-lnk{font-size:12.5px;font-weight:700;color:var(--muted,#71717a);text-decoration:underline;text-underline-offset:2px;background:none;border:none;padding:0;cursor:pointer}'
     + '.adp-sg .sg-lnk:hover{color:var(--ink,#18181b)}'
