@@ -422,6 +422,7 @@ window.ADP_CANVAS = (function () {
     var save = makeSaver(def.block, st, onSaved);
     function gather() { var o = {}; tas.forEach(function (t) { o[t.dataset.key] = t.value; }); return o; }
     tas.forEach(function (t) {
+      autoGrow(t);
       t.addEventListener('input', function () { if (st) st.textContent = '…'; save(gather); });
       t.addEventListener('blur', function () { doSave(def.block, gather(), st, onSaved); }); // flush ao sair do campo
     });
@@ -1081,6 +1082,7 @@ window.ADP_CANVAS = (function () {
       if (k === 'prova' && !valOf('prova')) { var pd = provaDraft(); if (pd) setVal('prova', pd); }
       if (k === 'frase' && !valOf('frase')) { var fd = fraseDraft(); if (fd) setVal('frase', fd); }
       showComposer(k, true);
+      var _pt = taEl(k); if (_pt) setTimeout(function () { _pt.style.height = 'auto'; _pt.style.height = (_pt.scrollHeight + 2) + 'px'; }, 0);
       var hint = k === 'prova' ? '<p class="rum-intro-x">Puxei as provas que você já contou no Escavador. Ajusta ou complementa — não invente.</p>'
         : k === 'frase' ? '<p class="rum-intro-x">Rascunho montado com teu nicho, tua dor e teu diferencial. Deixa do teu jeito.</p>'
           : '<p class="rum-intro-x">Um projeto real que deu certo, do jeito que aconteceu. A IA acha as fases aí dentro.</p>';
@@ -1129,7 +1131,7 @@ window.ADP_CANVAS = (function () {
       var fases = val.split('\n').map(function (ln) { return String(ln).replace(/^\s*\d+[\).\-]\s*/, '').trim(); }).filter(Boolean);
       var listHtml = fases.map(function (f, i) { return '<div class="met-row"><span class="met-n">' + (i + 1) + '</span><span class="met-t">' + esc(f) + '</span></div>'; }).join('');
       host.innerHTML = '<div class="met-list">' + listHtml + '</div>'
-        + '<p class="met-note">Isso não é um método pronto que você precisava ter — provavelmente você nunca parou pra nomear. É o jeito que você <b>já</b> resolve, só organizado em passos. Confere se bate com a tua realidade e ajusta o que não for.</p>'
+        + '<p class="met-note">Isso não é um método pronto que você precisava ter — provavelmente você nunca parou pra nomear. É o jeito que você já resolve, só organizado em passos. Confere se bate com a tua realidade e ajusta o que não for.</p>'
         + '<div class="sg-confirm-acts"><div class="sg-subacts"><button class="sg-lnk" type="button" data-act="metRegen">Gerar outra</button><button class="sg-lnk" type="button" data-act="metEdit">Ajustar</button></div><button class="rbtn rbtn-primary" type="button" data-act="contPlain">Continuar</button></div>';
       bind();
     }
