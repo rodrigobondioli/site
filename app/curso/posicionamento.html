@@ -75,7 +75,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .gate li{margin:5px 0}
 .gate.block{background:#18181b;color:#fff}
 .gate.block a{color:#e7f99a;text-decoration:underline}
-.gate.stamp{background:#fff;border:1px solid var(--line);color:#18181b}
+.gate.stamp{background:#fff;color:#18181b}
 .selo{display:flex;align-items:center;gap:10px;font-size:13.5px;color:var(--ink);background:var(--lime);border-radius:12px;padding:11px 15px;margin:16px 0}
 .selo .sdot{width:9px;height:9px;border-radius:999px;background:var(--ink);flex:none}
 .cadeia{border:1px solid var(--line);border-radius:16px;padding:18px 20px;margin:16px 0}
@@ -117,17 +117,22 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .plano .pcol ul{list-style:none;margin:0}
 .plano .pcol li{font-size:14px;line-height:1.5;color:#3f3f46;padding-left:18px;position:relative;margin-bottom:9px}
 .plano .pcol li::before{content:"";position:absolute;left:2px;top:8px;width:6px;height:6px;border-radius:999px;background:var(--ink)}
-.plano .acc{margin-top:6px}
-.plano .amod{border-top:1px solid var(--line)}
-.plano .amod:last-child{border-bottom:1px solid var(--line)}
-.plano .atitle{display:flex;align-items:center;gap:10px;width:100%;text-align:left;padding:14px 2px;font-weight:700;font-size:14.5px;color:var(--ink);background:none;border:0;cursor:pointer;font-family:inherit}
+.sec.plano{border:none;padding:0}
+.sec.white{background:#fff}
+.sec p,.puv .pv,.cadeia .cvv,.gate p{text-wrap:balance}
+.plano .acc{margin-top:8px;border:1px solid var(--line);border-radius:16px;overflow:hidden}
+.plano .amod + .amod{border-top:1px solid var(--line)}
+.plano .atitle{display:flex;align-items:center;gap:10px;width:100%;text-align:left;padding:14px 18px;font-weight:700;font-size:14.5px;color:var(--ink);background:var(--soft);border:0;cursor:pointer;font-family:inherit}
 .plano .atitle .chev{width:16px;height:16px;fill:none;stroke:var(--muted);stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex:none;transition:transform .18s}
 .plano .amod.collapsed .chev{transform:rotate(-90deg)}
 .plano .amod.collapsed .abody{display:none}
-.plano .abody{padding:0 2px 16px}
+.plano .abody{padding:14px 18px 16px}
 .plano .abody ul{list-style:none;margin:0}
-.plano .abody li{font-size:14px;line-height:1.5;color:#3f3f46;padding-left:18px;position:relative;margin-bottom:9px}
+.plano .abody li{font-size:14px;line-height:1.5;color:#3f3f46;padding-left:18px;position:relative;margin-bottom:9px;text-wrap:pretty}
+.plano .abody li:last-child{margin-bottom:0}
 .plano .abody li::before{content:"";position:absolute;left:2px;top:8px;width:6px;height:6px;border-radius:999px;background:var(--ink)}
+.chatbar #chatsend{padding:0;width:44px;height:44px;justify-content:center;flex:none}
+.chatbar #chatsend svg{width:18px;height:18px;fill:none;stroke:#fff;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 
 @media(max-width:900px){.side{display:none}.tabs{display:none}.top{grid-template-columns:1fr auto}.grid{grid-template-columns:1fr}.plano .pcols{grid-template-columns:1fr}}
 /* chat do Estrategista (refino) */
@@ -255,7 +260,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
           <p id="f-medos">Nichar não fecha portas — escolhe a certa. Todo especialista bem pago um dia foi generalista com medo. Você não perde cliente: você para de ser esquecível.</p>
         </div>
 
-        <div class="sec wide">
+        <div class="sec wide white">
           <div class="k">Pronto pra colar</div>
           <div class="puvbox">
             <div class="puv"><div class="pl">bio (Instagram / site)</div><div class="pv" id="f-bio">Clica em Gerar com o Estrategista pra preencher.</div></div>
@@ -287,7 +292,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
         <div class="chatapply gone" id="chatapply"><button class="btn prim" id="chatapplybtn">Aplicar no meu posicionamento</button></div>
         <div class="chatbar">
           <textarea id="chatin" rows="1" placeholder="Escreve aqui… (ex: acho o nicho ainda amplo)"></textarea>
-          <button class="btn prim" id="chatsend">Enviar</button>
+          <button class="btn prim" id="chatsend" aria-label="Enviar"><svg viewBox="0 0 24 24"><path d="M22 2 11 13"/><path d="M22 2 15 22l-4-9-9-4z"/></svg></button>
         </div>
       </div>
     </div>
@@ -428,7 +433,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
       clearInterval(iv);
       render(d);
       if(d && d.frase) window.ADP.savePlan(d).catch(function(){});   // só persiste posicionamento VÁLIDO (nunca um gate bloqueado)
-      say("Pronto. Gerado a partir do seu Canvas.");
+      say("");
     }catch(err){ clearInterval(iv); say(err.message || "Não consegui montar seu posicionamento agora. Tenta de novo."); }
     btn.disabled = false;
   }
@@ -456,7 +461,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
     var wantGen = /[?&]gerar=1/.test(location.search);
     try{
       const r = await window.ADP.loadPlan();
-      if(r && r.plan && r.plan.frase){ render(r.plan); say("Gerado a partir do seu Canvas."); }   // só plano VÁLIDO (tem frase)
+      if(r && r.plan && r.plan.frase){ render(r.plan); say(""); }   // só plano VÁLIDO (tem frase)
       else if(wantGen || (r && r.plan)){ doGerar(); }                                          // sem plano válido, ou bloqueio velho salvo → gera de novo com o canvas atual
       else { clearExample(); say("Preenche os 5 blocos do Canvas — o Estrategista lê tua matéria-prima e monta a frase, o nicho, a frase de valor e o plano de 90 dias automaticamente."); }
     }catch(e){ if(wantGen){ doGerar(); } }
@@ -465,7 +470,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
   var chatHist=[], chatBooted=false, chatBusy=false;
   var CHATKEY="adp_pos_chat";
   function saveChat(){ try{ localStorage.setItem(CHATKEY, JSON.stringify(chatHist)); }catch(e){} }
-  function showApply(){ var a=$("chatapply"); if(a) a.classList.remove("gone"); }
+  function showApply(){}
   function cesc(x){ return String(x==null?"":x).replace(/[<>&]/g,function(c){return {"<":"&lt;",">":"&gt;","&":"&amp;"}[c];}); }
   function cfmt(x){ return cesc(x).replace(/\*\*(.+?)\*\*/g,"<strong>$1</strong>").replace(/\n/g,"<br>"); }
   function cadd(role,text){ var log=$("chatlog"); if(!log) return null; var el=document.createElement("div"); el.className="cmsg "+(role==="me"?"me":"ai"); el.innerHTML=cfmt(text); log.appendChild(el); log.scrollTop=log.scrollHeight; return el; }
