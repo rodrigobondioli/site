@@ -81,10 +81,6 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .stampnote ul{margin:7px 0 0;padding-left:18px}
 .stampnote li{margin:3px 0}
 .grid .selo{grid-column:1/-1;margin:0 0 4px}
-.sec.white .puvbox{gap:0}
-.sec.white .puv{padding:18px 0;border-top:1px solid var(--line)}
-.sec.white .puv:first-child{padding-top:0;border-top:none}
-.sec.white .puv:last-child{padding-bottom:0}
 .chatsection{margin-top:32px}
 .chatsection .chathead{margin-bottom:14px}
 .chatsection .chathead .k{font-size:12px;font-weight:700;letter-spacing:.03em;color:var(--ink);margin-bottom:6px}
@@ -123,10 +119,15 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .sec li{font-size:15px;line-height:1.6;color:#3f3f46;padding-left:20px;position:relative;margin-bottom:4px}
 .sec li::before{content:"";position:absolute;left:2px;top:10px;width:7px;height:7px;border-radius:999px;background:var(--ink)}
 .sec li.no::before{background:none;content:"×";left:0;top:0;font-weight:700;color:var(--faint)}
-.puvbox{display:flex;flex-direction:column;gap:16px}
-.puv .pl{font-size:12px;font-weight:700;color:var(--ink);margin-bottom:6px}
-.puv .pv{font-size:16px;font-weight:700;color:var(--ink);line-height:1.4}
-.puv .pv.long{font-weight:400;font-size:15px;color:#3f3f46}
+.puvbox{display:flex;flex-direction:column;gap:0}
+.puv{display:flex;gap:22px;padding:16px 0;border-top:1px solid var(--line)}
+.puv:first-child{padding-top:0;border-top:none}
+.puv:last-child{padding-bottom:0}
+.puv .pl{flex:none;width:160px;font-size:12px;font-weight:700;color:var(--ink);margin-bottom:0;padding-top:3px;line-height:1.35}
+.puv .pv{min-width:0;font-size:15px;font-weight:700;color:var(--ink);line-height:1.5}
+.puv .pv.long{font-weight:400;color:#3f3f46}
+.warn .misslist{margin:8px 0 0;padding-left:18px}
+.warn .misslist li{margin:6px 0;line-height:1.5}
 /* plano 30/60/90 */
 .plano .pcols{display:grid;grid-template-columns:1fr 1fr 1fr;gap:22px;margin-top:8px}
 .plano .pw{font-size:13px;font-weight:700;color:var(--ink);margin-bottom:12px;padding-bottom:8px;border-bottom:2px solid var(--ink)}
@@ -150,7 +151,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .chatbar #chatsend{padding:0;width:44px;height:44px;justify-content:center;flex:none}
 .chatbar #chatsend svg{width:18px;height:18px;fill:none;stroke:#fff;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 
-@media(max-width:900px){.side{display:none}.tabs{display:none}.top{grid-template-columns:1fr auto}.grid{grid-template-columns:1fr}.plano .pcols{grid-template-columns:1fr}}
+@media(max-width:900px){.side{display:none}.tabs{display:none}.top{grid-template-columns:1fr auto}.grid{grid-template-columns:1fr}.plano .pcols{grid-template-columns:1fr}.puv{flex-direction:column;gap:6px}.puv .pl{width:auto;padding-top:0}}
 /* chat do Estrategista (refino) */
 .chatwrap{border:1px solid var(--line);border-radius:16px;padding:16px 20px}
 .chatwrap .chatsub{color:var(--muted,#71717a);font-size:14px;margin-top:4px}
@@ -373,6 +374,15 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
     return true;
   }
   function esc(s){ return String(s==null?"":s).replace(/[<>&]/g,function(c){return {"<":"&lt;",">":"&gt;","&":"&amp;"}[c];}); }
+  function missingText(t){
+    var k=String(t||"").toLowerCase();
+    if(/prova|resultado|impacto/.test(k)) return "Falta <b>prova de resultado</b> — você ainda não mostrou número, print ou case do que já resolveu. Enquanto não tiver, sua frase fala do que você resolve, não do resultado que promete. Meta dos 30 dias: juntar a 1ª prova (antes/depois, print de conversa, depoimento).";
+    if(/matriz|nicho|evid|eixo/.test(k)) return "Falta <b>mostrar por que esse nicho vale</b> — no Canvas você escolheu o nicho, mas não preencheu a evidência de que tem gente pagando por isso. Volta no Bloco 2 e anota 1-2 fatos reais: demanda que você viu, clientes que já pediram, dinheiro girando nesse mercado.";
+    if(/m.todo|fase|etapa|passo/.test(k)) return "Falta <b>deixar seu método claro</b> — as etapas de como você resolve, em ordem. Volta no Bloco 4 e escreve em 3-4 passos o seu jeito de trabalhar.";
+    if(/desejo/.test(k)) return "Falta o <b>desejo do cliente</b> — o que ele quer de verdade, no fundo. Volta no Bloco 3 e escreve com as palavras dele.";
+    if(/valida|\bdor\b/.test(k)) return "Você ainda <b>não confirmou a dor com um cliente real</b> — por enquanto é hipótese sua. Nos 30 dias, fala com 2-3 pessoas do nicho e confirma se a dor é essa mesmo.";
+    return "<b>"+esc(human(t))+"</b> — esse ponto ficou vago no Canvas. Volta lá e detalha com um exemplo real.";
+  }
   function human(s){ return String(s==null?"":s).replace(/\bN[1-5]\b/g,"").replace(/\bda matriz\b/gi,"do nicho").replace(/\bna matriz\b/gi,"no nicho").replace(/\bmatriz\b/gi,"nicho").replace(/\bcarimbad[oa]s?\b/gi,"hipótese").replace(/\(\s*[\u2014-]?\s*\)/g,"").replace(/\s{2,}/g," ").replace(/\s+([.,;:])/g,"$1").trim(); }
   // selo de hipótese + cadeia "por que essa frase é sua" (a partir dos metadados do Estrategista)
   function renderExtras(d){
@@ -394,7 +404,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
         + row("Diferencial", d.monopolio)
         + row("Método", metodo)
         + row("Prova", prova);
-      if(Array.isArray(d.missing) && d.missing.length) html += '<div class="warn"><b>Ainda falta pra ficar forte:</b> ' + d.missing.map(function(x){return esc(human(x));}).join(" · ") + '</div>';
+      if(Array.isArray(d.missing) && d.missing.length) html += '<div class="warn"><b>Ainda falta pra ficar forte</b><ul class="misslist">' + d.missing.map(function(x){return "<li>"+missingText(x)+"</li>";}).join("") + '</ul></div>';
       if(d.diagnostico) html += '<div class="warn">' + esc(human(d.diagnostico)) + '</div>';
       cad.innerHTML = html; cad.classList.remove("gone");
     }
