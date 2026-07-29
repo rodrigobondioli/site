@@ -135,7 +135,11 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .plano .pcol li{font-size:14px;line-height:1.5;color:#3f3f46;padding-left:18px;position:relative;margin-bottom:9px}
 .plano .pcol li::before{content:"";position:absolute;left:2px;top:8px;width:6px;height:6px;border-radius:999px;background:var(--ink)}
 .sec.plano{border:none;padding:0}
-.sec.white{background:#fff;border:none}
+.sec.out{border:none;padding:0}
+.sec.out .k{margin-bottom:12px}
+.cardbox{border:1px solid var(--line);border-radius:16px;padding:26px 28px}
+.cardbox.white{background:#fff;border:none}
+.warn .misslink{display:inline-block;margin-top:12px;font-weight:700;text-decoration:underline}
 .sec p,.puv .pv,.cadeia .cvv,.gate p{text-wrap:balance}
 .plano .acc{margin-top:8px;border:1px solid var(--line);border-radius:16px;overflow:hidden}
 .plano .amod + .amod{border-top:1px solid var(--line)}
@@ -265,11 +269,13 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
           <p class="dor" id="f-dor">"Por que minha barbearia lota no sábado e fica vazia na terça?"</p>
         </div>
 
-        <div class="sec wide">
+        <div class="sec wide out">
           <div class="k">Sua frase de valor</div>
-          <div class="puvbox">
-            <div class="puv"><div class="pl">curta (bio, cartão)</div><div class="pv" id="f-puvc">Encho os horários vazios da sua barbearia premium.</div></div>
-            <div class="puv"><div class="pl">falada (quando perguntarem o que você faz)</div><div class="pv long" id="f-puvf">"Sabe aquele buraco na agenda da barbearia no meio da semana? Eu faço landing page que transforma quem só segue no Instagram em assinante que aparece na terça-feira."</div></div>
+          <div class="cardbox">
+            <div class="puvbox">
+              <div class="puv"><div class="pl">curta (bio, cartão)</div><div class="pv" id="f-puvc">Encho os horários vazios da sua barbearia premium.</div></div>
+              <div class="puv"><div class="pl">falada (quando perguntarem o que você faz)</div><div class="pv long" id="f-puvf">"Sabe aquele buraco na agenda da barbearia no meio da semana? Eu faço landing page que transforma quem só segue no Instagram em assinante que aparece na terça-feira."</div></div>
+            </div>
           </div>
         </div>
 
@@ -278,18 +284,22 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
           <p id="f-medos">Nichar não fecha portas — escolhe a certa. Todo especialista bem pago um dia foi generalista com medo. Você não perde cliente: você para de ser esquecível.</p>
         </div>
 
-        <div class="sec wide white">
+        <div class="sec wide out">
           <div class="k">Pronto pra colar</div>
-          <div class="puvbox">
-            <div class="puv"><div class="pl">bio (Instagram / site)</div><div class="pv" id="f-bio">Clica em Gerar com o Estrategista pra preencher.</div></div>
-            <div class="puv"><div class="pl">topo do portfólio</div><div class="pv long" id="f-portfolio">—</div></div>
-            <div class="puv"><div class="pl">abertura de proposta</div><div class="pv long" id="f-proposta">—</div></div>
+          <div class="cardbox white">
+            <div class="puvbox">
+              <div class="puv"><div class="pl">bio (Instagram / site)</div><div class="pv" id="f-bio">—</div></div>
+              <div class="puv"><div class="pl">topo do portfólio</div><div class="pv long" id="f-portfolio">—</div></div>
+              <div class="puv"><div class="pl">abertura de proposta</div><div class="pv long" id="f-proposta">—</div></div>
+            </div>
           </div>
         </div>
 
-        <div class="sec wide">
+        <div class="sec wide out">
           <div class="k">Onde achar seu cliente</div>
-          <ul id="f-onde"><li>Clica em Gerar com o Estrategista pra ver os 3 movimentos do seu nicho.</li></ul>
+          <div class="cardbox">
+            <ul id="f-onde"><li>—</li></ul>
+          </div>
         </div>
 
         <div class="selo gone" id="f-selo"></div>
@@ -376,12 +386,12 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
   function esc(s){ return String(s==null?"":s).replace(/[<>&]/g,function(c){return {"<":"&lt;",">":"&gt;","&":"&amp;"}[c];}); }
   function missingText(t){
     var k=String(t||"").toLowerCase();
-    if(/prova|resultado|impacto/.test(k)) return "Falta <b>prova de resultado</b> — você ainda não mostrou número, print ou case do que já resolveu. Enquanto não tiver, sua frase fala do que você resolve, não do resultado que promete. Meta dos 30 dias: juntar a 1ª prova (antes/depois, print de conversa, depoimento).";
-    if(/matriz|nicho|evid|eixo/.test(k)) return "Falta <b>mostrar por que esse nicho vale</b> — no Canvas você escolheu o nicho, mas não preencheu a evidência de que tem gente pagando por isso. Volta no Bloco 2 e anota 1-2 fatos reais: demanda que você viu, clientes que já pediram, dinheiro girando nesse mercado.";
-    if(/m.todo|fase|etapa|passo/.test(k)) return "Falta <b>deixar seu método claro</b> — as etapas de como você resolve, em ordem. Volta no Bloco 4 e escreve em 3-4 passos o seu jeito de trabalhar.";
-    if(/desejo/.test(k)) return "Falta o <b>desejo do cliente</b> — o que ele quer de verdade, no fundo. Volta no Bloco 3 e escreve com as palavras dele.";
-    if(/valida|\bdor\b/.test(k)) return "Você ainda <b>não confirmou a dor com um cliente real</b> — por enquanto é hipótese sua. Nos 30 dias, fala com 2-3 pessoas do nicho e confirma se a dor é essa mesmo.";
-    return "<b>"+esc(human(t))+"</b> — esse ponto ficou vago no Canvas. Volta lá e detalha com um exemplo real.";
+    if(/prova|resultado|impacto/.test(k)) return "A <b>prova do seu resultado</b>: um número, print ou case de algo que você já resolveu.";
+    if(/matriz|nicho|evid|eixo/.test(k)) return "O <b>porquê do seu nicho</b>: 1-2 sinais de que tem mercado — gente reclamando dessa dor, procurando solução ou já pagando por isso.";
+    if(/m.todo|fase|etapa|passo/.test(k)) return "Seu <b>método em 3-4 passos</b>: como você resolve, na ordem.";
+    if(/desejo/.test(k)) return "O <b>desejo do cliente</b>: o que ele quer de verdade, nas palavras dele.";
+    if(/valida|\bdor\b/.test(k)) return "<b>Confirmar a dor</b> com 2-3 clientes reais do nicho (hoje ainda é palpite seu).";
+    return "<b>"+esc(human(t))+"</b>: detalha melhor com um exemplo real.";
   }
   function human(s){ return String(s==null?"":s).replace(/\bN[1-5]\b/g,"").replace(/\bda matriz\b/gi,"do nicho").replace(/\bna matriz\b/gi,"no nicho").replace(/\bmatriz\b/gi,"nicho").replace(/\bcarimbad[oa]s?\b/gi,"hipótese").replace(/\(\s*[\u2014-]?\s*\)/g,"").replace(/\s{2,}/g," ").replace(/\s+([.,;:])/g,"$1").trim(); }
   // selo de hipótese + cadeia "por que essa frase é sua" (a partir dos metadados do Estrategista)
@@ -404,7 +414,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
         + row("Diferencial", d.monopolio)
         + row("Método", metodo)
         + row("Prova", prova);
-      if(Array.isArray(d.missing) && d.missing.length) html += '<div class="warn"><b>Ainda falta pra ficar forte</b><ul class="misslist">' + d.missing.map(function(x){return "<li>"+missingText(x)+"</li>";}).join("") + '</ul></div>';
+      if(Array.isArray(d.missing) && d.missing.length) html += '<div class="warn"><b>Quer deixar mais forte?</b> Isso aqui ficou em branco no seu Canvas — preenche que o Estrategista aperta o resultado:<ul class="misslist">' + d.missing.map(function(x){return "<li>"+missingText(x)+"</li>";}).join("") + '</ul><a class="misslink" href="canvas.html">Abrir meu Canvas</a></div>';
       if(d.diagnostico) html += '<div class="warn">' + esc(human(d.diagnostico)) + '</div>';
       cad.innerHTML = html; cad.classList.remove("gone");
     }
