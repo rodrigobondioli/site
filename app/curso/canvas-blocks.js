@@ -48,6 +48,8 @@ window.ADP_CANVAS = (function () {
 
   function byBlock(n) { for (var i = 0; i < BLOCKS.length; i++) if (BLOCKS[i].block === n) return BLOCKS[i]; return null; }
   function esc(s) { return String(s == null ? '' : s).replace(/[<>&"]/g, function (c) { return { '<': '&lt;', '>': '&gt;', '&': '&amp;', '"': '&quot;' }[c]; }); }
+  // timeout pra chamada de IA nunca pendurar o loading (cai no estado de erro, que tem saida)
+  function withTimeout(promise, ms) { return Promise.race([promise, new Promise(function (_, reject) { setTimeout(function () { reject(new Error('timeout')); }, ms || 30000); })]); }
 
   // ---------- Matriz v2: lógica pura (evidência + confiança + inviabilidade) ----------
   function cellOf(row, k) { var c = row && row.cells && row.cells[k]; return c || { nota: 0, ev: '', conf: '' }; }
@@ -861,7 +863,7 @@ window.ADP_CANVAS = (function () {
     async function gen(k) {
       var s = st(k); s.tried = true; s.error = false; s.falta = ''; s.loading = true; active = k; showComposer(k, false); render();
       try {
-        var r = await window.ADP.sugestoes(k); var d = (r && r.data) ? r.data : r;
+        var r = await withTimeout(window.ADP.sugestoes(k), 30000); var d = (r && r.data) ? r.data : r;
         if (d && d.falta) { s.falta = d.falta; s.loading = false; render(); return; }
         s.chips = (d && d.chips) || [];
         s.options = normOpts(d && d.opcoes);
@@ -1010,7 +1012,7 @@ window.ADP_CANVAS = (function () {
     async function genDif() {
       var s = st('diferencial'); s.tried = true; s.loading = true; s.phase = 'loading'; showComposer('diferencial', false); render();
       try {
-        var r = await window.ADP.monopolio(); var d = (r && r.data) ? r.data : r;
+        var r = await withTimeout(window.ADP.monopolio(), 30000); var d = (r && r.data) ? r.data : r;
         if (d && d.falta) { s.loading = false; s.phase = 'falta'; render(); return; }
         s.options = normOpts(d && d.opcoes);
         s.phase = s.options.length ? 'options' : 'error';
@@ -1085,7 +1087,7 @@ window.ADP_CANVAS = (function () {
     async function genMetodo() {
       var s = st('metodo'); s.tried = true; s.loading = true; s.phase = 'loading'; showComposer('metodo', false); render();
       try {
-        var r = await window.ADP.metodoFases(); var d = (r && r.data) ? r.data : r;
+        var r = await withTimeout(window.ADP.metodoFases(), 30000); var d = (r && r.data) ? r.data : r;
         if (d && d.falta) { s.loading = false; s.phase = 'falta'; render(); return; }
         var fases = (d && Array.isArray(d.fases)) ? d.fases.filter(Boolean) : [];
         if (fases.length) { setVal('metodo', fases.map(function (f, i) { return (i + 1) + ') ' + String(f).trim(); }).join('\n')); s.phase = 'ready'; }

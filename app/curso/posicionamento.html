@@ -287,6 +287,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 <script>
 (function(){
   const $ = id => document.getElementById(id);
+  function withTimeout(pr, ms){ return Promise.race([pr, new Promise(function(_,rej){ setTimeout(function(){ rej(new Error('A IA demorou demais. Tenta de novo.')); }, ms||45000); })]); }
   const msg = $("genmsg");
   function say(t){ msg.textContent = t; msg.classList.toggle("gone", !t); }
   function fillList(el, arr){
@@ -406,7 +407,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
     try{
       const canvas = await buildCanvas();
       if(!canvas || Object.keys(canvas).length===0){ clearInterval(iv); say("Preenche o Canvas primeiro — sem matéria-prima não tem plano."); btn.disabled=false; return; }
-      const out = await window.ADP.estrategista(canvas);
+      const out = await withTimeout(window.ADP.estrategista(canvas), 45000);
       const d = out.data || out;
       clearInterval(iv);
       render(d);
@@ -453,7 +454,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
   async function bootChat(){
     if(window.ADP.devMode) return;
     var t=cadd("ai","…"); if(t) t.classList.add("think");
-    try{ var out=await window.ADP.estrategistaChat([]); if(t)t.remove(); var reply=(out&&out.reply)||""; if(reply){ cadd("ai",reply); chatHist.push({role:"assistant",content:reply}); } else cadd("ai","Manda uma mensagem que eu começo a apertar teu posicionamento."); }
+    try{ var out=await withTimeout(window.ADP.estrategistaChat([]), 30000); if(t)t.remove(); var reply=(out&&out.reply)||""; if(reply){ cadd("ai",reply); chatHist.push({role:"assistant",content:reply}); } else cadd("ai","Manda uma mensagem que eu começo a apertar teu posicionamento."); }
     catch(e){ if(t)t.remove(); cadd("ai","Não consegui abrir agora. Escreve uma mensagem que eu respondo."); }
   }
   async function sendChat(){
@@ -461,7 +462,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
     inp.value=""; inp.style.height="auto";
     cadd("me",v); chatHist.push({role:"user",content:v});
     chatBusy=true; var t=cadd("ai","…"); if(t)t.classList.add("think");
-    try{ var out=await window.ADP.estrategistaChat(chatHist); if(t)t.remove(); var reply=(out&&out.reply)||""; if(reply){ cadd("ai",reply); chatHist.push({role:"assistant",content:reply}); } else cadd("ai","(sem resposta — tenta de novo)"); }
+    try{ var out=await withTimeout(window.ADP.estrategistaChat(chatHist), 30000); if(t)t.remove(); var reply=(out&&out.reply)||""; if(reply){ cadd("ai",reply); chatHist.push({role:"assistant",content:reply}); } else cadd("ai","(sem resposta — tenta de novo)"); }
     catch(e){ if(t)t.remove(); cadd("ai",(e&&e.message)||"Deu erro. Tenta de novo."); }
     chatBusy=false;
   }
