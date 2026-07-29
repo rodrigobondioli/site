@@ -16,7 +16,7 @@
   .adp-x:hover{background:#f1f1f1;color:#18181b}
   .adp-x svg{width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round}
   .adp-db{padding:24px 26px 30px;overflow-y:auto;flex:1;color:#18181b}
-  .adp-db p.sub{font-size:14px;color:#71717a;line-height:1.6;margin:0 0 20px;text-wrap:balance}
+  .adp-db p.sub{font-size:14px;color:#71717a;line-height:1.6;margin:0 0 20px}
   .adp-f label{display:block;font-size:12.5px;font-weight:700;color:#71717a;margin:16px 0 7px}
   .adp-f input,.adp-f textarea,.adp-f select{width:100%;border:1px solid #d4d4d8;border-radius:10px;background:#fff;padding:11px 13px;
     font:inherit;font-size:14.5px;color:#18181b;outline:none}
@@ -45,34 +45,10 @@
   .adp-toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
   .adp-toast.ok{background:#e7f99a;color:#101010}
   .adp-toast.erro{background:#ff00d7;color:#fff}
-  .adp-chips{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:2px}
-  .adp-chip{border:0;border-radius:999px;padding:9px 14px;font-size:13px;font-weight:700;cursor:pointer;background:#f1f1f1;color:#18181b;text-align:center;transition:background .12s,color .12s}
-  .adp-chip.on{background:#18181b;color:#fff}
+  .adp-chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:2px}
+  .adp-chip{border:1px solid #d4d4d8;border-radius:999px;padding:8px 14px;font-size:13px;font-weight:700;cursor:pointer;background:#fff;color:#18181b}
+  .adp-chip.on{background:#18181b;color:#fff;border-color:#18181b}
   @media(max-width:520px){.adp-dw{width:100%}}
-  /* ---- tema escuro dos drawers (Suporte/Sugestão/Perfil) — igual ao painel de aulas ---- */
-  .adp-dw{background:#101010}
-  .adp-dh{border-bottom-color:rgba(255,255,255,.1)}
-  .adp-dh h3{color:#fff}
-  .adp-x{color:rgba(255,255,255,.55)}
-  .adp-x:hover{background:rgba(255,255,255,.1);color:#fff}
-  .adp-db{color:#fff}
-  .adp-db p.sub{color:rgba(255,255,255,.6)}
-  .adp-f label{color:rgba(255,255,255,.6)}
-  .adp-f input,.adp-f textarea,.adp-f select{background:rgba(255,255,255,.06);border:0;color:#fff}
-  .adp-f input::placeholder,.adp-f textarea::placeholder{color:rgba(255,255,255,.38)}
-  .adp-f input:focus,.adp-f textarea:focus,.adp-f select:focus{background:rgba(255,255,255,.11)}
-  .adp-f input[readonly]{background:rgba(255,255,255,.04);color:rgba(255,255,255,.5)}
-  .adp-ghost{background:rgba(255,255,255,.06);border:0;color:#fff}
-  .adp-ghost:hover{background:rgba(255,255,255,.11)}
-  .adp-msg{color:rgba(255,255,255,.6)}
-  .adp-signout{border-top-color:rgba(255,255,255,.1)}
-  .adp-signout a{color:rgba(255,255,255,.6)}
-  .adp-signout a:hover{color:var(--pink,#ff00d7)}
-  .adp-chip{background:rgba(255,255,255,.08);color:#fff}
-  .adp-chip:hover{background:rgba(255,255,255,.15)}
-  .adp-chip.on{background:#fff;color:#101010}
-  .adp-photo .pic{box-shadow:0 0 0 1px rgba(255,255,255,.14);background:rgba(255,255,255,.06)}
-  .adp-photo .hint{color:rgba(255,255,255,.55)}
   `;
   var st = document.createElement("style"); st.textContent = css; document.head.appendChild(st);
 
@@ -280,7 +256,7 @@
   currentUser().then(function(u){ setAvatars(u && u.user_metadata && u.user_metadata.avatar_url); });
 
   // neutraliza qualquer '#' restante (evita pulo pro topo em links de demo)
-  document.querySelectorAll('a[href="#"]').forEach(function(a){ a.addEventListener("click", function(e){ e.preventDefault(); }); });
+  document.querySelectorAll('a[href="#"]').forEach(function(a){ a.addEventListener("click", function(e){ if(a.getAttribute("href")==="#") e.preventDefault(); }); });
 
   // ---------- navegação MOBILE (hambúrguer + drawer) ----------
   // no mobile a sidebar (.side) some; sem isso o aluno não chega em Canvas/Posicionamento/Aulas.
