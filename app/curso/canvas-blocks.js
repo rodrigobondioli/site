@@ -50,6 +50,8 @@ window.ADP_CANVAS = (function () {
   function esc(s) { return String(s == null ? '' : s).replace(/[<>&"]/g, function (c) { return { '<': '&lt;', '>': '&gt;', '&': '&amp;', '"': '&quot;' }[c]; }); }
   // timeout pra chamada de IA nunca pendurar o loading (cai no estado de erro, que tem saida)
   function withTimeout(promise, ms) { return Promise.race([promise, new Promise(function (_, reject) { setTimeout(function () { reject(new Error('timeout')); }, ms || 30000); })]); }
+  // textarea de edicao cresce com o conteudo (sem alca de resize, sem clipping)
+  function autoGrow(el) { if (!el) return; var f = function () { el.style.height = 'auto'; el.style.height = (el.scrollHeight + 2) + 'px'; }; el.addEventListener('input', f); setTimeout(f, 0); }
 
   // ---------- Matriz v2: lógica pura (evidência + confiança + inviabilidade) ----------
   function cellOf(row, k) { var c = row && row.cells && row.cells[k]; return c || { nota: 0, ev: '', conf: '' }; }
@@ -329,7 +331,7 @@ window.ADP_CANVAS = (function () {
     + '.adp-sg .rum-intro-t{font-size:16px;font-weight:700;color:var(--ink,#18181b);margin:0 0 8px;line-height:1.3;text-wrap:balance}'
     + '.adp-sg .rum-intro-x{font-size:13.5px;color:var(--muted,#71717a);margin:0 0 16px;line-height:1.55;max-width:64ch;text-wrap:balance}'
     + '.adp-sg .mono-box{border:1px solid var(--line,#d4d4d8);background:var(--soft,#f4f4f5);border-radius:12px;padding:14px 16px;margin:0 0 12px;font-size:13.5px;line-height:1.6;color:var(--ink,#18181b);text-wrap:pretty}'
-    + '.adp-sg .mono-edit{width:100%;font:inherit;font-size:14.5px;line-height:1.55;color:var(--ink,#18181b);border:1px solid var(--line,#d4d4d8);border-radius:16px;padding:13px 15px;margin:0 0 12px;resize:vertical;box-sizing:border-box}'
+    + '.adp-sg .mono-edit{width:100%;font:inherit;font-size:14.5px;line-height:1.55;color:var(--ink,#18181b);border:1px solid var(--line,#d4d4d8);border-radius:16px;background:none;padding:13px 15px;margin:0 0 12px;resize:none;overflow:hidden;min-height:70px;box-sizing:border-box}'
     + '.adp-sg .mono-edit:focus{outline:none;border-color:var(--line,#d4d4d8)}'
     + '.adp-sg .mono-lead{font-size:13.5px;color:var(--muted,#71717a);margin:0 0 16px;line-height:1.55;max-width:60ch}'
     + '.adp-sg .mono-card{background:none;border:1px solid var(--line,#d4d4d8);border-radius:14px;padding:2px 18px 6px;margin:0 0 24px}'
@@ -877,7 +879,7 @@ window.ADP_CANVAS = (function () {
       stopRotate();
       if (!active) { host.innerHTML = ''; return; }
       var k = active, s = st(k), cfg = CFG[k] || {}, chosen = valOf(k);
-      if (s.editing) { showComposer(k, false); host.innerHTML = '<textarea class="mono-edit" id="sgEditTa" rows="3">' + esc(valOf(k)) + '</textarea><div class="rum-acts"><button class="rbtn rbtn-primary" type="button" data-act="save">Salvar ajuste</button><button class="rbtn rbtn-sec" type="button" data-act="cancel">Cancelar</button></div>'; bind(); var _sg = host.querySelector('#sgEditTa'); if (_sg) setTimeout(function () { try { _sg.focus(); } catch (e) {} }, 0); return; }
+      if (s.editing) { showComposer(k, false); host.innerHTML = '<textarea class="mono-edit" id="sgEditTa" rows="3">' + esc(valOf(k)) + '</textarea><div class="rum-acts"><button class="rbtn rbtn-primary" type="button" data-act="save">Salvar ajuste</button><button class="rbtn rbtn-sec" type="button" data-act="cancel">Cancelar</button></div>'; bind(); var _sg = host.querySelector('#sgEditTa'); if (_sg) { autoGrow(_sg); setTimeout(function () { try { _sg.focus(); } catch (e) {} }, 0); } return; }
       showComposer(k, false);
       var head = headHTML(k);
       if (s.falta) { host.innerHTML = head + '<p class="rsub">' + esc(faltaTxt(s.falta)) + '</p>' + (s.falta === 'nicho' ? '' : '<button class="rbtn rbtn-primary" type="button" data-act="fix" data-fix="' + s.falta + '">Completar respostas anteriores</button>'); bind(); return; }
@@ -1055,7 +1057,7 @@ window.ADP_CANVAS = (function () {
           + '<div class="rum-acts"><button class="rbtn rbtn-primary" type="button" data-act="histSave">Salvar história</button><button class="rbtn rbtn-sec" type="button" data-act="histCancel">Cancelar</button></div>';
         bind(); var mh = host.querySelector('#monoHist'); if (mh) setTimeout(function () { try { mh.focus(); } catch (e) {} }, 0); return;
       }
-      if (s.editing) { showComposer('diferencial', false); host.innerHTML = '<textarea class="mono-edit" id="difEditTa" rows="4">' + esc(valOf('diferencial')) + '</textarea><div class="rum-acts"><button class="rbtn rbtn-primary" type="button" data-act="save">Salvar</button><button class="rbtn rbtn-sec" type="button" data-act="cancel">Cancelar</button></div>'; bind(); var _df = host.querySelector('#difEditTa'); if (_df) setTimeout(function () { try { _df.focus(); } catch (e) {} }, 0); return; }
+      if (s.editing) { showComposer('diferencial', false); host.innerHTML = '<textarea class="mono-edit" id="difEditTa" rows="4">' + esc(valOf('diferencial')) + '</textarea><div class="rum-acts"><button class="rbtn rbtn-primary" type="button" data-act="save">Salvar</button><button class="rbtn rbtn-sec" type="button" data-act="cancel">Cancelar</button></div>'; bind(); var _df = host.querySelector('#difEditTa'); if (_df) { autoGrow(_df); setTimeout(function () { try { _df.focus(); } catch (e) {} }, 0); } return; }
       showComposer('diferencial', false);
       if (chosen && s.phase !== 'options') { renderChosen(); return; }
       if (s.loading) { host.innerHTML = '<p class="rmsg"><span class="spin"></span><span class="rmsg-t">' + esc(ROT[0]) + '</span></p>'; startR(); return; }
@@ -1103,7 +1105,7 @@ window.ADP_CANVAS = (function () {
         host.innerHTML = '<textarea class="mono-edit" id="metEditTa" rows="6">' + esc(valOf('metodo')) + '</textarea>'
           + '<div class="rum-acts"><button class="rbtn rbtn-primary" type="button" data-act="metSave">Salvar</button><button class="rbtn rbtn-sec" type="button" data-act="metCancel">Cancelar</button></div>';
         bind();
-        var mt = host.querySelector('#metEditTa'); if (mt) setTimeout(function () { try { mt.focus(); } catch (e) {} }, 0);
+        var mt = host.querySelector('#metEditTa'); if (mt) { autoGrow(mt); setTimeout(function () { try { mt.focus(); } catch (e) {} }, 0); }
         return;
       }
       if (s.loading) { host.innerHTML = '<p class="rmsg"><span class="spin"></span><span class="rmsg-t">Montando tuas fases a partir dos teus cases…</span></p>'; return; }
