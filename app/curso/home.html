@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>De Genérico a Especialista — anti designer pato</title>
-<link rel="icon" type="image/png" href="/shared/favicon.png">
+<link rel="icon" type="image/png" href="/shared/favicon-pato.png">
 <style>
 @font-face{font-family:Vinila;src:url(/shared/fonts/vinila-400-normal.woff2) format("woff2");font-weight:400;font-display:swap}
 @font-face{font-family:Vinila;src:url(/shared/fonts/vinila-700-normal.woff2) format("woff2");font-weight:700;font-display:swap}
@@ -122,6 +122,17 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .lesson.lock .tt{color:var(--faint)}
 .lesson .tag{font-size:11px;font-weight:700;color:var(--muted);border:1px solid var(--line);padding:2px 8px;border-radius:999px;flex:none}
 .lesson .dur{font-size:13px;color:var(--muted);flex:none;min-width:42px;text-align:right}
+.lesson .lthumb{position:relative;width:100px;flex:none;aspect-ratio:16/9;border-radius:7px;overflow:hidden;background:#000 center/cover no-repeat;display:grid;place-items:center}
+.lesson .lthumb .lp{display:flex;color:rgba(255,255,255,.72)}
+.lesson .lthumb .lp svg{width:17px;height:17px;fill:currentColor}
+.lesson .lthumb.novid{background:var(--soft)}
+.lesson .lthumb.novid .lp{color:var(--faint)}
+.lesson .lthumb .lp{transition:opacity .15s}
+.lesson .lthumb .lprev{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;z-index:1}
+.lesson .lthumb.hasvid{cursor:pointer}
+.lesson .lthumb.hasvid:hover .lp{opacity:0}
+.lesson .lthumb .lprog{position:absolute;left:0;right:0;bottom:0;height:3px;background:rgba(255,255,255,.22);z-index:2}
+.lesson .lthumb .lprog i{display:block;height:100%;width:0;background:var(--pink)}
 /* linha secundária do card: texto corrido (conclusão · diagnóstico · validação) */
 .lesson .lsub{font-size:12px;color:var(--muted);line-height:1.4}
 .lesson.lock .lsub{color:var(--faint)}
@@ -133,7 +144,16 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .pill.g-ok{background:var(--lime);color:var(--ink);border-color:var(--lime)}
 .pill.val .vdot{width:7px;height:7px;border-radius:999px;display:inline-block;margin-right:5px;vertical-align:0;background:#e8b93a}
 
-@media(max-width:900px){.side{display:none}.tabs{display:none}.top{grid-template-columns:1fr auto}}
+@media(max-width:900px){.side{display:none}.tabs{display:none}.top{grid-template-columns:1fr auto}.inner{padding:36px 24px 70px}.pagehead .ph-in{padding:18px 24px}}
+@media(max-width:600px){
+  .inner{padding:24px 16px 64px}
+  .pagehead .ph-in{padding:16px 16px;font-size:15px}
+  .head h1{font-size:23px}
+  .btn-primary{white-space:normal;text-align:center;line-height:1.25}
+  .lesson{padding:12px 12px;gap:10px}
+  .lesson .lthumb{width:62px}
+  .lesson .dur{min-width:34px;font-size:12px}
+}
 </style>
 </head>
 <body>
@@ -222,6 +242,8 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
   var ICON_DONE='<svg viewBox="0 0 24 24"><path d="m5 13 4 4L19 7"/></svg>';
   var ICON_PLAY='<svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>';
   var ICON_DOT ='<svg viewBox="0 0 24 24" style="width:8px;height:8px"><circle cx="12" cy="12" r="6" fill="#a1a1aa"/></svg>';
+  // progresso assistido do vídeo (mesmo dado da barra lateral das aulas — adp_watch_v1)
+  var WATCH = (function(){ try{ return JSON.parse(localStorage.getItem('adp_watch_v1'))||{}; }catch(e){ return {}; } })();
   function esc(s){return String(s==null?'':s).replace(/[<>&]/g,function(c){return {'<':'&lt;','>':'&gt;','&':'&amp;'}[c];});}
 
   function dots(ratio){ var n=Math.max(0,Math.min(5,Math.round((ratio||0)*5))); var s=''; for(var i=0;i<5;i++) s+= i<n?'●':'○'; return s; }
@@ -284,9 +306,24 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
       var tag = isNow? '<span class="tag">agora</span>':'';
       var dur = l.duration? '<span class="dur">'+esc(l.duration)+'</span>':'';
       var info = blockInfo(l, blockData||{});
-      return '<a class="'+cls+'" href="aula.html?a='+l.id+'">'+st+'<span class="lcol"><span class="tt">'+esc(l.title)+'</span>'+info+'</span>'+tag+dur+'</a>';
+      var pz='vz-6010a13b-258.b-cdn.net';
+      var wpct = (l.video_id && WATCH[l.id]) ? Math.min(100, WATCH[l.id]) : 0;
+      var thumb = l.video_id
+        ? '<span class="lthumb hasvid" data-prev="https://'+pz+'/'+encodeURIComponent(l.video_id)+'/preview.webp" style="background-image:url(https://'+pz+'/'+encodeURIComponent(l.video_id)+'/thumbnail.jpg)"><span class="lp">'+ICON_PLAY+'</span>'+(wpct?'<span class="lprog"><i style="width:'+wpct+'%"></i></span>':'')+'</span>'
+        : '<span class="lthumb novid"><span class="lp">'+ICON_PLAY+'</span></span>';
+      return '<a class="'+cls+'" href="aula.html?a='+l.id+'">'+st+thumb+'<span class="lcol"><span class="tt">'+esc(l.title)+'</span>'+info+'</span>'+tag+dur+'</a>';
     }).join('');
     document.getElementById('lessonList').innerHTML = html || '<div class="lesson"><span class="tt" style="color:var(--muted)">Nenhuma aula publicada ainda.</span></div>';
+    // preview MUDO no mouseover: troca pelo preview.webp do Bunny (igual a barra lateral das aulas)
+    Array.prototype.forEach.call(document.querySelectorAll('#lessonList .lthumb.hasvid'), function(th){
+      var img=null;
+      th.addEventListener('mouseenter', function(){
+        if(img || !th.dataset.prev) return;
+        img=document.createElement('img'); img.className='lprev'; img.alt=''; img.src=th.dataset.prev;
+        th.appendChild(img);
+      });
+      th.addEventListener('mouseleave', function(){ if(img){ try{th.removeChild(img);}catch(e){} img=null; } });
+    });
   }
 
   async function boot(){
