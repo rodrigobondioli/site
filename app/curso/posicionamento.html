@@ -69,37 +69,37 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .genmsg{font-size:13px;color:var(--muted);margin:14px 0 24px;line-height:1.5}
 .gone{display:none!important}
 .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
-.gate{border-radius:12px;padding:16px 18px;margin:16px 0 4px;font-size:14.5px;line-height:1.55}
+.gate{border-radius:16px;padding:16px 18px;margin:16px 0 4px;font-size:14.5px;line-height:1.55}
 .gate h3{font-size:15px;font-weight:700;margin-bottom:8px}
 .gate ul{margin:9px 0 0;padding-left:18px}
 .gate li{margin:5px 0}
 .gate.block{background:#18181b;color:#fff}
 .gate.block a{color:#e7f99a;text-decoration:underline}
-.gate.stamp{background:rgba(255,0,215,.07);border:1.5px solid #ff00d7;color:#18181b}
-.selo{display:flex;align-items:center;gap:10px;font-size:13.5px;color:var(--ink);background:rgba(232,185,58,.10);border:1px solid rgba(232,185,58,.55);border-radius:10px;padding:10px 14px;margin:14px 0 0}
-.selo .sdot{width:9px;height:9px;border-radius:999px;background:#e8b93a;flex:none}
-.cadeia{border:1px solid var(--line);border-radius:12px;padding:18px 20px;margin:16px 0 0}
+.gate.stamp{background:var(--lime);color:#18181b}
+.selo{display:flex;align-items:center;gap:10px;font-size:13.5px;color:var(--ink);background:var(--lime);border-radius:12px;padding:11px 15px;margin:14px 0 0}
+.selo .sdot{width:9px;height:9px;border-radius:999px;background:var(--ink);flex:none}
+.cadeia{padding:2px 0 0;margin:22px 0 0}
 .cadeia h3{font-size:14px;font-weight:700;margin-bottom:6px}
 .cadeia .crow{display:flex;gap:12px;padding:9px 0;border-top:1px solid var(--line)}
 .cadeia .crow:first-of-type{border-top:none}
 .cadeia .cl{font-size:12px;font-weight:700;color:var(--muted);min-width:98px;flex:none;padding-top:1px}
 .cadeia .cvv{font-size:14px;color:var(--ink);min-width:0}
 .cadeia .cvv.miss{color:var(--faint)}
-.cadeia .warn{margin-top:13px;font-size:13px;line-height:1.5;color:var(--ink);background:rgba(255,0,215,.06);border:1px solid #ff00d7;border-radius:9px;padding:10px 13px}
+.cadeia .warn{margin-top:14px;font-size:13px;line-height:1.5;color:var(--ink);background:var(--lime);border-radius:12px;padding:11px 14px}
 .spin{display:inline-block;width:13px;height:13px;border:2px solid currentColor;border-right-color:transparent;border-radius:50%;animation:adpspin .7s linear infinite;vertical-align:-2px;margin-right:8px}
 @keyframes adpspin{to{transform:rotate(360deg)}}
 
 /* frase hero (cyan) */
 .frase{background:var(--cyan);border-radius:16px;padding:38px 40px;margin-bottom:26px}
-.frase .fk{font-size:12px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:rgba(16,16,16,.55);margin-bottom:16px}
+.frase .fk{font-size:12px;font-weight:700;letter-spacing:.04em;color:rgba(16,16,16,.55);margin-bottom:16px}
 .frase p{font-size:clamp(24px,2.9vw,34px);font-weight:700;line-height:1.24;letter-spacing:-.02em;color:#101010}
 .frase .hl{border-bottom:3px solid rgba(16,16,16,.9);padding-bottom:1px}
 
 /* grid seções */
 .grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-.sec{border:1px solid var(--line);border-radius:var(--r);padding:22px 24px}
+.sec{padding:18px 0}
 .sec.wide{grid-column:1/-1}
-.sec .k{font-size:12px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+.sec .k{font-size:12px;font-weight:700;letter-spacing:.03em;color:var(--muted);margin-bottom:10px}
 .sec p{font-size:15px;line-height:1.6;color:#3f3f46}
 .sec p b{color:var(--ink);font-weight:700}
 .sec .dor{font-size:18px;font-weight:700;color:var(--ink);line-height:1.4;letter-spacing:-.01em}
@@ -113,18 +113,18 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .puv .pv.long{font-weight:400;font-size:15px;color:#3f3f46}
 /* plano 30/60/90 */
 .plano .pcols{display:grid;grid-template-columns:1fr 1fr 1fr;gap:22px;margin-top:8px}
-.plano .pw{font-size:13px;font-weight:700;color:var(--ink);margin-bottom:12px;padding-bottom:8px;border-bottom:2px solid var(--lime)}
+.plano .pw{font-size:13px;font-weight:700;color:var(--ink);margin-bottom:12px;padding-bottom:8px;border-bottom:2px solid var(--ink)}
 .plano .pcol ul{list-style:none;margin:0}
 .plano .pcol li{font-size:14px;line-height:1.5;color:#3f3f46;padding-left:18px;position:relative;margin-bottom:9px}
 .plano .pcol li::before{content:"";position:absolute;left:2px;top:8px;width:6px;height:6px;border-radius:999px;background:var(--ink)}
 
 @media(max-width:900px){.side{display:none}.tabs{display:none}.top{grid-template-columns:1fr auto}.grid{grid-template-columns:1fr}.plano .pcols{grid-template-columns:1fr}}
 /* chat do Estrategista (refino) */
-.chatwrap{border:1px solid var(--line,#e2e2e2);border-radius:16px;padding:22px 22px 18px;margin-top:26px;background:#fff}
+.chatwrap{padding:8px 0 0;margin-top:28px}
 .chatwrap .chatsub{color:var(--muted,#71717a);font-size:14px;margin-top:4px}
 .chatlog{display:flex;flex-direction:column;gap:12px;margin:18px 0;max-height:460px;overflow-y:auto}
 .cmsg{max-width:82%;padding:12px 15px;border-radius:14px;font-size:15px;line-height:1.5;white-space:pre-wrap;word-wrap:break-word}
-.cmsg.ai{align-self:flex-start;background:var(--soft,#f1f1f1);color:var(--ink,#18181b);border:1px solid var(--line,#e2e2e2);border-bottom-left-radius:4px}
+.cmsg.ai{align-self:flex-start;background:var(--soft,#f1f1f1);color:var(--ink,#18181b);border-bottom-left-radius:4px}
 .cmsg.me{align-self:flex-end;background:#101010;color:#fff;border-bottom-right-radius:4px}
 .cmsg.think{color:var(--muted,#71717a);font-style:italic}
 .cmsg strong{font-weight:700}
@@ -180,7 +180,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
           <span class="gen"><svg viewBox="0 0 24 24"><path d="M12 3l2 5 5 2-5 2-2 5-2-5-5-2 5-2z"/></svg>Gerado pelo Estrategista a partir do seu Canvas</span>
         </div>
         <div class="actions">
-          <button class="btn prim" id="gerar"><svg viewBox="0 0 24 24"><path d="M12 3l2 5 5 2-5 2-2 5-2-5-5-2 5-2z"/></svg>Gerar com o Estrategista</button>
+          <button class="btn prim gone" id="gerar"><svg viewBox="0 0 24 24"><path d="M12 3l2 5 5 2-5 2-2 5-2-5-5-2 5-2z"/></svg>Gerar com o Estrategista</button>
           <button class="btn" id="copiar"><svg viewBox="0 0 24 24"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>Copiar</button>
           <button class="btn"><svg viewBox="0 0 24 24"><path d="M12 3v12M7 11l5 5 5-5M5 21h14"/></svg>Baixar PDF</button>
         </div>
@@ -234,8 +234,8 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
         <div class="sec wide">
           <div class="k">Sua frase de valor</div>
           <div class="puvbox">
-            <div class="puv"><div class="pl">CURTA (bio, cartão)</div><div class="pv" id="f-puvc">Encho os horários vazios da sua barbearia premium.</div></div>
-            <div class="puv"><div class="pl">FALADA (quando perguntarem o que você faz)</div><div class="pv long" id="f-puvf">"Sabe aquele buraco na agenda da barbearia no meio da semana? Eu faço landing page que transforma quem só segue no Instagram em assinante que aparece na terça-feira."</div></div>
+            <div class="puv"><div class="pl">curta (bio, cartão)</div><div class="pv" id="f-puvc">Encho os horários vazios da sua barbearia premium.</div></div>
+            <div class="puv"><div class="pl">falada (quando perguntarem o que você faz)</div><div class="pv long" id="f-puvf">"Sabe aquele buraco na agenda da barbearia no meio da semana? Eu faço landing page que transforma quem só segue no Instagram em assinante que aparece na terça-feira."</div></div>
           </div>
         </div>
 
@@ -247,9 +247,9 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
         <div class="sec wide">
           <div class="k">Pronto pra colar</div>
           <div class="puvbox">
-            <div class="puv"><div class="pl">BIO (Instagram / site)</div><div class="pv" id="f-bio">Clica em Gerar com o Estrategista pra preencher.</div></div>
-            <div class="puv"><div class="pl">TOPO DO PORTFÓLIO</div><div class="pv long" id="f-portfolio">—</div></div>
-            <div class="puv"><div class="pl">ABERTURA DE PROPOSTA</div><div class="pv long" id="f-proposta">—</div></div>
+            <div class="puv"><div class="pl">bio (Instagram / site)</div><div class="pv" id="f-bio">Clica em Gerar com o Estrategista pra preencher.</div></div>
+            <div class="puv"><div class="pl">topo do portfólio</div><div class="pv long" id="f-portfolio">—</div></div>
+            <div class="puv"><div class="pl">abertura de proposta</div><div class="pv long" id="f-proposta">—</div></div>
           </div>
         </div>
 
@@ -447,7 +447,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
       const r = await window.ADP.loadPlan();
       if(r && r.plan && r.plan.frase){ render(r.plan); say("Gerado a partir do seu Canvas."); }   // só plano VÁLIDO (tem frase)
       else if(wantGen || (r && r.plan)){ doGerar(); }                                          // sem plano válido, ou bloqueio velho salvo → gera de novo com o canvas atual
-      else { clearExample(); say("Preenche os 5 blocos do Canvas e clica em Gerar com o Estrategista — ele lê tua matéria-prima e monta a frase de especialista, o nicho, a frase de valor e o plano de 90 dias."); }
+      else { clearExample(); say("Preenche os 5 blocos do Canvas — o Estrategista lê tua matéria-prima e monta a frase, o nicho, a frase de valor e o plano de 90 dias automaticamente."); }
     }catch(e){ if(wantGen){ doGerar(); } }
   }
   // ---- Chat do Estrategista (refino) ----
