@@ -41,9 +41,8 @@ window.ADP_CANVAS = (function () {
     ]},
     { block: 4, title: 'Seu Monopólio', type: 'fields', fields: [
       { key: 'diferencial', label: 'Seu diferencial que ninguém copia', ph: 'Tua história, o que só você tem — o cruzamento do nicho com quem você é.' },
-      { key: 'metodo',      label: 'Como você trabalha — um caso real',             ph: 'Ex.: o que você olhou pra entender o problema, o que decidiu, e o que entregou.' },
+      { key: 'metodo',      label: 'Seu método — como você resolve',             ph: 'Ex.: 1) entendo o problema 2) recorto o essencial 3) executo e ajusto.' },
       { key: 'prova',       label: 'Sua prova real (um caso com resultado)', ph: 'Um caso concreto: cliente, o que você fez, o que mudou. Número se tiver. Não tem prova ainda? Deixa vazio — não invente.' },
-      { key: 'frase',       label: 'Rascunho da tua frase',             ph: 'Eu resolvo [a dor] para [o nicho] através de [o teu recorte]. Nem que fique tosco.' }
     ]}
   ];
 
@@ -1075,7 +1074,40 @@ window.ADP_CANVAS = (function () {
       host.innerHTML = hint + '<div class="rum-acts"><button class="rbtn rbtn-primary" type="button" data-act="contPlain">Continuar →</button></div>';
       bind();
     }
-    function render() { stopR(); if (!active) { host.innerHTML = ''; return; } if (active === 'diferencial') renderDif(); else renderPlain(active); }
+    async function genMetodo() {
+      var s = st('metodo'); s.tried = true; s.loading = true; s.phase = 'loading'; showComposer('metodo', false); render();
+      try {
+        var r = await window.ADP.metodoFases(); var d = (r && r.data) ? r.data : r;
+        if (d && d.falta) { s.loading = false; s.phase = 'falta'; render(); return; }
+        var fases = (d && Array.isArray(d.fases)) ? d.fases.filter(Boolean) : [];
+        if (fases.length) { setVal('metodo', fases.map(function (f, i) { return (i + 1) + ') ' + String(f).trim(); }).join('\n')); s.phase = 'ready'; }
+        else { s.phase = 'error'; }
+      } catch (e) { s.phase = 'error'; }
+      s.loading = false; render();
+    }
+    function renderMetodo() {
+      var s = st('metodo');
+      if (s.loading) { host.innerHTML = '<p class="rmsg"><span class="spin"></span><span class="rmsg-t">Montando tuas fases a partir dos teus cases…</span></p>'; return; }
+      if (s.phase === 'falta') {
+        showComposer('metodo', true);
+        host.innerHTML = '<p class="rum-intro-x">Ainda falta matéria-prima dos teus cases (Aula 1) pra eu montar. Escreve em 2-3 passos como você costuma resolver — ou volta e completa o Escavador.</p><div class="rum-acts"><button class="rbtn rbtn-primary" type="button" data-act="contPlain">Continuar →</button></div>';
+        bind(); return;
+      }
+      if (s.phase === 'error') {
+        showComposer('metodo', false);
+        host.innerHTML = '<p class="rsub">Não consegui montar agora.</p><div class="rum-acts"><button class="rbtn rbtn-primary" type="button" data-act="metRegen">Tentar de novo</button><button class="rbtn rbtn-sec" type="button" data-act="metManual">Escrever do meu jeito</button></div>';
+        bind(); return;
+      }
+      if (s.phase === 'manual') {
+        showComposer('metodo', true);
+        host.innerHTML = '<p class="rum-intro-x">Escreve em 2-3 passos como você resolve, na ordem.</p><div class="rum-acts"><button class="rbtn rbtn-primary" type="button" data-act="contPlain">Continuar →</button></div>';
+        bind(); return;
+      }
+      showComposer('metodo', true);
+      host.innerHTML = '<p class="rum-intro-x">Montei tuas fases a partir dos cases que você contou. Confirma ou ajusta — é assim que você trabalha?</p><div class="rum-acts"><button class="rbtn rbtn-primary" type="button" data-act="contPlain">Continuar →</button><button class="rbtn rbtn-sec" type="button" data-act="metRegen">Gerar outra</button></div>';
+      bind();
+    }
+    function render() { stopR(); if (!active) { host.innerHTML = ''; return; } if (active === 'diferencial') renderDif(); else if (active === 'metodo') renderMetodo(); else renderPlain(active); }
 
     function bind() {
       Array.prototype.forEach.call(host.querySelectorAll('[data-pick]'), function (b) {
@@ -1088,7 +1120,10 @@ window.ADP_CANVAS = (function () {
       });
       Array.prototype.forEach.call(host.querySelectorAll('[data-act]'), function (b) {
         b.addEventListener('click', function () {
-          var a = this.getAttribute('data-act'), s = st('diferencial');
+          var a = this.getAttribute('data-act');
+          if (a === 'metRegen') { genMetodo(); return; }
+          if (a === 'metManual') { var sm = st('metodo'); setVal('metodo', ''); sm.phase = 'manual'; sm.tried = true; showComposer('metodo', true); render(); focusFld('metodo'); return; }
+          var s = st('diferencial');
           if (a === 'corr') { s.corr = true; render(); return; }
           if (a === 'histSave') { var t = host.querySelector('#monoHist'); var v = voce(); v.historia = t ? t.value.trim() : (v.historia || ''); if (opts && opts.saveVoce) opts.saveVoce(v); s.corr = false; render(); return; }
           if (a === 'histCancel') { s.corr = false; render(); return; }
@@ -1108,6 +1143,7 @@ window.ADP_CANVAS = (function () {
     window.__sgShow = function (key) {
       active = key; var s = st(key);
       if (key === 'diferencial') { if (valOf('diferencial')) { s.phase = 'chosen'; } render(); return; }
+      if (key === 'metodo') { if (valOf('metodo')) { s.phase = 'ready'; render(); } else if (!s.tried) { genMetodo(); } else { render(); } return; }
       render();
     };
   }

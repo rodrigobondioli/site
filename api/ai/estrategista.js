@@ -461,6 +461,52 @@ async function handleChat(req, res, user, body) {
 }
 
 
+// 🧭 IA do MÉTODO (Bloco 4) — monta as FASES do jeito de trabalhar a partir dos cases reais. Mesma rota, task === 'metodo'. Sem função nova.
+const METODO_SYSTEM = `Você monta o MÉTODO (as fases) de um designer a partir da matéria-prima REAL dele, pro curso De Genérico a Especialista (Rodrigo Bondioli, movimento Anti Designer Pato).
+Voz: seca, direta, tiozão. Zero marketingês, zero emoji.
+O designer NÃO sabe que tem um método. Seu trabalho é OLHAR os cases (situação → ação → resultado), as competências e a história que ele já contou, e devolver, EM ORDEM, os passos que ele repete quando resolve um problema — as FASES do jeito dele trabalhar.
+Regras:
+- Extraia das AÇÕES reais dos cases e das competências. NÃO invente passo que não está na matéria-prima.
+- 3 a 5 fases. Cada fase: curta (uma linha), verbo na frente, concreta. Nada de nome bonito de método.
+- Cada fase é um PASSO do processo, não um resultado.
+- Se não houver matéria-prima suficiente (nenhum case nem competência com exemplo), responde {"falta":true}.
+Responde SÓ JSON, sem texto fora: {"fases":["passo 1","passo 2","passo 3"]} OU {"falta":true}`;
+
+async function handleMetodo(req, res, user) {
+  var url = process.env.SUPABASE_URL, svc = process.env.SUPABASE_SERVICE_ROLE, course = 'p1-generico-especialista';
+  async function block(n) {
+    try {
+      var r = await fetch(url + '/rest/v1/canvas_answers?user_id=eq.' + user.id + '&course_id=eq.' + encodeURIComponent(course) + '&block=eq.' + n + '&select=data', { headers: { apikey: svc, Authorization: 'Bearer ' + svc } });
+      if (r.ok) { var rows = await r.json(); return (rows[0] && rows[0].data) || {}; }
+    } catch (e) {}
+    return {};
+  }
+  var got = await Promise.all([block(0), block(2), block(3), block(4)]);
+  var b0 = got[0], b2 = got[1], b3 = got[2], b4 = got[3];
+  var nicho = (b2 && b2.hipotese_principal && b2.hipotese_principal.nicho) || '';
+  if (!nicho && b2 && Array.isArray(b2.rows)) { var named = b2.rows.filter(function (r) { return r && String(r.name || '').trim(); }); if (named.length) { named.sort(function (a, b) { return (b.total || 0) - (a.total || 0); }); nicho = named[0].name; } }
+  var provas = Array.isArray(b0.provas) ? b0.provas : [], comps = Array.isArray(b0.competencias) ? b0.competencias : [];
+  var temBase = provas.some(function (p) { return p && (p.acao || p.situacao || p.consequencia); }) || comps.some(function (c) { return c && (c.exemplo || c.o_que); });
+  if (!temBase) return res.status(200).json({ ok: true, data: { falta: true } });
+  var ctx = {
+    cases: provas.map(function (p) { return p ? { situacao: p.situacao || '', acao: p.acao || '', resultado: p.consequencia || '' } : null; }).filter(Boolean),
+    competencias: comps.map(function (c) { return c ? { o_que: c.o_que || '', exemplo: c.exemplo || '' } : null; }).filter(Boolean),
+    historia: b0.historia || '',
+    nicho: nicho,
+    cliente_ideal: (b3 && b3.ideal) || '',
+    dor: (b3 && b3.dor) || '',
+    diferencial: (b4 && b4.diferencial) || ''
+  };
+  var user_msg = 'Matéria-prima REAL do designer (JSON):\n' + JSON.stringify(ctx) + '\n\nMonta as fases do método dele no JSON pedido, usando só o que está aqui.';
+  try {
+    var out = await ai(MODEL_SMART(), [{ role: 'system', content: METODO_SYSTEM }, { role: 'user', content: user_msg }], 700, 0.6);
+    var data = extractJSON(out) || { falta: true };
+    return res.status(200).json({ ok: true, data });
+  } catch (e) {
+    return res.status(500).json({ error: String(e.message || e) });
+  }
+}
+
 export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
   const user = await getUser(req);
@@ -479,6 +525,8 @@ export default async function handler(req, res) {
   if (body && body.task === 'monopolio') return handleMonopolio(req, res, user);
   // O Estrategista em modo chat (refino) — mesma rota, task diferente.
   if (body && body.task === 'chat') return handleChat(req, res, user, body);
+  // IA do Método (Bloco 4 — fases a partir dos cases) — mesma rota, task diferente.
+  if (body && body.task === 'metodo') return handleMetodo(req, res, user);
 
   const { canvas } = body || {};
   if (!canvas) return res.status(400).json({ error: 'Canvas vazio.' });

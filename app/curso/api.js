@@ -46,6 +46,7 @@ window.ADP = (function () {
     sugestoes: (campo) => api("/api/ai/estrategista", { method: "POST", body: JSON.stringify({ task: "sugestoes", campo }) }),
     // IA do Monopólio (Bloco 4 — diferencial) — a IA cruza história/competências/provas/nicho/ruminação do Canvas no servidor.
     monopolio: () => api("/api/ai/estrategista", { method: "POST", body: JSON.stringify({ task: "monopolio" }) }),
+    metodoFases: () => api("/api/ai/estrategista", { method: "POST", body: JSON.stringify({ task: "metodo" }) }),
     // 🛠️ Escavador (Aula 1 — VOCÊ): 1 turno da conversa. Cliente guarda o estado (history + voce) e manda a cada chamada.
     escavador: (payload) => api("/api/ai/escavador", { method: "POST", body: JSON.stringify(payload || {}) }),
     // aulas + progresso
