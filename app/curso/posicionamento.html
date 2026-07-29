@@ -80,6 +80,12 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .stampnote b{color:var(--ink);font-weight:700}
 .stampnote ul{margin:7px 0 0;padding-left:18px}
 .stampnote li{margin:3px 0}
+.divline{height:1px;background:var(--line);border:0;margin:28px 0}
+.grid .selo{grid-column:1/-1;margin:0 0 4px}
+.chatsection{margin-top:32px}
+.chatsection .chathead{margin-bottom:14px}
+.chatsection .chathead .k{font-size:12px;font-weight:700;letter-spacing:.03em;color:var(--ink);margin-bottom:6px}
+.chatsection .chathead .chatsub{color:var(--muted);font-size:14px;line-height:1.5}
 #f-onde li{margin-bottom:14px}
 #f-onde li b{display:block;color:var(--ink)}
 #f-onde .ab{display:block;color:#3f3f46;margin-top:3px}
@@ -103,7 +109,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .frase .hl{border-bottom:3px solid rgba(16,16,16,.9);padding-bottom:1px}
 
 /* grid seções */
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
 .sec{border:1px solid var(--line);border-radius:16px;padding:26px 28px}
 .sec.wide{grid-column:1/-1}
 .sec .k{font-size:12px;font-weight:700;letter-spacing:.03em;color:var(--ink);margin-bottom:10px}
@@ -143,7 +149,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 
 @media(max-width:900px){.side{display:none}.tabs{display:none}.top{grid-template-columns:1fr auto}.grid{grid-template-columns:1fr}.plano .pcols{grid-template-columns:1fr}}
 /* chat do Estrategista (refino) */
-.chatwrap{border:1px solid var(--line);border-radius:16px;padding:22px 22px 16px;margin-top:26px}
+.chatwrap{border:1px solid var(--line);border-radius:16px;padding:16px 20px}
 .chatwrap .chatsub{color:var(--muted,#71717a);font-size:14px;margin-top:4px}
 .chatlog{display:flex;flex-direction:column;gap:12px;margin:18px 0;max-height:460px;overflow-y:auto}
 .cmsg{max-width:82%;padding:12px 15px;border-radius:14px;font-size:15px;line-height:1.5;white-space:pre-wrap;word-wrap:break-word}
@@ -218,8 +224,9 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 
       <p class="stampnote gone" id="stampnote"></p>
 
-      <div class="selo gone" id="f-selo"></div>
       <div class="cadeia gone" id="f-cadeia"></div>
+
+      <hr class="divline" id="divline">
 
       <div class="grid">
 
@@ -283,6 +290,8 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
           <ul id="f-onde"><li>Clica em Gerar com o Estrategista pra ver os 3 movimentos do seu nicho.</li></ul>
         </div>
 
+        <div class="selo gone" id="f-selo"></div>
+
         <div class="sec wide plano">
           <div class="k">Seu plano de 90 dias</div>
           <div class="acc">
@@ -294,14 +303,18 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 
       </div>
 
-      <div class="chatwrap gone" id="chatwrap">
-        <div class="k">Alinha com o Estrategista</div>
-        <p class="chatsub">Não bateu 100%? Conversa aqui que a gente aperta o que ficou frouxo — a frase, o nicho, a dor, o que for.</p>
+      <div class="chatsection gone" id="chatsection">
+        <div class="chathead">
+          <div class="k">Alinha com o Estrategista</div>
+          <p class="chatsub">Não bateu 100%? Conversa aqui que a gente aperta o que ficou frouxo — a frase, o nicho, a dor, o que for.</p>
+        </div>
+        <div class="chatwrap" id="chatwrap">
         <div class="chatlog" id="chatlog"></div>
         <div class="chatapply gone" id="chatapply"><button class="btn prim" id="chatapplybtn">Aplicar no meu posicionamento</button></div>
         <div class="chatbar">
           <textarea id="chatin" rows="1" placeholder="Escreve aqui… (ex: acho o nicho ainda amplo)"></textarea>
           <button class="btn prim" id="chatsend" aria-label="Enviar"><svg viewBox="0 0 24 24"><path d="M22 2 11 13"/><path d="M22 2 15 22l-4-9-9-4z"/></svg></button>
+        </div>
         </div>
       </div>
     </div>
@@ -341,38 +354,37 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
       }
       if(frase) frase.classList.add("gone");
       if(grid) grid.classList.add("gone");
-      ["f-selo","f-cadeia","stampnote"].forEach(function(id){ var e=$(id); if(e) e.classList.add("gone"); });
+      ["f-selo","f-cadeia","stampnote","divline"].forEach(function(id){ var e=$(id); if(e) e.classList.add("gone"); });
       return false;
     }
     if(frase) frase.classList.remove("gone");
     if(grid) grid.classList.remove("gone");
+    var dv = $("divline"); if(dv) dv.classList.remove("gone");
     var sn = $("stampnote");
     if(g){ g.className = "gate gone"; g.innerHTML = ""; }
     if(sn){
       if(gate && gate.status === "carimbado"){
-        var imp = (gate.importantes || []).concat(gate.avisos || []);
-        sn.innerHTML = "<b>Hipótese de baixa confiança.</b> "
-          + esc(gate.mensagem || "Teu Canvas passou com pendências. Trata como aposta pros 30 dias, não como veredito.")
-          + (imp.length ? "<ul>" + imp.map(function(x){ return "<li>" + esc(x) + "</li>"; }).join("") + "</ul>" : "");
+        sn.innerHTML = "<b>Isso é uma hipótese pra testar — não um veredito.</b> "
+          + "Teu Canvas ainda tem pontos fracos (falta prova e evidência mais forte). Trata teu posicionamento como uma aposta pra validar nos próximos 30 dias — usa o plano aí embaixo pra deixar ele mais firme.";
         sn.classList.remove("gone");
       } else { sn.classList.add("gone"); sn.innerHTML = ""; }
     }
     return true;
   }
   function esc(s){ return String(s==null?"":s).replace(/[<>&]/g,function(c){return {"<":"&lt;",">":"&gt;","&":"&amp;"}[c];}); }
+  function human(s){ return String(s==null?"":s).replace(/\bN[1-5]\b/g,"").replace(/\bda matriz\b/gi,"do nicho").replace(/\bna matriz\b/gi,"no nicho").replace(/\bmatriz\b/gi,"nicho").replace(/\bcarimbad[oa]s?\b/gi,"hipótese").replace(/\(\s*[\u2014-]?\s*\)/g,"").replace(/\s{2,}/g," ").replace(/\s+([.,;:])/g,"$1").trim(); }
   // selo de hipótese + cadeia "por que essa frase é sua" (a partir dos metadados do Estrategista)
   function renderExtras(d){
     var selo = $("f-selo");
     if(selo){
-      var nv = (d.nivel_prova && d.nivel_prova.nivel) ? " · Prova " + esc(d.nivel_prova.nivel) : "";
-      selo.innerHTML = '<span class="sdot"></span><span>' + esc(d.selo || "Hipótese estratégica pra testar nos próximos 30 dias — não é veredito.") + nv + "</span>";
+      selo.innerHTML = '<span class="sdot"></span><span>' + (esc(human(d.selo)) || "Hipótese pra testar nos próximos 30 dias — não é veredito.") + "</span>";
       selo.classList.remove("gone");
     }
     var cad = $("f-cadeia");
     if(cad){
       function row(l,v){ var miss=!v||!String(v).trim(); return '<div class="crow"><div class="cl">'+l+'</div><div class="cvv'+(miss?' miss':'')+'">'+(miss?"[faltou preencher no Canvas]":esc(v))+'</div></div>'; }
       var metodo = (Array.isArray(d.metodo_fases)&&d.metodo_fases.length) ? d.metodo_fases.join(" → ") : "";
-      var prova = d.nivel_prova ? ((d.nivel_prova.nivel||"") + (d.nivel_prova.porque?" — "+d.nivel_prova.porque:"")) : "";
+      var prova = d.nivel_prova ? human(d.nivel_prova.porque||"") : "";
       var cliente = (Array.isArray(d.quem_atende)&&d.quem_atende.length) ? d.quem_atende[0] : "";
       var html = "<h3>Por que essa frase é sua</h3>"
         + row("Território", d.nicho)
@@ -381,8 +393,8 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
         + row("Diferencial", d.monopolio)
         + row("Método", metodo)
         + row("Prova", prova);
-      if(Array.isArray(d.missing) && d.missing.length) html += '<div class="warn"><b>Ainda falta pra ficar forte:</b> ' + d.missing.map(esc).join(" · ") + '</div>';
-      if(d.diagnostico) html += '<div class="warn">' + esc(d.diagnostico) + '</div>';
+      if(Array.isArray(d.missing) && d.missing.length) html += '<div class="warn"><b>Ainda falta pra ficar forte:</b> ' + d.missing.map(function(x){return esc(human(x));}).join(" · ") + '</div>';
+      if(d.diagnostico) html += '<div class="warn">' + esc(human(d.diagnostico)) + '</div>';
       cad.innerHTML = html; cad.classList.remove("gone");
     }
   }
@@ -485,7 +497,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
   function cesc(x){ return String(x==null?"":x).replace(/[<>&]/g,function(c){return {"<":"&lt;",">":"&gt;","&":"&amp;"}[c];}); }
   function cfmt(x){ return cesc(x).replace(/\*\*(.+?)\*\*/g,"<strong>$1</strong>").replace(/\n/g,"<br>"); }
   function cadd(role,text){ var log=$("chatlog"); if(!log) return null; var el=document.createElement("div"); el.className="cmsg "+(role==="me"?"me":"ai"); el.innerHTML=cfmt(text); log.appendChild(el); log.scrollTop=log.scrollHeight; return el; }
-  function revealChat(d){ var w=$("chatwrap"); if(!w||!d||!d.frase) return; w.classList.remove("gone"); if(!chatBooted){ chatBooted=true; restoreOrBoot(); } }
+  function revealChat(d){ var w=$("chatsection"); if(!w||!d||!d.frase) return; w.classList.remove("gone"); if(!chatBooted){ chatBooted=true; restoreOrBoot(); } }
   function restoreOrBoot(){ var saved=[]; try{ saved=JSON.parse(localStorage.getItem(CHATKEY)||"[]")||[]; }catch(e){ saved=[]; } if(saved.length){ chatHist=saved; saved.forEach(function(m){ cadd(m.role==="user"?"me":"ai", m.content); }); showApply(); } else bootChat(); }
   async function bootChat(){
     if(window.ADP.devMode) return;
