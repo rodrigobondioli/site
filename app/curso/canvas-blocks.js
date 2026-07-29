@@ -369,13 +369,14 @@ window.ADP_CANVAS = (function () {
     // CONFIRMAÇÃO (pós-escolha) — sem card/decoração: resposta + ações no mesmo eixo à esquerda, botão padrão (.esc-cont)
     + '.adp-sg .sg-chosen{margin:2px 0 0}'
     + '.adp-sg .sg-chosen .sg-opt-d{margin-top:5px}'
-    + '.adp-sg .sg-confirm-acts{display:flex;flex-direction:column;align-items:flex-end;gap:12px;margin-top:20px}'
+    + '.adp-sg .sg-confirm-acts{display:flex;align-items:center;gap:22px;margin-top:20px;flex-wrap:wrap}'
+    + '.adp-sg .sg-confirm-acts .esc-cont,.adp-sg .sg-confirm-acts .rbtn-primary{margin-left:auto}'
     + '.adp-sg .sg-subacts{display:flex;align-items:center;gap:20px;flex-wrap:wrap}'
     + '.adp-sg .sg-lnk{font-size:12.5px;font-weight:700;color:var(--muted,#71717a);text-decoration:underline;text-underline-offset:2px;background:none;border:none;padding:0;cursor:pointer}'
     + '.adp-sg .sg-lnk:hover{color:var(--ink,#18181b)}'
     + '.adp-sg .sg-tert{display:flex;align-items:center;justify-content:flex-end;gap:22px;flex-wrap:wrap;margin-top:20px}'
     + '.adp-sg .sg-tert .sg-lnk{color:var(--faint,#a1a1aa);font-weight:600}'
-    + '@media(max-width:560px){.adp-sg .sg-confirm-acts{align-self:stretch}.adp-sg .sg-confirm-acts .esc-cont{width:100%;text-align:center}}'
+    + '@media(max-width:560px){.adp-sg .sg-confirm-acts{flex-direction:column-reverse;align-items:stretch;gap:14px}.adp-sg .sg-confirm-acts .esc-cont,.adp-sg .sg-confirm-acts .rbtn-primary{width:100%;text-align:center;margin-left:0}.adp-sg .sg-subacts{justify-content:center}}'
     // --- Matriz responsiva no mobile: empilha a nota abaixo da pergunta (cabe em 390px) ---
     + '@media(max-width:640px){'
     +   '.mx-rtop{flex-direction:column;align-items:stretch;gap:10px}'
@@ -902,8 +903,8 @@ window.ADP_CANVAS = (function () {
         var h = '<div class="sg-chosen"><div class="sg-opt-t">' + esc(chosen) + '</div>' + (pdesc ? '<div class="sg-opt-d">' + esc(pdesc) + '</div>' : '') + '</div>'
           + (k === 'dor' && cfg.chosenSub ? '<p class="rsub" style="margin:10px 0 4px">' + esc(cfg.chosenSub) + '</p>' : '')
           + '<div class="sg-confirm-acts">'
-          + (window.__rumWizard ? '<button class="esc-cont" type="button" data-act="continue">Continuar</button>' : '')
           + '<div class="sg-subacts"><button class="sg-lnk" type="button" data-act="trocar">Trocar escolha</button><button class="sg-lnk" type="button" data-act="edit">Editar</button></div>'
+          + (window.__rumWizard ? '<button class="esc-cont" type="button" data-act="continue">Continuar</button>' : '')
           + '</div>'
           + (cfg.note ? '<p class="rnote">Esta é uma hipótese. Confirme depois em conversas, avaliações ou grupos.</p>' : '');
         host.innerHTML = h; bind(); return;
@@ -1043,7 +1044,7 @@ window.ADP_CANVAS = (function () {
       var pdesc = (s.pickedTitulo === chosen) ? s.pickedDesc : '';
       host.innerHTML = '<div class="sg-chosen"><div class="sg-opt-t">' + esc(chosen) + '</div>' + (pdesc ? '<div class="sg-opt-d">' + esc(pdesc) + '</div>' : '') + '</div>'
         + '<p class="rsub" style="margin:10px 0 4px">Este é o começo do teu monopólio.</p>'
-        + '<div class="sg-confirm-acts"><button class="esc-cont" type="button" data-act="continue">Continuar</button><div class="sg-subacts"><button class="sg-lnk" type="button" data-act="rodar">Gerar outras</button><button class="sg-lnk" type="button" data-act="edit">Ajustar</button></div></div>';
+        + '<div class="sg-confirm-acts"><div class="sg-subacts"><button class="sg-lnk" type="button" data-act="rodar">Gerar outras</button><button class="sg-lnk" type="button" data-act="edit">Ajustar</button></div><button class="esc-cont" type="button" data-act="continue">Continuar</button></div>';
       bind();
     }
     function renderDif() {
@@ -1127,8 +1128,7 @@ window.ADP_CANVAS = (function () {
       var listHtml = fases.map(function (f, i) { return '<div class="met-row"><span class="met-n">' + (i + 1) + '</span><span class="met-t">' + esc(f) + '</span></div>'; }).join('');
       host.innerHTML = '<div class="met-list">' + listHtml + '</div>'
         + '<p class="met-note">Isso não é um método pronto que você precisava ter — provavelmente você nunca parou pra nomear. É o jeito que você <b>já</b> resolve, só organizado em passos. Confere se bate com a tua realidade e ajusta o que não for.</p>'
-        + '<div class="rum-acts"><button class="rbtn rbtn-primary" type="button" data-act="contPlain">Continuar</button><button class="rbtn rbtn-sec" type="button" data-act="metEdit">Ajustar</button></div>'
-        + '<div class="met-regen"><button class="sg-lnk" type="button" data-act="metRegen">Gerar outra versão</button></div>';
+        + '<div class="sg-confirm-acts"><div class="sg-subacts"><button class="sg-lnk" type="button" data-act="metRegen">Gerar outra</button><button class="sg-lnk" type="button" data-act="metEdit">Ajustar</button></div><button class="rbtn rbtn-primary" type="button" data-act="contPlain">Continuar</button></div>';
       bind();
     }
     function render() { stopR(); if (!active) { host.innerHTML = ''; return; } if (active === 'diferencial') renderDif(); else if (active === 'metodo') renderMetodo(); else renderPlain(active); }
