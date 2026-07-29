@@ -76,13 +76,20 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .gate.block{background:#18181b;color:#fff}
 .gate.block a{color:#e7f99a;text-decoration:underline}
 .gate.stamp{background:#fff;color:#18181b}
+.stampnote{font-size:13px;line-height:1.6;color:var(--muted);margin:2px 2px 22px}
+.stampnote b{color:var(--ink);font-weight:700}
+.stampnote ul{margin:7px 0 0;padding-left:18px}
+.stampnote li{margin:3px 0}
+#f-onde li{margin-bottom:14px}
+#f-onde li b{display:block;color:var(--ink)}
+#f-onde .ab{display:block;color:#3f3f46;margin-top:3px}
 .selo{display:flex;align-items:center;gap:10px;font-size:13.5px;color:var(--ink);background:var(--lime);border-radius:12px;padding:11px 15px;margin:16px 0}
 .selo .sdot{width:9px;height:9px;border-radius:999px;background:var(--ink);flex:none}
-.cadeia{border:1px solid var(--line);border-radius:16px;padding:18px 20px;margin:16px 0}
+.cadeia{border:1px solid var(--line);border-radius:16px;padding:22px 24px;margin:16px 0}
 .cadeia h3{font-size:14px;font-weight:700;margin-bottom:6px}
 .cadeia .crow{display:flex;gap:12px;padding:9px 0;border-top:1px solid var(--line)}
 .cadeia .crow:first-of-type{border-top:none}
-.cadeia .cl{font-size:12px;font-weight:700;color:var(--muted);min-width:98px;flex:none;padding-top:1px}
+.cadeia .cl{font-size:12px;font-weight:700;color:var(--ink);min-width:98px;flex:none;padding-top:1px}
 .cadeia .cvv{font-size:14px;color:var(--ink);min-width:0}
 .cadeia .cvv.miss{color:var(--faint)}
 .cadeia .warn{margin-top:14px;font-size:13px;line-height:1.5;color:var(--ink);background:var(--lime);border-radius:12px;padding:11px 14px}
@@ -91,15 +98,15 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 
 /* frase hero (cyan) */
 .frase{background:var(--cyan);border-radius:16px;padding:38px 40px;margin:16px 0}
-.frase .fk{font-size:12px;font-weight:700;letter-spacing:.04em;color:rgba(16,16,16,.55);margin-bottom:16px}
+.frase .fk{font-size:12px;font-weight:700;letter-spacing:.04em;color:#101010;margin-bottom:16px}
 .frase p{font-size:clamp(24px,2.9vw,34px);font-weight:700;line-height:1.24;letter-spacing:-.02em;color:#101010}
 .frase .hl{border-bottom:3px solid rgba(16,16,16,.9);padding-bottom:1px}
 
 /* grid seções */
 .grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-.sec{border:1px solid var(--line);border-radius:16px;padding:22px 24px}
+.sec{border:1px solid var(--line);border-radius:16px;padding:26px 28px}
 .sec.wide{grid-column:1/-1}
-.sec .k{font-size:12px;font-weight:700;letter-spacing:.03em;color:var(--muted);margin-bottom:10px}
+.sec .k{font-size:12px;font-weight:700;letter-spacing:.03em;color:var(--ink);margin-bottom:10px}
 .sec p{font-size:15px;line-height:1.6;color:#3f3f46}
 .sec p b{color:var(--ink);font-weight:700}
 .sec .dor{font-size:18px;font-weight:700;color:var(--ink);line-height:1.4;letter-spacing:-.01em}
@@ -108,7 +115,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .sec li::before{content:"";position:absolute;left:2px;top:10px;width:7px;height:7px;border-radius:999px;background:var(--ink)}
 .sec li.no::before{background:none;content:"×";left:0;top:0;font-weight:700;color:var(--faint)}
 .puvbox{display:flex;flex-direction:column;gap:16px}
-.puv .pl{font-size:12px;font-weight:700;color:var(--muted);margin-bottom:6px}
+.puv .pl{font-size:12px;font-weight:700;color:var(--ink);margin-bottom:6px}
 .puv .pv{font-size:16px;font-weight:700;color:var(--ink);line-height:1.4}
 .puv .pv.long{font-weight:400;font-size:15px;color:#3f3f46}
 /* plano 30/60/90 */
@@ -118,7 +125,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .plano .pcol li{font-size:14px;line-height:1.5;color:#3f3f46;padding-left:18px;position:relative;margin-bottom:9px}
 .plano .pcol li::before{content:"";position:absolute;left:2px;top:8px;width:6px;height:6px;border-radius:999px;background:var(--ink)}
 .sec.plano{border:none;padding:0}
-.sec.white{background:#fff}
+.sec.white{background:#fff;border:none}
 .sec p,.puv .pv,.cadeia .cvv,.gate p{text-wrap:balance}
 .plano .acc{margin-top:8px;border:1px solid var(--line);border-radius:16px;overflow:hidden}
 .plano .amod + .amod{border-top:1px solid var(--line)}
@@ -208,6 +215,8 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
         <div class="fk">A sua frase de especialista</div>
         <p id="f-frase">Eu resolvo <span class="hl">a agenda furada nos dias fracos</span> para <span class="hl">barbearias premium que vendem assinatura</span> através de <span class="hl">landing pages que enchem os horários vazios</span>.</p>
       </div>
+
+      <p class="stampnote gone" id="stampnote"></p>
 
       <div class="selo gone" id="f-selo"></div>
       <div class="cadeia gone" id="f-cadeia"></div>
@@ -332,19 +341,21 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
       }
       if(frase) frase.classList.add("gone");
       if(grid) grid.classList.add("gone");
-      ["f-selo","f-cadeia"].forEach(function(id){ var e=$(id); if(e) e.classList.add("gone"); });
+      ["f-selo","f-cadeia","stampnote"].forEach(function(id){ var e=$(id); if(e) e.classList.add("gone"); });
       return false;
     }
     if(frase) frase.classList.remove("gone");
     if(grid) grid.classList.remove("gone");
-    if(g){
+    var sn = $("stampnote");
+    if(g){ g.className = "gate gone"; g.innerHTML = ""; }
+    if(sn){
       if(gate && gate.status === "carimbado"){
         var imp = (gate.importantes || []).concat(gate.avisos || []);
-        g.className = "gate stamp";
-        g.innerHTML = "<h3>⚠️ Gerado como hipótese de baixa confiança</h3><p>"
-          + (gate.mensagem || "Teu Canvas passou com pendências. O posicionamento sai carimbado — trata como aposta pros 30 dias, não como veredito.") + "</p>"
-          + (imp.length ? "<ul>" + imp.map(function(x){ return "<li>" + String(x) + "</li>"; }).join("") + "</ul>" : "");
-      } else { g.className = "gate gone"; g.innerHTML = ""; }
+        sn.innerHTML = "<b>Hipótese de baixa confiança.</b> "
+          + esc(gate.mensagem || "Teu Canvas passou com pendências. Trata como aposta pros 30 dias, não como veredito.")
+          + (imp.length ? "<ul>" + imp.map(function(x){ return "<li>" + esc(x) + "</li>"; }).join("") + "</ul>" : "");
+        sn.classList.remove("gone");
+      } else { sn.classList.add("gone"); sn.innerHTML = ""; }
     }
     return true;
   }
@@ -395,7 +406,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
     if(d.abertura_proposta) $("f-proposta").textContent = d.abertura_proposta;
     if(Array.isArray(d.onde_achar) && d.onde_achar.length){
       $("f-onde").innerHTML = d.onde_achar.map(function(o){
-        if(o && typeof o === "object") return "<li><b>"+(o.local||"")+"</b>"+(o.abordagem?" — "+o.abordagem:"")+"</li>";
+        if(o && typeof o === "object") return "<li><b>"+esc(o.local||"")+"</b>"+(o.abordagem?"<span class=\"ab\">"+esc(o.abordagem)+"</span>":"")+"</li>";
         return "<li>"+String(o)+"</li>";
       }).join("");
     }
