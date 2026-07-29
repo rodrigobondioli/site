@@ -75,11 +75,8 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .gate li{margin:5px 0}
 .gate.block{background:#18181b;color:#fff}
 .gate.block a{color:#e7f99a;text-decoration:underline}
-.gate.stamp{background:#fff;color:#18181b}
 .stampnote{font-size:13px;line-height:1.6;color:var(--muted);margin:2px 2px 22px}
 .stampnote b{color:var(--ink);font-weight:700}
-.stampnote ul{margin:7px 0 0;padding-left:18px}
-.stampnote li{margin:3px 0}
 .grid .selo{grid-column:1/-1;margin:0 0 4px}
 .chatsection{margin-top:32px}
 .chatsection .chathead{margin-bottom:14px}
@@ -90,7 +87,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 #f-onde .ab{display:block;color:#3f3f46;margin-top:3px}
 .selo{display:flex;align-items:center;gap:10px;font-size:13.5px;color:var(--ink);background:var(--lime);border-radius:12px;padding:11px 15px;margin:16px 0}
 .selo .sdot{width:9px;height:9px;border-radius:999px;background:var(--ink);flex:none}
-.cadeia{border:1px solid var(--line);border-radius:16px;padding:22px 24px;margin:16px 0}
+.cadeia{border:1px solid var(--line);border-radius:16px;padding:30px 32px;margin:16px 0}
 .cadeia h3{font-size:14px;font-weight:700;margin-bottom:6px}
 .cadeia .crow{display:flex;gap:12px;padding:9px 0;border-top:1px solid var(--line)}
 .cadeia .crow:first-of-type{border-top:none}
@@ -109,7 +106,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 
 /* grid seções */
 .grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
-.sec{border:1px solid var(--line);border-radius:16px;padding:26px 28px}
+.sec{border:1px solid var(--line);border-radius:16px;padding:30px 32px}
 .sec.wide{grid-column:1/-1}
 .sec .k{font-size:12px;font-weight:700;letter-spacing:.03em;color:var(--ink);margin-bottom:10px}
 .sec p{font-size:15px;line-height:1.6;color:#3f3f46}
@@ -135,10 +132,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .plano .pcol li{font-size:14px;line-height:1.5;color:#3f3f46;padding-left:18px;position:relative;margin-bottom:9px}
 .plano .pcol li::before{content:"";position:absolute;left:2px;top:8px;width:6px;height:6px;border-radius:999px;background:var(--ink)}
 .sec.plano{border:none;padding:0}
-.sec.out{border:none;padding:0}
-.sec.out .k{margin-bottom:12px}
-.cardbox{border:1px solid var(--line);border-radius:16px;padding:26px 28px}
-.cardbox.white{background:#fff;border:none}
+.sec.white{background:#fff;border:none}
 .warn .misslink{display:inline-block;margin-top:12px;font-weight:700;text-decoration:underline}
 .sec p,.puv .pv,.cadeia .cvv,.gate p{text-wrap:balance}
 .plano .acc{margin-top:8px;border:1px solid var(--line);border-radius:16px;overflow:hidden}
@@ -159,7 +153,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 /* chat do Estrategista (refino) */
 .chatwrap{border:1px solid var(--line);border-radius:16px;padding:16px 20px}
 .chatwrap .chatsub{color:var(--muted,#71717a);font-size:14px;margin-top:4px}
-.chatlog{display:flex;flex-direction:column;gap:12px;margin:18px 0;max-height:460px;overflow-y:auto}
+.chatlog{display:flex;flex-direction:column;gap:12px;margin:16px 0;height:min(52vh,400px);overflow-y:auto}
 .cmsg{max-width:82%;padding:12px 15px;border-radius:14px;font-size:15px;line-height:1.5;white-space:pre-wrap;word-wrap:break-word}
 .cmsg.ai{align-self:flex-start;background:var(--soft,#f1f1f1);color:var(--ink,#18181b);border-bottom-left-radius:4px}
 .cmsg.me{align-self:flex-end;background:#101010;color:#fff;border-bottom-right-radius:4px}
@@ -218,8 +212,8 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
         </div>
         <div class="actions">
           <button class="btn prim gone" id="gerar"><svg viewBox="0 0 24 24"><path d="M12 3l2 5 5 2-5 2-2 5-2-5-5-2 5-2z"/></svg>Gerar com o Estrategista</button>
-          <button class="btn" id="copiar"><svg viewBox="0 0 24 24"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>Copiar</button>
-          <button class="btn"><svg viewBox="0 0 24 24"><path d="M12 3v12M7 11l5 5 5-5M5 21h14"/></svg>Baixar PDF</button>
+          <button class="btn" id="copiar">Copiar</button>
+          <button class="btn">Baixar PDF</button>
         </div>
       </div>
       <p class="genmsg gone" id="genmsg"></p>
@@ -269,13 +263,11 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
           <p class="dor" id="f-dor">"Por que minha barbearia lota no sábado e fica vazia na terça?"</p>
         </div>
 
-        <div class="sec wide out">
+        <div class="sec wide">
           <div class="k">Sua frase de valor</div>
-          <div class="cardbox">
-            <div class="puvbox">
-              <div class="puv"><div class="pl">curta (bio, cartão)</div><div class="pv" id="f-puvc">Encho os horários vazios da sua barbearia premium.</div></div>
-              <div class="puv"><div class="pl">falada (quando perguntarem o que você faz)</div><div class="pv long" id="f-puvf">"Sabe aquele buraco na agenda da barbearia no meio da semana? Eu faço landing page que transforma quem só segue no Instagram em assinante que aparece na terça-feira."</div></div>
-            </div>
+          <div class="puvbox">
+            <div class="puv"><div class="pl">curta (bio, cartão)</div><div class="pv" id="f-puvc">Encho os horários vazios da sua barbearia premium.</div></div>
+            <div class="puv"><div class="pl">falada (quando perguntarem o que você faz)</div><div class="pv long" id="f-puvf">"Sabe aquele buraco na agenda da barbearia no meio da semana? Eu faço landing page que transforma quem só segue no Instagram em assinante que aparece na terça-feira."</div></div>
           </div>
         </div>
 
@@ -284,22 +276,18 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
           <p id="f-medos">Nichar não fecha portas — escolhe a certa. Todo especialista bem pago um dia foi generalista com medo. Você não perde cliente: você para de ser esquecível.</p>
         </div>
 
-        <div class="sec wide out">
+        <div class="sec wide white">
           <div class="k">Pronto pra colar</div>
-          <div class="cardbox white">
-            <div class="puvbox">
-              <div class="puv"><div class="pl">bio (Instagram / site)</div><div class="pv" id="f-bio">—</div></div>
-              <div class="puv"><div class="pl">topo do portfólio</div><div class="pv long" id="f-portfolio">—</div></div>
-              <div class="puv"><div class="pl">abertura de proposta</div><div class="pv long" id="f-proposta">—</div></div>
-            </div>
+          <div class="puvbox">
+            <div class="puv"><div class="pl">bio (Instagram / site)</div><div class="pv" id="f-bio">—</div></div>
+            <div class="puv"><div class="pl">topo do portfólio</div><div class="pv long" id="f-portfolio">—</div></div>
+            <div class="puv"><div class="pl">abertura de proposta</div><div class="pv long" id="f-proposta">—</div></div>
           </div>
         </div>
 
-        <div class="sec wide out">
+        <div class="sec wide">
           <div class="k">Onde achar seu cliente</div>
-          <div class="cardbox">
-            <ul id="f-onde"><li>—</li></ul>
-          </div>
+          <ul id="f-onde"><li>—</li></ul>
         </div>
 
         <div class="selo gone" id="f-selo"></div>
