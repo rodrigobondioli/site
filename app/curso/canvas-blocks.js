@@ -877,7 +877,7 @@ window.ADP_CANVAS = (function () {
       stopRotate();
       if (!active) { host.innerHTML = ''; return; }
       var k = active, s = st(k), cfg = CFG[k] || {}, chosen = valOf(k);
-      if (s.editing) { showComposer(k, true); host.innerHTML = '<div class="rum-acts"><button class="rbtn rbtn-primary" type="button" data-act="save">Salvar ajuste</button><button class="rbtn rbtn-sec" type="button" data-act="cancel">Cancelar</button></div>'; bind(); return; }
+      if (s.editing) { showComposer(k, false); host.innerHTML = '<textarea class="mono-edit" id="sgEditTa" rows="3">' + esc(valOf(k)) + '</textarea><div class="rum-acts"><button class="rbtn rbtn-primary" type="button" data-act="save">Salvar ajuste</button><button class="rbtn rbtn-sec" type="button" data-act="cancel">Cancelar</button></div>'; bind(); var _sg = host.querySelector('#sgEditTa'); if (_sg) setTimeout(function () { try { _sg.focus(); } catch (e) {} }, 0); return; }
       showComposer(k, false);
       var head = headHTML(k);
       if (s.falta) { host.innerHTML = head + '<p class="rsub">' + esc(faltaTxt(s.falta)) + '</p>' + (s.falta === 'nicho' ? '' : '<button class="rbtn rbtn-primary" type="button" data-act="fix" data-fix="' + s.falta + '">Completar respostas anteriores</button>'); bind(); return; }
@@ -939,7 +939,7 @@ window.ADP_CANVAS = (function () {
           if (a === 'fix') { var fx = this.getAttribute('data-fix'); if (window.__rumWizard && window.__rumWizard.gotoField) window.__rumWizard.gotoField(fx === 'nicho' ? 'ideal' : fx); return; }
           if (a === 'continue') { if (window.__rumWizard && window.__rumWizard.cont) window.__rumWizard.cont(); return; }
           if (a === 'edit') { s.editing = true; s.prev = valOf(k); render(); focusFld(k); return; }
-          if (a === 'save') { s.pickedDesc = ''; s.pickedTitulo = ''; s.editing = false; render(); return; }
+          if (a === 'save') { var _sga = host.querySelector('#sgEditTa'); if (_sga) setVal(k, _sga.value.trim()); s.pickedDesc = ''; s.pickedTitulo = ''; s.editing = false; render(); return; }
           if (a === 'cancel') { setVal(k, s.prev); s.editing = false; render(); return; }
         });
       });
@@ -1055,7 +1055,7 @@ window.ADP_CANVAS = (function () {
           + '<div class="rum-acts"><button class="rbtn rbtn-primary" type="button" data-act="histSave">Salvar história</button><button class="rbtn rbtn-sec" type="button" data-act="histCancel">Cancelar</button></div>';
         bind(); var mh = host.querySelector('#monoHist'); if (mh) setTimeout(function () { try { mh.focus(); } catch (e) {} }, 0); return;
       }
-      if (s.editing) { showComposer('diferencial', true); host.innerHTML = '<div class="rum-acts"><button class="rbtn rbtn-primary" type="button" data-act="save">Salvar</button><button class="rbtn rbtn-sec" type="button" data-act="cancel">Cancelar</button></div>'; bind(); return; }
+      if (s.editing) { showComposer('diferencial', false); host.innerHTML = '<textarea class="mono-edit" id="difEditTa" rows="4">' + esc(valOf('diferencial')) + '</textarea><div class="rum-acts"><button class="rbtn rbtn-primary" type="button" data-act="save">Salvar</button><button class="rbtn rbtn-sec" type="button" data-act="cancel">Cancelar</button></div>'; bind(); var _df = host.querySelector('#difEditTa'); if (_df) setTimeout(function () { try { _df.focus(); } catch (e) {} }, 0); return; }
       showComposer('diferencial', false);
       if (chosen && s.phase !== 'options') { renderChosen(); return; }
       if (s.loading) { host.innerHTML = '<p class="rmsg"><span class="spin"></span><span class="rmsg-t">' + esc(ROT[0]) + '</span></p>'; startR(); return; }
@@ -1159,7 +1159,7 @@ window.ADP_CANVAS = (function () {
           if (a === 'rodar') { genDif(); return; }
           if (a === 'manual') { setVal('diferencial', ''); s.pickedTitulo = ''; s.pickedDesc = ''; s.editing = true; s.prev = ''; render(); focusFld('diferencial'); return; }
           if (a === 'edit') { s.editing = true; s.prev = valOf('diferencial'); render(); focusFld('diferencial'); return; }
-          if (a === 'save') { s.editing = false; render(); return; }
+          if (a === 'save') { var _dfa = host.querySelector('#difEditTa'); if (_dfa) setVal('diferencial', _dfa.value.trim()); s.editing = false; render(); return; }
           if (a === 'cancel') { setVal('diferencial', s.prev); s.editing = false; render(); return; }
           if (a === 'continue' || a === 'contPlain') { if (window.__rumWizard && window.__rumWizard.cont) window.__rumWizard.cont(); return; }
         });
