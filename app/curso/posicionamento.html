@@ -119,6 +119,19 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .plano .pcol li::before{content:"";position:absolute;left:2px;top:8px;width:6px;height:6px;border-radius:999px;background:var(--ink)}
 
 @media(max-width:900px){.side{display:none}.tabs{display:none}.top{grid-template-columns:1fr auto}.grid{grid-template-columns:1fr}.plano .pcols{grid-template-columns:1fr}}
+/* chat do Estrategista (refino) */
+.chatwrap{border:1px solid var(--line,#e2e2e2);border-radius:16px;padding:22px 22px 18px;margin-top:26px;background:#fff}
+.chatwrap .chatsub{color:var(--muted,#71717a);font-size:14px;margin-top:4px}
+.chatlog{display:flex;flex-direction:column;gap:12px;margin:18px 0;max-height:460px;overflow-y:auto}
+.cmsg{max-width:82%;padding:12px 15px;border-radius:14px;font-size:15px;line-height:1.5;white-space:pre-wrap;word-wrap:break-word}
+.cmsg.ai{align-self:flex-start;background:var(--soft,#f1f1f1);color:var(--ink,#18181b);border:1px solid var(--line,#e2e2e2);border-bottom-left-radius:4px}
+.cmsg.me{align-self:flex-end;background:#101010;color:#fff;border-bottom-right-radius:4px}
+.cmsg.think{color:var(--muted,#71717a);font-style:italic}
+.cmsg strong{font-weight:700}
+.chatbar{display:flex;gap:10px;align-items:flex-end}
+.chatbar textarea{flex:1;resize:none;border:1px solid var(--line,#e2e2e2);border-radius:12px;padding:12px 14px;font:inherit;font-size:15px;line-height:1.4;background:#fff;color:var(--ink,#18181b);max-height:160px}
+.chatbar textarea:focus{outline:none;border-color:var(--ink,#18181b)}
+.chatbar .btn.prim{white-space:nowrap}
 </style>
 </head>
 <body>
@@ -253,6 +266,16 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
         </div>
 
       </div>
+
+      <div class="chatwrap gone" id="chatwrap">
+        <div class="k">Alinha com o Estrategista</div>
+        <p class="chatsub">Não bateu 100%? Conversa aqui que a gente aperta o que ficou frouxo — a frase, o nicho, a dor, o que for.</p>
+        <div class="chatlog" id="chatlog"></div>
+        <div class="chatbar">
+          <textarea id="chatin" rows="1" placeholder="Escreve aqui… (ex: acho o nicho ainda amplo)"></textarea>
+          <button class="btn prim" id="chatsend">Enviar</button>
+        </div>
+      </div>
     </div>
   </main>
 </div>
@@ -355,6 +378,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
       }).join("");
     }
     if(d.plano){ fillList($("f-d30"), d.plano.d30); fillList($("f-d60"), d.plano.d60); fillList($("f-d90"), d.plano.d90); }
+    revealChat(d);
   }
 
   // monta o objeto canvas a partir do que foi salvo
@@ -420,6 +444,34 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
       else { clearExample(); say("Preenche os 5 blocos do Canvas e clica em Gerar com o Estrategista — ele lê tua matéria-prima e monta a frase de especialista, o nicho, a frase de valor e o plano de 90 dias."); }
     }catch(e){ if(wantGen){ doGerar(); } }
   }
+  // ---- Chat do Estrategista (refino) ----
+  var chatHist=[], chatBooted=false, chatBusy=false;
+  function cesc(x){ return String(x==null?"":x).replace(/[<>&]/g,function(c){return {"<":"&lt;",">":"&gt;","&":"&amp;"}[c];}); }
+  function cfmt(x){ return cesc(x).replace(/\*\*(.+?)\*\*/g,"<strong>$1</strong>").replace(/\n/g,"<br>"); }
+  function cadd(role,text){ var log=$("chatlog"); if(!log) return null; var el=document.createElement("div"); el.className="cmsg "+(role==="me"?"me":"ai"); el.innerHTML=cfmt(text); log.appendChild(el); log.scrollTop=log.scrollHeight; return el; }
+  function revealChat(d){ var w=$("chatwrap"); if(!w||!d||!d.frase) return; w.classList.remove("gone"); if(!chatBooted){ chatBooted=true; bootChat(); } }
+  async function bootChat(){
+    if(window.ADP.devMode) return;
+    var t=cadd("ai","…"); if(t) t.classList.add("think");
+    try{ var out=await window.ADP.estrategistaChat([]); if(t)t.remove(); var reply=(out&&out.reply)||""; if(reply){ cadd("ai",reply); chatHist.push({role:"assistant",content:reply}); } else cadd("ai","Manda uma mensagem que eu começo a apertar teu posicionamento."); }
+    catch(e){ if(t)t.remove(); cadd("ai","Não consegui abrir agora. Escreve uma mensagem que eu respondo."); }
+  }
+  async function sendChat(){
+    if(chatBusy) return; var inp=$("chatin"); if(!inp) return; var v=(inp.value||"").trim(); if(!v) return;
+    inp.value=""; inp.style.height="auto";
+    cadd("me",v); chatHist.push({role:"user",content:v});
+    chatBusy=true; var t=cadd("ai","…"); if(t)t.classList.add("think");
+    try{ var out=await window.ADP.estrategistaChat(chatHist); if(t)t.remove(); var reply=(out&&out.reply)||""; if(reply){ cadd("ai",reply); chatHist.push({role:"assistant",content:reply}); } else cadd("ai","(sem resposta — tenta de novo)"); }
+    catch(e){ if(t)t.remove(); cadd("ai",(e&&e.message)||"Deu erro. Tenta de novo."); }
+    chatBusy=false;
+  }
+  (function(){
+    var b=$("chatsend"); if(b) b.addEventListener("click", sendChat);
+    var i=$("chatin");
+    if(i){ i.addEventListener("keydown", function(e){ if(e.key==="Enter" && !e.shiftKey){ e.preventDefault(); sendChat(); } });
+           i.addEventListener("input", function(){ this.style.height="auto"; this.style.height=Math.min(160,this.scrollHeight)+"px"; }); }
+  })();
+
   boot();
 })();
 </script>

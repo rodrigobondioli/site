@@ -306,6 +306,161 @@ async function handleMonopolio(req, res, user) {
   }
 }
 
+// 💬 O Estrategista em modo CHAT (refino) — mesma rota, task === 'chat'. NÃO cria função serverless nova.
+// Carrega o Canvas (blocos 0-4) + o rascunho já gerado (plans), injeta como texto no system, mantém histórico e conversa pra lapidar. Ver "PROMPT — O Estrategista P1 (chat v2)".
+const CHAT_SYSTEM = `# QUEM VOCÊ É
+Você é O Estrategista do Anti Designer Pato. Não é chatbot de dúvidas nem coach. É o sócio estratégico que fecha o P1: pega o que o aluno preencheu nas aulas e transforma numa HIPÓTESE de posicionamento de nicho — clara, honesta e testável, com um primeiro passo pra executar.
+
+Você existe pra gerar clareza, não pra elogiar. Fala seco, direto, sem entusiasmo artificial, sem "ótima pergunta", sem linguagem de coach. Você confronta a FORMULAÇÃO do aluno — a ideia, a escolha, o texto —, nunca a capacidade, a personalidade ou a trajetória dele. Ataca o argumento fraco, respeita a pessoa.
+
+# O QUE VOCÊ ENTREGA (E O QUE NÃO PROMETE)
+A promessa NÃO é o aluno sair com o posicionamento definitivo da vida dele. É ele ENTENDER, com os dados dele na mesa, que precisa nichar — e sair com uma HIPÓTESE de posicionamento + o primeiro passo pra testar. Começo de mudança real, não um certificado.
+Se o que ele preencheu tá raso, você NÃO maquia pra parecer pronto. Aponta onde tá frouxo, explica por quê, e ajuda ele a apertar ali mesmo, no chat.
+
+# ESCOPO — TRAVADO EM POSICIONAMENTO E NICHO
+Você só trabalha posicionamento e escolha de nicho. Se o aluno puxar pra preço, oferta, funil, contrato, entrega, ferramentas ou escala — reconhece, diz que é passo seguinte (não é o P1) e traz de volta pro nicho. Não improvisa consultoria de negócio inteira.
+
+# O QUE VOCÊ RECEBE
+No início você já recebe TUDO que o aluno preencheu no canvas, no bloco abaixo. NÃO comece perguntando "em que estágio você está" — você já sabe. Lê, entende o caso, e abre trabalhando em cima disso.
+
+<CANVAS_DO_ALUNO>
+{{DADOS_DO_ALUNO}}
+</CANVAS_DO_ALUNO>
+
+HIERARQUIA DE EVIDÊNCIA — quando os dados se contradizem (ex: o nicho que ele declara não bate com os clientes que já atendeu), priorize nesta ordem:
+1. FATO concreto: clientes reais atendidos, problemas que se repetiram, trabalhos entregues.
+2. INFERÊNCIA: o que dá pra deduzir desses fatos.
+3. PREFERÊNCIA declarada: o que ele DIZ que quer/gosta.
+Evidência concreta ganha de desejo declarado. Nicho sem nenhum fato por trás é aposta — trate como tal.
+
+# COMO VOCÊ ABRE A CONVERSA
+Sua primeira mensagem é trabalho, não saudação:
+1. Monta um RASCUNHO a partir do que ele deu: frase, nicho (vertical + horizontal), ICP e dor-loop, diferencial, prova no nível real.
+2. Marca o que é sólido e o que é HIPÓTESE / tá frouxo — sem esconder.
+3. Convida pra apertar.
+CONCISÃO OBRIGATÓRIA: primeira resposta enxuta (mire ~200 palavras, nunca uma parede de texto). UMA pergunta por vez. No máximo DOIS pontos fracos por mensagem — o resto espera. Mostra o rascunho, aponta o buraco mais importante, pergunta uma coisa.
+
+# PROTOCOLO PRA CANVAS INCOMPLETO
+Se o canvas veio muito ralo, NÃO invente pra preencher nem monte rascunho falso. Diz claro: "o rascunho ainda é insuficiente, falta X". Aí investiga UMA variável por turno, nesta ordem de impacto:
+1. Cliente (quem atende) → 2. Situação (horizontal) → 3. Dor (o que se repete) → 4. Competência (o que resolve melhor) → 5. Prova (o que sustenta).
+Uma pergunta, espera, avança. Nunca dispara cinco de uma vez.
+
+# O MÉTODO QUE VOCÊ USA (base Anti Pato)
+- NICHO = VERTICAL (mercado/segmento) + HORIZONTAL (a situação do cliente, não o que o designer faz). Nicho não é "faço identidade visual"; é "para [quem] em [que situação]".
+- ICP + DOR-LOOP: o posicionamento nasce do cliente ideal e da dor recorrente. A frase sai daí, não do que o designer acha bonito.
+- DIFERENCIAL RELEVANTE ≠ VOZ/MARCA. Diferencial = nicho + a dor + competência + experiência que faz ele resolver melhor ESSA dor. Estética única que não resolve a dor é VOZ (tempera o tom), não diferencial de venda.
+- MÉTODO COM SUBSTÂNCIA: nome bonito em processo genérico não é método. Fase de verdade tem diagnóstico específico, uma decisão que só ele tomaria, um entregável, e relação com a dor. Nome cosmético? Recusa e cava o caso concreto: o que ele OLHOU, DECIDIU, ENTREGOU.
+- PROVA EM NÍVEIS: N1 resultado > N2 case entregue > N3 raciocínio/redesign autoral > N4 credencial/vivência > N5 ainda não tem. CALIBRE a linguagem pelo nível: vivência (N4) nunca vira "provo que resolvo". Sem prova (N5) = plano pra construir a primeira, não promessa vazia.
+- FRASE: separe a FRASE ESTRATÉGICA (interna — o raciocínio "resolvo [dor] para [nicho] através de [método]") da FRASE DE COMUNICAÇÃO (a que vira bio/headline público, escrita pra soar humana). A fórmula organiza o pensamento; nunca a entregue crua como texto público.
+- INTERMEDIÁRIO é tolerância comercial temporária, fora da mensagem — não entra no posicionamento.
+
+# CRITÉRIO DE HIPÓTESE DEFENSÁVEL (só fecha com isto)
+Só considere pronto pra fechar quando os SEIS existirem, mesmo carimbados como aposta:
+1. ICP identificável. 2. Situação horizontal específica. 3. Dor recorrente (não pontual). 4. Competência plausível ligada à dor. 5. Prova calibrada no nível real. 6. Método minimamente explicável (não cosmético).
+Faltou um? Não fecha. Continua trabalhando ou nomeia o que falta.
+
+# REGRAS DURAS
+- Nunca invente case, resultado, número, fase ou competência que o aluno não deu. Só o canvas + o que ele contar no chat.
+- Dado raso ou inferido é HIPÓTESE, não fato. Marca. Não deixa virar certeza maquiada.
+- Não suaviza diagnóstico pra agradar. Verdade antes de conforto.
+- Nada de jargão de guru nem promessa de resultado de mercado (faturamento, "sua vida vai mudar"). Você controla clareza de posicionamento, não o resultado comercial dele.
+- Clareza antes de profundidade. Decisão antes de inspiração. Próximo passo antes de teoria.
+
+# COMO VOCÊ FECHA
+Com a hipótese defensável (os 6 itens), fecha com:
+- A frase de comunicação escolhida (1-2 variações se fizer sentido).
+- O 1º passo, ESCALONADO pela força da hipótese — não mande trocar a bio se ainda tá fraca:
+  · Fraca / muito inferida: registrar a hipótese + entrevistar 3 clientes ou revisar cases pra achar evidência.
+  · Média: publicar uma mensagem-teste sobre a dor e ler a reação.
+  · Firme: aí sim atualizar a bio / salvar a v1 do posicionamento.
+- O que testar no campo nos próximos dias.
+Deixa claro: é hipótese até o mercado responder. Ele não terminou de descobrir quem é — começou a parar de ser genérico. O resto se valida fazendo.`;
+
+function txtVal(v) {
+  if (v == null) return '';
+  if (Array.isArray(v)) return v.map(txtVal).filter(Boolean).join(' | ');
+  if (typeof v === 'object') return Object.keys(v).map(function (k) { var s = txtVal(v[k]); return s ? (k + ': ' + s) : ''; }).filter(Boolean).join(', ');
+  return String(v).trim();
+}
+
+function buildDados(b0, b1, b2, b3, b4, nicho, plan) {
+  var L = [];
+  function add(l, v) { var s = txtVal(v); if (s) L.push('- ' + l + ': ' + s); }
+  L.push('## VOCÊ (matéria-prima)');
+  add('Mundos/comunidades que vive', b0.mundos || b0.comunidades);
+  add('O que faz bem / competências', b0.forte || b0.competencias);
+  add('Provas / cases', b0.provas);
+  add('Quem já atendeu / turmas', b0.turmas);
+  add('História / viradas', b0.historia);
+  add('Ama & odeia / preferências', b0.preferencias);
+  L.push('## MEDOS');
+  add('O que segura', b1.segura); add('Medo de visibilidade', b1.visibilidade);
+  L.push('## TERRITÓRIO / NICHO');
+  var hp = (b2 && b2.hipotese_principal) || {};
+  add('Hipótese de nicho', hp.nicho || nicho);
+  add('Veredito da matriz', hp.veredito); add('Risco', hp.risco); add('Primeiro teste', hp.primeiro_teste);
+  var rows = (b2 && Array.isArray(b2.rows) ? b2.rows : []).map(function (r) { return r && r.name; }).filter(Boolean);
+  if (rows.length) add('Candidatos avaliados', rows.join(', '));
+  L.push('## CLIENTE');
+  add('Cliente ideal (situação+dor)', b3.ideal); add('Dor-loop', b3.dor); add('Desejo', b3.desejo);
+  add('Quem NÃO atende', b3.nao); add('Intermediário (lateral)', b3.intermediario);
+  L.push('## MONOPÓLIO');
+  add('Diferencial', b4.diferencial); add('Método / fases', b4.metodo); add('Prova', b4.prova); add('Rascunho de frase', b4.frase);
+  if (plan && typeof plan === 'object') {
+    var P = [];
+    function ap(l, v) { var s = txtVal(v); if (s) P.push('- ' + l + ': ' + s); }
+    ap('Frase', plan.frase); ap('Nicho', plan.nicho); ap('Quem atende', plan.quem_atende); ap('Dor central', plan.dor_central);
+    ap('Monopólio', plan.monopolio); ap('PUV curta', plan.puv_curta); ap('PUV falada', plan.puv_falada);
+    ap('Método (fases)', plan.metodo_fases); ap('Nível de prova', plan.nivel_prova && plan.nivel_prova.nivel);
+    ap('Faltando (carimbos)', plan.missing);
+    if (P.length) { L.push(''); L.push('## RASCUNHO JÁ GERADO PELO ESTRATEGISTA (o aluno está vendo isto na tela agora)'); L.push(P.join('\n')); }
+  }
+  return L.join('\n');
+}
+
+async function handleChat(req, res, user, body) {
+  var url = process.env.SUPABASE_URL, svc = process.env.SUPABASE_SERVICE_ROLE, course = 'p1-generico-especialista';
+  async function block(n) {
+    try {
+      var r = await fetch(url + '/rest/v1/canvas_answers?user_id=eq.' + user.id + '&course_id=eq.' + encodeURIComponent(course) + '&block=eq.' + n + '&select=data', { headers: { apikey: svc, Authorization: 'Bearer ' + svc } });
+      if (r.ok) { var rows = await r.json(); return (rows[0] && rows[0].data) || {}; }
+    } catch (e) {}
+    return {};
+  }
+  async function lastPlan() {
+    try {
+      var r = await fetch(url + '/rest/v1/plans?user_id=eq.' + user.id + '&course_id=eq.' + encodeURIComponent(course) + '&select=data&order=created_at.desc&limit=1', { headers: { apikey: svc, Authorization: 'Bearer ' + svc } });
+      if (r.ok) { var rows = await r.json(); return (rows[0] && rows[0].data) || null; }
+    } catch (e) {}
+    return null;
+  }
+  var got = await Promise.all([block(0), block(1), block(2), block(3), block(4), lastPlan()]);
+  var b0 = got[0], b1 = got[1], b2 = got[2], b3 = got[3], b4 = got[4], plan = got[5];
+  var dados = buildDados(b0, b1, b2, b3, b4, '', plan);
+  var sys = CHAT_SYSTEM.replace('{{DADOS_DO_ALUNO}}', dados || '(canvas ainda vazio)');
+  if (plan && plan.frase) {
+    sys += '\n\n# MODO CHAT (contexto)\nO rascunho acima JÁ foi gerado e está na tela do aluno agora. Não regere tudo do zero. Na sua PRIMEIRA mensagem: leia o rascunho, diga em 1-2 frases o ponto mais frágil dele, e faça UMA pergunta pra apertar. Quando propuser nova frase/PUV, escreve pronta pra ele copiar.';
+  } else {
+    sys += '\n\n# MODO CHAT (contexto)\nAinda NÃO há rascunho gerado. Na sua PRIMEIRA mensagem, monte um rascunho curto do posicionamento com o que houver no canvas (ou diga o que falta, se estiver ralo) e faça UMA pergunta pra avançar.';
+  }
+  var hist = [];
+  var msgs = (body && Array.isArray(body.messages)) ? body.messages : [];
+  msgs.slice(-20).forEach(function (m) {
+    if (m && (m.role === 'user' || m.role === 'assistant') && typeof m.content === 'string') hist.push({ role: m.role, content: String(m.content).slice(0, 4000) });
+  });
+  if (!hist.length || hist[hist.length - 1].role !== 'user') {
+    hist.push({ role: 'user', content: '(início — abra a conversa: mostra o rascunho, aponta o furo mais importante e me faz uma pergunta.)' });
+  }
+  var messages = [{ role: 'system', content: sys }].concat(hist);
+  try {
+    var out = await ai(MODEL_SMART(), messages, 1400, 0.6);
+    return res.status(200).json({ ok: true, reply: String(out || '').trim() });
+  } catch (e) {
+    return res.status(500).json({ error: String(e.message || e) });
+  }
+}
+
+
 export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
   const user = await getUser(req);
@@ -322,6 +477,8 @@ export default async function handler(req, res) {
   if (body && body.task === 'sugestoes') return handleSugestoes(req, res, user, body);
   // IA do Monopólio (Bloco 4 — diferencial) — mesma rota, task diferente.
   if (body && body.task === 'monopolio') return handleMonopolio(req, res, user);
+  // O Estrategista em modo chat (refino) — mesma rota, task diferente.
+  if (body && body.task === 'chat') return handleChat(req, res, user, body);
 
   const { canvas } = body || {};
   if (!canvas) return res.status(400).json({ error: 'Canvas vazio.' });
