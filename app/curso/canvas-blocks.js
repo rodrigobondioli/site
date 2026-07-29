@@ -330,6 +330,7 @@ window.ADP_CANVAS = (function () {
     + '.adp-sg .rbtn.rbtn-primary:hover{filter:brightness(1.06);background:var(--pink,#ff00d7);color:#fff}'
     + '.adp-sg .rum-intro-t{font-size:16px;font-weight:700;color:var(--ink,#18181b);margin:0 0 8px;line-height:1.3;text-wrap:balance}'
     + '.adp-sg .rum-intro-x{font-size:13.5px;color:var(--muted,#71717a);margin:0 0 16px;line-height:1.55;max-width:64ch;text-wrap:balance}'
+    + '.adp-sg .plain-hint{margin-top:16px}'
     + '.adp-sg .mono-box{border:1px solid var(--line,#d4d4d8);background:var(--soft,#f4f4f5);border-radius:12px;padding:14px 16px;margin:0 0 12px;font-size:13.5px;line-height:1.6;color:var(--ink,#18181b);text-wrap:pretty}'
     + '.adp-sg .mono-edit{width:100%;font:inherit;font-size:14.5px;line-height:1.55;color:var(--ink,#18181b);border:1px solid var(--line,#d4d4d8);border-radius:16px;background:none;padding:13px 15px;margin:0 0 12px;resize:none;overflow:hidden;min-height:70px;box-sizing:border-box}'
     + '.adp-sg .mono-edit:focus{outline:none;border-color:var(--line,#d4d4d8)}'
@@ -1083,7 +1084,7 @@ window.ADP_CANVAS = (function () {
       if (k === 'frase' && !valOf('frase')) { var fd = fraseDraft(); if (fd) setVal('frase', fd); }
       showComposer(k, true);
       var _pt = taEl(k); if (_pt) setTimeout(function () { _pt.style.height = 'auto'; _pt.style.height = (_pt.scrollHeight + 2) + 'px'; }, 0);
-      var hint = k === 'prova' ? '<p class="rum-intro-x">Puxei as provas que você já contou no Escavador. Ajusta ou complementa — não invente.</p>'
+      var hint = k === 'prova' ? '<p class="rum-intro-x plain-hint">Puxei as provas que você já contou no Escavador. Ajusta ou complementa — não invente.</p>'
         : k === 'frase' ? '<p class="rum-intro-x">Rascunho montado com teu nicho, tua dor e teu diferencial. Deixa do teu jeito.</p>'
           : '<p class="rum-intro-x">Um projeto real que deu certo, do jeito que aconteceu. A IA acha as fases aí dentro.</p>';
       host.innerHTML = hint + '<div class="rum-acts"><button class="rbtn rbtn-primary" type="button" data-act="contPlain">Continuar</button></div>';
