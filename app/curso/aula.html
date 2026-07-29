@@ -132,10 +132,11 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .nextstep-final{margin-top:38px;padding-top:28px;border-top:1px solid var(--line);display:flex;flex-direction:column;align-items:flex-start}
 .nextstep-final .done-status{margin-bottom:14px}
 .nsf-title{font-size:22px;font-weight:700;letter-spacing:-.01em;color:var(--ink);margin:0 0 8px;line-height:1.25}
-.nsf-sub{font-size:14px;color:var(--muted);line-height:1.6;margin:0 0 22px;max-width:60ch;text-wrap:balance}
+.nsf-sub{font-size:14px;color:var(--muted);line-height:1.6;margin:0 0 22px;max-width:none;text-wrap:pretty}
 .esc-cont-lg{font-size:15.5px;padding:15px 28px}
-.nextstep-final .sbtn{margin-top:14px}
-@media(max-width:560px){.nextstep-final .esc-cont-lg{width:100%;justify-content:center}.nextstep-final .sbtn{width:100%;justify-content:center}}
+.nsf-acts{display:flex;align-items:center;gap:14px;flex-wrap:wrap;width:100%;margin-top:8px}
+.nsf-acts .esc-cont-lg{margin-left:auto}
+@media(max-width:560px){.nsf-acts{flex-direction:column-reverse;align-items:stretch;gap:12px}.nsf-acts .esc-cont-lg,.nsf-acts .sbtn{width:100%;justify-content:center;margin-left:0}}
 /* aplique aqui (bloco do Canvas embaixo do vídeo) */
 .applyhere{position:relative;margin-top:44px;border:1px solid var(--line);border-radius:var(--r);padding:26px 24px 22px}
 .applyhere .adp-syncnote{font-size:12.5px;color:var(--muted);margin-top:18px;padding-top:13px;border-top:1px solid var(--line)}
@@ -769,8 +770,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
         + (isDone?'<span class="done-status">'+ICON_DONE+'Curso concluído</span>':'')
         + '<h3 class="nsf-title">A matéria-prima está pronta.</h3>'
         + '<p class="nsf-sub">Você já definiu a direção, escolheu o cliente, encontrou a ruminação e identificou o que torna teu trabalho difícil de copiar. Agora a IA vai juntar tudo e transformar isso em posicionamento.</p>'
-        + '<button class="esc-cont esc-cont-lg" id="finalGen" type="button">Juntar tudo e encontrar meu posicionamento</button>'
-        + '<a class="sbtn" href="canvas.html">Revisar meu Canvas</a>'
+        + '<div class="nsf-acts"><a class="sbtn" href="canvas.html">Revisar meu Canvas</a><button class="esc-cont esc-cont-lg" id="finalGen" type="button">Finalizar e encontrar meu posicionamento</button></div>'
         + '</div>';
     }
     var nextHref='aula.html?a='+next.id;
