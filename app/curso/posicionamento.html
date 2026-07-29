@@ -11,7 +11,7 @@
 
 :root{
   --surface:#f1f1f1;--card:transparent;--soft:#e6e6e8;--line:#d4d4d8;
-  --ink:#18181b;--muted:#71717a;--faint:#a1a1aa;
+  --ink:#101010;--muted:#71717a;--faint:#a1a1aa;
   --lime:#e7f99a;--pink:#ff00d7;--cyan:#00fff6;--r:12px;
 }
 *{margin:0;padding:0;box-sizing:border-box}
@@ -73,7 +73,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .gate h3{font-size:15px;font-weight:700;margin-bottom:8px}
 .gate ul{margin:9px 0 0;padding-left:18px}
 .gate li{margin:5px 0}
-.gate.block{background:#18181b;color:#fff}
+.gate.block{background:#101010;color:#fff}
 .gate.block a{color:#e7f99a;text-decoration:underline}
 .stampnote{font-size:13px;line-height:1.6;color:var(--muted);margin:2px 2px 22px}
 .stampnote b{color:var(--ink);font-weight:700}
@@ -87,7 +87,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 #f-onde .ab{display:block;color:#3f3f46;margin-top:3px}
 .selo{display:flex;align-items:center;gap:10px;font-size:13.5px;color:var(--ink);background:var(--lime);border-radius:12px;padding:11px 15px;margin:16px 0}
 .selo .sdot{width:9px;height:9px;border-radius:999px;background:var(--ink);flex:none}
-.cadeia{border:1px solid var(--line);border-radius:16px;padding:30px 32px;margin:16px 0}
+.cadeia{border:none;background:var(--soft);border-radius:16px;padding:30px 32px;margin:16px 0}
 .cadeia h3{font-size:14px;font-weight:700;margin-bottom:6px}
 .cadeia .crow{display:flex;gap:12px;padding:9px 0;border-top:1px solid var(--line)}
 .cadeia .crow:first-of-type{border-top:none}
@@ -106,7 +106,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 
 /* grid seções */
 .grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
-.sec{border:1px solid var(--line);border-radius:16px;padding:30px 32px}
+.sec{border:none;background:var(--soft);border-radius:16px;padding:30px 32px}
 .sec.wide{grid-column:1/-1}
 .sec .k{font-size:12px;font-weight:700;letter-spacing:.03em;color:var(--ink);margin-bottom:10px}
 .sec p{font-size:15px;line-height:1.6;color:#3f3f46}
@@ -135,8 +135,8 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .sec.white{background:#fff;border:none}
 .warn .misslink{display:inline-block;margin-top:12px;font-weight:700;text-decoration:underline}
 .sec p,.puv .pv,.cadeia .cvv,.gate p{text-wrap:balance}
-.plano .acc{margin-top:8px;border:1px solid var(--line);border-radius:16px;overflow:hidden}
-.plano .amod + .amod{border-top:1px solid var(--line)}
+.plano .acc{margin-top:8px;border:none;border-radius:16px;overflow:hidden;background:var(--soft)}
+.plano .amod + .amod{border-top:1px solid #d0d0d3}
 .plano .atitle{display:flex;align-items:center;gap:10px;width:100%;text-align:left;padding:14px 18px;font-weight:700;font-size:14.5px;color:var(--ink);background:var(--soft);border:0;cursor:pointer;font-family:inherit}
 .plano .atitle .chev{width:16px;height:16px;fill:none;stroke:var(--muted);stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex:none;transition:transform .18s}
 .plano .amod.collapsed .chev{transform:rotate(-90deg)}
@@ -149,19 +149,30 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .chatbar #chatsend{padding:0;width:44px;height:44px;justify-content:center;flex:none}
 .chatbar #chatsend svg{width:18px;height:18px;fill:none;stroke:#fff;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 
+@media print{
+  .top,.side,.pagehead,.actions,.chatsection{display:none!important}
+  .shell{display:block}.main{width:100%}.inner{max-width:none;padding:0}
+  body{background:#fff;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .sec,.cadeia{background:#fff!important;border:1px solid #e3e3e6!important}
+  .sec,.cadeia,.frase,.selo,.puv,.cadeia .crow,.plano .amod{break-inside:avoid}
+  .plano .acc{background:#fff!important;border:1px solid #e3e3e6!important}
+  .plano .amod.collapsed .abody{display:block!important}
+  .plano .amod .chev{display:none}
+  .stampnote{color:#3f3f46}
+}
 @media(max-width:900px){.side{display:none}.tabs{display:none}.top{grid-template-columns:1fr auto}.grid{grid-template-columns:1fr}.plano .pcols{grid-template-columns:1fr}.puv{flex-direction:column;gap:6px}.puv .pl{width:auto;padding-top:0}}
 /* chat do Estrategista (refino) */
 .chatwrap{border:1px solid var(--line);border-radius:16px;padding:16px 20px}
 .chatwrap .chatsub{color:var(--muted,#71717a);font-size:14px;margin-top:4px}
 .chatlog{display:flex;flex-direction:column;gap:12px;margin:16px 0;height:min(52vh,400px);overflow-y:auto}
 .cmsg{max-width:82%;padding:12px 15px;border-radius:14px;font-size:15px;line-height:1.5;white-space:pre-wrap;word-wrap:break-word}
-.cmsg.ai{align-self:flex-start;background:var(--soft,#f1f1f1);color:var(--ink,#18181b);border-bottom-left-radius:4px}
+.cmsg.ai{align-self:flex-start;background:var(--soft,#f1f1f1);color:var(--ink,#101010);border-bottom-left-radius:4px}
 .cmsg.me{align-self:flex-end;background:#101010;color:#fff;border-bottom-right-radius:4px}
 .cmsg.think{color:var(--muted,#71717a);font-style:italic}
 .cmsg strong{font-weight:700}
 .chatbar{display:flex;gap:10px;align-items:flex-end;border-top:1px solid var(--line);padding-top:14px;margin-top:6px}
-.chatbar textarea{flex:1;resize:none;border:none;border-radius:0;padding:8px 0;font:inherit;font-size:15px;line-height:1.4;background:none;color:var(--ink,#18181b);max-height:160px}
-.chatbar textarea:focus{outline:none;border-color:var(--ink,#18181b)}
+.chatbar textarea{flex:1;resize:none;border:none;border-radius:0;padding:8px 0;font:inherit;font-size:15px;line-height:1.4;background:none;color:var(--ink,#101010);max-height:160px}
+.chatbar textarea:focus{outline:none;border-color:var(--ink,#101010)}
 .chatbar .btn.prim{white-space:nowrap}
 .chatapply{display:flex;justify-content:flex-end;margin:0 0 14px}
 .chatapply.gone{display:none}
@@ -171,7 +182,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 
 <header class="top">
   <a class="logo" href="home.html">
-    <span class="m mk"><svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg"><g clip-path="url(#c0)"><rect width="64" height="64" rx="32" fill="#E7F99A"/><path fill-rule="evenodd" clip-rule="evenodd" d="M20.5867 34.7487L20.5867 17.9659L28.1653 22.3413C28.1961 22.6142 28.211 22.8796 28.211 23.1312L28.211 34.7487C28.211 36.8541 29.9172 38.5603 32.0226 38.5603C34.128 38.5603 35.8352 36.853 35.8352 34.7487C35.8352 33.0541 34.73 31.6187 33.2021 31.1218C32.1776 30.7884 31.0553 30.9042 30.1178 31.4456L30.1178 23.4688C31.4896 23.2374 32.8996 23.2618 34.2639 23.5325C39.5077 24.5741 43.4606 29.199 43.4606 34.7497C43.4606 41.0659 38.3409 46.1867 32.0236 46.1867C30.6869 46.1867 29.4043 45.9573 28.212 45.5358C23.7697 43.9655 20.5877 39.7292 20.5877 34.7497L20.5867 34.7487Z" fill="#18181b"/></g><defs><clipPath id="c0"><rect width="64" height="64" rx="32" fill="white"/></clipPath></defs></svg></span>
+    <span class="m mk"><svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg"><g clip-path="url(#c0)"><rect width="64" height="64" rx="32" fill="#E7F99A"/><path fill-rule="evenodd" clip-rule="evenodd" d="M20.5867 34.7487L20.5867 17.9659L28.1653 22.3413C28.1961 22.6142 28.211 22.8796 28.211 23.1312L28.211 34.7487C28.211 36.8541 29.9172 38.5603 32.0226 38.5603C34.128 38.5603 35.8352 36.853 35.8352 34.7487C35.8352 33.0541 34.73 31.6187 33.2021 31.1218C32.1776 30.7884 31.0553 30.9042 30.1178 31.4456L30.1178 23.4688C31.4896 23.2374 32.8996 23.2618 34.2639 23.5325C39.5077 24.5741 43.4606 29.199 43.4606 34.7497C43.4606 41.0659 38.3409 46.1867 32.0236 46.1867C30.6869 46.1867 29.4043 45.9573 28.212 45.5358C23.7697 43.9655 20.5877 39.7292 20.5877 34.7497L20.5867 34.7487Z" fill="#101010"/></g><defs><clipPath id="c0"><rect width="64" height="64" rx="32" fill="white"/></clipPath></defs></svg></span>
     anti designer pato
   </a>
   <nav class="tabs">
@@ -212,8 +223,8 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
         </div>
         <div class="actions">
           <button class="btn prim gone" id="gerar"><svg viewBox="0 0 24 24"><path d="M12 3l2 5 5 2-5 2-2 5-2-5-5-2 5-2z"/></svg>Gerar com o Estrategista</button>
-          <button class="btn" id="copiar">Copiar</button>
-          <button class="btn">Baixar PDF</button>
+          <button class="btn" id="copiar"><svg viewBox="0 0 24 24"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>Copiar</button>
+          <button class="btn" id="baixar"><svg viewBox="0 0 24 24"><path d="M12 3v12M7 11l5 5 5-5M5 21h14"/></svg>Baixar PDF</button>
         </div>
       </div>
       <p class="genmsg gone" id="genmsg"></p>
@@ -472,6 +483,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
   $("gerar").addEventListener("click", doGerar);
 
   // copiar
+  var _b=$("baixar"); if(_b) _b.addEventListener("click", function(){ window.print(); });
   $("copiar").addEventListener("click", ()=>{
     const parts = ["f-frase","f-nicho","f-monopolio","f-dor","f-puvc","f-puvf","f-medos"].map(id=>$(id)?.textContent?.trim()).filter(Boolean);
     const atende = [...($("f-atende")?.querySelectorAll("li")||[])].map(li=>"- "+li.textContent).join("\n");
