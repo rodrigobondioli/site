@@ -21,13 +21,37 @@ export default async function handler(req, res) {
     const r = await fetch(`${url}/rest/v1/course_access?course_id=eq.${encodeURIComponent(course)}&select=user_id,granted_at&order=granted_at.desc`, { headers: H });
     if (!r.ok) return res.status(502).json({ error: await r.text() });
     const rows = await r.json();
-    let emails = {};
+    let students = [];
     if (rows.length) {
       const ids = rows.map(x => x.user_id).join(',');
-      const p = await fetch(`${url}/rest/v1/profiles?id=in.(${ids})&select=id,email`, { headers: H });
+      const inList = `(${ids})`;
+      const cq = `&course_id=eq.${encodeURIComponent(course)}`;
+      const emails = {};
+      const p = await fetch(`${url}/rest/v1/profiles?id=in.${inList}&select=id,email`, { headers: H });
       if (p.ok) for (const pr of await p.json()) emails[pr.id] = pr.email;
+      // total de aulas publicadas do curso
+      let total = 0;
+      const lz = await fetch(`${url}/rest/v1/lessons?course_id=eq.${encodeURIComponent(course)}&is_published=eq.true&select=id`, { headers: H });
+      if (lz.ok) total = (await lz.json()).length;
+      // progresso (aulas concluidas) + ultima atividade + posicionamento gerado
+      const done = {}, act = {}, plan = {};
+      const bump = (uid, ts) => { const t = +new Date(ts); if (t && (!act[uid] || t > act[uid])) act[uid] = t; };
+      const pg = await fetch(`${url}/rest/v1/progress?user_id=in.${inList}${cq}&select=user_id,status,updated_at`, { headers: H });
+      if (pg.ok) for (const row of await pg.json()) { if (row.status === 'done') done[row.user_id] = (done[row.user_id]||0)+1; bump(row.user_id, row.updated_at); }
+      const cv = await fetch(`${url}/rest/v1/canvas_answers?user_id=in.${inList}${cq}&select=user_id,updated_at`, { headers: H });
+      if (cv.ok) for (const row of await cv.json()) bump(row.user_id, row.updated_at);
+      const pl = await fetch(`${url}/rest/v1/plans?user_id=in.${inList}${cq}&select=user_id,created_at`, { headers: H });
+      if (pl.ok) for (const row of await pl.json()) { plan[row.user_id] = true; bump(row.user_id, row.created_at); }
+      students = rows.map(x => ({
+        user_id: x.user_id,
+        email: emails[x.user_id] || '—',
+        granted_at: x.granted_at,
+        last_activity: act[x.user_id] ? new Date(act[x.user_id]).toISOString() : null,
+        done: done[x.user_id] || 0,
+        total,
+        concluiu: !!plan[x.user_id] || (total > 0 && (done[x.user_id]||0) >= total),
+      }));
     }
-    const students = rows.map(x => ({ user_id: x.user_id, email: emails[x.user_id] || '—', granted_at: x.granted_at }));
     return res.status(200).json({ students });
   }
 
