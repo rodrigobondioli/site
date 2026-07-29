@@ -319,7 +319,7 @@ window.ADP_CANVAS = (function () {
     + '.adp-sg .rsub{font-size:13.5px;color:var(--muted,#71717a);margin:0 0 14px;line-height:1.55;max-width:64ch;text-wrap:balance}'
     + '.adp-sg .spin{display:inline-block;width:12px;height:12px;border:2px solid currentColor;border-right-color:transparent;border-radius:50%;animation:adpspin .7s linear infinite;vertical-align:-1px;margin-right:8px}'
     + '@keyframes adpspin{to{transform:rotate(360deg)}}'
-    + '.adp-sg .rum-acts{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-top:12px}'
+    + '.adp-sg .rum-acts{display:flex;align-items:center;justify-content:flex-end;gap:14px;flex-wrap:wrap;margin-top:12px}'
     + '.adp-sg .rbtn{display:inline-flex;align-items:center;gap:8px;font-weight:700;font-size:13.5px;padding:11px 20px;border-radius:999px;border:1.5px solid var(--ink,#18181b);color:var(--ink,#18181b);background:none;cursor:pointer}'
     + '.adp-sg .rbtn:hover{background:var(--ink,#18181b);color:#fff}'
     + '.adp-sg .rbtn.rbtn-primary{border:none;background:var(--pink,#ff00d7);color:#fff;padding:12px 24px}'
@@ -348,7 +348,7 @@ window.ADP_CANVAS = (function () {
     + '.adp-sg .met-t{font-size:15px;line-height:1.45;color:var(--ink,#18181b);text-wrap:pretty;padding-top:2px}'
     + '.adp-sg .met-note{font-size:13.5px;line-height:1.55;color:var(--muted,#71717a);margin:18px 0 0;text-wrap:pretty}'
     + '.adp-sg .met-note b{color:var(--ink,#18181b);font-weight:700}'
-    + '.adp-sg .met-regen{margin-top:14px}'
+    + '.adp-sg .met-regen{margin-top:14px;text-align:right}'
     + '.adp-sg .mono-deep{margin:0 0 4px}'
     + '.adp-sg .mono-deep-t{font-size:15px;font-weight:700;color:var(--ink,#18181b);margin:2px 0 6px}'
     + '.adp-sg .mono-composer{background:none;border:1px solid var(--line,#d4d4d8);border-radius:16px;padding:8px;margin:0 0 4px}'
@@ -367,7 +367,7 @@ window.ADP_CANVAS = (function () {
     // CONFIRMAÇÃO (pós-escolha) — sem card/decoração: resposta + ações no mesmo eixo à esquerda, botão padrão (.esc-cont)
     + '.adp-sg .sg-chosen{margin:2px 0 0}'
     + '.adp-sg .sg-chosen .sg-opt-d{margin-top:5px}'
-    + '.adp-sg .sg-confirm-acts{display:flex;flex-direction:column;align-items:flex-start;gap:12px;margin-top:20px}'
+    + '.adp-sg .sg-confirm-acts{display:flex;flex-direction:column;align-items:flex-end;gap:12px;margin-top:20px}'
     + '.adp-sg .sg-subacts{display:flex;align-items:center;gap:20px;flex-wrap:wrap}'
     + '.adp-sg .sg-lnk{font-size:12.5px;font-weight:700;color:var(--muted,#71717a);text-decoration:underline;text-underline-offset:2px;background:none;border:none;padding:0;cursor:pointer}'
     + '.adp-sg .sg-lnk:hover{color:var(--ink,#18181b)}'
@@ -882,7 +882,7 @@ window.ADP_CANVAS = (function () {
       if (s.intro && !chosen) {
         host.innerHTML = '<h4 class="rum-intro-t">Agora vamos entrar na cabeça desse cliente</h4>'
           + '<p class="rum-intro-x">A IA vai cruzar a direção escolhida, o cliente que você quer atender e o problema percebido pra encontrar a frase que fica rodando na cabeça dele.</p>'
-          + '<button class="rbtn rbtn-primary" type="button" data-act="rodar">Rodar a IA de Ruminação →</button>';
+          + '<button class="rbtn rbtn-primary" type="button" data-act="rodar">Rodar a IA de Ruminação</button>';
         bind(); return;
       }
       if (s.loading) {
@@ -900,7 +900,7 @@ window.ADP_CANVAS = (function () {
         var h = '<div class="sg-chosen"><div class="sg-opt-t">' + esc(chosen) + '</div>' + (pdesc ? '<div class="sg-opt-d">' + esc(pdesc) + '</div>' : '') + '</div>'
           + (k === 'dor' && cfg.chosenSub ? '<p class="rsub" style="margin:10px 0 4px">' + esc(cfg.chosenSub) + '</p>' : '')
           + '<div class="sg-confirm-acts">'
-          + (window.__rumWizard ? '<button class="esc-cont" type="button" data-act="continue">Continuar →</button>' : '')
+          + (window.__rumWizard ? '<button class="esc-cont" type="button" data-act="continue">Continuar</button>' : '')
           + '<div class="sg-subacts"><button class="sg-lnk" type="button" data-act="trocar">Trocar escolha</button><button class="sg-lnk" type="button" data-act="edit">Editar</button></div>'
           + '</div>'
           + (cfg.note ? '<p class="rnote">Esta é uma hipótese. Confirme depois em conversas, avaliações ou grupos.</p>' : '');
@@ -1031,7 +1031,7 @@ window.ADP_CANVAS = (function () {
       body += '<p class="rum-intro-x">Não precisa contar tua biografia. Só vale adicionar algo que mudou a forma como você trabalha ou resolve problemas.</p>';
       body += '<p class="sg-q">Tem alguma experiência, virada, erro, trabalho ou vivência que mudou a forma como você resolve problemas hoje?</p>';
       body += '<div class="mono-composer"><div class="mono-comp-row"><span class="mono-spark"><svg viewBox="0 0 24 24"><path d="M12 3l1.7 4.8L18.5 9.5l-4.8 1.7L12 16l-1.7-4.8L5.5 9.5l4.8-1.7z"/></svg></span><textarea id="monoDeep" rows="3" placeholder="Escreva só o que realmente acrescenta algo novo…"></textarea></div></div></div>';
-      body += '<div class="mono-foot"><button class="rbtn rbtn-sec" type="button" data-act="toIntro">Minha história já está suficiente</button><button class="rbtn rbtn-primary" type="button" data-act="deepAdd" disabled>Adicionar à minha história →</button></div>';
+      body += '<div class="mono-foot"><button class="rbtn rbtn-sec" type="button" data-act="toIntro">Minha história já está suficiente</button><button class="rbtn rbtn-primary" type="button" data-act="deepAdd" disabled>Adicionar à minha história</button></div>';
       host.innerHTML = body; bind();
       var dta = host.querySelector('#monoDeep'), ab = host.querySelector('[data-act="deepAdd"]');
       if (dta && ab) { var upd = function () { ab.disabled = !dta.value.trim(); }; upd(); dta.addEventListener('input', upd); }
@@ -1041,7 +1041,7 @@ window.ADP_CANVAS = (function () {
       var pdesc = (s.pickedTitulo === chosen) ? s.pickedDesc : '';
       host.innerHTML = '<div class="sg-chosen"><div class="sg-opt-t">' + esc(chosen) + '</div>' + (pdesc ? '<div class="sg-opt-d">' + esc(pdesc) + '</div>' : '') + '</div>'
         + '<p class="rsub" style="margin:10px 0 4px">Este é o começo do teu monopólio.</p>'
-        + '<div class="sg-confirm-acts"><button class="esc-cont" type="button" data-act="continue">Continuar →</button><div class="sg-subacts"><button class="sg-lnk" type="button" data-act="rodar">Gerar outras</button><button class="sg-lnk" type="button" data-act="edit">Ajustar</button></div></div>';
+        + '<div class="sg-confirm-acts"><button class="esc-cont" type="button" data-act="continue">Continuar</button><div class="sg-subacts"><button class="sg-lnk" type="button" data-act="rodar">Gerar outras</button><button class="sg-lnk" type="button" data-act="edit">Ajustar</button></div></div>';
       bind();
     }
     function renderDif() {
@@ -1067,7 +1067,7 @@ window.ADP_CANVAS = (function () {
       if (s.phase === 'intro') {
         host.innerHTML = '<h4 class="rum-intro-t">Agora vamos cruzar tudo</h4>'
           + '<p class="rum-intro-x">A IA vai juntar tua história, competência, prova, nicho e a dor do cliente pra encontrar o começo do teu monopólio.</p>'
-          + '<div class="mono-cta-right"><button class="rbtn rbtn-primary" type="button" data-act="rodar">Encontrar o que ninguém copia →</button></div>';
+          + '<div class="mono-cta-right"><button class="rbtn rbtn-primary" type="button" data-act="rodar">Encontrar o que ninguém copia</button></div>';
         bind(); return;
       }
       renderHist(); // fase inicial (Fatia 2)
@@ -1079,7 +1079,7 @@ window.ADP_CANVAS = (function () {
       var hint = k === 'prova' ? '<p class="rum-intro-x">Puxei as provas que você já contou no Escavador. Ajusta ou complementa — não invente.</p>'
         : k === 'frase' ? '<p class="rum-intro-x">Rascunho montado com teu nicho, tua dor e teu diferencial. Deixa do teu jeito.</p>'
           : '<p class="rum-intro-x">Um projeto real que deu certo, do jeito que aconteceu. A IA acha as fases aí dentro.</p>';
-      host.innerHTML = hint + '<div class="rum-acts"><button class="rbtn rbtn-primary" type="button" data-act="contPlain">Continuar →</button></div>';
+      host.innerHTML = hint + '<div class="rum-acts"><button class="rbtn rbtn-primary" type="button" data-act="contPlain">Continuar</button></div>';
       bind();
     }
     async function genMetodo() {
@@ -1106,7 +1106,7 @@ window.ADP_CANVAS = (function () {
       if (s.loading) { host.innerHTML = '<p class="rmsg"><span class="spin"></span><span class="rmsg-t">Montando tuas fases a partir dos teus cases…</span></p>'; return; }
       if (s.phase === 'falta') {
         showComposer('metodo', true);
-        host.innerHTML = '<p class="rum-intro-x">Ainda falta matéria-prima dos teus cases (Aula 1) pra eu montar. Escreve em 2-3 passos como você costuma resolver — ou volta e completa o Escavador.</p><div class="rum-acts"><button class="rbtn rbtn-primary" type="button" data-act="contPlain">Continuar →</button></div>';
+        host.innerHTML = '<p class="rum-intro-x">Ainda falta matéria-prima dos teus cases (Aula 1) pra eu montar. Escreve em 2-3 passos como você costuma resolver — ou volta e completa o Escavador.</p><div class="rum-acts"><button class="rbtn rbtn-primary" type="button" data-act="contPlain">Continuar</button></div>';
         bind(); return;
       }
       if (s.phase === 'error') {
@@ -1116,7 +1116,7 @@ window.ADP_CANVAS = (function () {
       }
       if (s.phase === 'manual') {
         showComposer('metodo', true);
-        host.innerHTML = '<p class="rum-intro-x">Escreve em 2-3 passos como você resolve, na ordem.</p><div class="rum-acts"><button class="rbtn rbtn-primary" type="button" data-act="contPlain">Continuar →</button></div>';
+        host.innerHTML = '<p class="rum-intro-x">Escreve em 2-3 passos como você resolve, na ordem.</p><div class="rum-acts"><button class="rbtn rbtn-primary" type="button" data-act="contPlain">Continuar</button></div>';
         bind(); return;
       }
       showComposer('metodo', false);
@@ -1125,7 +1125,7 @@ window.ADP_CANVAS = (function () {
       var listHtml = fases.map(function (f, i) { return '<div class="met-row"><span class="met-n">' + (i + 1) + '</span><span class="met-t">' + esc(f) + '</span></div>'; }).join('');
       host.innerHTML = '<div class="met-list">' + listHtml + '</div>'
         + '<p class="met-note">Isso não é um método pronto que você precisava ter — provavelmente você nunca parou pra nomear. É o jeito que você <b>já</b> resolve, só organizado em passos. Confere se bate com a tua realidade e ajusta o que não for.</p>'
-        + '<div class="rum-acts"><button class="rbtn rbtn-primary" type="button" data-act="contPlain">Continuar →</button><button class="rbtn rbtn-sec" type="button" data-act="metEdit">Ajustar</button></div>'
+        + '<div class="rum-acts"><button class="rbtn rbtn-primary" type="button" data-act="contPlain">Continuar</button><button class="rbtn rbtn-sec" type="button" data-act="metEdit">Ajustar</button></div>'
         + '<div class="met-regen"><button class="sg-lnk" type="button" data-act="metRegen">Gerar outra versão</button></div>';
       bind();
     }

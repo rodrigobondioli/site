@@ -308,7 +308,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
         g.innerHTML = "<h3>🚫 Ainda não dá pra gerar</h3><p>"
           + ((gate && gate.mensagem) || "Tem gate crítico aberto. Resolve e volta.") + "</p>"
           + (crit.length ? "<ul>" + crit.map(function(x){ return "<li>" + String(x) + "</li>"; }).join("") + "</ul>" : "")
-          + '<p style="margin-top:11px"><a href="canvas.html">Voltar pro Canvas →</a></p>';
+          + '<p style="margin-top:11px"><a href="canvas.html">Voltar pro Canvas</a></p>';
       }
       if(frase) frase.classList.add("gone");
       if(grid) grid.classList.add("gone");
