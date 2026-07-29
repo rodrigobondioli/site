@@ -41,7 +41,7 @@ window.ADP_CANVAS = (function () {
     ]},
     { block: 4, title: 'Seu Monopólio', type: 'fields', fields: [
       { key: 'diferencial', label: 'Seu diferencial que ninguém copia', ph: 'Tua história, o que só você tem — o cruzamento do nicho com quem você é.' },
-      { key: 'metodo',      label: 'Como você trabalha — um caso real',             ph: 'Pega um projeto que deu certo e conta na ordem: o que você olhou/perguntou pra entender o problema, o que decidiu fazer que outro não faria, e o que entregou no fim. Sem nome bonito, só o que aconteceu.' },
+      { key: 'metodo',      label: 'Como você trabalha — um caso real',             ph: 'Ex.: o que você olhou pra entender o problema, o que decidiu, e o que entregou.' },
       { key: 'prova',       label: 'Sua prova real (um caso com resultado)', ph: 'Um caso concreto: cliente, o que você fez, o que mudou. Número se tiver. Não tem prova ainda? Deixa vazio — não invente.' },
       { key: 'frase',       label: 'Rascunho da tua frase',             ph: 'Eu resolvo [a dor] para [o nicho] através de [o teu recorte]. Nem que fique tosco.' }
     ]}
@@ -1071,7 +1071,7 @@ window.ADP_CANVAS = (function () {
       showComposer(k, true);
       var hint = k === 'prova' ? '<p class="rum-intro-x">Puxei as provas que você já contou no Escavador. Ajusta ou complementa — não invente.</p>'
         : k === 'frase' ? '<p class="rum-intro-x">Rascunho montado com teu nicho, tua dor e teu diferencial. Deixa do teu jeito.</p>'
-          : '<p class="rum-intro-x">Nada de "método" com nome. Pega o último projeto que deu certo e conta em ordem: o que você olhou pra entender o problema, o que decidiu que outro não decidiria, e o que entregou. É daqui que a IA monta teu método.</p>';
+          : '<p class="rum-intro-x">Um projeto real que deu certo, do jeito que aconteceu. A IA acha as fases aí dentro.</p>';
       host.innerHTML = hint + '<div class="rum-acts"><button class="rbtn rbtn-primary" type="button" data-act="contPlain">Continuar →</button></div>';
       bind();
     }
