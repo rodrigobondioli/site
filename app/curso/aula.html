@@ -809,7 +809,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
       var lib = l.video_library || LIB;
       var hasVid = !!(l.video_id && lib);
       var pz = 'vz-6010a13b-258.b-cdn.net';
-      var thumbUrl = hasVid ? ('https://'+pz+'/'+encodeURIComponent(l.video_id)+'/thumbnail.jpg') : '';
+      var thumbUrl = hasVid ? ('https://'+pz+'/'+encodeURIComponent(l.video_id)+'/thumbnail.jpg?v=1') : '';
       var prevUrl  = hasVid ? ('https://'+pz+'/'+encodeURIComponent(l.video_id)+'/preview.webp') : '';
       var thumb = '<span class="lthumb'+(hasVid?' hasvid':'')+'"'
         + (hasVid?' data-prev="'+esc(prevUrl)+'" style="background-image:url('+esc(thumbUrl)+')"':'')+'>'
