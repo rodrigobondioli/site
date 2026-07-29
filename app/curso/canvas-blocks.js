@@ -341,6 +341,14 @@ window.ADP_CANVAS = (function () {
     + '.adp-sg .mono-chk svg{width:11px;height:11px;fill:none;stroke:currentColor;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}'
     + '.adp-sg .mono-sec-x{font-size:13.5px;line-height:1.5;color:var(--ink,#18181b);text-wrap:pretty}'
     + '.adp-sg .mono-sec-x.soft{color:var(--muted,#71717a)}'
+    + '.adp-sg .met-list{margin:4px 0 0}'
+    + '.adp-sg .met-row{display:flex;align-items:flex-start;gap:13px;padding:14px 0;border-top:1px solid var(--line,#ececef)}'
+    + '.adp-sg .met-row:first-child{border-top:0;padding-top:2px}'
+    + '.adp-sg .met-n{flex:none;width:25px;height:25px;border-radius:999px;background:var(--ink,#18181b);color:#fff;font-size:12.5px;font-weight:700;display:grid;place-items:center;margin-top:1px}'
+    + '.adp-sg .met-t{font-size:15px;line-height:1.45;color:var(--ink,#18181b);text-wrap:pretty;padding-top:2px}'
+    + '.adp-sg .met-note{font-size:13.5px;line-height:1.55;color:var(--muted,#71717a);margin:18px 0 0;text-wrap:pretty}'
+    + '.adp-sg .met-note b{color:var(--ink,#18181b);font-weight:700}'
+    + '.adp-sg .met-regen{margin-top:14px}'
     + '.adp-sg .mono-deep{margin:0 0 4px}'
     + '.adp-sg .mono-deep-t{font-size:15px;font-weight:700;color:var(--ink,#18181b);margin:2px 0 6px}'
     + '.adp-sg .mono-composer{background:none;border:1px solid var(--line,#d4d4d8);border-radius:16px;padding:8px;margin:0 0 4px}'
@@ -1087,7 +1095,14 @@ window.ADP_CANVAS = (function () {
     }
     function renderMetodo() {
       var s = st('metodo');
-      if (s.editing) { showComposer('metodo', true); host.innerHTML = '<div class="rum-acts"><button class="rbtn rbtn-primary" type="button" data-act="metSave">Salvar</button><button class="rbtn rbtn-sec" type="button" data-act="metCancel">Cancelar</button></div>'; bind(); return; }
+      if (s.editing) {
+        showComposer('metodo', false);
+        host.innerHTML = '<textarea class="mono-edit" id="metEditTa" rows="6">' + esc(valOf('metodo')) + '</textarea>'
+          + '<div class="rum-acts"><button class="rbtn rbtn-primary" type="button" data-act="metSave">Salvar</button><button class="rbtn rbtn-sec" type="button" data-act="metCancel">Cancelar</button></div>';
+        bind();
+        var mt = host.querySelector('#metEditTa'); if (mt) setTimeout(function () { try { mt.focus(); } catch (e) {} }, 0);
+        return;
+      }
       if (s.loading) { host.innerHTML = '<p class="rmsg"><span class="spin"></span><span class="rmsg-t">Montando tuas fases a partir dos teus cases…</span></p>'; return; }
       if (s.phase === 'falta') {
         showComposer('metodo', true);
@@ -1106,9 +1121,12 @@ window.ADP_CANVAS = (function () {
       }
       showComposer('metodo', false);
       var val = valOf('metodo');
-      host.innerHTML = '<div class="sg-chosen">' + esc(val).replace(/\n/g, '<br>') + '</div>'
-        + '<p class="rsub" style="margin:10px 0 4px">É assim que você trabalha?</p>'
-        + '<div class="sg-confirm-acts"><button class="esc-cont" type="button" data-act="contPlain">Continuar →</button><div class="sg-subacts"><button class="sg-lnk" type="button" data-act="metRegen">Gerar outra</button><button class="sg-lnk" type="button" data-act="metEdit">Ajustar</button></div></div>';
+      var fases = val.split('\n').map(function (ln) { return String(ln).replace(/^\s*\d+[\).\-]\s*/, '').trim(); }).filter(Boolean);
+      var listHtml = fases.map(function (f, i) { return '<div class="met-row"><span class="met-n">' + (i + 1) + '</span><span class="met-t">' + esc(f) + '</span></div>'; }).join('');
+      host.innerHTML = '<div class="met-list">' + listHtml + '</div>'
+        + '<p class="met-note">Isso não é um método pronto que você precisava ter — provavelmente você nunca parou pra nomear. É o jeito que você <b>já</b> resolve, só organizado em passos. Confere se bate com a tua realidade e ajusta o que não for.</p>'
+        + '<div class="rum-acts"><button class="rbtn rbtn-primary" type="button" data-act="contPlain">Continuar →</button><button class="rbtn rbtn-sec" type="button" data-act="metEdit">Ajustar</button></div>'
+        + '<div class="met-regen"><button class="sg-lnk" type="button" data-act="metRegen">Gerar outra versão</button></div>';
       bind();
     }
     function render() { stopR(); if (!active) { host.innerHTML = ''; return; } if (active === 'diferencial') renderDif(); else if (active === 'metodo') renderMetodo(); else renderPlain(active); }
@@ -1128,8 +1146,8 @@ window.ADP_CANVAS = (function () {
           if (a === 'metRegen') { genMetodo(); return; }
           if (a === 'metManual') { var sm = st('metodo'); setVal('metodo', ''); sm.phase = 'manual'; sm.tried = true; showComposer('metodo', true); render(); focusFld('metodo'); return; }
           if (a === 'metEdit') { var se = st('metodo'); se.editing = true; se.prev = valOf('metodo'); render(); focusFld('metodo'); return; }
-          if (a === 'metSave') { st('metodo').editing = false; render(); return; }
-          if (a === 'metCancel') { var sc = st('metodo'); setVal('metodo', sc.prev || ''); sc.editing = false; render(); return; }
+          if (a === 'metSave') { var mta = host.querySelector('#metEditTa'); if (mta) setVal('metodo', mta.value.trim()); st('metodo').editing = false; render(); return; }
+          if (a === 'metCancel') { st('metodo').editing = false; render(); return; }
           var s = st('diferencial');
           if (a === 'corr') { s.corr = true; render(); return; }
           if (a === 'histSave') { var t = host.querySelector('#monoHist'); var v = voce(); v.historia = t ? t.value.trim() : (v.historia || ''); if (opts && opts.saveVoce) opts.saveVoce(v); s.corr = false; render(); return; }
