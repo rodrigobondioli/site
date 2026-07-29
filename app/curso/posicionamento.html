@@ -222,7 +222,6 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
           <span class="gen"><svg viewBox="0 0 24 24"><path d="M12 3l2 5 5 2-5 2-2 5-2-5-5-2 5-2z"/></svg>Gerado pelo Estrategista a partir do seu Canvas</span>
         </div>
         <div class="actions">
-          <button class="btn prim gone" id="gerar"><svg viewBox="0 0 24 24"><path d="M12 3l2 5 5 2-5 2-2 5-2-5-5-2 5-2z"/></svg>Gerar com o Estrategista</button>
           <button class="btn" id="copiar"><svg viewBox="0 0 24 24"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>Copiar</button>
           <button class="btn" id="baixar"><svg viewBox="0 0 24 24"><path d="M12 3v12M7 11l5 5 5-5M5 21h14"/></svg>Baixar PDF</button>
         </div>
@@ -463,14 +462,15 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 
   // mensagens progressivas do loading (sem % falso)
   var LOAD_MSGS=['Lendo sua matéria-prima…','Cruzando nicho, cliente e dor…','Encontrando seu monopólio…','Montando sua frase e seu plano…'];
+  var genBusy=false;
   async function doGerar(){
     if(window.ADP.devMode){ say("Modo dev: publique com as chaves (Supabase + OpenAI) pra gerar de verdade."); return; }
-    const btn = $("gerar"); if(btn.disabled) return; btn.disabled = true;   // trava clique-duplo / envio novo durante o loading
+    if(genBusy) return; genBusy = true;   // trava clique-duplo / envio novo durante o loading
     var li=0; msg.innerHTML='<span class="spin"></span>'+LOAD_MSGS[0]; msg.classList.remove("gone");
     var iv=setInterval(function(){ li=(li+1)%LOAD_MSGS.length; msg.innerHTML='<span class="spin"></span>'+LOAD_MSGS[li]; }, 2500);
     try{
       const canvas = await buildCanvas();
-      if(!canvas || Object.keys(canvas).length===0){ clearInterval(iv); say("Preenche o Canvas primeiro — sem matéria-prima não tem plano."); btn.disabled=false; return; }
+      if(!canvas || Object.keys(canvas).length===0){ clearInterval(iv); say("Preenche o Canvas primeiro — sem matéria-prima não tem plano."); genBusy=false; return; }
       const out = await withTimeout(window.ADP.estrategista(canvas), 45000);
       const d = out.data || out;
       clearInterval(iv);
@@ -478,9 +478,8 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
       if(d && d.frase) window.ADP.savePlan(d).catch(function(){});   // só persiste posicionamento VÁLIDO (nunca um gate bloqueado)
       say("");
     }catch(err){ clearInterval(iv); say(err.message || "Não consegui montar seu posicionamento agora. Tenta de novo."); }
-    btn.disabled = false;
+    genBusy = false;
   }
-  $("gerar").addEventListener("click", doGerar);
 
   // copiar
   var _b=$("baixar"); if(_b) _b.addEventListener("click", function(){ window.print(); });
