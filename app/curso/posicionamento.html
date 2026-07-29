@@ -117,10 +117,10 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .sec li::before{content:"\2713";position:absolute;left:0;top:0;font-weight:700;font-size:13.5px;color:var(--ink)}
 .sec li.no::before{content:"×";left:0;top:0;font-size:15px;font-weight:700;color:var(--faint)}
 .puvbox{display:flex;flex-direction:column;gap:0}
-.puv{display:flex;gap:22px;padding:16px 0;border-top:1px solid var(--line)}
+.puv{display:flex;gap:16px;align-items:baseline;padding:16px 0;border-top:1px solid var(--line)}
 .puv:first-child{padding-top:0;border-top:none}
 .puv:last-child{padding-bottom:0}
-.puv .pl{flex:none;width:160px;font-size:12px;font-weight:700;color:var(--ink);margin-bottom:0;padding-top:3px;line-height:1.35}
+.puv .pl{flex:none;width:130px;font-size:12px;font-weight:700;color:var(--ink);margin-bottom:0;line-height:1.35}
 .puv .pv{min-width:0;font-size:15px;font-weight:700;color:var(--ink);line-height:1.5}
 .puv .pv.long{font-weight:400;color:#3f3f46}
 .warn .misslist{margin:8px 0 0;padding-left:18px}
@@ -167,7 +167,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .chatlog{display:flex;flex-direction:column;gap:12px;margin:18px 0;max-height:460px;overflow-y:auto;padding-right:10px}
 .cmsg{max-width:80%;padding:13px 16px;border-radius:14px;font-size:15px;line-height:1.55;white-space:pre-wrap;word-wrap:break-word}
 .cmsg.ai{align-self:flex-start;background:#ededee;color:var(--ink);border-bottom-left-radius:4px}
-.cmsg.me{align-self:flex-end;background:#fff;color:var(--ink);border:1px solid var(--line);border-bottom-right-radius:4px}
+.cmsg.me{align-self:flex-end;background:#fff;color:var(--ink);border-bottom-right-radius:4px}
 .cmsg.think{color:var(--muted,#71717a);font-style:italic}
 .cmsg strong{font-weight:700}
 .chatbar{display:flex;gap:10px;align-items:flex-end;border-top:1px solid var(--line);padding-top:14px;margin-top:6px}
