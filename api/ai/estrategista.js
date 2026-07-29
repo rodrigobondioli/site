@@ -374,7 +374,10 @@ Com a hipótese defensável (os 6 itens), fecha com:
   · Média: publicar uma mensagem-teste sobre a dor e ler a reação.
   · Firme: aí sim atualizar a bio / salvar a v1 do posicionamento.
 - O que testar no campo nos próximos dias.
-Deixa claro: é hipótese até o mercado responder. Ele não terminou de descobrir quem é — começou a parar de ser genérico. O resto se valida fazendo.`;
+Deixa claro: é hipótese até o mercado responder. Ele não terminou de descobrir quem é — começou a parar de ser genérico. O resto se valida fazendo.
+
+# AFUNILAR E FECHAR (importante)
+Você é direto e objetivo. Afunila a conversa: em poucas trocas (idealmente 3 a 5) chega numa versão sólida — sem enrolar, sem abrir assunto novo à toa, uma pergunta por vez. Quando os 6 critérios da hipótese defensável estiverem de pé (ou o aluno sinalizar que tá bom), você FECHA: entrega a versão final numa mensagem curta e diz pra ele clicar em "Aplicar no meu posicionamento" pra atualizar os cards lá em cima. Depois de fechar, não reabre sozinho — se ele quiser mudar mais, ele puxa.`;
 
 function txtVal(v) {
   if (v == null) return '';
@@ -507,6 +510,37 @@ async function handleMetodo(req, res, user) {
   }
 }
 
+// ✅ Fecho do chat de refino — gera o posicionamento FINAL (schema das 14 seções) a partir do Canvas + da conversa. Mesma rota, task === 'chat_close'.
+async function handleChatClose(req, res, user, body) {
+  var url = process.env.SUPABASE_URL, svc = process.env.SUPABASE_SERVICE_ROLE, course = 'p1-generico-especialista';
+  async function block(n) {
+    try {
+      var r = await fetch(url + '/rest/v1/canvas_answers?user_id=eq.' + user.id + '&course_id=eq.' + encodeURIComponent(course) + '&block=eq.' + n + '&select=data', { headers: { apikey: svc, Authorization: 'Bearer ' + svc } });
+      if (r.ok) { var rows = await r.json(); return (rows[0] && rows[0].data) || {}; }
+    } catch (e) {}
+    return {};
+  }
+  var got = await Promise.all([block(0), block(1), block(2), block(3), block(4)]);
+  var b0 = got[0], b1 = got[1], b2 = got[2], b3 = got[3], b4 = got[4];
+  var canvas = { bloco_0: b0, bloco_1: b1, bloco_2: b2, bloco_3: b3, bloco_4: b4 };
+  var nicho = (b2 && b2.hipotese_principal && b2.hipotese_principal.nicho) || '';
+  if (!nicho && b2 && Array.isArray(b2.rows)) { var named = b2.rows.filter(function (r) { return r && String(r.name || '').trim(); }); if (named.length) { named.sort(function (a, b) { return (b.total || 0) - (a.total || 0); }); nicho = named[0].name; } }
+  if (nicho) canvas.nicho_escolhido = nicho;
+  var msgs = (body && Array.isArray(body.messages)) ? body.messages : [];
+  var conv = msgs.filter(function (m) { return m && (m.role === 'user' || m.role === 'assistant') && typeof m.content === 'string'; })
+    .map(function (m) { return (m.role === 'user' ? 'ALUNO' : 'ESTRATEGISTA') + ': ' + String(m.content).slice(0, 4000); }).join('\n');
+  var user_msg = 'Canvas do aluno (JSON):\n' + JSON.stringify(canvas, null, 2)
+    + '\n\nO aluno acabou de refinar o posicionamento nesta conversa de alinhamento. Incorpore as decisões e ajustes combinados aqui — a versão final tem que refletir o que ficou acertado no chat, não ignorar:\n' + (conv || '(sem conversa)')
+    + '\n\nGere o posicionamento FINAL em JSON (mesmo schema de sempre).';
+  try {
+    var out = await ai(MODEL_SMART(), [{ role: 'system', content: SYSTEM }, { role: 'user', content: user_msg }], 6144, 0.5);
+    var data = extractJSON(out) || { raw: out };
+    return res.status(200).json({ ok: true, data: data });
+  } catch (e) {
+    return res.status(500).json({ error: String(e.message || e) });
+  }
+}
+
 export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
   const user = await getUser(req);
@@ -525,6 +559,8 @@ export default async function handler(req, res) {
   if (body && body.task === 'monopolio') return handleMonopolio(req, res, user);
   // O Estrategista em modo chat (refino) — mesma rota, task diferente.
   if (body && body.task === 'chat') return handleChat(req, res, user, body);
+  // Fecho do chat: gera o posicionamento final da conversa.
+  if (body && body.task === 'chat_close') return handleChatClose(req, res, user, body);
   // IA do Método (Bloco 4 — fases a partir dos cases) — mesma rota, task diferente.
   if (body && body.task === 'metodo') return handleMetodo(req, res, user);
 

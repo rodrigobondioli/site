@@ -132,6 +132,8 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .chatbar textarea{flex:1;resize:none;border:1px solid var(--line,#e2e2e2);border-radius:12px;padding:12px 14px;font:inherit;font-size:15px;line-height:1.4;background:#fff;color:var(--ink,#18181b);max-height:160px}
 .chatbar textarea:focus{outline:none;border-color:var(--ink,#18181b)}
 .chatbar .btn.prim{white-space:nowrap}
+.chatapply{display:flex;justify-content:flex-end;margin:0 0 14px}
+.chatapply.gone{display:none}
 </style>
 </head>
 <body>
@@ -271,6 +273,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
         <div class="k">Alinha com o Estrategista</div>
         <p class="chatsub">Não bateu 100%? Conversa aqui que a gente aperta o que ficou frouxo — a frase, o nicho, a dor, o que for.</p>
         <div class="chatlog" id="chatlog"></div>
+        <div class="chatapply gone" id="chatapply"><button class="btn prim" id="chatapplybtn">Aplicar no meu posicionamento</button></div>
         <div class="chatbar">
           <textarea id="chatin" rows="1" placeholder="Escreve aqui… (ex: acho o nicho ainda amplo)"></textarea>
           <button class="btn prim" id="chatsend">Enviar</button>
@@ -447,27 +450,43 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
   }
   // ---- Chat do Estrategista (refino) ----
   var chatHist=[], chatBooted=false, chatBusy=false;
+  var CHATKEY="adp_pos_chat";
+  function saveChat(){ try{ localStorage.setItem(CHATKEY, JSON.stringify(chatHist)); }catch(e){} }
+  function showApply(){ var a=$("chatapply"); if(a) a.classList.remove("gone"); }
   function cesc(x){ return String(x==null?"":x).replace(/[<>&]/g,function(c){return {"<":"&lt;",">":"&gt;","&":"&amp;"}[c];}); }
   function cfmt(x){ return cesc(x).replace(/\*\*(.+?)\*\*/g,"<strong>$1</strong>").replace(/\n/g,"<br>"); }
   function cadd(role,text){ var log=$("chatlog"); if(!log) return null; var el=document.createElement("div"); el.className="cmsg "+(role==="me"?"me":"ai"); el.innerHTML=cfmt(text); log.appendChild(el); log.scrollTop=log.scrollHeight; return el; }
-  function revealChat(d){ var w=$("chatwrap"); if(!w||!d||!d.frase) return; w.classList.remove("gone"); if(!chatBooted){ chatBooted=true; bootChat(); } }
+  function revealChat(d){ var w=$("chatwrap"); if(!w||!d||!d.frase) return; w.classList.remove("gone"); if(!chatBooted){ chatBooted=true; restoreOrBoot(); } }
+  function restoreOrBoot(){ var saved=[]; try{ saved=JSON.parse(localStorage.getItem(CHATKEY)||"[]")||[]; }catch(e){ saved=[]; } if(saved.length){ chatHist=saved; saved.forEach(function(m){ cadd(m.role==="user"?"me":"ai", m.content); }); showApply(); } else bootChat(); }
   async function bootChat(){
     if(window.ADP.devMode) return;
     var t=cadd("ai","…"); if(t) t.classList.add("think");
-    try{ var out=await withTimeout(window.ADP.estrategistaChat([]), 30000); if(t)t.remove(); var reply=(out&&out.reply)||""; if(reply){ cadd("ai",reply); chatHist.push({role:"assistant",content:reply}); } else cadd("ai","Manda uma mensagem que eu começo a apertar teu posicionamento."); }
+    try{ var out=await withTimeout(window.ADP.estrategistaChat([]), 30000); if(t)t.remove(); var reply=(out&&out.reply)||""; if(reply){ cadd("ai",reply); chatHist.push({role:"assistant",content:reply}); saveChat(); showApply(); } else cadd("ai","Manda uma mensagem que eu começo a apertar teu posicionamento."); }
     catch(e){ if(t)t.remove(); cadd("ai","Não consegui abrir agora. Escreve uma mensagem que eu respondo."); }
   }
   async function sendChat(){
     if(chatBusy) return; var inp=$("chatin"); if(!inp) return; var v=(inp.value||"").trim(); if(!v) return;
     inp.value=""; inp.style.height="auto";
-    cadd("me",v); chatHist.push({role:"user",content:v});
+    cadd("me",v); chatHist.push({role:"user",content:v}); saveChat();
     chatBusy=true; var t=cadd("ai","…"); if(t)t.classList.add("think");
-    try{ var out=await withTimeout(window.ADP.estrategistaChat(chatHist), 30000); if(t)t.remove(); var reply=(out&&out.reply)||""; if(reply){ cadd("ai",reply); chatHist.push({role:"assistant",content:reply}); } else cadd("ai","(sem resposta — tenta de novo)"); }
+    try{ var out=await withTimeout(window.ADP.estrategistaChat(chatHist), 30000); if(t)t.remove(); var reply=(out&&out.reply)||""; if(reply){ cadd("ai",reply); chatHist.push({role:"assistant",content:reply}); saveChat(); showApply(); } else cadd("ai","(sem resposta — tenta de novo)"); }
     catch(e){ if(t)t.remove(); cadd("ai",(e&&e.message)||"Deu erro. Tenta de novo."); }
     chatBusy=false;
   }
+  async function applyChat(){
+    if(!chatHist.length || chatBusy) return;
+    var btn=$("chatapplybtn"); if(btn){ btn.disabled=true; btn.textContent="Aplicando…"; }
+    try{
+      var out=await withTimeout(window.ADP.estrategistaChatClose(chatHist), 45000);
+      var d=(out&&out.data)?out.data:out;
+      if(d && d.frase){ render(d); window.ADP.savePlan(d).catch(function(){}); cadd("ai","Pronto — atualizei teu posicionamento aí em cima com o que a gente alinhou."); window.scrollTo({top:0,behavior:"smooth"}); }
+      else { cadd("ai","Não consegui aplicar agora. Tenta de novo."); }
+    }catch(e){ cadd("ai",(e&&e.message)||"Deu erro ao aplicar."); }
+    if(btn){ btn.disabled=false; btn.textContent="Aplicar no meu posicionamento"; }
+  }
   (function(){
     var b=$("chatsend"); if(b) b.addEventListener("click", sendChat);
+    var ab=$("chatapplybtn"); if(ab) ab.addEventListener("click", applyChat);
     var i=$("chatin");
     if(i){ i.addEventListener("keydown", function(e){ if(e.key==="Enter" && !e.shiftKey){ e.preventDefault(); sendChat(); } });
            i.addEventListener("input", function(){ this.style.height="auto"; this.style.height=Math.min(160,this.scrollHeight)+"px"; }); }

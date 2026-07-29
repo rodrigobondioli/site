@@ -33,6 +33,7 @@ window.ADP = (function () {
       api("/api/canvas", { method: "POST", body: JSON.stringify({ course, block, data }) }),
     estrategista: (canvas) => api("/api/ai/estrategista", { method: "POST", body: JSON.stringify({ canvas }) }),
     estrategistaChat: (messages) => api("/api/ai/estrategista", { method: "POST", body: JSON.stringify({ task: "chat", messages: messages || [] }) }),
+    estrategistaChatClose: (messages) => api("/api/ai/estrategista", { method: "POST", body: JSON.stringify({ task: "chat_close", messages: messages || [] }) }),
     loadPlan: (course = COURSE) => api("/api/plan?course=" + encodeURIComponent(course)),
     savePlan: (data, course = COURSE) =>
       api("/api/plan", { method: "POST", body: JSON.stringify({ course, data }) }),
