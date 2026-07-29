@@ -80,8 +80,11 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .stampnote b{color:var(--ink);font-weight:700}
 .stampnote ul{margin:7px 0 0;padding-left:18px}
 .stampnote li{margin:3px 0}
-.divline{height:1px;background:var(--line);border:0;margin:28px 0}
 .grid .selo{grid-column:1/-1;margin:0 0 4px}
+.sec.white .puvbox{gap:0}
+.sec.white .puv{padding:18px 0;border-top:1px solid var(--line)}
+.sec.white .puv:first-child{padding-top:0;border-top:none}
+.sec.white .puv:last-child{padding-bottom:0}
 .chatsection{margin-top:32px}
 .chatsection .chathead{margin-bottom:14px}
 .chatsection .chathead .k{font-size:12px;font-weight:700;letter-spacing:.03em;color:var(--ink);margin-bottom:6px}
@@ -226,8 +229,6 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 
       <div class="cadeia gone" id="f-cadeia"></div>
 
-      <hr class="divline" id="divline">
-
       <div class="grid">
 
         <div class="sec">
@@ -354,18 +355,18 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
       }
       if(frase) frase.classList.add("gone");
       if(grid) grid.classList.add("gone");
-      ["f-selo","f-cadeia","stampnote","divline"].forEach(function(id){ var e=$(id); if(e) e.classList.add("gone"); });
+      ["f-selo","f-cadeia","stampnote"].forEach(function(id){ var e=$(id); if(e) e.classList.add("gone"); });
       return false;
     }
     if(frase) frase.classList.remove("gone");
     if(grid) grid.classList.remove("gone");
-    var dv = $("divline"); if(dv) dv.classList.remove("gone");
     var sn = $("stampnote");
     if(g){ g.className = "gate gone"; g.innerHTML = ""; }
     if(sn){
       if(gate && gate.status === "carimbado"){
         sn.innerHTML = "<b>Isso é uma hipótese pra testar — não um veredito.</b> "
-          + "Teu Canvas ainda tem pontos fracos (falta prova e evidência mais forte). Trata teu posicionamento como uma aposta pra validar nos próximos 30 dias — usa o plano aí embaixo pra deixar ele mais firme.";
+          + "Teu Canvas ainda tem pontos fracos (falta prova e evidência mais forte).<br>"
+          + "Trata teu posicionamento como uma aposta pra validar nos próximos 30 dias — usa o plano aí embaixo pra deixar ele mais firme.";
         sn.classList.remove("gone");
       } else { sn.classList.add("gone"); sn.innerHTML = ""; }
     }
