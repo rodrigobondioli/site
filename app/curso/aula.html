@@ -812,7 +812,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
       var thumbUrl = hasVid ? ('https://'+pz+'/'+encodeURIComponent(l.video_id)+'/thumbnail.jpg') : '';
       var prevUrl  = hasVid ? ('https://'+pz+'/'+encodeURIComponent(l.video_id)+'/preview.webp') : '';
       var thumb = '<span class="lthumb'+(hasVid?' hasvid':'')+'"'
-        + (hasVid?' data-prev="'+esc(prevUrl)+'" style="background-image:url('+esc(thumbUrl)+'),url('+esc(prevUrl)+')"':'')+'>'
+        + (hasVid?' data-prev="'+esc(prevUrl)+'" style="background-image:url('+esc(thumbUrl)+')"':'')+'>'
         + '<span class="lp">'+ICON_PLAY+'</span>'
         + (l.duration?'<span class="ldur">'+esc(l.duration)+'</span>':'')
         + (hasVid?'<span class="lprog"><i style="width:'+(WATCH[l.id]||0)+'%"></i></span>':'')

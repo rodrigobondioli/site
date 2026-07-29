@@ -309,7 +309,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
       var pz='vz-6010a13b-258.b-cdn.net';
       var wpct = (l.video_id && WATCH[l.id]) ? Math.min(100, WATCH[l.id]) : 0;
       var thumb = l.video_id
-        ? '<span class="lthumb hasvid" data-prev="https://'+pz+'/'+encodeURIComponent(l.video_id)+'/preview.webp" style="background-image:url(https://'+pz+'/'+encodeURIComponent(l.video_id)+'/thumbnail.jpg),url(https://'+pz+'/'+encodeURIComponent(l.video_id)+'/preview.webp)"><span class="lp">'+ICON_PLAY+'</span>'+(wpct?'<span class="lprog"><i style="width:'+wpct+'%"></i></span>':'')+'</span>'
+        ? '<span class="lthumb hasvid" data-prev="https://'+pz+'/'+encodeURIComponent(l.video_id)+'/preview.webp" style="background-image:url(https://'+pz+'/'+encodeURIComponent(l.video_id)+'/thumbnail.jpg)"><span class="lp">'+ICON_PLAY+'</span>'+(wpct?'<span class="lprog"><i style="width:'+wpct+'%"></i></span>':'')+'</span>'
         : '<span class="lthumb novid"><span class="lp">'+ICON_PLAY+'</span></span>';
       return '<a class="'+cls+'" href="aula.html?a='+l.id+'">'+st+thumb+'<span class="lcol"><span class="tt">'+esc(l.title)+'</span>'+info+'</span>'+tag+dur+'</a>';
     }).join('');
