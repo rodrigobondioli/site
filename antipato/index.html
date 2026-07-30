@@ -656,9 +656,18 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--ink);outline-offset
 #cacaCta{
   background:var(--pink);border-color:var(--pink);color:var(--ink);
   padding:13px 24px;font-size:clamp(14px,1.2vw,16px);
+  position:relative;overflow:hidden;
 }
 #cacaCta .price{background:var(--ink);color:var(--pink)}
 #cacaCta:hover,#cacaCta:focus-visible{background:var(--pink);border-color:var(--pink);color:var(--ink)}
+#cacaCta::after{
+  content:"";position:absolute;top:-40%;bottom:-40%;width:34%;
+  background:linear-gradient(105deg,transparent,rgba(255,255,255,.6),transparent);
+  transform:translateX(-260%) skewX(-18deg);
+  transition:transform .65s ease;
+  pointer-events:none;
+}
+#cacaCta:hover::after{transform:translateX(420%) skewX(-18deg)}
 #cacaCta.gg{animation:pulsePink 1.6s ease-in-out infinite}
 @keyframes pulsePink{
   0%,100%{box-shadow:0 0 0 0 rgba(255,0,215,.45)}
