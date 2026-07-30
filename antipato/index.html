@@ -704,7 +704,7 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--ink);outline-offset
 .stack li.total::before{display:none}
 
 .selo{
-  position:absolute;top:-52px;right:-34px;z-index:5;
+  position:absolute;top:-44px;right:-44px;z-index:5;
   width:clamp(112px,10vw,156px);height:clamp(112px,10vw,156px);
   filter:drop-shadow(0 6px 18px rgba(0,0,0,.35));
   pointer-events:none;
@@ -1102,7 +1102,7 @@ body::after{
       <p class="dor rv" style="--rd:.34s"><b>04</b><span>“a ia faz em segundos o que levei anos pra aprender. <span class="hit">ainda vão precisar de mim?</span>”</span></p>
     </div>
 
-    <p class="anon rv" style="--rd:.06s">resultado: você virou um <strong>anônimo altamente qualificado</strong> — sabe fazer de tudo, não é a referência em nada.</p>
+    <p class="anon rv" style="--rd:.06s">resultado: você virou um <strong>anônimo altamente qualificado</strong><br>— sabe fazer de tudo, não é a referência em nada.</p>
 
     <div class="verdict rv" style="--rd:.1s">
       <p>você acha que é <span class="strike">falta de técnica</span>.<br>que falta mais um curso. <span class="nao-inline">não é.</span></p>
@@ -1226,7 +1226,7 @@ body::after{
         <div class="cred rv" style="--rd:.2s">
           <span>20 anos de ofício</span><span>nike · coca-cola · l'oréal</span><span>+30k no youtube</span><span>jurado awwwards</span>
         </div>
-        <blockquote class="rv" style="--rd:.26s">“design bonito é commodity. <em>ponto de vista não.</em>”</blockquote>
+        <blockquote class="rv" style="--rd:.26s">“design bonito é commodity.<br><em>ponto de vista não.</em>”</blockquote>
         <p class="bio-line rv" style="--rd:.3s">o pato entrega o que mandam. o estrategista chega antes e resolve o negócio.</p>
       </div>
     </div>
@@ -1271,7 +1271,7 @@ body::after{
         <div class="val-row"><div class="val"><small>R$</small>97</div><span class="x12">12x</span></div>
         <p class="parc">ou 12x de R$8,09</p>
         <p class="oficial">valor oficial: <s>R$197</s> — sobe quando o lote fechar</p>
-        <a class="cta-big" href="https://payfast.greenn.com.br/fqrmpkf/offer/dPcwW6?ch_id=141265">quero meu novo posicionamento</a>
+        <a class="cta-big" href="https://payfast.greenn.com.br/fqrmpkf/offer/dPcwW6?ch_id=141265" target="_blank" rel="noopener">quero meu novo posicionamento</a>
         <p class="pays">pix · cartão em até 12x · boleto · apple pay · google pay</p>
         <p class="pays">acesso na hora, direto no e-mail · aplica numa tarde</p>
         <p class="mini-guar">garantia de 7 dias: não cravou o posicionamento? me manda um e-mail e devolvo os R$97 na hora, sem burocracia. o risco é 100% meu.</p>
@@ -1293,7 +1293,7 @@ body::after{
 
     <div class="caca-foot rv" style="--rd:.22s">
       <span class="score" id="score">&gt; patos abatidos: 0/5_</span>
-      <a class="cta-big" id="cacaCta" href="https://payfast.greenn.com.br/fqrmpkf/offer/dPcwW6?ch_id=141265">agora mata o teu <span class="price">R$97</span></a>
+      <a class="cta-big" id="cacaCta" href="https://payfast.greenn.com.br/fqrmpkf/offer/dPcwW6?ch_id=141265" target="_blank" rel="noopener">agora mata o teu <span class="price">R$97</span></a>
     </div>
   </div>
 </section>
@@ -1351,7 +1351,7 @@ body::after{
 
     <div class="rv" style="--rd:.1s;margin-top:clamp(30px,5vh,54px);text-align:center">
       <p class="binary">continuar pato ou matar o pato: uma dessas escolhas custa <strong>R$97</strong>. a outra você já paga faz anos.</p>
-      <a class="cta-big" style="background:var(--ink);border-color:var(--ink);color:#fff" href="https://payfast.greenn.com.br/fqrmpkf/offer/dPcwW6?ch_id=141265">quero virar especialista <span class="price">R$97</span></a>
+      <a class="cta-big" style="background:var(--ink);border-color:var(--ink);color:#fff" href="https://payfast.greenn.com.br/fqrmpkf/offer/dPcwW6?ch_id=141265" target="_blank" rel="noopener">quero virar especialista <span class="price">R$97</span></a>
       <p class="cta-final-sub">lote fundador · 50 acessos · garantia de 7 dias</p>
     </div>
   </div>
@@ -1897,28 +1897,28 @@ document.addEventListener('click', function(e){
       var tl = g.timeline(vars);
       items.forEach(function(li, i){
         var s = li.querySelector('s');
-        var at = i*.22;
-        tl.from(li, {autoAlpha:0, scale:1.45, rotation:(i%2?2.2:-2.2), transformOrigin:'12% 50%', duration:.42, ease:'power3.out'}, at);
-        if (s) tl.from(s, {autoAlpha:0, x:22, duration:.26, ease:'power2.out'}, at+.14);
-        if (lines[i]) tl.to(lines[i], {scaleX:1, duration:.24, ease:'power3.inOut'}, at+.4);
+        var at = i*.14;
+        tl.from(li, {autoAlpha:0, scale:1.45, rotation:(i%2?2.2:-2.2), transformOrigin:'12% 50%', duration:.36, ease:'power3.out'}, at);
+        if (s) tl.from(s, {autoAlpha:0, x:22, duration:.22, ease:'power2.out'}, at+.1);
+        if (lines[i]) tl.to(lines[i], {scaleX:1, duration:.2, ease:'power3.inOut'}, at+.3);
       });
-      var base = items.length*.22 + .4;
-      tl.from(totalLi, {autoAlpha:0, y:14, duration:.4}, base)
-        .to(counting, {v:692, duration:1.0, ease:'power2.out',
-            onUpdate:function(){ num.textContent = Math.round(counting.v); }}, base+.15)
-        .to(totalLine, {scaleX:1, duration:.4, ease:'power3.inOut'}, base+1.25);
-      if (why) tl.from(why, {autoAlpha:0, duration:.4}, base+1.5);
+      var base = items.length*.14 + .3;
+      tl.from(totalLi, {autoAlpha:0, y:14, duration:.35}, base)
+        .to(counting, {v:692, duration:.6, ease:'power2.out',
+            onUpdate:function(){ num.textContent = Math.round(counting.v); }}, base+.1)
+        .to(totalLine, {scaleX:1, duration:.35, ease:'power3.inOut'}, base+.65);
+      if (why) tl.from(why, {autoAlpha:0, duration:.35}, base+.85);
       /* pricebox DESABA */
-      tl.from(box, {yPercent:-14, autoAlpha:0, scale:.88, rotation:-2, duration:.65, ease:'back.out(1.8)',
-          onStart:thump}, base+1.6);
+      tl.from(box, {yPercent:-14, autoAlpha:0, scale:.88, rotation:-2, duration:.55, ease:'back.out(1.8)',
+          onStart:thump}, base+.9);
       reels.forEach(function(r, i){
-        tl.to(r.col, {yPercent:-r.digit*10, duration:.85+i*.2, ease:'back.out(1.2)'}, base+1.8);
+        tl.to(r.col, {yPercent:-r.digit*10, duration:.7+i*.15, ease:'back.out(1.2)'}, base+1.1);
       });
       var x12 = box.querySelector('.x12');
-      if (x12) tl.from(x12, {scale:0, rotation:-30, duration:.45, ease:'back.out(2.5)'}, base+2.15);
+      if (x12) tl.from(x12, {scale:0, rotation:-30, duration:.4, ease:'back.out(2.5)'}, base+1.45);
       tl.from([box.querySelector('.parc'), box.querySelector('.oficial')].filter(Boolean),
-              {autoAlpha:0, y:10, stagger:.08, duration:.4}, base+2.25);
-      if (cta) tl.from(cta, {autoAlpha:0, scale:.85, duration:.45, ease:'back.out(2)'}, base+2.4);
+              {autoAlpha:0, y:10, stagger:.06, duration:.35}, base+1.55);
+      if (cta) tl.from(cta, {autoAlpha:0, scale:.85, duration:.4, ease:'back.out(2)'}, base+1.7);
       var pays = box.querySelectorAll('.pays');
       if (pays.length) tl.from(pays, {autoAlpha:0, stagger:.06, duration:.35}, base+2.55);
       if (guar) tl.from(guar, {scale:2.4, rotation:-22, autoAlpha:0, duration:.5, ease:'power4.in',
@@ -1986,19 +1986,27 @@ document.addEventListener('click', function(e){
     });
     mo.observe(range, {childList:true});
 
-    /* pop sintetizado, bem baixo */
+    /* quack sintetizado, bem baixo */
     var actx = null;
     function pop(){
       try{
         actx = actx || new (window.AudioContext||window.webkitAudioContext)();
-        var o = actx.createOscillator(), ga = actx.createGain();
-        o.type='triangle';
-        o.frequency.setValueAtTime(320, actx.currentTime);
-        o.frequency.exponentialRampToValueAtTime(70, actx.currentTime+.11);
-        ga.gain.setValueAtTime(.07, actx.currentTime);
-        ga.gain.exponentialRampToValueAtTime(.001, actx.currentTime+.13);
-        o.connect(ga); ga.connect(actx.destination);
-        o.start(); o.stop(actx.currentTime+.14);
+        var t0 = actx.currentTime;
+        var o = actx.createOscillator(), ga = actx.createGain(), filt = actx.createBiquadFilter();
+        o.type = 'sawtooth';
+        filt.type = 'bandpass';
+        filt.Q.value = 5;
+        filt.frequency.setValueAtTime(1100, t0);
+        filt.frequency.exponentialRampToValueAtTime(450, t0+.15);
+        o.frequency.setValueAtTime(380, t0);
+        o.frequency.exponentialRampToValueAtTime(170, t0+.05);
+        o.frequency.exponentialRampToValueAtTime(240, t0+.1);
+        o.frequency.exponentialRampToValueAtTime(120, t0+.16);
+        ga.gain.setValueAtTime(.0001, t0);
+        ga.gain.exponentialRampToValueAtTime(.13, t0+.012);
+        ga.gain.exponentialRampToValueAtTime(.001, t0+.17);
+        o.connect(filt); filt.connect(ga); ga.connect(actx.destination);
+        o.start(t0); o.stop(t0+.18);
       }catch(e){}
     }
 
