@@ -756,9 +756,17 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--ink);outline-offset
 .pricebox .parc{font-size:15.5px;font-weight:700;margin-top:6px}
 .pricebox .oficial{font-family:var(--mono);font-size:12px;margin-top:10px;color:rgba(16,16,16,.6)}
 .pricebox .oficial s{text-decoration:line-through}
-.pricebox .cta-big{margin-top:20px;background:var(--lime);border:2px solid var(--ink);color:var(--ink);width:100%;justify-content:center}
-.pricebox .cta-big .price{background:var(--ink);color:var(--lime)}
+.pricebox .cta-big{margin-top:20px;background:var(--pink);border:2px solid var(--pink);color:var(--ink);width:100%;justify-content:center;position:relative;overflow:hidden}
+.pricebox .cta-big .price{background:var(--ink);color:var(--pink)}
 .pricebox .cta-big:hover{background:var(--pink);border-color:var(--pink);color:var(--ink)}
+.pricebox .cta-big::after{
+  content:"";position:absolute;top:-40%;bottom:-40%;width:34%;
+  background:linear-gradient(105deg,transparent,rgba(255,255,255,.6),transparent);
+  transform:translateX(-260%) skewX(-18deg);
+  transition:transform .65s ease;
+  pointer-events:none;
+}
+.pricebox .cta-big:hover::after{transform:translateX(420%) skewX(-18deg)}
 .pricebox .pays{
   margin-top:14px;font-family:var(--mono);font-size:11px;color:rgba(16,16,16,.6);
   text-align:center;letter-spacing:.02em;
@@ -852,7 +860,7 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--ink);outline-offset
 .footer-logo{
   display:block;line-height:0;text-decoration:none;flex:0 0 auto;
 }
-.footer-logo svg,.footer-logo img{height:72px;width:auto;display:block}
+.footer-logo svg,.footer-logo img{height:72px;width:auto;display:block;transform:translateY(-13px)}
 .footer-top small a{color:rgba(255,255,255,.6);text-decoration:underline;text-underline-offset:2px}
 .footer-top small a:hover{color:#fff}
 .footer-top small{
@@ -969,13 +977,6 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--ink);outline-offset
 .val .reel > span{display:block;line-height:1}
 /* carimbo da garantia */
 .g-on .guarantee{will-change:transform}
-/* brilho que varre o CTA da oferta */
-.pricebox .cta-big{position:relative;overflow:hidden}
-.pricebox .cta-big .glare{
-  position:absolute;top:-20%;bottom:-20%;width:34%;
-  background:linear-gradient(105deg,transparent,rgba(255,255,255,.35),transparent);
-  transform:translateX(-220%) skewX(-18deg);pointer-events:none;
-}
 
 /* ---- game: juice ---- */
 .g-on .duckling{will-change:transform}
@@ -1896,12 +1897,7 @@ document.addEventListener('click', function(e){
       });
     }
 
-    /* glare periódico no CTA */
     var cta = box.querySelector('.cta-big');
-    if (cta && !cta.querySelector('.glare')) {
-      var gl = document.createElement('i'); gl.className='glare'; cta.appendChild(gl);
-      g.to(gl, {x:'620%', duration:1.1, ease:'power2.inOut', repeat:-1, repeatDelay:2.6});
-    }
 
     function thump(){
       g.fromTo('#oferta .sec-in', {y:0}, {y:5, duration:.06, yoyo:true, repeat:3, ease:'power1.inOut'});
@@ -2001,6 +1997,7 @@ document.addEventListener('click', function(e){
     function pop(){
       try{
         actx = actx || new (window.AudioContext||window.webkitAudioContext)();
+        if (actx.state === 'suspended') actx.resume();
         var t0 = actx.currentTime;
 
         /* estalo — burst de ruído branco com decaimento rápido */
