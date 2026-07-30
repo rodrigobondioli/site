@@ -886,6 +886,87 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--ink);outline-offset
   .note-bottom-center{white-space:normal;text-align:center;width:88vw}
   .dock{position:relative;left:auto;bottom:auto;margin:0 0 84px;padding:0 clamp(20px,3.5vw,52px);align-items:flex-start}
 }
+/* ============ CAMADA GSAP (g-on = motor ligado) ============ */
+/* mata o reveal antigo "frase por frase" — o GSAP assume */
+.g-on .rv{opacity:1;transform:none;transition:none}
+/* mata as entradas CSS do hero — a timeline assume */
+.g-on .spring-in,.g-on .fade-in,.g-on .duck-land{opacity:1;transform:none;animation:none}
+/* pré-estado dos alvos do intro (evita flash antes da timeline) */
+.g-on[data-intro] .nav,.g-on[data-intro] .pitch,.g-on[data-intro] .dock,
+.g-on[data-intro] .note-h1-l,.g-on[data-intro] .note-h1-r,
+.g-on[data-intro] .note-bottom-center,.g-on[data-intro] .note-bottom-right{visibility:hidden}
+.g-on[data-intro] .part{visibility:hidden}
+
+/* linhas mascaradas do SplitText herdam o line-height do pai */
+.st-mask{overflow:hidden!important;display:block}
+
+/* etiqueta de seção: régua desenha via transform */
+.g-on .sec-tag::after{transform-origin:left center}
+
+/* ---- oferta: estados do "preço que desaba" ---- */
+.g-on .stack li{will-change:transform}
+.stack li s{position:relative;white-space:nowrap}
+.stack li s.pre-strike{text-decoration:none}
+.stack li s.pre-strike::after{
+  content:"";position:absolute;left:-2%;right:-2%;top:52%;height:2px;
+  background:var(--pink);transform:scaleX(0);transform-origin:left center;
+}
+.stack li.total s.pre-strike::after{height:3px}
+/* total que conta */
+#totalNum{font-variant-numeric:tabular-nums}
+/* reels do 97 */
+.val .reel{
+  display:inline-block;overflow:hidden;vertical-align:bottom;
+  height:1em;line-height:1;
+}
+.val .reel > span{display:block;line-height:1}
+/* carimbo da garantia */
+.g-on .guarantee{will-change:transform}
+/* brilho que varre o CTA da oferta */
+.pricebox .cta-big{position:relative;overflow:hidden}
+.pricebox .cta-big .glare{
+  position:absolute;top:-20%;bottom:-20%;width:34%;
+  background:linear-gradient(105deg,transparent,rgba(255,255,255,.35),transparent);
+  transform:translateX(-220%) skewX(-18deg);pointer-events:none;
+}
+
+/* ---- game: juice ---- */
+.g-on .duckling{will-change:transform}
+.hitnum{
+  position:absolute;z-index:8;pointer-events:none;
+  font-family:'Londrina Solid',sans-serif;font-weight:900;
+  color:#fff;font-size:30px;text-shadow:2px 2px 0 var(--pink);
+}
+.habit-track{
+  list-style:none;display:flex;flex-wrap:wrap;gap:7px;
+  margin-top:12px;
+}
+.habit-track li{
+  font-family:var(--mono);font-size:10.5px;letter-spacing:.05em;
+  color:rgba(255,255,255,.55);
+  border:1.5px solid rgba(255,255,255,.22);
+  padding:4px 11px;border-radius:999px;
+  transition:all .3s;position:relative;white-space:nowrap;
+}
+.habit-track li.dead2{
+  color:var(--pink);border-color:var(--pink);
+  text-decoration:line-through;text-decoration-thickness:2px;
+}
+.confetti-bit{
+  position:absolute;z-index:9;pointer-events:none;
+  width:10px;height:10px;border-radius:2px;
+}
+
+/* fallback sem GSAP (arquivo não carregou): reveal antigo continua valendo */
+@media(prefers-reduced-motion:reduce){
+  .g-on[data-intro] .nav,.g-on[data-intro] .pitch,.g-on[data-intro] .dock,
+  .g-on[data-intro] .part,
+  .g-on[data-intro] .note-h1-l,.g-on[data-intro] .note-h1-r,
+  .g-on[data-intro] .note-bottom-center,.g-on[data-intro] .note-bottom-right{visibility:visible}
+}
+
+.g-on .sec-tag::after{transform:scaleX(var(--ruler,1))}
+
 </style>
 </head>
 <body>
@@ -1366,6 +1447,7 @@ document.addEventListener('click', function(e){
   /* ---------- smooth scroll (Lenis — fluido, nativo em duração/momentum) ---------- */
   if(!reduced && window.Lenis){
     var lenis = new Lenis({ duration: 1.05, smoothWheel: true, smoothTouch: false, touchMultiplier: 1.4, anchors: true });
+    window.__lenis = lenis;
     requestAnimationFrame(function raf(time){ lenis.raf(time); requestAnimationFrame(raf); });
   }
 
@@ -1653,6 +1735,396 @@ document.addEventListener('click', function(e){
     requestAnimationFrame(loop);
   })();
 })();
+</script>
+<script src="/antipato/assets/js/gsap.min.js"></script>
+<script src="/antipato/assets/js/ScrollTrigger.min.js"></script>
+<script src="/antipato/assets/js/SplitText.min.js"></script>
+<script>
+/* ==================================================================
+   CAMADA DE MOTION — GSAP + ScrollTrigger + SplitText
+   Roda por cima da página. Sem GSAP ou com reduced-motion,
+   o fallback antigo (CSS .rv) continua valendo.
+   ================================================================== */
+(function(){
+  var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (reduced || !window.gsap || !window.ScrollTrigger) return;
+  var g = window.gsap;
+  g.registerPlugin(window.ScrollTrigger, window.SplitText);
+  var ST = window.ScrollTrigger;
+  var desktop = window.matchMedia('(min-width: 961px)').matches;
+  var fine = window.matchMedia('(pointer: fine)').matches;
+
+  document.documentElement.classList.add('g-on');
+  document.documentElement.setAttribute('data-intro','1');
+
+  /* ---------- Lenis ↔ ScrollTrigger ---------- */
+  if (window.__lenis) {
+    window.__lenis.on('scroll', ST.update);
+    g.ticker.lagSmoothing(0);
+  }
+
+  /* ============================================================
+     1 · HERO — entrada cinematográfica
+     ============================================================ */
+  var mataChars = null, patoChars = null;
+  try {
+    mataChars = new SplitText('.w-mata span', {type:'chars'}).chars;
+    patoChars = new SplitText('.w-pato span', {type:'chars'}).chars;
+  } catch(e){}
+
+  var intro = g.timeline({
+    defaults:{ease:'power4.out'},
+    onComplete: function(){ document.documentElement.removeAttribute('data-intro'); }
+  });
+
+  g.set(['.nav','.pitch','.dock','.note-h1-l','.note-h1-r','.note-bottom-center','.note-bottom-right'], {visibility:'visible'});
+  g.set('.part', {visibility:'visible'});
+
+  /* peças do pato voam de fora e assentam com física */
+  intro
+    .from('.part-body', {yPercent:130, rotation:10,  duration:1.05, ease:'back.out(1.1)'}, .1)
+    .from('.part-head', {xPercent:-160, yPercent:-40, rotation:-32, duration:1.0, ease:'back.out(1.3)'}, .28)
+    .from('.part-hat',  {yPercent:-420, rotation:-70, duration:.9,  ease:'bounce.out'}, .55);
+
+  /* letras do título char a char */
+  if (mataChars && patoChars) {
+    intro.from(mataChars, {yPercent:105, autoAlpha:0, rotation:9,  stagger:{each:.032}, duration:.72, ease:'back.out(1.7)'}, .35)
+         .from(patoChars, {yPercent:105, autoAlpha:0, rotation:-9, stagger:{each:.045}, duration:.72, ease:'back.out(1.7)'}, .55);
+  }
+
+  /* moldura */
+  intro
+    .from('.nav', {y:-46, autoAlpha:0, duration:.7}, .2)
+    .from(['.note-h1-l','.note-h1-r'], {clipPath:'inset(0 100% 0 0)', autoAlpha:0, duration:.6, stagger:.1, ease:'power2.out'}, 1.0)
+    .from('.pitch p', {y:22, autoAlpha:0, stagger:.09, duration:.6}, 1.05)
+    .from('.dock', {scale:.6, autoAlpha:0, transformOrigin:'left bottom', duration:.55, ease:'back.out(2)'}, 1.15)
+    .from(['.note-bottom-center','.note-bottom-right'], {autoAlpha:0, duration:.5, stagger:.08}, 1.3);
+
+  /* ============================================================
+     2 · HERO — coreografia de scroll (desmonta ao rolar)
+     ============================================================ */
+  if (desktop) {
+    g.timeline({
+      scrollTrigger:{trigger:'.hero', start:'top top', end:'+=65%', scrub:.6, pin:true, anticipatePin:1}
+    })
+    .to('.part-hat',  {y:'-26vh', x:'6vw',  rotation:-24, ease:'none'}, 0)
+    .to('.part-head', {y:'-13vh', x:'-7vw', rotation:-10, ease:'none'}, 0)
+    .to('.part-body', {y:'14vh',  rotation:5, ease:'none'}, 0)
+    .to('.w-mata', {xPercent:-16, ease:'none'}, 0)
+    .to('.w-pato', {xPercent:16, ease:'none'}, 0)
+    .to(['.pitch','.dock','.note-bottom-center','.note-bottom-right'], {autoAlpha:0, ease:'none'}, 0);
+  }
+
+  /* ============================================================
+     3 · REVEALS — máscara de linha, agrupado, rápido
+     ============================================================ */
+  document.querySelectorAll('.sec-title').forEach(function(t){
+    var split;
+    try { split = new SplitText(t, {type:'lines', mask:'lines', linesClass:'st-line'}); } catch(e){ return; }
+    g.from(split.lines, {
+      yPercent:112, duration:.75, stagger:.08, ease:'power4.out',
+      scrollTrigger:{trigger:t, start:'top 86%', once:true}
+    });
+  });
+
+  document.querySelectorAll('.sec-tag').forEach(function(tag){
+    g.timeline({scrollTrigger:{trigger:tag, start:'top 90%', once:true}})
+      .from(tag, {autoAlpha:0, x:-14, duration:.45, ease:'power2.out'})
+      .fromTo(tag, {'--ruler':0}, {'--ruler':1, duration:.6, ease:'power3.inOut'}, .12);
+  });
+
+  function reveal(sel, vars, trigger){
+    var els = g.utils.toArray(sel);
+    if(!els.length) return;
+    g.from(els, Object.assign({
+      y:26, autoAlpha:0, duration:.65, ease:'power3.out',
+      stagger:{each:.07},
+      scrollTrigger:{trigger: trigger || els[0], start:'top 88%', once:true}
+    }, vars||{}));
+  }
+  reveal('#problema .sec-sub');
+  reveal('#problema .dor', {stagger:{each:.06}}, '#problema .dores');
+  reveal('#problema .anon');
+  reveal('#problema .verdict');
+  reveal('#virada .sec-sub');
+  reveal('#virada .vcard', {y:40, stagger:{each:.12}}, '#virada .versus');
+  reveal('#como .step', {y:40, stagger:{each:.1}}, '#como .steps');
+  reveal('#kit .sec-sub');
+  reveal('#kit .item', {y:34, stagger:{each:.06}}, '#kit .kit');
+  reveal('#quem .bio-duck', {x:-30, y:0});
+  reveal('#quem .bio > div > p', {stagger:{each:.08}});
+  reveal('#quem .cred span', {y:14, stagger:{each:.05}, duration:.4}, '#quem .cred');
+  reveal('#quem blockquote');
+  reveal('#quem .bio-line');
+  reveal('#caca .sec-sub');
+  reveal('#caca .range', {y:34});
+  reveal('#caca .caca-foot');
+  reveal('#praquem .fit > div', {y:36, stagger:{each:.12}}, '#praquem .fit');
+  reveal('#faq details', {y:18, stagger:{each:.05}}, '#faq .faq');
+  reveal('#faq .binary');
+
+  /* ============================================================
+     4 · OFERTA — o preço que desaba
+     ============================================================ */
+  (function(){
+    var sec = document.getElementById('oferta');
+    if (!sec) return;
+    var items = g.utils.toArray('#oferta .stack li:not(.total)');
+    var totalLi = sec.querySelector('.stack li.total');
+    var totalS = totalLi && totalLi.querySelector('s');
+    var box = sec.querySelector('.pricebox');
+    var val = box && box.querySelector('.val');
+    var guar = sec.querySelector('.guarantee');
+    var why = sec.querySelector('.stack-why');
+    if (!items.length || !totalS || !box) return;
+
+    /* linha de risco animável em cada preço (substitui o <s> nativo) */
+    function makeLine(s, thick){
+      s.style.textDecoration = 'none';
+      s.style.position = 'relative';
+      s.style.display = 'inline-block';
+      var line = document.createElement('i');
+      line.style.cssText = 'position:absolute;left:-3%;right:-3%;top:52%;height:'+(thick||2)+'px;background:#ff00d7;transform:scaleX(0);transform-origin:left center;display:block;';
+      s.appendChild(line);
+      return line;
+    }
+    var lines = items.map(function(li){
+      var s = li.querySelector('s');
+      return s ? makeLine(s, 2) : null;
+    });
+
+    /* contador do total */
+    totalS.style.textDecoration = 'none';
+    totalS.innerHTML = 'R$<b id="totalNum">0</b>';
+    var num = totalS.querySelector('#totalNum');
+    var totalLine = makeLine(totalS, 3);
+
+    /* reels do 97 */
+    var reels = [];
+    if (val) {
+      var raw = val.textContent.replace(/[^0-9]/g,'');
+      var small = val.querySelector('small');
+      val.innerHTML = '';
+      if (small) val.appendChild(small);
+      raw.split('').forEach(function(d){
+        var reel = document.createElement('span');
+        reel.className = 'reel';
+        var col = document.createElement('span');
+        for (var i=0;i<=9;i++){ col.appendChild(document.createTextNode(i)); col.appendChild(document.createElement('br')); }
+        reel.appendChild(col);
+        val.appendChild(reel);
+        reels.push({col:col, digit:+d});
+      });
+    }
+
+    /* glare periódico no CTA */
+    var cta = box.querySelector('.cta-big');
+    if (cta && !cta.querySelector('.glare')) {
+      var gl = document.createElement('i'); gl.className='glare'; cta.appendChild(gl);
+      g.to(gl, {x:'620%', duration:1.1, ease:'power2.inOut', repeat:-1, repeatDelay:2.6});
+    }
+
+    function thump(){
+      g.fromTo('#oferta .sec-in', {y:0}, {y:5, duration:.06, yoyo:true, repeat:3, ease:'power1.inOut'});
+    }
+
+    var counting = {v:0};
+    function buildTl(vars){
+      var tl = g.timeline(vars);
+      items.forEach(function(li, i){
+        var s = li.querySelector('s');
+        var at = i*.3;
+        tl.from(li, {autoAlpha:0, scale:1.45, rotation:(i%2?2.2:-2.2), transformOrigin:'12% 50%', duration:.42, ease:'power3.out'}, at);
+        if (s) tl.from(s, {autoAlpha:0, x:22, duration:.26, ease:'power2.out'}, at+.14);
+        if (lines[i]) tl.to(lines[i], {scaleX:1, duration:.24, ease:'power3.inOut'}, at+.4);
+      });
+      var base = items.length*.3 + .5;
+      tl.from(totalLi, {autoAlpha:0, y:14, duration:.4}, base)
+        .to(counting, {v:692, duration:1.0, ease:'power2.out',
+            onUpdate:function(){ num.textContent = Math.round(counting.v); }}, base+.15)
+        .to(totalLine, {scaleX:1, duration:.4, ease:'power3.inOut'}, base+1.25);
+      if (why) tl.from(why, {autoAlpha:0, duration:.4}, base+1.5);
+      /* pricebox DESABA */
+      tl.from(box, {yPercent:-14, autoAlpha:0, scale:.88, rotation:-2, duration:.65, ease:'back.out(1.8)',
+          onStart:thump}, base+1.6);
+      reels.forEach(function(r, i){
+        tl.to(r.col, {yPercent:-r.digit*10, duration:.85+i*.2, ease:'back.out(1.2)'}, base+1.8);
+      });
+      var x12 = box.querySelector('.x12');
+      if (x12) tl.from(x12, {scale:0, rotation:-30, duration:.45, ease:'back.out(2.5)'}, base+2.15);
+      tl.from([box.querySelector('.parc'), box.querySelector('.oficial')].filter(Boolean),
+              {autoAlpha:0, y:10, stagger:.08, duration:.4}, base+2.25);
+      if (cta) tl.from(cta, {autoAlpha:0, scale:.85, duration:.45, ease:'back.out(2)'}, base+2.4);
+      var pays = box.querySelectorAll('.pays');
+      if (pays.length) tl.from(pays, {autoAlpha:0, stagger:.06, duration:.35}, base+2.55);
+      if (guar) tl.from(guar, {scale:2.4, rotation:-22, autoAlpha:0, duration:.5, ease:'power4.in',
+          onComplete:function(){
+            thump();
+            g.fromTo(guar, {rotation:-3}, {rotation:0, duration:.5, ease:'elastic.out(1,.4)'});
+          }}, base+2.6);
+      return tl;
+    }
+
+    if (desktop) {
+      buildTl({scrollTrigger:{trigger:sec, start:'top top', end:'+=150%', pin:true, scrub:.55, anticipatePin:1}});
+    } else {
+      buildTl({defaults:{}, scrollTrigger:{trigger:sec, start:'top 70%', once:true}});
+    }
+
+    /* CTA magnético */
+    if (desktop && fine && cta) {
+      var qx = g.quickTo(cta, 'x', {duration:.3, ease:'power3'});
+      var qy = g.quickTo(cta, 'y', {duration:.3, ease:'power3'});
+      box.addEventListener('mousemove', function(e){
+        var r = cta.getBoundingClientRect();
+        var dx = e.clientX - (r.left + r.width/2), dy = e.clientY - (r.top + r.height/2);
+        if (Math.hypot(dx, dy) < 150) { qx(dx*.18); qy(dy*.18); } else { qx(0); qy(0); }
+      });
+      box.addEventListener('mouseleave', function(){ qx(0); qy(0); });
+    }
+  })();
+
+  /* ============================================================
+     5 · GAME — juice em cima da mecânica existente
+     ============================================================ */
+  (function(){
+    var range = document.getElementById('range');
+    var score = document.getElementById('score');
+    var cta = document.getElementById('cacaCta');
+    if (!range) return;
+
+    /* trilha de hábitos */
+    var HABITS = ['faço de tudo','cobro por hora','pego qualquer job','briga por preço','mais um curso'];
+    var foot = document.querySelector('.caca-foot');
+    var track = document.createElement('ul');
+    track.className = 'habit-track';
+    HABITS.forEach(function(h){
+      var li = document.createElement('li'); li.textContent = h; track.appendChild(li);
+    });
+    if (foot) foot.parentNode.insertBefore(track, foot);
+
+    /* cada pato ganha voo orgânico: bob senoidal + inclinação + pop de entrada */
+    var mo = new MutationObserver(function(muts){
+      muts.forEach(function(m){
+        m.addedNodes.forEach(function(n){
+          if (!(n.classList && n.classList.contains('duckling'))) return;
+          var amp = 14 + Math.random()*22;
+          var dur = .7 + Math.random()*.7;
+          g.to(n, {y:'+='+amp, duration:dur, yoyo:true, repeat:-1, ease:'sine.inOut'});
+          g.fromTo(n, {rotation:-4}, {rotation:4, duration:dur*1.35, yoyo:true, repeat:-1, ease:'sine.inOut'});
+          g.from(n, {scale:.4, autoAlpha:0, duration:.35, ease:'back.out(2)'});
+        });
+      });
+    });
+    mo.observe(range, {childList:true});
+
+    /* pop sintetizado, bem baixo */
+    var actx = null;
+    function pop(){
+      try{
+        actx = actx || new (window.AudioContext||window.webkitAudioContext)();
+        var o = actx.createOscillator(), ga = actx.createGain();
+        o.type='triangle';
+        o.frequency.setValueAtTime(320, actx.currentTime);
+        o.frequency.exponentialRampToValueAtTime(70, actx.currentTime+.11);
+        ga.gain.setValueAtTime(.07, actx.currentTime);
+        ga.gain.exponentialRampToValueAtTime(.001, actx.currentTime+.13);
+        o.connect(ga); ga.connect(actx.destination);
+        o.start(); o.stop(actx.currentTime+.14);
+      }catch(e){}
+    }
+
+    range.addEventListener('click', function(e){
+      var d = e.target.closest && e.target.closest('.duckling');
+      if (!d || d.dataset.j) return;
+      d.dataset.j = '1';
+      pop();
+      /* hit-stop: o mundo congela 90ms */
+      g.globalTimeline.timeScale(.06);
+      g.delayedCall(.09, function(){ g.to(g.globalTimeline, {timeScale:1, duration:.18}); });
+      /* mira recua */
+      var xh = document.getElementById('xh');
+      if (xh) g.fromTo(xh, {scale:1.5, rotation:8}, {scale:1, rotation:0, duration:.35, ease:'back.out(3)'});
+      /* +1 flutua */
+      var r = d.getBoundingClientRect(), rr = range.getBoundingClientRect();
+      var hn = document.createElement('span');
+      hn.className = 'hitnum'; hn.textContent = '+1';
+      hn.style.left = (r.left - rr.left + r.width/2) + 'px';
+      hn.style.top = (r.top - rr.top - 6) + 'px';
+      range.appendChild(hn);
+      g.fromTo(hn, {scale:.4, autoAlpha:1, rotation:-8},
+        {y:-56, scale:1.25, rotation:6, autoAlpha:0, duration:.9, ease:'power2.out',
+         onComplete:function(){ hn.remove(); }});
+      /* placar leva um soco */
+      if (score) g.fromTo(score, {scale:1.18}, {scale:1, duration:.4, ease:'back.out(3)'});
+      /* penas */
+      for (var i=0;i<10;i++){
+        var f = document.createElement('i');
+        f.className='confetti-bit';
+        f.style.background = ['#fff','#e7f99a','#ff00d7'][i%3];
+        f.style.left = (r.left - rr.left + r.width/2) + 'px';
+        f.style.top = (r.top - rr.top + r.height/2) + 'px';
+        range.appendChild(f);
+        g.to(f, {x:(Math.random()-.5)*180, y:(Math.random()-.7)*160 + 90,
+                 rotation:Math.random()*360, autoAlpha:0, duration:.7+Math.random()*.5,
+                 ease:'power2.out', onComplete:(function(el){return function(){el.remove();};})(f)});
+      }
+      /* risca o hábito */
+      var label = d.querySelector('em');
+      if (label) {
+        var t = label.textContent.trim();
+        track.querySelectorAll('li').forEach(function(li){
+          if (li.textContent.trim() === t && !li.classList.contains('dead2')) {
+            li.classList.add('dead2');
+            g.fromTo(li, {scale:1.25}, {scale:1, duration:.4, ease:'back.out(3)'});
+          }
+        });
+      }
+    }, true);
+
+    /* fim de temporada: confete no CTA */
+    if (score && cta) {
+      var fin = new MutationObserver(function(){
+        if (score.textContent.indexOf('genérico abatido') === -1) return;
+        fin.disconnect();
+        g.fromTo(cta, {scale:.8, rotation:-3}, {scale:1, rotation:0, duration:.7, ease:'elastic.out(1,.4)'});
+        var r = cta.getBoundingClientRect(), rr = range.getBoundingClientRect();
+        for (var i=0;i<26;i++){
+          var f = document.createElement('i');
+          f.className='confetti-bit';
+          f.style.background = ['#e7f99a','#ff00d7','#fff','#00fff6'][i%4];
+          f.style.left = (r.left - rr.left + r.width/2) + 'px';
+          f.style.top = (r.top - rr.top) + 'px';
+          range.appendChild(f);
+          g.to(f, {x:(Math.random()-.5)*420, y:-(60+Math.random()*260),
+                   rotation:Math.random()*720, duration:.9+Math.random()*.7, ease:'power2.out'});
+          g.to(f, {y:'+=340', autoAlpha:0, delay:.7, duration:.9, ease:'power2.in',
+                   onComplete:(function(el){return function(){el.remove();};})(f)});
+        }
+      });
+      fin.observe(score, {childList:true, characterData:true, subtree:true});
+    }
+  })();
+
+  /* ============================================================
+     6 · Botões magnéticos (nav)
+     ============================================================ */
+  if (desktop && fine) {
+    document.querySelectorAll('.btn-pill').forEach(function(b){
+      var qx = g.quickTo(b, 'x', {duration:.35, ease:'power3'});
+      var qy = g.quickTo(b, 'y', {duration:.35, ease:'power3'});
+      b.addEventListener('mousemove', function(e){
+        var r = b.getBoundingClientRect();
+        qx((e.clientX - r.left - r.width/2)*.25);
+        qy((e.clientY - r.top - r.height/2)*.35);
+      });
+      b.addEventListener('mouseleave', function(){ qx(0); qy(0); });
+    });
+  }
+
+  window.addEventListener('load', function(){ ST.refresh(); });
+})();
+
 </script>
 </body>
 </html>
