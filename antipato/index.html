@@ -704,13 +704,13 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--ink);outline-offset
 .stack li.total::before{display:none}
 
 .selo{
-  position:absolute;top:-44px;right:-44px;z-index:5;
+  position:absolute;top:-38px;right:-38px;z-index:5;
   width:clamp(112px,10vw,156px);height:clamp(112px,10vw,156px);
   filter:drop-shadow(0 6px 18px rgba(0,0,0,.35));
   pointer-events:none;
 }
 .selo svg{width:100%;height:100%;display:block}
-.selo text{font-family:var(--mono);font-size:10.5px;letter-spacing:2.2px;text-transform:uppercase;fill:var(--lime)}
+.selo text{font-family:var(--mono);font-size:10.5px;letter-spacing:2.2px;text-transform:uppercase;fill:var(--pink)}
 .selo .selo-check{font-size:34px;font-family:'Space Grotesk',sans-serif;font-weight:700}
 .mini-guar{
   margin-top:14px;
@@ -1262,19 +1262,18 @@ body::after{
       <div class="pricebox rv" style="--rd:.18s">
         <div class="selo" aria-hidden="true"><svg viewBox="0 0 120 120">
           <defs><path id="seloCirc" d="M60,60 m-44,0 a44,44 0 1,1 88,0 a44,44 0 1,1 -88,0"/></defs>
-          <circle cx="60" cy="60" r="58" fill="#101010"/>
-          <circle cx="60" cy="60" r="33" fill="none" stroke="rgba(231,249,154,.35)" stroke-width="1.5" stroke-dasharray="3 5"/>
+          <circle cx="60" cy="60" r="58" fill="#00fff6"/>
+          <circle cx="60" cy="60" r="33" fill="none" stroke="rgba(255,0,215,.4)" stroke-width="1.5" stroke-dasharray="3 5"/>
           <g class="selo-rot"><text><textPath href="#seloCirc">7 dias de garantia · risco zero · 7 dias de garantia · risco zero ·&#160;</textPath></text></g>
-          <text class="selo-check" x="60" y="72" text-anchor="middle" fill="#e7f99a">✓</text>
+          <text class="selo-check" x="60" y="72" text-anchor="middle" fill="#ff00d7">✓</text>
         </svg></div>
         <span class="lote">lote fundador · 50 acessos</span>
-        <div class="val-row"><div class="val"><small>R$</small>97</div><span class="x12">12x</span></div>
-        <p class="parc">ou 12x de R$8,09</p>
-        <p class="oficial">valor oficial: <s>R$197</s> — sobe quando o lote fechar</p>
+        <div class="val-row"><div class="val"><small>R$</small>97</div><span class="x12">12x de R$8,09</span></div>
+        <p class="oficial">valor oficial: <s>R$197</s> — <strong>sobe quando o lote fechar</strong></p>
         <a class="cta-big" href="https://payfast.greenn.com.br/fqrmpkf/offer/dPcwW6?ch_id=141265" target="_blank" rel="noopener">quero meu novo posicionamento</a>
         <p class="pays">pix · cartão em até 12x · boleto · apple pay · google pay</p>
-        <p class="pays">acesso na hora, direto no e-mail · aplica numa tarde</p>
-        <p class="mini-guar">garantia de 7 dias: não cravou o posicionamento? me manda um e-mail e devolvo os R$97 na hora, sem burocracia. o risco é 100% meu.</p>
+        <p class="pays">acesso na hora, direto no e-mail · <strong>aplica numa tarde</strong></p>
+        <p class="mini-guar"><strong>garantia de 7 dias</strong>: não cravou o posicionamento? me manda um e-mail e <strong>devolvo os R$97 na hora</strong>, sem burocracia.</p>
       </div>
     </div>
   </div>
@@ -1827,6 +1826,12 @@ document.addEventListener('click', function(e){
   reveal('#faq details', {y:18, stagger:{each:.05}}, '#faq .faq');
   reveal('#faq .binary');
 
+  /* corrige posições dos gatilhos depois que as fontes customizadas terminam
+     de carregar — evita flash/"fantasma" de texto que troca de lugar no meio do scroll */
+  if (document.fonts && document.fonts.ready) {
+    document.fonts.ready.then(function(){ ST.refresh(); });
+  }
+
   /* ============================================================
      4 · OFERTA — o preço que desaba
      ============================================================ */
@@ -1920,12 +1925,12 @@ document.addEventListener('click', function(e){
               {autoAlpha:0, y:10, stagger:.06, duration:.35}, base+1.55);
       if (cta) tl.from(cta, {autoAlpha:0, scale:.85, duration:.4, ease:'back.out(2)'}, base+1.7);
       var pays = box.querySelectorAll('.pays');
-      if (pays.length) tl.from(pays, {autoAlpha:0, stagger:.06, duration:.35}, base+2.55);
-      if (guar) tl.from(guar, {scale:2.4, rotation:-22, autoAlpha:0, duration:.5, ease:'power4.in',
+      if (pays.length) tl.from(pays, {autoAlpha:0, stagger:.06, duration:.3}, base+1.85);
+      if (guar) tl.from(guar, {scale:2.4, rotation:-22, autoAlpha:0, duration:.4, ease:'power4.in',
           onComplete:function(){
             thump();
-            g.fromTo(guar, {rotation:-3}, {rotation:0, duration:.5, ease:'elastic.out(1,.4)'});
-          }}, base+2.6);
+            g.fromTo(guar, {rotation:-3}, {rotation:0, duration:.4, ease:'elastic.out(1,.4)'});
+          }}, base+1.95);
       return tl;
     }
 
@@ -1986,27 +1991,43 @@ document.addEventListener('click', function(e){
     });
     mo.observe(range, {childList:true});
 
-    /* quack sintetizado, bem baixo */
+    /* tiro sintetizado: estalo (ruído filtrado) + thump grave */
     var actx = null;
     function pop(){
       try{
         actx = actx || new (window.AudioContext||window.webkitAudioContext)();
         var t0 = actx.currentTime;
-        var o = actx.createOscillator(), ga = actx.createGain(), filt = actx.createBiquadFilter();
-        o.type = 'sawtooth';
-        filt.type = 'bandpass';
-        filt.Q.value = 5;
-        filt.frequency.setValueAtTime(1100, t0);
-        filt.frequency.exponentialRampToValueAtTime(450, t0+.15);
-        o.frequency.setValueAtTime(380, t0);
-        o.frequency.exponentialRampToValueAtTime(170, t0+.05);
-        o.frequency.exponentialRampToValueAtTime(240, t0+.1);
-        o.frequency.exponentialRampToValueAtTime(120, t0+.16);
-        ga.gain.setValueAtTime(.0001, t0);
-        ga.gain.exponentialRampToValueAtTime(.13, t0+.012);
-        ga.gain.exponentialRampToValueAtTime(.001, t0+.17);
-        o.connect(filt); filt.connect(ga); ga.connect(actx.destination);
-        o.start(t0); o.stop(t0+.18);
+
+        /* estalo — burst de ruído branco com decaimento rápido */
+        var dur = .16;
+        var bufSize = Math.floor(actx.sampleRate * dur);
+        var buf = actx.createBuffer(1, bufSize, actx.sampleRate);
+        var data = buf.getChannelData(0);
+        for (var i=0;i<bufSize;i++){
+          data[i] = (Math.random()*2-1) * Math.pow(1 - i/bufSize, 2.2);
+        }
+        var noise = actx.createBufferSource();
+        noise.buffer = buf;
+        var hp = actx.createBiquadFilter();
+        hp.type = 'highpass'; hp.frequency.value = 500;
+        var bp = actx.createBiquadFilter();
+        bp.type = 'bandpass'; bp.frequency.setValueAtTime(2400, t0); bp.Q.value = .7;
+        var ng = actx.createGain();
+        ng.gain.setValueAtTime(.55, t0);
+        ng.gain.exponentialRampToValueAtTime(.001, t0+dur);
+        noise.connect(hp); hp.connect(bp); bp.connect(ng); ng.connect(actx.destination);
+        noise.start(t0); noise.stop(t0+dur);
+
+        /* thump — corpo grave do tiro */
+        var o = actx.createOscillator(), og = actx.createGain();
+        o.type = 'sine';
+        o.frequency.setValueAtTime(150, t0);
+        o.frequency.exponentialRampToValueAtTime(38, t0+.09);
+        og.gain.setValueAtTime(.0001, t0);
+        og.gain.exponentialRampToValueAtTime(.4, t0+.006);
+        og.gain.exponentialRampToValueAtTime(.001, t0+.13);
+        o.connect(og); og.connect(actx.destination);
+        o.start(t0); o.stop(t0+.14);
       }catch(e){}
     }
 
