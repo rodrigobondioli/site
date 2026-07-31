@@ -508,16 +508,17 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--ink);outline-offset
   display:grid;grid-template-columns:32% 68%;
   gap:clamp(32px,5vw,72px);align-items:start;
 }
-.bio-col-photo{display:flex;flex-direction:column}
-.bio-duck{width:clamp(180px,20vw,260px)}
+.bio-col-photo{display:flex;flex-direction:column;align-items:center;text-align:center}
+.bio-duck{width:clamp(180px,20vw,260px);margin-left:auto;margin-right:auto}
 .bio-duck img{width:100%;height:auto;border-radius:50%;display:block}
 .bio-id{margin-top:20px}
 .bio-id-name{font-weight:700;font-size:15px;letter-spacing:.01em;color:var(--ink)}
-.bio-id-role{
-  margin-top:4px;
-  font-family:var(--mono);font-size:12px;letter-spacing:.02em;
+.bio-id .bio-id-role{
+  margin-top:2px;
+  font-family:var(--mono);font-size:11px;letter-spacing:.02em;
   color:rgba(16,16,16,.6);
 }
+.bio-id .bio-id-role:first-of-type{margin-top:6px}
 .bio-col-content{max-width:720px}
 #quem .bio-col-content .sec-title{margin-bottom:clamp(22px,3.2vh,34px)}
 .bio p{font-size:clamp(16px,1.6vw,21px);line-height:1.6;font-weight:500}
@@ -1291,7 +1292,7 @@ body::after{
         <p class="rv" style="--rd:.28s">num domingo, enquanto fazia um site de grade de proteção de janela, caiu a ficha: o problema não era falta de experiência. era ter experiência demais e nenhuma posição clara.</p>
         <p class="rv" style="--rd:.32s">o método anti pato nasceu do processo que usei para deixar de ser um executor genérico e reconstruir minha posição no mercado.</p>
         <div class="cred rv" style="--rd:.36s">
-          <span>20+ anos de ofício</span><span>nike · coca-cola · l'oréal</span><span>+30 mil no youtube</span><span>jurado awwwards</span>
+          <span>20+ anos de ofício</span><span>nike · coca-cola · l'oréal</span><span>+30 mil no youtube</span><span>jurado awwwards</span><span>jurado orpetron</span>
         </div>
         <blockquote class="rv" style="--rd:.4s">“design bonito é commodity.<br><em>ponto de vista não.</em>”</blockquote>
       </div>
