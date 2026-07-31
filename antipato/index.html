@@ -1056,7 +1056,7 @@ body::after{
 
 /* ====== POR DENTRO — a UI real do app rodando (tokens do /shared) ====== */
 .appreal{
-  margin-top:0;
+  margin-top:clamp(26px,4vh,42px);
   --a-surface:#f1f1f1; --a-soft:#e6e6e8; --a-line:#d4d4d8;
   --a-ink:#101010; --a-muted:#71717a; --a-faint:#a1a1aa;
   border-radius:16px;overflow:hidden;
@@ -1146,14 +1146,6 @@ body::after{
   display:flex;align-items:center;gap:10px;font-size:12.5px;color:var(--a-ink);
   background:var(--lime);border-radius:10px;padding:12px 16px;margin-top:12px;font-weight:700;
 }
-.a-hud{
-  display:flex;align-items:center;justify-content:space-between;gap:16px;
-  margin:clamp(22px,3.4vh,34px) 0 clamp(10px,1.6vh,14px);
-}
-.a-fase{font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--lime)}
-.a-dotsnav{display:flex;gap:7px}
-.a-dotsnav i{width:26px;height:3px;border-radius:2px;background:rgba(255,255,255,.16);transition:background .4s}
-.a-dotsnav i.on{background:var(--lime)}
 @media(max-width:900px){
   .a-side,.a-tabs,.a-search{display:none}
   .a-shell{min-height:460px}
@@ -1421,15 +1413,10 @@ body::after{
 <section class="sec sec--dark" id="dentro">
   <div class="sec-in">
     <p class="sec-tag rv">o produto por dentro</p>
-    <h2 class="sec-title rv" style="--rd:.05s">não é promessa. é saída.</h2>
-    <p class="sec-sub rv" style="--rd:.12s">você não sai com aula assistida. <span class="mark">sai com nicho, frase e plano.</span> a plataforma rodando de verdade — do despejo cru até a saída.</p>
+    <h2 class="sec-title rv" style="--rd:.05s">o que entra confuso, sai posicionado.</h2>
+    <p class="sec-sub rv" style="--rd:.12s">você coloca no canvas o que hoje está solto na tua cabeça. as ias cruzam os 5 blocos e devolvem <span class="mark">teu nicho, tua frase e um plano pra testar.</span></p>
 
     <div class="rv" style="--rd:.18s">
-      <div class="a-hud">
-        <span class="a-fase" id="aFase">01 · o que entra</span>
-        <div class="a-dotsnav" id="aDots"><i class="on"></i><i></i><i></i><i></i></div>
-      </div>
-
       <div class="appreal" id="appreal">
         <header class="a-top">
           <span class="a-logo"><svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="64" height="64" rx="32" fill="#E7F99A"/><path fill-rule="evenodd" clip-rule="evenodd" d="M20.5867 34.7487L20.5867 17.9659L28.1653 22.3413C28.1961 22.6142 28.211 22.8796 28.211 23.1312L28.211 34.7487C28.211 36.8541 29.9172 38.5603 32.0226 38.5603C34.128 38.5603 35.8352 36.853 35.8352 34.7487C35.8352 33.0541 34.73 31.6187 33.2021 31.1218C32.1776 30.7884 31.0553 30.9042 30.1178 31.4456L30.1178 23.4688C31.4896 23.2374 32.8996 23.2618 34.2639 23.5325C39.5077 24.5741 43.4606 29.199 43.4606 34.7497C43.4606 41.0659 38.3409 46.1867 32.0236 46.1867C30.6869 46.1867 29.4043 45.9573 28.212 45.5358C23.7697 43.9655 20.5877 39.7292 20.5877 34.7497L20.5867 34.7487Z" fill="#101010"/></svg> anti designer pato</span>
@@ -2384,9 +2371,6 @@ document.addEventListener('click', function(e){
   var g = window.gsap;
 
   var cenas = [1,2,3,4].map(function(n){ return document.getElementById('ac'+n); });
-  var fase = document.getElementById('aFase');
-  var dots = document.querySelectorAll('#aDots i');
-  var NOMES = ['01 · o que entra','02 · o canvas capta','03 · a ia responde','04 · a saída'];
   var campos = g.utils.toArray('#ac1 .a-campo');
   var blocos = g.utils.toArray('#ac2 .a-bloco');
   var puvs = g.utils.toArray('#ac4 .a-puvs div');
@@ -2396,19 +2380,12 @@ document.addEventListener('click', function(e){
 
   if (reduced) {
     cenas[0].style.visibility='hidden'; cenas[3].style.visibility='visible';
-    fase.textContent = NOMES[3];
-    dots.forEach(function(d,i){ d.classList.toggle('on', i===3); });
     navCanvas.classList.remove('on'); navPos.classList.add('on');
     return;
   }
 
-  function marca(i){
-    fase.textContent = NOMES[i];
-    dots.forEach(function(d,k){ d.classList.toggle('on', k===i); });
-  }
-  function troca(tl, de, para, i){
+  function troca(tl, de, para){
     tl.to(cenas[de], {autoAlpha:0, y:-14, duration:.55, ease:'power2.in'})
-      .call(function(){ marca(i); })
       .set(cenas[para], {visibility:'visible', opacity:0, y:14})
       .to(cenas[para], {opacity:1, y:0, duration:.6, ease:'power3.out'});
   }
@@ -2416,13 +2393,13 @@ document.addEventListener('click', function(e){
   var tl = g.timeline({repeat:-1, repeatDelay:1.2, paused:true});
 
   /* 1 · o que entra — os campos crus aparecem, um a um, com calma */
-  tl.call(function(){ marca(0); navCanvas.classList.add('on'); navPos.classList.remove('on'); })
+  tl.call(function(){ navCanvas.classList.add('on'); navPos.classList.remove('on'); })
     .set(cenas[0], {visibility:'visible', opacity:1, y:0})
     .from(campos, {autoAlpha:0, y:16, duration:.55, stagger:.42, ease:'power3.out'})
     .to({}, {duration:2.2});
 
   /* 2 · o canvas capta — cada bloco fecha e carimba */
-  troca(tl, 0, 1, 1);
+  troca(tl, 0, 1);
   tl.from(blocos, {autoAlpha:0, y:18, duration:.5, stagger:.14, ease:'power3.out'}, '<.15');
   blocos.forEach(function(b){
     var em = b.querySelector('em');
@@ -2432,7 +2409,7 @@ document.addEventListener('click', function(e){
   tl.to({}, {duration:2});
 
   /* 3 · a ia responde — varre e acha a dor */
-  troca(tl, 1, 2, 2);
+  troca(tl, 1, 2);
   tl.set('#aDor', {autoAlpha:0, y:14})
     .fromTo('#aIabar .a-dots i', {opacity:.25}, {opacity:1, duration:.42, stagger:{each:.14, repeat:5, yoyo:true}}, '<.2')
     .to({}, {duration:1.4})
@@ -2442,7 +2419,7 @@ document.addEventListener('click', function(e){
     .call(function(){ iabar.firstChild.nodeValue = '🧠 varrendo reclamações, grupos e reviews do nicho… '; });
 
   /* 4 · a saída — a tela real de Meu posicionamento */
-  troca(tl, 2, 3, 3);
+  troca(tl, 2, 3);
   tl.call(function(){ navCanvas.classList.remove('on'); navPos.classList.add('on'); }, null, '<')
     .from('#ac4 .a-frase', {autoAlpha:0, y:20, duration:.7, ease:'power3.out'}, '<.15')
     .from('#ac4 .a-frase u', {'--u':0, duration:.01})
