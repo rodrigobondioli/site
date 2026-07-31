@@ -1079,7 +1079,7 @@ body::after{
   border:1px solid var(--a-line);border-radius:8px;padding:6px 12px;
 }
 .a-av{width:28px;height:28px;border-radius:999px;background:var(--a-soft);box-shadow:0 0 0 1px var(--a-line)}
-.a-shell{display:flex;align-items:stretch;min-height:clamp(400px,38vw,480px)}
+.a-shell{display:flex;align-items:stretch;min-height:clamp(430px,41vw,520px)}
 .a-side{
   width:198px;flex:none;border-right:1px solid var(--a-line);padding:16px 10px;
   display:flex;flex-direction:column;gap:1px;
@@ -1098,19 +1098,20 @@ body::after{
 .a-sub{font-size:12.5px;color:var(--a-muted);margin-bottom:16px}
 /* campos crus */
 .a-campo{
-  border:1px solid var(--a-line);border-radius:10px;background:#fff;
-  padding:11px 14px;margin-bottom:9px;
+  border-radius:10px;background:#fff;
+  padding:13px 16px;margin-bottom:9px;
 }
 .a-campo span{display:block;font-size:10.5px;font-weight:700;letter-spacing:.03em;color:var(--a-muted);margin-bottom:3px}
 .a-campo p{font-size:13.5px;line-height:1.5;color:#3f3f46}
 /* blocos do canvas */
 .a-blocos{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:9px}
 .a-bloco{
-  border:1px solid var(--a-line);border-radius:12px;background:#fff;
-  padding:13px 12px;display:flex;flex-direction:column;gap:7px;min-height:132px;
-  transition:border-color .4s,box-shadow .4s;
+  border-radius:12px;background:#fff;
+  padding:14px 13px;display:flex;flex-direction:column;gap:7px;min-height:132px;
+  box-shadow:inset 0 0 0 0 var(--a-ink);
+  transition:box-shadow .4s;
 }
-.a-bloco.ok{border-color:var(--a-ink);box-shadow:0 2px 0 var(--a-ink)}
+.a-bloco.ok{box-shadow:inset 0 0 0 1.5px var(--a-ink)}
 .a-bloco b{font-size:10.5px;font-weight:700;letter-spacing:.03em;color:var(--a-ink)}
 .a-bloco p{font-size:11.5px;line-height:1.45;color:#3f3f46;flex:1}
 .a-bloco em{
@@ -1122,12 +1123,12 @@ body::after{
 .a-ia{display:flex;flex-direction:column;gap:13px}
 .a-iabar{
   display:flex;align-items:center;gap:10px;font-size:13px;color:var(--a-ink);font-weight:700;
-  border:1px solid var(--a-line);border-radius:10px;background:#fff;padding:12px 15px;
+  border-radius:10px;background:#fff;padding:13px 16px;
 }
 .a-dots{display:inline-flex;gap:4px;margin-left:auto}
 .a-dots i{width:5px;height:5px;border-radius:50%;background:var(--a-faint)}
 .a-dor{
-  border:1px solid var(--a-line);border-radius:12px;background:#fff;padding:18px 20px;
+  border-radius:12px;background:#fff;padding:20px 22px;
 }
 .a-dor span{display:block;font-size:10.5px;font-weight:700;letter-spacing:.03em;color:var(--a-muted);margin-bottom:8px}
 .a-dor p{font-size:clamp(15px,1.6vw,18px);font-weight:700;line-height:1.4;letter-spacing:-.01em;color:var(--a-ink)}
@@ -1142,9 +1143,10 @@ body::after{
 .a-puvs div b{flex:none;width:104px;font-size:11.5px;font-weight:700;color:var(--a-ink)}
 .a-puvs div p{min-width:0;font-size:13.5px;font-weight:700;color:var(--a-ink);line-height:1.5}
 .a-puvs div p.long{font-weight:400;color:#3f3f46}
+.a-puvs div:last-child{border-bottom:1px solid var(--a-line)}
 .a-selo{
   display:flex;align-items:center;gap:10px;font-size:12.5px;color:var(--a-ink);
-  background:var(--lime);border-radius:10px;padding:12px 16px;margin-top:12px;font-weight:700;
+  background:var(--lime);border-radius:10px;padding:14px 18px;margin-top:clamp(18px,2.4vh,24px);font-weight:700;
 }
 @media(max-width:900px){
   .a-side,.a-tabs,.a-search{display:none}
@@ -1413,7 +1415,7 @@ body::after{
 <section class="sec sec--dark" id="dentro">
   <div class="sec-in">
     <p class="sec-tag rv">o produto por dentro</p>
-    <h2 class="sec-title rv" style="--rd:.05s">o que entra confuso, sai posicionado.</h2>
+    <h2 class="sec-title rv" style="--rd:.05s">o que entra confuso,<br>sai posicionado.</h2>
     <p class="sec-sub rv" style="--rd:.12s">você coloca no canvas o que hoje está solto na tua cabeça. as ias cruzam os 5 blocos e devolvem <span class="mark">teu nicho, tua frase e um plano pra testar.</span></p>
 
     <div class="rv" style="--rd:.18s">
