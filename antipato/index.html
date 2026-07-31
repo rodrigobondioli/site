@@ -773,8 +773,8 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--ink);outline-offset
   margin-top:14px;font-family:var(--mono);font-size:11px;color:rgba(16,16,16,.6);
   text-align:center;letter-spacing:.02em;
 }
-.stack-why{
-  margin-top:14px;
+.stack-lead{
+  margin-bottom:16px;
   font-family:var(--mono);font-size:12.5px;letter-spacing:.02em;
   color:var(--lime);
   text-wrap:balance;
@@ -916,7 +916,7 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--ink);outline-offset
   .guarantee{flex-direction:column}
   .guarantee b{white-space:normal}
   .offer{gap:clamp(30px,7vh,48px)}
-  .stack-why{margin-top:20px;margin-bottom:6px;text-align:center}
+  .stack-lead{margin-bottom:14px;text-align:center}
   .stack{padding-bottom:2px}
   .pricebox .pays-br{display:block}
 }
@@ -1286,17 +1286,14 @@ body::after{
 
     <div class="offer">
       <div class="rv" style="--rd:.12s">
+        <p class="stack-lead">tudo o que você precisa pra sair do genérico numa tarde:</p>
         <ul class="stack">
-          <li>5 aulas diretas <s>R$297</s></li>
-          <li>o estrategista (ia) <s>R$197</s></li>
-          <li>caça à ruminação (ia) <s>R$47</s></li>
-          <li>canvas do nicho <s>R$67</s></li>
-          <li>bônus · 7 perguntas que viram a mesa <s>R$47</s></li>
-          <li>bônus · ikigai do nicho <s>R$37</s></li>
-          <li class="total">valor de tudo <s>R$692</s></li>
+          <li>5 aulas curtas</li>
+          <li>canvas do nicho</li>
+          <li>2 ias treinadas pro processo</li>
+          <li>plano de posicionamento salvo</li>
+          <li>2 ferramentas extras pra aprofundar teu nicho e tuas reuniões</li>
         </ul>
-        <p class="stack-why rv" style="--rd:.16s">se custasse os R$692 e te tirasse do genérico, já teria valido. custa R$97.</p>
-
       </div>
 
       <div class="pricebox rv" style="--rd:.18s">
@@ -1878,35 +1875,12 @@ document.addEventListener('click', function(e){
   (function(){
     var sec = document.getElementById('oferta');
     if (!sec) return;
-    var items = g.utils.toArray('#oferta .stack li:not(.total)');
-    var totalLi = sec.querySelector('.stack li.total');
-    var totalS = totalLi && totalLi.querySelector('s');
+    var items = g.utils.toArray('#oferta .stack li');
     var box = sec.querySelector('.pricebox');
     var val = box && box.querySelector('.val');
     var guar = sec.querySelector('.guarantee');
-    var why = sec.querySelector('.stack-why');
-    if (!items.length || !totalS || !box) return;
-
-    /* linha de risco animável em cada preço (substitui o <s> nativo) */
-    function makeLine(s, thick){
-      s.style.textDecoration = 'none';
-      s.style.position = 'relative';
-      s.style.display = 'inline-block';
-      var line = document.createElement('i');
-      line.style.cssText = 'position:absolute;left:-3%;right:-3%;top:52%;height:'+(thick||2)+'px;background:#ff00d7;transform:scaleX(0);transform-origin:left center;display:block;';
-      s.appendChild(line);
-      return line;
-    }
-    var lines = items.map(function(li){
-      var s = li.querySelector('s');
-      return s ? makeLine(s, 2) : null;
-    });
-
-    /* contador do total */
-    totalS.style.textDecoration = 'none';
-    totalS.innerHTML = 'R$<b id="totalNum">0</b>';
-    var num = totalS.querySelector('#totalNum');
-    var totalLine = makeLine(totalS, 3);
+    var lead = sec.querySelector('.stack-lead');
+    if (!items.length || !box) return;
 
     /* reels do 97 */
     var reels = [];
@@ -1938,40 +1912,32 @@ document.addEventListener('click', function(e){
       g.fromTo('#oferta .sec-in', {y:0}, {y:5, duration:.06, yoyo:true, repeat:3, ease:'power1.inOut'});
     }
 
-    var counting = {v:0};
     function buildTl(vars){
       var tl = g.timeline(vars);
+      if (lead) tl.from(lead, {autoAlpha:0, y:10, duration:.3, ease:'power2.out'}, 0);
       items.forEach(function(li, i){
-        var s = li.querySelector('s');
-        var at = i*.14;
-        tl.from(li, {autoAlpha:0, scale:1.45, rotation:(i%2?2.2:-2.2), transformOrigin:'12% 50%', duration:.36, ease:'power3.out'}, at);
-        if (s) tl.from(s, {autoAlpha:0, x:22, duration:.22, ease:'power2.out'}, at+.1);
-        if (lines[i]) tl.to(lines[i], {scaleX:1, duration:.2, ease:'power3.inOut'}, at+.3);
+        var at = .1 + i*.1;
+        tl.from(li, {autoAlpha:0, x:-16, duration:.32, ease:'power3.out'}, at);
       });
-      var base = items.length*.14 + .3;
-      tl.from(totalLi, {autoAlpha:0, y:14, duration:.35}, base)
-        .to(counting, {v:692, duration:.6, ease:'power2.out',
-            onUpdate:function(){ num.textContent = Math.round(counting.v); }}, base+.1)
-        .to(totalLine, {scaleX:1, duration:.35, ease:'power3.inOut'}, base+.65);
-      if (why) tl.from(why, {autoAlpha:0, duration:.35}, base+.85);
+      var base = items.length*.1 + .2;
       /* pricebox DESABA */
       tl.from(box, {yPercent:-14, autoAlpha:0, scale:.88, rotation:-2, duration:.55, ease:'back.out(1.8)',
-          onStart:thump}, base+.9);
+          onStart:thump}, base);
       reels.forEach(function(r, i){
-        tl.to(r.col, {yPercent:-r.digit*10, duration:.7+i*.15, ease:'back.out(1.2)'}, base+1.1);
+        tl.to(r.col, {yPercent:-r.digit*10, duration:.7+i*.15, ease:'back.out(1.2)'}, base+.2);
       });
       var x12 = box.querySelector('.x12');
-      if (x12) tl.from(x12, {scale:0, rotation:-30, duration:.4, ease:'back.out(2.5)'}, base+1.45);
+      if (x12) tl.from(x12, {scale:0, rotation:-30, duration:.4, ease:'back.out(2.5)'}, base+.55);
       tl.from([box.querySelector('.parc'), box.querySelector('.oficial')].filter(Boolean),
-              {autoAlpha:0, y:10, stagger:.06, duration:.35}, base+1.55);
-      if (cta) tl.from(cta, {autoAlpha:0, scale:.85, duration:.4, ease:'back.out(2)'}, base+1.7);
+              {autoAlpha:0, y:10, stagger:.06, duration:.35}, base+.65);
+      if (cta) tl.from(cta, {autoAlpha:0, scale:.85, duration:.4, ease:'back.out(2)'}, base+.8);
       var pays = box.querySelectorAll('.pays');
-      if (pays.length) tl.from(pays, {autoAlpha:0, stagger:.06, duration:.3}, base+1.85);
+      if (pays.length) tl.from(pays, {autoAlpha:0, stagger:.06, duration:.3}, base+.95);
       if (guar) tl.from(guar, {scale:2.4, rotation:-22, autoAlpha:0, duration:.4, ease:'power4.in',
           onComplete:function(){
             thump();
             g.fromTo(guar, {rotation:-3}, {rotation:0, duration:.4, ease:'elastic.out(1,.4)'});
-          }}, base+1.95);
+          }}, base+1.05);
       return tl;
     }
 
