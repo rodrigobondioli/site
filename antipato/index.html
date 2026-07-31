@@ -118,12 +118,18 @@ img{-webkit-user-drag:none;user-select:none}
   padding:14px 26px;border-radius:999px;
   text-decoration:none;white-space:nowrap;
   transition:transform .42s cubic-bezier(.34,1.56,.44,1),background .3s ease,border-color .3s ease,color .3s ease;
-  display:inline-block;
+  display:inline-flex;align-items:center;gap:10px;
+}
+.btn-pill .price{
+  background:var(--cyan);color:var(--ink);
+  font-family:var(--mono);font-size:11.5px;font-weight:700;
+  padding:5px 11px;border-radius:999px;
 }
 .btn-pill:hover,.btn-pill:focus-visible{
   background:var(--lime);border-color:var(--lime);color:var(--ink);
   transform:rotate(-2.2deg) scale(1.07);
 }
+.btn-pill:hover .price{background:var(--ink);color:var(--lime)}
 a:focus-visible,button:focus-visible{outline:3px solid var(--ink);outline-offset:3px;border-radius:6px}
 .nav-cta{display:flex;flex-direction:column;align-items:center;gap:9px}
 .nav-sub{
@@ -656,18 +662,9 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--ink);outline-offset
 #cacaCta{
   background:var(--pink);border-color:var(--pink);color:var(--ink);
   padding:13px 24px;font-size:clamp(14px,1.2vw,16px);
-  position:relative;overflow:hidden;
 }
 #cacaCta .price{background:var(--ink);color:var(--pink)}
 #cacaCta:hover,#cacaCta:focus-visible{background:var(--pink);border-color:var(--pink);color:var(--ink)}
-#cacaCta::after{
-  content:"";position:absolute;top:-40%;bottom:-40%;width:34%;
-  background:linear-gradient(105deg,transparent,rgba(255,255,255,.6),transparent);
-  transform:translateX(-260%) skewX(-18deg);
-  transition:transform .65s ease;
-  pointer-events:none;
-}
-#cacaCta:hover::after{transform:translateX(420%) skewX(-18deg)}
 #cacaCta.gg{animation:pulsePink 1.6s ease-in-out infinite}
 @keyframes pulsePink{
   0%,100%{box-shadow:0 0 0 0 rgba(255,0,215,.45)}
@@ -759,14 +756,11 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--ink);outline-offset
 .pricebox .cta-big{margin-top:20px;background:var(--pink);border:2px solid var(--pink);color:var(--ink);width:100%;justify-content:center;position:relative;overflow:hidden}
 .pricebox .cta-big .price{background:var(--ink);color:var(--pink)}
 .pricebox .cta-big:hover{background:var(--pink);border-color:var(--pink);color:var(--ink)}
-.pricebox .cta-big::after{
-  content:"";position:absolute;top:-40%;bottom:-40%;width:34%;
-  background:linear-gradient(105deg,transparent,rgba(255,255,255,.6),transparent);
-  transform:translateX(-260%) skewX(-18deg);
-  transition:transform .65s ease;
-  pointer-events:none;
+.pricebox .cta-big .glare{
+  position:absolute;top:-20%;bottom:-20%;width:34%;
+  background:linear-gradient(105deg,transparent,rgba(255,255,255,.5),transparent);
+  transform:translateX(-220%) skewX(-18deg);pointer-events:none;
 }
-.pricebox .cta-big:hover::after{transform:translateX(420%) skewX(-18deg)}
 .pricebox .pays{
   margin-top:14px;font-family:var(--mono);font-size:11px;color:rgba(16,16,16,.6);
   text-align:center;letter-spacing:.02em;
@@ -986,14 +980,15 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--ink);outline-offset
   color:#fff;font-size:30px;text-shadow:2px 2px 0 var(--pink);
 }
 .habit-track{
+  position:absolute;left:16px;right:16px;bottom:14px;z-index:6;
   list-style:none;display:flex;flex-wrap:wrap;gap:8px;
   justify-content:center;
-  width:min(92vw,1400px);
-  margin:14px 0 0 calc((100% - min(92vw,1400px))/2);
+  margin:0;
 }
 .habit-track li{
   font-family:var(--mono);font-size:10.5px;letter-spacing:.05em;
   color:rgba(255,255,255,.55);
+  background:rgba(16,16,16,.72);backdrop-filter:blur(4px);
   border:1.5px solid rgba(255,255,255,.22);
   padding:4px 11px;border-radius:999px;
   transition:all .3s;position:relative;white-space:nowrap;
@@ -1044,7 +1039,7 @@ body::after{
       <li><a href="#faq">faq</a></li>
     </ul>
     <div class="nav-cta spring-in" style="--d:.15s">
-      <a class="btn-pill" href="#oferta">quero deixar de ser genérico</a>
+      <a class="btn-pill" href="#oferta">quero deixar de ser genérico <span class="price">R$97</span></a>
       <span class="nav-sub">R$97 · lote fundador</span>
     </div>
   </nav>
@@ -1899,6 +1894,12 @@ document.addEventListener('click', function(e){
 
     var cta = box.querySelector('.cta-big');
 
+    /* glare periódico no CTA — passa sozinho, sem depender de hover */
+    if (cta && !cta.querySelector('.glare')) {
+      var gl = document.createElement('i'); gl.className='glare'; cta.appendChild(gl);
+      g.to(gl, {x:'620%', duration:1.1, ease:'power2.inOut', repeat:-1, repeatDelay:2.6});
+    }
+
     function thump(){
       g.fromTo('#oferta .sec-in', {y:0}, {y:5, duration:.06, yoyo:true, repeat:3, ease:'power1.inOut'});
     }
@@ -1973,8 +1974,8 @@ document.addEventListener('click', function(e){
     HABITS.forEach(function(h){
       var li = document.createElement('li'); li.textContent = h; track.appendChild(li);
     });
-    if (foot) foot.parentNode.insertBefore(track, foot);
-    /* placar vira HUD no canto da arena — não briga mais com o botão */
+    /* trilha de hábitos + placar viram HUD dentro da arena — botão fica sozinho embaixo */
+    range.appendChild(track);
     if (score) range.appendChild(score);
 
     /* cada pato ganha voo orgânico: bob senoidal + inclinação + pop de entrada */
