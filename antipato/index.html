@@ -869,7 +869,7 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--ink);outline-offset
 /* ---------- scroll reveal ---------- */
 .rv{opacity:0;transform:translateY(38px)}
 .rv.on{
-  opacity:1;transform:none;
+  opacity:1!important;transform:none!important;
   transition:opacity .7s cubic-bezier(.2,.9,.3,1),transform .8s cubic-bezier(.2,1.25,.32,1);
   transition-delay:var(--rd,0s);
 }
@@ -900,6 +900,7 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--ink);outline-offset
   .versus{grid-template-columns:1fr}
   .kit{grid-template-columns:1fr}
   .fit{grid-template-columns:1fr}
+  #quem .sec-tag{justify-content:center}
   .bio{grid-template-columns:1fr;text-align:center}
   .bio-duck{text-align:center}
   .bio p{margin-left:auto;margin-right:auto}
@@ -910,8 +911,9 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--ink);outline-offset
   .guarantee{flex-direction:column}
   .guarantee b{white-space:normal}
   .offer{gap:clamp(30px,7vh,48px)}
-  .stack-why{margin-top:20px;margin-bottom:6px}
+  .stack-why{margin-top:20px;margin-bottom:6px;text-align:center}
   .stack{padding-bottom:2px}
+  .pricebox .pays-br{display:block}
 }
 @media(max-width:600px){
   .logo svg,.logo img{height:46px}
@@ -933,7 +935,7 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--ink);outline-offset
   .duck-gap{
     display:block;position:relative;
     grid-column:1/-1;grid-row:1;justify-self:center;
-    width:min(38vw,175px);height:auto;
+    width:min(48vw,215px);height:auto;
     margin:6px auto 18px;
     aspect-ratio:680/1763;
   }
@@ -941,6 +943,7 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--ink);outline-offset
   .w-pato{grid-column:2;grid-row:2;justify-self:start;flex:none;display:block;margin-left:0}
   .w-mata span{white-space:nowrap;max-width:none}
   .duck-zone{position:absolute;left:0;top:0;transform:none;width:100%}
+  .h1wrap{margin-bottom:22px}
   .pitch{
     position:relative;right:auto;bottom:auto;
     text-align:center;max-width:420px;
@@ -948,6 +951,7 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--ink);outline-offset
     padding:0 clamp(20px,3.5vw,52px);
   }
   .pitch .lead{white-space:normal}
+  .note-br{display:block}
   .note-h1-l,.note-h1-r,.note-bottom-right{display:none}
   .note-bottom-center{white-space:normal;text-align:center;width:88vw}
   .dock{position:relative;left:auto;bottom:auto;margin:0 auto 84px;padding:0 clamp(20px,3.5vw,52px);align-items:center;text-align:center}
@@ -1098,7 +1102,7 @@ body::after{
     <p class="spring-in" style="--d:.55s">ganha pouco porque o mercado não sabe no que você é especialista.</p>
   </aside>
 
-  <div class="note note-bottom-center fade-in" style="--d:1.3s">fig. 01 — anas platyrhynchos · não alimente o genérico</div>
+  <div class="note note-bottom-center fade-in" style="--d:1.3s">fig. 01 — anas platyrhynchos ·<span class="note-br"> não alimente o genérico</span></div>
   <div class="note note-bottom-right fade-in" style="--d:1.45s">// voa mal · anda mal · nada mal · e ainda paga o pato</div>
 
   <div class="dock">
@@ -1298,7 +1302,7 @@ body::after{
         <p class="oficial">valor oficial: <s>R$197</s> — <strong>sobe quando o lote fechar</strong></p>
         <a class="cta-big" href="https://payfast.greenn.com.br/fqrmpkf/offer/dPcwW6?ch_id=141265" target="_blank" rel="noopener">quero meu novo posicionamento</a>
         <p class="pays">pix · cartão em até 12x · boleto · apple pay · google pay</p>
-        <p class="pays">acesso na hora, direto no e-mail · <strong>aplica numa tarde</strong></p>
+        <p class="pays">acesso na hora, direto no e-mail ·<span class="pays-br"> <strong>aplica numa tarde</strong></span></p>
         <p class="mini-guar"><strong>garantia de 7 dias</strong>: não cravou o posicionamento? me manda um e-mail e <strong>devolvo os R$97 na hora</strong>, sem burocracia.</p>
       </div>
     </div>
