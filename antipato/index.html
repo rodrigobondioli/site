@@ -1078,6 +1078,13 @@ body::after{
 
 .price-col{display:flex;flex-direction:column}
 .price-col .mini-guar{margin-top:18px}
+
+.fecho-como{
+  margin-top:clamp(30px,5vh,54px);
+  font-size:clamp(18px,2vw,27px);font-weight:700;line-height:1.35;
+  max-width:46ch;text-wrap:balance;
+}
+.fecho-como .off{color:rgba(16,16,16,.5);font-weight:500}
 </style>
 </head>
 <body>
@@ -1212,26 +1219,28 @@ body::after{
 <!-- ================= 04 · COMO FUNCIONA ================= -->
 <section class="sec sec--paper" id="como" style="padding-top:0">
   <div class="sec-in">
-    <p class="sec-tag rv">como funciona</p>
-    <h2 class="sec-title rv" style="--rd:.05s">uma tarde. três passos.</h2>
+    <p class="sec-tag rv">no fim da tarde</p>
+    <h2 class="sec-title rv" style="--rd:.05s">antes do dia acabar, isso já é teu.</h2>
 
     <div class="steps">
       <div class="step rv" style="--rd:.12s">
         <b>01</b>
-        <h3>você alimenta o canvas</h3>
-        <p>em 5 aulas curtas, você organiza sua bagagem em cinco blocos: você, território, cliente, monopólio e posicionamento.</p>
+        <h3>uma hipótese de nicho</h3>
+        <p>um recorte claro de quem você quer atender e qual problema quer ser lembrado por resolver.</p>
       </div>
       <div class="step rv" style="--rd:.2s">
         <b>02</b>
-        <h3>a IA acha seu ponto cego</h3>
-        <p>a Caça à Ruminação identifica a dor que se repete na cabeça do seu cliente. depois, o Estrategista lê o Canvas inteiro e cruza as informações.</p>
+        <h3>uma frase de posicionamento</h3>
+        <p>uma frase pronta pra orientar tua bio, teu portfólio, tua proposta e tua primeira conversa com o cliente.</p>
       </div>
       <div class="step rv" style="--rd:.28s">
         <b>03</b>
-        <h3>você sai com uma posição</h3>
-        <p>no final, você recebe sua hipótese de nicho, sua proposta única de valor e um plano de posicionamento pra testar nos próximos 90 dias.</p>
+        <h3>um plano de 90 dias</h3>
+        <p>os próximos passos pra testar a posição no mercado, observar a resposta e decidir se mantém, ajusta ou troca.</p>
       </div>
     </div>
+
+    <p class="fecho-como rv" style="--rd:.36s"><span class="off">não é mais uma tarde estudando posicionamento.</span><br>é uma tarde terminando o teu.</p>
   </div>
 </section>
 
@@ -1799,6 +1808,7 @@ document.addEventListener('click', function(e){
   reveal('#virada .sec-sub');
   reveal('#virada .vcard', {y:40, stagger:{each:.12}}, '#virada .versus');
   reveal('#como .step', {y:40, stagger:{each:.1}}, '#como .steps');
+  reveal('#como .fecho-como');
   reveal('#kit .sec-sub');
   reveal('#kit .item', {y:34, stagger:{each:.06}}, '#kit .kit');
   reveal('#quem .cred span', {y:14, stagger:{each:.05}, duration:.4}, '#quem .cred');
