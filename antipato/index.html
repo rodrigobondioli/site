@@ -90,7 +90,7 @@ img{-webkit-user-drag:none;user-select:none}
 /* ============ NAV ============ */
 .nav{
   position:relative;z-index:20;
-  display:flex;align-items:center;justify-content:space-between;
+  display:flex;align-items:flex-start;justify-content:space-between;
   padding:22px clamp(20px,3.5vw,52px);
   gap:16px;
 }
@@ -98,7 +98,7 @@ img{-webkit-user-drag:none;user-select:none}
   display:block;line-height:0;text-decoration:none;
   transition:transform .3s cubic-bezier(.2,1.6,.3,1);
 }
-.logo svg,.logo img{height:51px;width:auto;display:block}
+.logo svg,.logo img{height:56px;width:auto;display:block}
 .logo:hover,.logo:focus-visible{transform:rotate(-3deg) scale(1.04)}
 /* centrado na TELA (não no espaço sobrante), alinhado à altura do pill */
 .nav-links{
