@@ -1052,102 +1052,116 @@ body::after{
 }
 
 
-/* ============ POR DENTRO — test-drive scroll-driven ============ */
-.dentro-stage{margin-top:clamp(24px,4vh,40px);display:flex;justify-content:center}
-.appwin{
-  width:min(96%,980px);
-  background:#17171a;
+
+/* ============ POR DENTRO — palco em loop (input → processo → output) ============ */
+.palco{
+  margin-top:clamp(26px,4vh,44px);
   border:1.5px solid rgba(255,255,255,.14);
-  border-radius:18px;
+  border-radius:20px;
+  background:linear-gradient(180deg,#161619,#121214);
   overflow:hidden;
-  box-shadow:0 30px 80px rgba(0,0,0,.5), 0 0 0 1px rgba(255,255,255,.03);
+  box-shadow:0 30px 80px rgba(0,0,0,.45);
 }
-.appbar{
-  display:flex;align-items:center;gap:10px;
-  padding:12px 16px;
-  background:#101012;border-bottom:1.5px solid rgba(255,255,255,.1);
+.palco-hud{
+  display:flex;align-items:center;justify-content:space-between;gap:16px;
+  padding:14px clamp(18px,2.4vw,28px);
+  border-bottom:1.5px solid rgba(255,255,255,.1);
+  background:rgba(0,0,0,.25);
 }
-.appbar i{width:11px;height:11px;border-radius:50%;background:rgba(255,255,255,.16)}
-.appbar i:nth-child(1){background:#ff5f57}.appbar i:nth-child(2){background:#febc2e}.appbar i:nth-child(3){background:#28c840}
-.appbar .url{
-  flex:1;max-width:360px;margin:0 auto;
-  font-family:var(--mono);font-size:11px;color:rgba(255,255,255,.55);
-  background:rgba(255,255,255,.06);border-radius:999px;
-  padding:6px 14px;text-align:center;white-space:nowrap;overflow:hidden;
+.palco-fase{
+  font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--lime);white-space:nowrap;
 }
-.appbody{position:relative;min-height:clamp(360px,44vw,460px)}
-.fase{position:absolute;inset:0;padding:clamp(18px,2.6vw,30px);display:grid;grid-template-columns:240px minmax(0,1fr);gap:clamp(16px,2.4vw,28px)}
-/* fase A — canvas */
-.blocos{list-style:none;display:flex;flex-direction:column;gap:8px}
-.blocos li{
-  display:flex;align-items:center;gap:10px;
-  font-family:var(--mono);font-size:12px;letter-spacing:.04em;color:rgba(255,255,255,.6);
-  border:1.5px solid rgba(255,255,255,.12);border-radius:12px;
-  padding:10px 13px;
+.palco-dots{display:flex;gap:7px}
+.palco-dots i{
+  width:26px;height:3px;border-radius:2px;background:rgba(255,255,255,.16);
+  transition:background .4s;
 }
-.blocos li b{
-  width:18px;height:18px;border-radius:50%;flex:0 0 auto;
-  border:1.5px solid rgba(255,255,255,.3);
-  display:flex;align-items:center;justify-content:center;
-  font-size:11px;color:var(--ink);font-weight:700;
+.palco-dots i.on{background:var(--lime)}
+.palco-body{
+  position:relative;
+  min-height:clamp(330px,32vw,400px);
+  padding:clamp(20px,2.6vw,34px);
 }
-.blocos li.done{color:#fff;border-color:rgba(231,249,154,.5)}
-.blocos li.done b{background:var(--lime);border-color:var(--lime)}
-.blocos li.done b::after{content:"✓"}
-.wizard{
-  background:#101012;border:1.5px solid rgba(255,255,255,.12);
-  border-radius:14px;padding:clamp(16px,2.2vw,26px);
-  display:flex;flex-direction:column;gap:14px;
+.cena{position:absolute;inset:clamp(22px,3vw,40px);display:flex;flex-direction:column;justify-content:center}
+
+/* — cena 1: o caos — */
+.caos{display:flex;flex-wrap:wrap;gap:clamp(12px,1.6vw,20px);align-content:center;justify-content:center;max-width:900px;margin:0 auto}
+.caos span{
+  font-family:var(--mono);font-size:clamp(13px,1.45vw,17px);
+  color:rgba(255,255,255,.66);
+  border:1.5px solid rgba(255,255,255,.18);
+  background:rgba(255,255,255,.04);
+  border-radius:14px;padding:15px 21px;white-space:nowrap;
 }
-.wizard .wtag{font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--lime)}
-.wizard h4{font-size:clamp(16px,1.6vw,21px);font-weight:700;color:#fff;line-height:1.35}
-.wfield{
-  background:rgba(255,255,255,.05);
-  border:1.5px solid rgba(255,255,255,.14);
-  border-radius:10px;padding:12px 14px;
-  font-family:var(--mono);font-size:12.5px;line-height:1.6;color:rgba(255,255,255,.85);
-  min-height:44px;
+/* — cena 2: o canvas organiza — */
+.cvgrid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;align-content:center}
+.cvcol{
+  border:1.5px solid rgba(255,255,255,.14);border-radius:14px;
+  padding:15px 13px;display:flex;flex-direction:column;gap:9px;min-height:150px;
+  transition:border-color .4s,background .4s;
 }
-.wfield .lbl{display:block;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:4px}
-.tcaret{display:inline-block;width:7px;height:13px;background:var(--lime);vertical-align:-2px;animation:blink 1s steps(1) infinite}
-/* fase B — estrategista */
-.faseB{grid-template-columns:minmax(0,1fr)}
-.bootline{font-family:var(--mono);font-size:12.5px;color:var(--lime)}
-.saida{
-  background:#101012;border:1.5px solid rgba(231,249,154,.35);
-  border-radius:14px;padding:clamp(18px,2.4vw,28px);
-  display:flex;flex-direction:column;gap:14px;
+.cvcol.hot{border-color:rgba(231,249,154,.55);background:rgba(231,249,154,.05)}
+.cvcol b{
+  font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;
+  color:rgba(255,255,255,.45);
 }
-.saida .stag{font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--lime)}
-.saida .frase{
-  font-family:'Londrina Solid',sans-serif;font-weight:900;text-transform:none;
-  font-size:clamp(20px,2.4vw,32px);line-height:1.12;color:#fff;
+.cvcol.hot b{color:var(--lime)}
+.cvcol p{font-family:var(--mono);font-size:11px;line-height:1.5;color:rgba(255,255,255,.8)}
+/* — cena 3: a ia lê — */
+.ia{display:flex;flex-direction:column;gap:clamp(18px,2.6vh,28px);align-items:center;text-align:center;justify-content:center;height:100%}
+.ia-tag{
+  font-family:var(--mono);font-size:clamp(12px,1.3vw,15px);letter-spacing:.06em;color:var(--lime);
 }
-.saida .frase em{font-style:normal;color:var(--lime)}
-.saida .puv{font-size:clamp(13.5px,1.3vw,16px);color:rgba(255,255,255,.75);font-weight:500}
-.plano{list-style:none;display:flex;flex-direction:column;gap:8px}
-.plano li{
-  display:flex;gap:10px;align-items:baseline;
-  font-family:var(--mono);font-size:12px;line-height:1.55;color:rgba(255,255,255,.8);
-  border-top:1.5px solid rgba(255,255,255,.1);padding-top:8px;
+.ia-scan{
+  width:min(100%,700px);height:3px;border-radius:2px;
+  background:linear-gradient(90deg,transparent,var(--lime),transparent);
 }
-.plano li b{color:var(--pink);font-weight:700;white-space:nowrap}
-.salvo{
-  align-self:flex-start;
-  font-family:var(--mono);font-size:11px;letter-spacing:.06em;
-  background:var(--lime);color:var(--ink);font-weight:700;
-  padding:6px 13px;border-radius:999px;
+.ia-achou{
+  border:1.5px solid rgba(255,0,215,.5);border-radius:14px;
+  background:rgba(255,0,215,.07);
+  padding:clamp(16px,2vw,24px) clamp(20px,2.6vw,32px);
+  max-width:660px;
+}
+.ia-achou i{
+  font-style:normal;display:block;
+  font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--pink);margin-bottom:9px;
+}
+.ia-achou p{font-size:clamp(16px,1.8vw,23px);font-weight:500;line-height:1.4;color:#fff}
+/* — cena 4: a saída — */
+.saida4{display:flex;flex-direction:column;gap:clamp(14px,2vh,20px);align-items:center;text-align:center}
+.linhas{display:flex;flex-direction:column;gap:7px;width:min(100%,720px);margin:0 auto}
+.linhas div{
+  display:flex;gap:12px;align-items:baseline;justify-content:flex-start;text-align:left;
+  font-family:var(--mono);font-size:clamp(11.5px,1.2vw,13.5px);line-height:1.5;
+  color:rgba(255,255,255,.82);
+  border-bottom:1.5px solid rgba(255,255,255,.1);padding-bottom:8px;
+}
+.linhas div b{color:var(--lime);min-width:52px;flex:0 0 auto}
+.frase4{
+  font-family:'Londrina Solid',sans-serif;font-weight:900;
+  font-size:clamp(19px,2.3vw,31px);line-height:1.12;color:#fff;
+  max-width:860px;margin:0 auto;
+}
+.frase4 em{font-style:normal;color:var(--lime)}
+.salvo4{
+  font-family:var(--mono);font-size:11px;letter-spacing:.06em;font-weight:700;
+  background:var(--lime);color:var(--ink);padding:7px 15px;border-radius:999px;
 }
 .dentro-note{
-  margin-top:clamp(16px,2.6vh,26px);text-align:center;
+  margin-top:clamp(16px,2.6vh,24px);text-align:center;
   font-family:var(--mono);font-size:11.5px;letter-spacing:.03em;color:rgba(255,255,255,.5);
 }
 .dentro-note a{color:var(--lime)}
 @media(max-width:860px){
-  .fase{grid-template-columns:1fr}
-  .blocos{flex-direction:row;flex-wrap:wrap}
-  .blocos li{padding:7px 10px;font-size:10.5px}
-  .appbody{min-height:560px}
+  .palco-body{min-height:520px;padding:20px 16px}
+  .cena{inset:20px 16px}
+  .cvgrid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+  .cvcol{min-height:0;padding:11px 10px}
+  .cvcol:last-child{grid-column:1/-1}
+  .caos span{font-size:11px;padding:9px 12px;white-space:normal}
+  .linhas div{flex-direction:column;gap:2px}
 }
 
 /* fallback sem GSAP (arquivo não carregou): reveal antigo continua valendo */
@@ -1402,56 +1416,74 @@ body::after{
 </div>
 
 
-<!-- ================= O PRODUTO POR DENTRO (test-drive) ================= -->
+
+<!-- ================= O PRODUTO POR DENTRO ================= -->
 <section class="sec sec--dark" id="dentro">
   <div class="sec-in">
     <p class="sec-tag rv">o produto por dentro</p>
-    <h2 class="sec-title rv" style="--rd:.05s">isso aqui não é<br>promessa. é tela.</h2>
-    <p class="sec-sub rv" style="--rd:.12s">rola e vê o fluxo real da plataforma: <span class="mark">o canvas capta, a ia responde.</span> exemplo com um nicho de verdade — clínicas odontológicas.</p>
+    <h2 class="sec-title rv" style="--rd:.05s">não é promessa.<br>é saída.</h2>
+    <p class="sec-sub rv" style="--rd:.12s">você não sai com aula assistida. <span class="mark">sai com nicho, frase e plano.</span> um exemplo real do fluxo, do despejo cru até a saída.</p>
 
-    <div class="dentro-stage rv" style="--rd:.18s">
-      <div class="appwin" id="appwin">
-        <div class="appbar"><i></i><i></i><i></i><span class="url">app.rodrigobondioli.com/curso · meu canvas</span></div>
-        <div class="appbody">
+    <div class="palco rv" style="--rd:.18s" id="palco">
+      <div class="palco-hud">
+        <span class="palco-fase" id="palcoFase">01 · o que entra</span>
+        <div class="palco-dots" id="palcoDots"><i class="on"></i><i></i><i></i><i></i></div>
+      </div>
+      <div class="palco-body">
 
-          <div class="fase faseA" id="faseA">
-            <ul class="blocos" id="blocosList">
-              <li><b></b> 01 · você</li>
-              <li><b></b> 02 · território</li>
-              <li><b></b> 03 · cliente</li>
-              <li><b></b> 04 · monopólio</li>
-              <li><b></b> 05 · posicionamento</li>
-            </ul>
-            <div class="wizard">
-              <span class="wtag">bloco 03 · cliente — pergunta 4 de 5</span>
-              <h4>o que tira o sono desse cliente?</h4>
-              <div class="wfield"><span class="lbl">tua resposta, crua</span><span id="type1"></span><span class="tcaret" id="c1"></span></div>
-              <div class="wfield"><span class="lbl">quem você NÃO atende</span><span id="type2"></span><span class="tcaret" id="c2" style="visibility:hidden"></span></div>
-            </div>
+        <!-- CENA 1 · o caos -->
+        <div class="cena" id="cena1">
+          <div class="caos">
+            <span>faço site, branding, social, ui…</span>
+            <span>atendo qualquer negócio</span>
+            <span>cliente sempre pede desconto</span>
+            <span>agenda vazia no meio do mês</span>
+            <span>quero parar de vender tela</span>
+            <span>meu portfólio é uma salada</span>
           </div>
-
-          <div class="fase faseB" id="faseB" style="visibility:hidden">
-            <div style="display:flex;flex-direction:column;gap:14px;min-width:0">
-              <p class="bootline"><span id="boot"></span><span class="tcaret"></span></p>
-              <div class="saida" id="saida">
-                <span class="stag">🚀 o estrategista · teu posicionamento</span>
-                <p class="frase" id="fraseOut">eu ajudo <em>clínicas odontológicas</em> a encher a agenda de particulares — com design que transforma primeira consulta em confiança.</p>
-                <p class="puv" id="puvOut">puv: design pra clínica que quer parecer tão boa quanto é.</p>
-                <ul class="plano" id="planoOut">
-                  <li><b>hoje</b> frase na bio · v1 do posicionamento salva</li>
-                  <li><b>7 dias</b> portfólio reaberto pro nicho · 1 case adaptado · 1 conteúdo sobre a dor</li>
-                  <li><b>30 dias</b> mensagem testada com 3 clínicas reais · manter, refinar ou trocar</li>
-                </ul>
-                <span class="salvo" id="salvoChip">salvo em “meu plano” ✓</span>
-              </div>
-            </div>
-          </div>
-
         </div>
+
+        <!-- CENA 2 · o canvas capta -->
+        <div class="cena" id="cena2" style="visibility:hidden">
+          <div class="cvgrid">
+            <div class="cvcol"><b>01 · você</b><p>20 anos de ofício · método próprio · odeia leilão de preço</p></div>
+            <div class="cvcol"><b>02 · território</b><p>saúde privada · clínicas odontológicas</p></div>
+            <div class="cvcol"><b>03 · cliente</b><p>dono de clínica · agenda ociosa · desconfiado</p></div>
+            <div class="cvcol"><b>04 · monopólio</b><p>design que vira confiança na 1ª consulta</p></div>
+            <div class="cvcol"><b>05 · posicionamento</b><p>síntese dos 4 blocos</p></div>
+          </div>
+        </div>
+
+        <!-- CENA 3 · a ia responde -->
+        <div class="cena" id="cena3" style="visibility:hidden">
+          <div class="ia">
+            <span class="ia-tag" id="iaTag">🧠 caça à ruminação · varrendo o que o cliente rumina…</span>
+            <div class="ia-scan" id="iaScan"></div>
+            <div class="ia-achou" id="iaAchou">
+              <i>dor que se repete</i>
+              <p>“agenda vazia no meio do mês. paciente só volta quando dói.”</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- CENA 4 · a saída -->
+        <div class="cena" id="cena4" style="visibility:hidden">
+          <div class="saida4">
+            <div class="linhas">
+              <div><b>nicho</b> clínicas odontológicas</div>
+              <div><b>dor</b> agenda ociosa + paciente sem recorrência</div>
+              <div><b>puv</b> design que transforma primeira consulta em confiança</div>
+              <div><b>plano</b> bio hoje · portfólio em 7 dias · teste de 30 dias</div>
+            </div>
+            <p class="frase4">eu ajudo <em>clínicas odontológicas</em> a encher a agenda de particulares — com design que transforma primeira consulta em confiança.</p>
+            <span class="salvo4">salvo em “meu plano” ✓</span>
+          </div>
+        </div>
+
       </div>
     </div>
 
-    <p class="dentro-note rv" style="--rd:.24s">fluxo real da plataforma — sem mockup, sem cena montada. <a href="https://payfast.greenn.com.br/fqrmpkf/offer/dPcwW6?ch_id=141265">quero rodar com o meu nicho →</a></p>
+    <p class="dentro-note rv" style="--rd:.24s">o canvas capta, a ia responde — e você sai com posição. <a href="https://payfast.greenn.com.br/fqrmpkf/offer/dPcwW6?ch_id=141265">quero rodar com o meu nicho →</a></p>
   </div>
 </section>
 
@@ -2318,76 +2350,94 @@ document.addEventListener('click', function(e){
 
 </script>
 
+
+
 <script>
-/* ============ POR DENTRO — cena scroll-driven ============ */
+/* ============ POR DENTRO — loop de 4 cenas (sem scroll, sem pin) ============ */
 (function(){
   var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var sec = document.getElementById('dentro');
-  if (!sec || !window.gsap || !window.ScrollTrigger) return;
+  var palco = document.getElementById('palco');
+  if (!palco || !window.gsap) return;
   var g = window.gsap;
-  g.registerPlugin(window.ScrollTrigger);
-  var desktop = window.matchMedia('(min-width: 961px)').matches;
 
-  var T1 = 'agenda vazia no meio do mês. paciente só volta quando dói.';
-  var T2 = 'quem quer “um logo rapidinho” por R$50.';
-  var BOOT = '> lendo teu canvas… 5 blocos ok. montando posicionamento_';
-  var t1 = document.getElementById('type1'), t2 = document.getElementById('type2');
-  var c1 = document.getElementById('c1'), c2 = document.getElementById('c2');
-  var boot = document.getElementById('boot');
-  var blocos = document.querySelectorAll('#blocosList li');
-  var faseA = document.getElementById('faseA'), faseB = document.getElementById('faseB');
-  var saidaEls = ['#fraseOut','#puvOut','#planoOut li','#salvoChip'].map(function(s){return g.utils.toArray(s);});
+  var cenas = [1,2,3,4].map(function(n){ return document.getElementById('cena'+n); });
+  var fase = document.getElementById('palcoFase');
+  var dots = document.querySelectorAll('#palcoDots i');
+  var NOMES = ['01 · o que entra','02 · o canvas capta','03 · a ia responde','04 · a saída'];
+  var caos = g.utils.toArray('#cena1 .caos span');
+  var cols = g.utils.toArray('#cena2 .cvcol');
+  var linhas = g.utils.toArray('#cena4 .linhas div');
 
   if (reduced) {
-    /* estado final direto, tudo legível */
-    t1.textContent = T1; t2.textContent = T2; boot.textContent = BOOT;
-    blocos.forEach(function(li){ li.classList.add('done'); });
-    faseA.style.visibility = 'hidden'; faseB.style.visibility = 'visible';
+    /* mostra a saída final, que é o que importa */
+    cenas[0].style.visibility='hidden';
+    cenas[3].style.visibility='visible';
+    fase.textContent = NOMES[3];
+    dots.forEach(function(d,i){ d.classList.toggle('on', i===3); });
     return;
   }
 
-  function typer(el, txt){
-    var st = {n:0};
-    return g.to(st, {n: txt.length, ease:'none', duration: txt.length * .022,
-      onUpdate: function(){ el.textContent = txt.slice(0, Math.round(st.n)); }});
+  function marca(i){
+    fase.textContent = NOMES[i];
+    dots.forEach(function(d,k){ d.classList.toggle('on', k===i); });
+  }
+  function troca(tl, de, para, i){
+    tl.to(cenas[de], {autoAlpha:0, y:-18, duration:.45, ease:'power2.in'})
+      .call(function(){ marca(i); })
+      .set(cenas[para], {visibility:'visible', opacity:0, y:18})
+      .to(cenas[para], {opacity:1, y:0, duration:.5, ease:'power3.out'});
   }
 
-  var tl = g.timeline({defaults:{ease:'none'}});
-  /* fase A: blocos 1 e 2 já concluem, digita as respostas, conclui 3-4-5 */
-  tl.add(function(){}, 0)
-    .call(function(){ blocos[0].classList.add('done'); }, null, .3)
-    .call(function(){ blocos[1].classList.add('done'); }, null, .9)
-    .add(typer(t1, T1), 1.2)
-    .call(function(){ c1.style.visibility='hidden'; c2.style.visibility='visible'; }, null, '>')
-    .add(typer(t2, T2), '>')
-    .call(function(){ blocos[2].classList.add('done'); }, null, '>')
-    .call(function(){ blocos[3].classList.add('done'); }, null, '>+.4')
-    .call(function(){ blocos[4].classList.add('done'); }, null, '>+.4')
-    /* troca de fase */
-    .to(faseA, {autoAlpha:0, xPercent:-4, duration:.5, ease:'power2.in'}, '>+.3')
-    .set(faseB, {visibility:'visible', opacity:0})
-    .to(faseB, {opacity:1, duration:.4}, '>')
-    /* fase B: boot + saída */
-    .add(typer(boot, BOOT), '>')
-    .from(saidaEls[0], {autoAlpha:0, y:22, duration:.7, ease:'power3.out'}, '>+.2')
-    .from(saidaEls[1], {autoAlpha:0, y:14, duration:.5, ease:'power3.out'}, '>-.2')
-    .from(saidaEls[2], {autoAlpha:0, x:-16, stagger:.35, duration:.5, ease:'power3.out'}, '>')
-    .from(saidaEls[3], {scale:0, rotation:-8, duration:.5, ease:'back.out(2.5)'}, '>');
+  var tl = g.timeline({repeat:-1, repeatDelay:.6, paused:true});
 
-  if (desktop) {
-    /* scroll conduz a cena — janela pinada */
-    ScrollTrigger.create({
-      trigger: sec, start:'top top', end:'+=220%',
-      pin: true, scrub: .6, anticipatePin: 1,
-      animation: tl
-    });
-  } else {
-    /* mobile: roda sozinha ao entrar */
-    tl.duration(9).play(0);
-    tl.pause(0);
-    ScrollTrigger.create({trigger: sec, start:'top 65%', once:true,
-      onEnter: function(){ tl.play(0); }});
-  }
+  /* CENA 1 — o caos: as respostas cruas caem tortas */
+  tl.call(function(){ marca(0); })
+    .set(cenas[0], {visibility:'visible', opacity:1, y:0})
+    .fromTo(caos,
+      {autoAlpha:0, y:26, rotation:function(i){ return (i%2?1:-1) * (2+i*.8); }, scale:.92},
+      {autoAlpha:1, y:0, rotation:function(i){ return (i%2?1:-1) * (1.4+i*.5); }, scale:1,
+       duration:.5, stagger:.13, ease:'back.out(1.7)'})
+    .to({}, {duration:1.1});
+
+  /* → CENA 2 — o canvas organiza: colunas acendem em sequência */
+  troca(tl, 0, 1, 1);
+  tl.from(cols, {autoAlpha:0, y:24, duration:.45, stagger:.1, ease:'power3.out'}, '<.1');
+  cols.forEach(function(c, i){
+    tl.call(function(){ c.classList.add('hot'); }, null, '>-.15');
+    tl.fromTo(c, {scale:1}, {scale:1.03, duration:.18, yoyo:true, repeat:1, ease:'power2.out'}, '<');
+  });
+  tl.to({}, {duration:.9});
+
+  /* → CENA 3 — a ia lê: varredura e a dor achada */
+  troca(tl, 1, 2, 2);
+  tl.set('#iaAchou', {autoAlpha:0, y:16})
+    .fromTo('#iaScan', {scaleX:0, transformOrigin:'left center'},
+            {scaleX:1, duration:.7, ease:'power2.inOut'}, '<.1')
+    .to('#iaScan', {scaleX:0, transformOrigin:'right center', duration:.5, ease:'power2.inOut'})
+    .call(function(){ document.getElementById('iaTag').textContent = '🚀 o estrategista · cruzando os 5 blocos…'; })
+    .to('#iaAchou', {autoAlpha:1, y:0, duration:.5, ease:'back.out(1.6)'})
+    .to({}, {duration:1.3})
+    .call(function(){ document.getElementById('iaTag').textContent = '🧠 caça à ruminação · varrendo o que o cliente rumina…'; });
+
+  /* → CENA 4 — a saída: linhas carimbam, frase entra, salva */
+  troca(tl, 2, 3, 3);
+  tl.from(linhas, {autoAlpha:0, x:-18, duration:.42, stagger:.16, ease:'power3.out'}, '<.1')
+    .from('#cena4 .frase4', {autoAlpha:0, y:22, duration:.65, ease:'power3.out'}, '>-.1')
+    .from('#cena4 .salvo4', {scale:0, rotation:-8, duration:.5, ease:'back.out(2.5)'}, '>-.2')
+    .to({}, {duration:2.2});
+
+  /* volta ao caos no loop */
+  tl.to(cenas[3], {autoAlpha:0, y:-18, duration:.5, ease:'power2.in'})
+    .set(cols, {clearProps:'all'})
+    .call(function(){ cols.forEach(function(c){ c.classList.remove('hot'); }); })
+    .set([cenas[1], cenas[2]], {visibility:'hidden'});
+
+  /* só roda quando está na tela (economiza CPU) */
+  if ('IntersectionObserver' in window) {
+    new IntersectionObserver(function(es){
+      es.forEach(function(e){ e.isIntersecting ? tl.play() : tl.pause(); });
+    }, {threshold:.2}).observe(palco);
+  } else { tl.play(); }
 })();
 </script>
 </body>
