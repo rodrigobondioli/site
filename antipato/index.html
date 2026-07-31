@@ -348,7 +348,10 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--ink);outline-offset
 }
 
 /* ondas de transição — a cor NUNCA corta seca */
-.wave{display:block;width:100%;height:clamp(46px,7vw,96px);line-height:0;position:relative;z-index:3;margin:-1px 0}
+.wave{display:block;width:100%;height:clamp(46px,7vw,96px);line-height:0;position:relative;z-index:3;margin:-1px 0;overflow:hidden}
+.wave::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:18px;background:var(--dest);z-index:1}
+.wave svg{position:relative;z-index:2;display:block;width:100%;height:100%;transform-origin:center bottom}
+.wave-x{display:none}
 .wave svg{display:block;width:100%;height:calc(100% + 2px);margin-top:-1px;transform-origin:50% 50%;will-change:transform}
 
 /* etiqueta de seção */
@@ -736,7 +739,8 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--ink);outline-offset
 .ctafinal .sec-tag::after{display:none}
 .ctafinal .sec-title{font-size:clamp(26px,3.7vw,54px);text-wrap:balance}
 .ctafinal .sec-sub{margin:0 auto;max-width:62ch;text-wrap:balance}
-.cta-final{margin-top:clamp(24px,4vh,38px);background:var(--ink);border-color:var(--ink);color:#fff}
+.cta-final{margin-top:clamp(24px,4vh,38px);background:var(--pink);border-color:var(--pink);color:var(--ink)}
+.cta-final:hover,.cta-final:focus-visible{background:var(--pink);border-color:var(--pink);color:var(--ink)}
 .cta-final:hover,.cta-final:focus-visible{background:var(--green);border-color:var(--green)}
 .cta-final-sub{
   margin-top:14px;font-family:var(--mono);font-size:11.5px;letter-spacing:.03em;
@@ -1071,6 +1075,9 @@ body::after{
 }
 .mbr{display:none}
 @media(max-width:440px){.mbr{display:inline}}
+
+.price-col{display:flex;flex-direction:column}
+.price-col .mini-guar{margin-top:18px}
 </style>
 </head>
 <body>
@@ -1146,7 +1153,7 @@ body::after{
 <!-- ================= 02 · O PROBLEMA (curto) ================= -->
 
 <!-- onda: cyan -> paper -->
-<div class="wave" style="background:var(--cyan)" aria-hidden="true">
+<div class="wave" style="--dest:#F4EFE4;background:var(--cyan)" aria-hidden="true">
   <svg viewBox="0 0 1440 96" preserveAspectRatio="none"><path fill="#F4EFE4" d="M0,64 C240,96 480,16 720,40 C960,64 1200,96 1440,48 L1440,96 L0,96 Z"/></svg>
 </div>
 <section class="sec sec--paper" id="problema">
@@ -1230,7 +1237,7 @@ body::after{
 
 
 <!-- onda: paper -> ink -->
-<div class="wave" style="background:var(--paper)" aria-hidden="true">
+<div class="wave" style="--dest:#101010;background:var(--paper)" aria-hidden="true">
   <svg viewBox="0 0 1440 96" preserveAspectRatio="none"><path fill="#101010" d="M0,56 C240,92 480,14 720,42 C960,70 1200,92 1440,44 L1440,96 L0,96 Z"/></svg>
 </div>
 <section class="sec sec--dark" id="dentro">
@@ -1307,16 +1314,13 @@ body::after{
 
     <div class="et-loop rv" style="--rd:.32s">
       <p class="payoff">você não volta depois pra aplicar. já sai com o trabalho feito.</p>
-      <p class="quebra">não é um GPT fantasiado de método.</p>
-      <p class="sec2">a plataforma cruza teu contexto nos cinco blocos do Canvas com IAs especializadas, referências de estratégia e posicionamento e os critérios construídos por Rodrigo em 20 anos de mercado.</p>
-      <p class="sec3">a IA entra com velocidade. o método entra com critério. tua bagagem entra com verdade.</p>
     </div>
   </div>
 </section>
 
 
 <!-- onda: ink -> lime -->
-<div class="wave" style="background:var(--ink)" aria-hidden="true">
+<div class="wave" style="--dest:#E7F99A;background:var(--ink)" aria-hidden="true">
   <svg viewBox="0 0 1440 96" preserveAspectRatio="none"><path fill="#E7F99A" d="M0,48 C240,96 480,20 720,44 C960,68 1200,90 1440,40 L1440,96 L0,96 Z"/></svg>
 </div>
 <section class="sec sec--yellow" id="kit">
@@ -1387,10 +1391,10 @@ body::after{
 
 
 <!-- onda: lime -> ink -->
-<div class="wave" style="background:var(--lime)" aria-hidden="true">
+<div class="wave" style="--dest:#101010;background:var(--lime)" aria-hidden="true">
   <svg viewBox="0 0 1440 96" preserveAspectRatio="none"><path fill="#101010" d="M0,56 C240,92 480,14 720,42 C960,70 1200,92 1440,44 L1440,96 L0,96 Z"/></svg>
 </div>
-<section class="sec sec--dark" id="praquem" style="padding-top:0">
+<section class="sec sec--dark" id="praquem" style="padding-top:clamp(44px,7vh,86px)">
   <div class="sec-in">
     <p class="sec-tag rv">régua na porta</p>
     <div class="fit">
@@ -1436,9 +1440,9 @@ body::after{
           <li>As 7 Perguntas da Primeira Reunião</li>
           <li>acesso permanente</li>
         </ul>
-        <p class="mini-guar mini-guar--dark"><strong>garantia de 7 dias</strong>: você tem 7 dias pra entrar, assistir e testar o processo. não fez sentido pra você? manda um e-mail pra <strong>suporte@rodrigobondioli.com</strong> e recebe o reembolso — sem justificativa e sem letra miúda.</p>
       </div>
 
+      <div class="price-col">
       <div class="pricebox rv" style="--rd:.18s">
         <div class="selo" aria-hidden="true"><svg viewBox="0 0 120 120">
           <defs><path id="seloCirc" d="M60,60 m-44,0 a44,44 0 1,1 88,0 a44,44 0 1,1 -88,0"/></defs>
@@ -1453,6 +1457,8 @@ body::after{
         <a class="cta-big" href="https://payfast.greenn.com.br/fqrmpkf/offer/dPcwW6?ch_id=141265" target="_blank" rel="noopener">quero meu posicionamento</a>
         <p class="pays">cartão de crédito em até 12x</p>
         <p class="pays">acesso na hora, direto no e-mail ·<span class="pays-br"> <strong>aplica numa tarde</strong></span></p>
+      </div>
+      <p class="mini-guar mini-guar--dark rv" style="--rd:.24s"><strong>garantia de 7 dias</strong>: você tem 7 dias pra entrar, assistir e testar o processo. não fez sentido pra você? manda um e-mail pra <strong>suporte@rodrigobondioli.com</strong> e recebe o reembolso — sem justificativa e sem letra miúda.</p>
       </div>
     </div>
   </div>
@@ -1479,7 +1485,7 @@ body::after{
 <!-- ================= 10 · FAQ ================= -->
 
 <!-- onda: ink -> paper -->
-<div class="wave" style="background:var(--ink)" aria-hidden="true">
+<div class="wave" style="--dest:#F4EFE4;background:var(--ink)" aria-hidden="true">
   <svg viewBox="0 0 1440 96" preserveAspectRatio="none"><path fill="#F4EFE4" d="M0,52 C240,90 480,16 720,42 C960,68 1200,92 1440,42 L1440,96 L0,96 Z"/></svg>
 </div>
 <section class="sec sec--paper" id="faq">
@@ -1510,7 +1516,7 @@ body::after{
 <section class="sec sec--paper" id="decisao" style="padding-top:0">
   <div class="sec-in ctafinal">
     <p class="sec-tag rv">a decisão é tua</p>
-    <h2 class="sec-title rv" style="--rd:.05s">o mercado não precisa saber tudo o que você faz.<br>precisa saber por que<span class="mbr"><br></span>lembrar de você.</h2>
+    <h2 class="sec-title rv" style="--rd:.05s">o mercado não precisa saber tudo o que você faz.<br>precisa saber por que <span class="mbr"><br></span>lembrar de você.</h2>
     <p class="sec-sub rv" style="--rd:.12s">em uma tarde, transforme tua bagagem numa hipótese de nicho, numa frase de posicionamento e num plano pronto para testar.</p>
     <div class="rv" style="--rd:.18s">
       <a class="cta-big cta-final" href="https://payfast.greenn.com.br/fqrmpkf/offer/dPcwW6?ch_id=141265" target="_blank" rel="noopener">quero meu posicionamento</a>
@@ -1523,7 +1529,7 @@ body::after{
 <!-- ================= FOOTER ================= -->
 
 <!-- onda: paper -> ink -->
-<div class="wave" style="background:var(--paper)" aria-hidden="true">
+<div class="wave" style="--dest:#101010;background:var(--paper)" aria-hidden="true">
   <svg viewBox="0 0 1440 96" preserveAspectRatio="none"><path fill="#101010" d="M0,52 C240,90 480,16 720,42 C960,68 1200,92 1440,42 L1440,96 L0,96 Z"/></svg>
 </div>
 <footer class="footer">
@@ -1922,7 +1928,7 @@ document.addEventListener('click', function(e){
     });
     window.__lenis.on('scroll', function(e){
       var v = g.utils.clamp(-10, 10, (e.velocity || 0) * .10);
-      for (var i=0;i<qs.length;i++){ qs[i].sk(v*.32); qs[i].sc(1 + Math.abs(v)*.014); }
+      for (var i=0;i<qs.length;i++){ qs[i].sk(0); qs[i].sc(1 + Math.abs(v)*.012); }
     });
   })();
 
