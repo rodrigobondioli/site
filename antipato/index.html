@@ -701,16 +701,17 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--ink);outline-offset
   gap:clamp(18px,2.6vw,34px);
   align-items:start;
 }
-.stack{list-style:none;border-top:1.5px solid rgba(255,255,255,.16)}
+.stack{list-style:none;border-top:1.5px dashed rgba(255,255,255,.2)}
 .stack li{
   display:flex;justify-content:space-between;gap:14px;align-items:baseline;
-  padding:clamp(15px,2vh,20px) 4px clamp(15px,2vh,20px) 32px;border-bottom:1.5px solid rgba(255,255,255,.16);
+  padding:clamp(15px,2vh,20px) 4px clamp(15px,2vh,20px) 32px;border-bottom:1.5px dashed rgba(255,255,255,.2);
   font-size:clamp(14.5px,1.3vw,17px);font-weight:500;
   position:relative;
 }
+.stack li:last-child{border-bottom:none}
 .stack li::before{
   content:"✓";position:absolute;left:4px;top:13px;
-  color:var(--pink);font-weight:700;
+  color:var(--pink);font-weight:700;font-family:var(--mono);font-style:normal;
 }
 .stack li s{font-family:var(--mono);font-size:13px;color:rgba(255,255,255,.45)}
 .stack li.total{font-weight:700}
@@ -1291,15 +1292,14 @@ body::after{
   <div class="sec-in">
     <p class="sec-tag rv">a oferta</p>
     <h2 class="sec-title rv" style="--rd:.05s">uma tarde.</h2>
-    <p class="sec-sub rv" style="--rd:.12s">pra resolver o que mais um curso de ferramenta não resolve.</p>
+    <p class="sec-sub rv" style="--rd:.12s">pra sair com teu nicho e tua frase de posicionamento prontos.</p>
 
     <div class="offer">
       <div class="rv" style="--rd:.12s">
-        <p class="stack-lead">tudo o que você precisa pra sair do genérico numa tarde:</p>
         <ul class="stack">
           <li>5 aulas curtas</li>
           <li>canvas do nicho</li>
-          <li>2 ias treinadas pro processo</li>
+          <li>2 IAs treinadas pro processo</li>
           <li>plano de posicionamento salvo</li>
           <li>2 ferramentas extras pra aprofundar teu nicho e tuas reuniões</li>
         </ul>
