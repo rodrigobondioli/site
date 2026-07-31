@@ -1051,6 +1051,105 @@ body::after{
   background-image:url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='240' height='240' filter='url(%23n)' opacity='.6'/%3E%3C/svg%3E");
 }
 
+
+/* ============ POR DENTRO — test-drive scroll-driven ============ */
+.dentro-stage{margin-top:clamp(24px,4vh,40px);display:flex;justify-content:center}
+.appwin{
+  width:min(96%,980px);
+  background:#17171a;
+  border:1.5px solid rgba(255,255,255,.14);
+  border-radius:18px;
+  overflow:hidden;
+  box-shadow:0 30px 80px rgba(0,0,0,.5), 0 0 0 1px rgba(255,255,255,.03);
+}
+.appbar{
+  display:flex;align-items:center;gap:10px;
+  padding:12px 16px;
+  background:#101012;border-bottom:1.5px solid rgba(255,255,255,.1);
+}
+.appbar i{width:11px;height:11px;border-radius:50%;background:rgba(255,255,255,.16)}
+.appbar i:nth-child(1){background:#ff5f57}.appbar i:nth-child(2){background:#febc2e}.appbar i:nth-child(3){background:#28c840}
+.appbar .url{
+  flex:1;max-width:360px;margin:0 auto;
+  font-family:var(--mono);font-size:11px;color:rgba(255,255,255,.55);
+  background:rgba(255,255,255,.06);border-radius:999px;
+  padding:6px 14px;text-align:center;white-space:nowrap;overflow:hidden;
+}
+.appbody{position:relative;min-height:clamp(360px,44vw,460px)}
+.fase{position:absolute;inset:0;padding:clamp(18px,2.6vw,30px);display:grid;grid-template-columns:240px minmax(0,1fr);gap:clamp(16px,2.4vw,28px)}
+/* fase A — canvas */
+.blocos{list-style:none;display:flex;flex-direction:column;gap:8px}
+.blocos li{
+  display:flex;align-items:center;gap:10px;
+  font-family:var(--mono);font-size:12px;letter-spacing:.04em;color:rgba(255,255,255,.6);
+  border:1.5px solid rgba(255,255,255,.12);border-radius:12px;
+  padding:10px 13px;
+}
+.blocos li b{
+  width:18px;height:18px;border-radius:50%;flex:0 0 auto;
+  border:1.5px solid rgba(255,255,255,.3);
+  display:flex;align-items:center;justify-content:center;
+  font-size:11px;color:var(--ink);font-weight:700;
+}
+.blocos li.done{color:#fff;border-color:rgba(231,249,154,.5)}
+.blocos li.done b{background:var(--lime);border-color:var(--lime)}
+.blocos li.done b::after{content:"✓"}
+.wizard{
+  background:#101012;border:1.5px solid rgba(255,255,255,.12);
+  border-radius:14px;padding:clamp(16px,2.2vw,26px);
+  display:flex;flex-direction:column;gap:14px;
+}
+.wizard .wtag{font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--lime)}
+.wizard h4{font-size:clamp(16px,1.6vw,21px);font-weight:700;color:#fff;line-height:1.35}
+.wfield{
+  background:rgba(255,255,255,.05);
+  border:1.5px solid rgba(255,255,255,.14);
+  border-radius:10px;padding:12px 14px;
+  font-family:var(--mono);font-size:12.5px;line-height:1.6;color:rgba(255,255,255,.85);
+  min-height:44px;
+}
+.wfield .lbl{display:block;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:4px}
+.tcaret{display:inline-block;width:7px;height:13px;background:var(--lime);vertical-align:-2px;animation:blink 1s steps(1) infinite}
+/* fase B — estrategista */
+.faseB{grid-template-columns:minmax(0,1fr)}
+.bootline{font-family:var(--mono);font-size:12.5px;color:var(--lime)}
+.saida{
+  background:#101012;border:1.5px solid rgba(231,249,154,.35);
+  border-radius:14px;padding:clamp(18px,2.4vw,28px);
+  display:flex;flex-direction:column;gap:14px;
+}
+.saida .stag{font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--lime)}
+.saida .frase{
+  font-family:'Londrina Solid',sans-serif;font-weight:900;text-transform:none;
+  font-size:clamp(20px,2.4vw,32px);line-height:1.12;color:#fff;
+}
+.saida .frase em{font-style:normal;color:var(--lime)}
+.saida .puv{font-size:clamp(13.5px,1.3vw,16px);color:rgba(255,255,255,.75);font-weight:500}
+.plano{list-style:none;display:flex;flex-direction:column;gap:8px}
+.plano li{
+  display:flex;gap:10px;align-items:baseline;
+  font-family:var(--mono);font-size:12px;line-height:1.55;color:rgba(255,255,255,.8);
+  border-top:1.5px solid rgba(255,255,255,.1);padding-top:8px;
+}
+.plano li b{color:var(--pink);font-weight:700;white-space:nowrap}
+.salvo{
+  align-self:flex-start;
+  font-family:var(--mono);font-size:11px;letter-spacing:.06em;
+  background:var(--lime);color:var(--ink);font-weight:700;
+  padding:6px 13px;border-radius:999px;
+}
+.dentro-note{
+  margin-top:clamp(16px,2.6vh,26px);text-align:center;
+  font-family:var(--mono);font-size:11.5px;letter-spacing:.03em;color:rgba(255,255,255,.5);
+}
+.dentro-note a{color:var(--lime)}
+@media(max-width:860px){
+  .fase{grid-template-columns:1fr}
+  .blocos{flex-direction:row;flex-wrap:wrap}
+  .blocos li{padding:7px 10px;font-size:10.5px}
+  .appbody{min-height:560px}
+}
+
 /* fallback sem GSAP (arquivo não carregou): reveal antigo continua valendo */
 @media(prefers-reduced-motion:reduce){
   .g-on[data-intro] .nav,.g-on[data-intro] .pitch,.g-on[data-intro] .dock,
@@ -1078,6 +1177,7 @@ body::after{
       <li><a href="#problema">o problema</a></li>
       <li><a href="#virada">a virada</a></li>
       <li><a href="#como">como funciona</a></li>
+      <li><a href="#dentro">por dentro</a></li>
       <li><a href="#oferta">oferta</a></li>
       <li><a href="#faq">faq</a></li>
     </ul>
@@ -1300,6 +1400,60 @@ body::after{
 <div class="wave" style="background:var(--lime)" aria-hidden="true">
   <svg viewBox="0 0 1440 96" preserveAspectRatio="none"><path fill="#101010" d="M0,56 C240,92 480,14 720,42 C960,70 1200,92 1440,44 L1440,96 L0,96 Z"/></svg>
 </div>
+
+
+<!-- ================= O PRODUTO POR DENTRO (test-drive) ================= -->
+<section class="sec sec--dark" id="dentro">
+  <div class="sec-in">
+    <p class="sec-tag rv">o produto por dentro</p>
+    <h2 class="sec-title rv" style="--rd:.05s">isso aqui não é<br>promessa. é tela.</h2>
+    <p class="sec-sub rv" style="--rd:.12s">rola e vê o fluxo real da plataforma: <span class="mark">o canvas capta, a ia responde.</span> exemplo com um nicho de verdade — clínicas odontológicas.</p>
+
+    <div class="dentro-stage rv" style="--rd:.18s">
+      <div class="appwin" id="appwin">
+        <div class="appbar"><i></i><i></i><i></i><span class="url">app.rodrigobondioli.com/curso · meu canvas</span></div>
+        <div class="appbody">
+
+          <div class="fase faseA" id="faseA">
+            <ul class="blocos" id="blocosList">
+              <li><b></b> 01 · você</li>
+              <li><b></b> 02 · território</li>
+              <li><b></b> 03 · cliente</li>
+              <li><b></b> 04 · monopólio</li>
+              <li><b></b> 05 · posicionamento</li>
+            </ul>
+            <div class="wizard">
+              <span class="wtag">bloco 03 · cliente — pergunta 4 de 5</span>
+              <h4>o que tira o sono desse cliente?</h4>
+              <div class="wfield"><span class="lbl">tua resposta, crua</span><span id="type1"></span><span class="tcaret" id="c1"></span></div>
+              <div class="wfield"><span class="lbl">quem você NÃO atende</span><span id="type2"></span><span class="tcaret" id="c2" style="visibility:hidden"></span></div>
+            </div>
+          </div>
+
+          <div class="fase faseB" id="faseB" style="visibility:hidden">
+            <div style="display:flex;flex-direction:column;gap:14px;min-width:0">
+              <p class="bootline"><span id="boot"></span><span class="tcaret"></span></p>
+              <div class="saida" id="saida">
+                <span class="stag">🚀 o estrategista · teu posicionamento</span>
+                <p class="frase" id="fraseOut">eu ajudo <em>clínicas odontológicas</em> a encher a agenda de particulares — com design que transforma primeira consulta em confiança.</p>
+                <p class="puv" id="puvOut">puv: design pra clínica que quer parecer tão boa quanto é.</p>
+                <ul class="plano" id="planoOut">
+                  <li><b>hoje</b> frase na bio · v1 do posicionamento salva</li>
+                  <li><b>7 dias</b> portfólio reaberto pro nicho · 1 case adaptado · 1 conteúdo sobre a dor</li>
+                  <li><b>30 dias</b> mensagem testada com 3 clínicas reais · manter, refinar ou trocar</li>
+                </ul>
+                <span class="salvo" id="salvoChip">salvo em “meu plano” ✓</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <p class="dentro-note rv" style="--rd:.24s">fluxo real da plataforma — sem mockup, sem cena montada. <a href="https://payfast.greenn.com.br/fqrmpkf/offer/dPcwW6?ch_id=141265">quero rodar com o meu nicho →</a></p>
+  </div>
+</section>
 
 <!-- ================= 07 · A OFERTA ================= -->
 <section class="sec sec--dark" id="oferta" style="padding-top:clamp(24px,4vh,48px)">
@@ -2162,6 +2316,79 @@ document.addEventListener('click', function(e){
   window.addEventListener('load', function(){ ST.refresh(); });
 })();
 
+</script>
+
+<script>
+/* ============ POR DENTRO — cena scroll-driven ============ */
+(function(){
+  var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var sec = document.getElementById('dentro');
+  if (!sec || !window.gsap || !window.ScrollTrigger) return;
+  var g = window.gsap;
+  g.registerPlugin(window.ScrollTrigger);
+  var desktop = window.matchMedia('(min-width: 961px)').matches;
+
+  var T1 = 'agenda vazia no meio do mês. paciente só volta quando dói.';
+  var T2 = 'quem quer “um logo rapidinho” por R$50.';
+  var BOOT = '> lendo teu canvas… 5 blocos ok. montando posicionamento_';
+  var t1 = document.getElementById('type1'), t2 = document.getElementById('type2');
+  var c1 = document.getElementById('c1'), c2 = document.getElementById('c2');
+  var boot = document.getElementById('boot');
+  var blocos = document.querySelectorAll('#blocosList li');
+  var faseA = document.getElementById('faseA'), faseB = document.getElementById('faseB');
+  var saidaEls = ['#fraseOut','#puvOut','#planoOut li','#salvoChip'].map(function(s){return g.utils.toArray(s);});
+
+  if (reduced) {
+    /* estado final direto, tudo legível */
+    t1.textContent = T1; t2.textContent = T2; boot.textContent = BOOT;
+    blocos.forEach(function(li){ li.classList.add('done'); });
+    faseA.style.visibility = 'hidden'; faseB.style.visibility = 'visible';
+    return;
+  }
+
+  function typer(el, txt){
+    var st = {n:0};
+    return g.to(st, {n: txt.length, ease:'none', duration: txt.length * .022,
+      onUpdate: function(){ el.textContent = txt.slice(0, Math.round(st.n)); }});
+  }
+
+  var tl = g.timeline({defaults:{ease:'none'}});
+  /* fase A: blocos 1 e 2 já concluem, digita as respostas, conclui 3-4-5 */
+  tl.add(function(){}, 0)
+    .call(function(){ blocos[0].classList.add('done'); }, null, .3)
+    .call(function(){ blocos[1].classList.add('done'); }, null, .9)
+    .add(typer(t1, T1), 1.2)
+    .call(function(){ c1.style.visibility='hidden'; c2.style.visibility='visible'; }, null, '>')
+    .add(typer(t2, T2), '>')
+    .call(function(){ blocos[2].classList.add('done'); }, null, '>')
+    .call(function(){ blocos[3].classList.add('done'); }, null, '>+.4')
+    .call(function(){ blocos[4].classList.add('done'); }, null, '>+.4')
+    /* troca de fase */
+    .to(faseA, {autoAlpha:0, xPercent:-4, duration:.5, ease:'power2.in'}, '>+.3')
+    .set(faseB, {visibility:'visible', opacity:0})
+    .to(faseB, {opacity:1, duration:.4}, '>')
+    /* fase B: boot + saída */
+    .add(typer(boot, BOOT), '>')
+    .from(saidaEls[0], {autoAlpha:0, y:22, duration:.7, ease:'power3.out'}, '>+.2')
+    .from(saidaEls[1], {autoAlpha:0, y:14, duration:.5, ease:'power3.out'}, '>-.2')
+    .from(saidaEls[2], {autoAlpha:0, x:-16, stagger:.35, duration:.5, ease:'power3.out'}, '>')
+    .from(saidaEls[3], {scale:0, rotation:-8, duration:.5, ease:'back.out(2.5)'}, '>');
+
+  if (desktop) {
+    /* scroll conduz a cena — janela pinada */
+    ScrollTrigger.create({
+      trigger: sec, start:'top top', end:'+=220%',
+      pin: true, scrub: .6, anticipatePin: 1,
+      animation: tl
+    });
+  } else {
+    /* mobile: roda sozinha ao entrar */
+    tl.duration(9).play(0);
+    tl.pause(0);
+    ScrollTrigger.create({trigger: sec, start:'top 65%', once:true,
+      onEnter: function(){ tl.play(0); }});
+  }
+})();
 </script>
 </body>
 </html>
