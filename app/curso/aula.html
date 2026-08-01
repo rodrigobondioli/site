@@ -195,6 +195,9 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .panel .li.done .tt{color:rgba(255,255,255,.5)}
 .lthumb{position:relative;width:100px;flex:none;aspect-ratio:16/9;border-radius:7px;overflow:hidden;background:#000 center/cover no-repeat;display:grid;place-items:center}
 .lthumb .lprev{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;z-index:1}
+.lthumb .lthumb-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;z-index:0}
+.lthumb.thumberr{background:var(--soft)}
+.lthumb.thumberr .lp{color:var(--faint)}
 .lthumb .lp{display:flex;color:rgba(255,255,255,.5)}
 .lthumb .lp svg{width:20px;height:20px;fill:currentColor}
 .lthumb.hasvid{cursor:pointer}
@@ -811,7 +814,8 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
       var thumbUrl = hasVid ? ('https://'+pz+'/'+encodeURIComponent(l.video_id)+'/thumbnail.jpg?v=1') : '';
       var prevUrl  = hasVid ? ('https://'+pz+'/'+encodeURIComponent(l.video_id)+'/preview.webp') : '';
       var thumb = '<span class="lthumb'+(hasVid?' hasvid':'')+'"'
-        + (hasVid?' data-prev="'+esc(prevUrl)+'" style="background-image:url('+esc(thumbUrl)+')"':'')+'>'
+        + (hasVid?' data-prev="'+esc(prevUrl)+'"':'')+'>'
+        + (hasVid?'<img class="lthumb-img" alt="" loading="lazy" src="'+esc(thumbUrl)+'">':'')
         + '<span class="lp">'+ICON_PLAY+'</span>'
         + (l.duration?'<span class="ldur">'+esc(l.duration)+'</span>':'')
         + (hasVid?'<span class="lprog"><i style="width:'+(WATCH[l.id]||0)+'%"></i></span>':'')
@@ -830,6 +834,12 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
         th.appendChild(img);
       });
       th.addEventListener('mouseleave', function(){ if(img){ try{th.removeChild(img);}catch(e){} img=null; } });
+    });
+    Array.prototype.forEach.call(document.querySelectorAll('#panelList .lthumb.hasvid .lthumb-img'), function(im){
+      var tried=false;
+      function fail(){ var par=im.parentNode; if(!tried && par && par.dataset.prev){ tried=true; im.src=par.dataset.prev; return; } im.style.display='none'; if(par) par.classList.add('thumberr'); }
+      im.addEventListener('error', fail);
+      if(im.complete && im.naturalWidth===0) fail();
     });
   }
 
