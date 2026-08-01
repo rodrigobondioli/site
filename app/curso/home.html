@@ -129,6 +129,9 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .lesson .lthumb.novid .lp{color:var(--faint)}
 .lesson .lthumb .lp{transition:opacity .15s}
 .lesson .lthumb .lprev{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;z-index:1}
+.lesson .lthumb .lthumb-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;z-index:0}
+.lesson .lthumb.thumberr{background:var(--soft)}
+.lesson .lthumb.thumberr .lp{color:var(--faint)}
 .lesson .lthumb.hasvid{cursor:pointer}
 .lesson .lthumb.hasvid:hover .lp{opacity:0}
 .lesson .lthumb .lprog{position:absolute;left:0;right:0;bottom:0;height:3px;background:rgba(255,255,255,.22);z-index:2}
@@ -309,7 +312,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
       var pz='vz-6010a13b-258.b-cdn.net';
       var wpct = (l.video_id && WATCH[l.id]) ? Math.min(100, WATCH[l.id]) : 0;
       var thumb = l.video_id
-        ? '<span class="lthumb hasvid" data-prev="https://'+pz+'/'+encodeURIComponent(l.video_id)+'/preview.webp" style="background-image:url(https://'+pz+'/'+encodeURIComponent(l.video_id)+'/thumbnail.jpg?v=1)"><span class="lp">'+ICON_PLAY+'</span>'+(wpct?'<span class="lprog"><i style="width:'+wpct+'%"></i></span>':'')+'</span>'
+        ? '<span class="lthumb hasvid" data-prev="https://'+pz+'/'+encodeURIComponent(l.video_id)+'/preview.webp"><img class="lthumb-img" alt="" loading="lazy" src="https://'+pz+'/'+encodeURIComponent(l.video_id)+'/thumbnail.jpg?v=1"><span class="lp">'+ICON_PLAY+'</span>'+(wpct?'<span class="lprog"><i style="width:'+wpct+'%"></i></span>':'')+'</span>'
         : '<span class="lthumb novid"><span class="lp">'+ICON_PLAY+'</span></span>';
       return '<a class="'+cls+'" href="aula.html?a='+l.id+'">'+st+thumb+'<span class="lcol"><span class="tt">'+esc(l.title)+'</span>'+info+'</span>'+tag+dur+'</a>';
     }).join('');
@@ -323,6 +326,13 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
         th.appendChild(img);
       });
       th.addEventListener('mouseleave', function(){ if(img){ try{th.removeChild(img);}catch(e){} img=null; } });
+    });
+    // thumb resiliente: thumbnail.jpg caiu -> preview.webp -> placeholder de marca (nunca buraco preto)
+    Array.prototype.forEach.call(document.querySelectorAll('#lessonList .lthumb.hasvid .lthumb-img'), function(im){
+      var tried=false;
+      function fail(){ var par=im.parentNode; if(!tried && par && par.dataset.prev){ tried=true; im.src=par.dataset.prev; return; } im.style.display='none'; if(par) par.classList.add('thumberr'); }
+      im.addEventListener('error', fail);
+      if(im.complete && im.naturalWidth===0) fail();
     });
   }
 
