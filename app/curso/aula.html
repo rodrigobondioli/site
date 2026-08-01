@@ -836,8 +836,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
       th.addEventListener('mouseleave', function(){ if(img){ try{th.removeChild(img);}catch(e){} img=null; } });
     });
     Array.prototype.forEach.call(document.querySelectorAll('#panelList .lthumb.hasvid .lthumb-img'), function(im){
-      var tried=false;
-      function fail(){ var par=im.parentNode; if(!tried && par && par.dataset.prev){ tried=true; im.src=par.dataset.prev; return; } im.style.display='none'; if(par) par.classList.add('thumberr'); }
+      function fail(){ im.style.display='none'; if(im.parentNode) im.parentNode.classList.add('thumberr'); }
       im.addEventListener('error', fail);
       if(im.complete && im.naturalWidth===0) fail();
     });
