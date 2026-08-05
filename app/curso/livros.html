@@ -82,18 +82,20 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .livro:hover{transform:translateY(-2px);box-shadow:0 12px 30px -18px rgba(0,0,0,.35)}
 
 .capa{
-  width:132px;flex:none;align-self:stretch;position:relative;
-  background:var(--soft);border-right:1px solid var(--line);overflow:hidden;
+  width:104px;flex:none;align-self:flex-start;position:relative;
+  aspect-ratio:2/3;margin:18px 0 18px 18px;
+  background:var(--soft);border:1px solid var(--line);border-radius:8px;overflow:hidden;
+  box-shadow:0 6px 16px -10px rgba(0,0,0,.45);
 }
 .capa img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
 /* fallback tipográfico se a capa não carregar */
 .capa .fb{
   position:absolute;inset:0;display:none;flex-direction:column;justify-content:flex-end;
-  padding:16px 14px;background:var(--ink);color:#fff;
+  padding:12px 10px;background:var(--ink);color:#fff;
 }
 .capa.err img{display:none}
 .capa.err .fb{display:flex}
-.capa .fb b{font-size:15px;font-weight:800;line-height:1.1;letter-spacing:-.02em}
+.capa .fb b{font-size:13px;font-weight:800;line-height:1.1;letter-spacing:-.02em}
 .capa .fb span{font-size:11.5px;color:rgba(255,255,255,.6);margin-top:5px}
 
 .lbody{padding:18px 20px 18px;display:flex;flex-direction:column;flex:1;min-width:0}
@@ -103,7 +105,6 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .livro h3{font-size:16.5px;font-weight:700;letter-spacing:-.01em;line-height:1.2;text-wrap:balance}
 .autor{font-size:13px;color:var(--muted);margin-top:4px}
 .ajuda{font-size:13.5px;color:var(--muted);margin-top:11px;text-wrap:pretty}
-.cita{font-size:13px;color:var(--ink);margin-top:10px;padding-left:11px;border-left:2px solid var(--lime);line-height:1.4}
 .lfoot{margin-top:auto;padding-top:16px}
 .amz{
   display:inline-flex;align-items:center;gap:7px;
@@ -120,7 +121,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 @media(max-width:600px){
   .inner{padding:24px 16px 64px}
   .pagehead .ph-in{padding:16px 16px;font-size:15px}
-  .capa{width:96px}
+  .capa{width:82px;margin:14px 0 14px 14px}
   .lbody{padding:15px 16px}
 }
 .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
@@ -179,15 +180,14 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
           <div class="lbody">
             <div class="lmeta">
               <span class="pill aula">Aula 3</span>
-              <span class="pill">1981</span>
+              <span class="pill">Ano: 1981</span>
               <span class="pill">Português</span>
             </div>
             <h3>Posicionamento: A Batalha por Sua Mente</h3>
             <p class="autor">Al Ries e Jack Trout</p>
             <p class="ajuda">O livro que inventou a ideia de posicionamento. Mostra que a briga nunca foi por ser melhor — é por ocupar um lugar na cabeça de alguém.</p>
-            <p class="cita">É de onde sai o "rei de uma ilha em vez de camponês num continente".</p>
             <div class="lfoot">
-              <a class="amz" href="https://www.amazon.com.br/dp/8576800667?tag=SEUTAG-20" target="_blank" rel="noopener nofollow sponsored">Ver na Amazon<svg viewBox="0 0 24 24"><path d="M7 17 17 7"/><path d="M9 7h8v8"/></svg></a>
+              <a class="amz" href="https://www.amazon.com.br/dp/8576800667" target="_blank" rel="noopener">Ver na Amazon<svg viewBox="0 0 24 24"><path d="M7 17 17 7"/><path d="M9 7h8v8"/></svg></a>
             </div>
           </div>
         </article>
@@ -201,15 +201,14 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
           <div class="lbody">
             <div class="lmeta">
               <span class="pill aula">Aula 3</span>
-              <span class="pill">2009</span>
+              <span class="pill">Ano: 2009</span>
               <span class="pill">Português</span>
             </div>
             <h3>Design Thinking</h3>
             <p class="autor">Tim Brown</p>
             <p class="ajuda">O cara da IDEO que cunhou o profissional T-Shaped. Ajuda a entender por que profundidade em uma coisa só vale mais que dez habilidades rasas.</p>
-            <p class="cita">A régua de contratação das maiores empresas de tecnologia saiu daqui.</p>
             <div class="lfoot">
-              <a class="amz" href="https://www.amazon.com.br/dp/8550814369?tag=SEUTAG-20" target="_blank" rel="noopener nofollow sponsored">Ver na Amazon<svg viewBox="0 0 24 24"><path d="M7 17 17 7"/><path d="M9 7h8v8"/></svg></a>
+              <a class="amz" href="https://www.amazon.com.br/dp/8550814369" target="_blank" rel="noopener">Ver na Amazon<svg viewBox="0 0 24 24"><path d="M7 17 17 7"/><path d="M9 7h8v8"/></svg></a>
             </div>
           </div>
         </article>
@@ -223,15 +222,14 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
           <div class="lbody">
             <div class="lmeta">
               <span class="pill aula">Aulas 3 e 4</span>
-              <span class="pill">2010</span>
+              <span class="pill">Ano: 2010</span>
               <span class="pill">Só em inglês</span>
             </div>
             <h3>The Win Without Pitching Manifesto</h3>
             <p class="autor">Blair Enns</p>
             <p class="ajuda">Explica por que o generalista perde poder na relação com o cliente — e por que especializar é uma decisão difícil que quase todo criativo foge de tomar.</p>
-            <p class="cita">"Um expert é alguém que sabe cada vez mais sobre cada vez menos."</p>
             <div class="lfoot">
-              <a class="amz" href="https://www.amazon.com.br/dp/1605440043?tag=SEUTAG-20" target="_blank" rel="noopener nofollow sponsored">Ver na Amazon<svg viewBox="0 0 24 24"><path d="M7 17 17 7"/><path d="M9 7h8v8"/></svg></a>
+              <a class="amz" href="https://www.amazon.com.br/dp/1605440043" target="_blank" rel="noopener">Ver na Amazon<svg viewBox="0 0 24 24"><path d="M7 17 17 7"/><path d="M9 7h8v8"/></svg></a>
             </div>
           </div>
         </article>
@@ -245,15 +243,14 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
           <div class="lbody">
             <div class="lmeta">
               <span class="pill aula">Aula 6</span>
-              <span class="pill">2017</span>
+              <span class="pill">Ano: 2017</span>
               <span class="pill">Só em inglês</span>
             </div>
             <h3>The Business of Expertise</h3>
             <p class="autor">David C. Baker</p>
             <p class="ajuda">A base intelectual de tudo isso aqui: o especialista é estreito e profundo, e é por isso que ele senta na mesa como par do cliente, não como executor que recebe ordem.</p>
-            <p class="cita">Se você só for ler um da lista, lê esse.</p>
             <div class="lfoot">
-              <a class="amz" href="https://www.amazon.com.br/dp/1605440604?tag=SEUTAG-20" target="_blank" rel="noopener nofollow sponsored">Ver na Amazon<svg viewBox="0 0 24 24"><path d="M7 17 17 7"/><path d="M9 7h8v8"/></svg></a>
+              <a class="amz" href="https://www.amazon.com.br/dp/1605440604" target="_blank" rel="noopener">Ver na Amazon<svg viewBox="0 0 24 24"><path d="M7 17 17 7"/><path d="M9 7h8v8"/></svg></a>
             </div>
           </div>
         </article>
@@ -267,22 +264,21 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
           <div class="lbody">
             <div class="lmeta">
               <span class="pill aula">Aula 6</span>
-              <span class="pill">2020</span>
+              <span class="pill">Ano: 2020</span>
               <span class="pill">Português</span>
             </div>
             <h3>O Almanaque de Naval Ravikant</h3>
             <p class="autor">Eric Jorgenson</p>
             <p class="ajuda">De onde vem a virada de chave: parar de correr pra ser o melhor e passar a construir uma posição onde não existe com quem te comparar.</p>
-            <p class="cita">"Você quer ser a única pessoa, não a melhor."</p>
             <div class="lfoot">
-              <a class="amz" href="https://www.amazon.com.br/dp/6555605502?tag=SEUTAG-20" target="_blank" rel="noopener nofollow sponsored">Ver na Amazon<svg viewBox="0 0 24 24"><path d="M7 17 17 7"/><path d="M9 7h8v8"/></svg></a>
+              <a class="amz" href="https://www.amazon.com.br/dp/6555605502" target="_blank" rel="noopener">Ver na Amazon<svg viewBox="0 0 24 24"><path d="M7 17 17 7"/><path d="M9 7h8v8"/></svg></a>
             </div>
           </div>
         </article>
 
       </div>
 
-      <p class="nota">Os links acima são de afiliado: você paga o mesmo preço e uma parte volta pra cá. Nenhum desses livros é obrigatório pra terminar o curso.</p>
+      <p class="nota">Nenhum desses livros é obrigatório pra terminar o curso — são pra depois, se você quiser cavar fundo.</p>
     </div>
   </main>
 </div>
