@@ -31,6 +31,51 @@ async function alertAdmin(subject, lines) {
   } catch (e) {}
 }
 
+// Gera um link magico (1 clique) pro comprador entrar direto. Null se nao rolar.
+async function makeMagicLink(email) {
+  const url = process.env.SUPABASE_URL, svc = process.env.SUPABASE_SERVICE_ROLE;
+  if (!url || !svc) return null;
+  try {
+    const r = await fetch(`${url}/auth/v1/admin/generate_link`, {
+      method: 'POST',
+      headers: { apikey: svc, Authorization: `Bearer ${svc}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ type: 'magiclink', email, redirect_to: 'https://app.rodrigobondioli.com' }),
+    });
+    if (!r.ok) return null;
+    const d = await r.json().catch(() => ({}));
+    return d.action_link || (d.properties && d.properties.action_link) || null;
+  } catch (e) { return null; }
+}
+
+// E-mail de boas-vindas pro comprador: botao de 1 clique + fallback do codigo. Silencioso se RESEND faltar.
+async function sendBuyerWelcome(email, name, magicLink) {
+  const key = process.env.RESEND_API_KEY;
+  if (!key) return;
+  const first = String(name || '').trim().split(' ')[0] || '';
+  const hi = first ? ('Fala, ' + first + '!') : 'Fala!';
+  const login = 'https://app.rodrigobondioli.com';
+  const btnUrl = magicLink || login;
+  try {
+    await fetch('https://api.resend.com/emails', {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${key}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        from: 'Anti Designer Pato <acesso@send.rodrigobondioli.com>',
+        to: [email],
+        subject: 'Teu acesso tá liberado — De Genérico a Especialista',
+        html: '<div style="font-family:Arial,Helvetica,sans-serif;font-size:15px;line-height:1.6;color:#111;max-width:520px">'
+          + '<p>' + hi + '</p>'
+          + '<p>Pagamento confirmado. Teu acesso ao <b>De Genérico a Especialista</b> tá liberado.</p>'
+          + '<p style="margin:22px 0"><a href="' + btnUrl + '" style="display:inline-block;background:#101010;color:#e7f99a;text-decoration:none;font-weight:700;padding:14px 26px;border-radius:999px">Entrar no curso</a></p>'
+          + '<p style="color:#555;font-size:13.5px">Se o botão não abrir: vai em <a href="' + login + '">app.rodrigobondioli.com</a>, coloca <b>este mesmo e-mail</b> (' + email + ') e a gente te manda um <b>código</b> na hora — cola ele e tá dentro.</p>'
+          + '<p style="color:#555;font-size:13.5px">Não chegou nada? Confere spam/promoções. Qualquer treta, responde este e-mail ou chama <b>suporte@rodrigobondioli.com</b>.</p>'
+          + '<p style="color:#8a8a8a">quak.</p>'
+          + '</div>',
+      }),
+    });
+  } catch (e) {}
+}
+
 export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
@@ -80,6 +125,9 @@ export default async function handler(req, res) {
         'Detalhe: ' + (await r.text()),
         'Ação: libera na mão em /admin → Alunos → Liberar acesso.',
       ]);
+    } else {
+      const link = await makeMagicLink(email);
+      await sendBuyerWelcome(email, body.client && body.client.name, link);
     }
     return res.status(r.ok ? 200 : 502).json({ ok: r.ok, action: 'granted', course: courseId, email });
   }
