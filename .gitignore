@@ -1,7 +1,15 @@
 node_modules/
+.vercel/
 .DS_Store
 *.log
+
+# descarte local
 _to_delete/
+_to_delete_git_locks/
 
 # docs internos de marketing (nao publicar)
 Marketing/
+
+# experimentos de landing que nao fazem parte do deploy oficial
+New-LP/
+.vercel
