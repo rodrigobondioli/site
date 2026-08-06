@@ -594,8 +594,8 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--ink);outline-offset
 .stack li.total::before{display:none}
 
 .selo{
-  position:absolute;top:16px;right:16px;z-index:5;
   width:clamp(84px,7.2vw,108px);height:clamp(84px,7.2vw,108px);
+  margin:0 auto clamp(14px,1.6vw,20px);
   pointer-events:none;
 }
 .selo svg{width:100%;height:100%;display:block}
@@ -616,20 +616,20 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--ink);outline-offset
   border-top:1.5px dashed rgba(255,255,255,.2);
 }
 .mini-guar--dark strong{color:rgba(255,255,255,.85)}
-@media(max-width:960px){ .selo{top:12px;right:12px} }
+@media(max-width:600px){ .selo{width:132px;height:132px;margin-bottom:10px} }
 .pricebox{
   background:var(--lime);color:var(--ink);
   border-radius:26px;
   padding:clamp(24px,2.8vw,36px);
   box-shadow:8px 10px 0 rgba(16,16,16,.14);
-  position:relative;
+  position:relative;text-align:center;
 }
 .pricebox .lote{
   font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;
   display:inline-block;background:var(--ink);color:var(--lime);
   padding:7px 13px;border-radius:999px;margin-bottom:16px;
 }
-.pricebox .val-row{display:flex;align-items:flex-start;gap:12px}
+.pricebox .val-row{display:flex;align-items:center;justify-content:center;gap:14px}
 .pricebox .val{
   font-family:'Londrina Solid',sans-serif;font-weight:900;
   font-size:clamp(64px,7vw,110px);line-height:.9;letter-spacing:-.005em;
@@ -637,9 +637,7 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--ink);outline-offset
 .pricebox .val small{font-size:.38em;vertical-align:.9em;letter-spacing:0}
 .pricebox .x12{
   font-family:var(--mono);font-weight:700;font-size:13px;letter-spacing:.02em;
-  background:var(--ink);color:var(--lime);
-  padding:6px 12px;border-radius:999px;
-  margin-top:clamp(30px,3.4vw,46px);white-space:nowrap;
+  color:var(--ink);white-space:nowrap;line-height:1.35;text-align:left;
 }
 .pricebox .parc{font-size:15.5px;font-weight:700;margin-top:6px}
 .pricebox .oficial{font-family:var(--mono);font-size:12px;margin-top:10px;color:rgba(16,16,16,.6)}
@@ -822,8 +820,7 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--ink);outline-offset
   .nav .btn-pill{font-size:13px;padding:13px 20px}
   .footer-top{flex-direction:column;text-align:center}
   .footer-top small{text-align:center;max-width:100%;font-size:9.5px;line-height:1.55}
-  .pricebox .val-row{flex-direction:column;align-items:flex-start;gap:0}
-  .pricebox .x12{margin-top:12px}
+  .pricebox .x12-br{display:block}
 }
 @media(max-width:900px){
   .nav-cta{display:none}
@@ -1463,10 +1460,9 @@ body::after{
           <text class="selo-check" x="60" y="72" text-anchor="middle" fill="#101010">✓</text>
         </svg></div>
         <span class="lote">lote fundador · 50 acessos</span>
-        <div class="val-row"><div class="val"><small>R$</small>97</div><span class="x12">ou 12x de R$ 9,97 no cartão</span></div>
+        <div class="val-row"><div class="val"><small>R$</small>97</div><span class="x12">ou 12x de R$ 9,97<span class="x12-br"> </span>no cartão</span></div>
         <p class="oficial">valor oficial: <s>R$197</s> —<span class="oficial-br"> <strong>sobe quando o lote fechar</strong></span></p>
         <a class="cta-big" href="https://payfast.greenn.com.br/fqrmpkf/offer/dPcwW6?ch_id=141265" target="_blank" rel="noopener">quero meu posicionamento</a>
-        <p class="pays">cartão de crédito em até 12x</p>
         <p class="pays">acesso na hora, direto no e-mail ·<span class="pays-br"> <strong>aplica numa tarde</strong></span></p>
       </div>
       <p class="mini-guar mini-guar--dark rv" style="--rd:.24s"><strong>garantia de 7 dias</strong>: você tem 7 dias pra entrar, assistir e testar o processo. não fez sentido pra você? manda um e-mail pra <strong>suporte@rodrigobondioli.com</strong> e recebe o reembolso — sem justificativa e sem letra miúda.</p>
