@@ -594,8 +594,8 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--ink);outline-offset
 .stack li.total::before{display:none}
 
 .selo{
+  position:absolute;top:16px;right:16px;z-index:5;
   width:clamp(84px,7.2vw,108px);height:clamp(84px,7.2vw,108px);
-  margin:0 auto clamp(14px,1.6vw,20px);
   pointer-events:none;
 }
 .selo svg{width:100%;height:100%;display:block}
@@ -616,20 +616,20 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--ink);outline-offset
   border-top:1.5px dashed rgba(255,255,255,.2);
 }
 .mini-guar--dark strong{color:rgba(255,255,255,.85)}
-@media(max-width:600px){ .selo{width:132px;height:132px;margin-bottom:10px} }
+@media(max-width:600px){ .selo{position:static;width:132px;height:132px;margin:0 auto 10px} }
 .pricebox{
   background:var(--lime);color:var(--ink);
   border-radius:26px;
   padding:clamp(24px,2.8vw,36px);
   box-shadow:8px 10px 0 rgba(16,16,16,.14);
-  position:relative;text-align:center;
+  position:relative;
 }
 .pricebox .lote{
   font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;
   display:inline-block;background:var(--ink);color:var(--lime);
   padding:7px 13px;border-radius:999px;margin-bottom:16px;
 }
-.pricebox .val-row{display:flex;align-items:center;justify-content:center;gap:14px}
+.pricebox .val-row{display:flex;align-items:flex-start;gap:12px}
 .pricebox .val{
   font-family:'Londrina Solid',sans-serif;font-weight:900;
   font-size:clamp(64px,7vw,110px);line-height:.9;letter-spacing:-.005em;
@@ -637,7 +637,7 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--ink);outline-offset
 .pricebox .val small{font-size:.38em;vertical-align:.9em;letter-spacing:0}
 .pricebox .x12{
   font-family:var(--mono);font-weight:700;font-size:13px;letter-spacing:.02em;
-  color:var(--ink);white-space:nowrap;line-height:1.35;text-align:left;
+  color:var(--ink);margin-top:clamp(30px,3.4vw,46px);white-space:nowrap;line-height:1.35;text-align:left;
 }
 .pricebox .parc{font-size:15.5px;font-weight:700;margin-top:6px}
 .pricebox .oficial{font-family:var(--mono);font-size:12px;margin-top:10px;color:rgba(16,16,16,.6)}
@@ -820,6 +820,9 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--ink);outline-offset
   .nav .btn-pill{font-size:13px;padding:13px 20px}
   .footer-top{flex-direction:column;text-align:center}
   .footer-top small{text-align:center;max-width:100%;font-size:9.5px;line-height:1.55}
+  .pricebox{text-align:center}
+  .pricebox .val-row{justify-content:center;align-items:center;gap:14px}
+  .pricebox .x12{margin-top:0}
   .pricebox .x12-br{display:block}
 }
 @media(max-width:900px){
