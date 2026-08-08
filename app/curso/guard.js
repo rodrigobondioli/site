@@ -15,7 +15,7 @@
   try {
     const { data: acc, error: accErr } = await sb.from("course_access").select("course_id").limit(1);
     if (!accErr && (!acc || acc.length === 0)) {
-      location.replace("https://rodrigobondioli.com/antipato"); // sem acesso -> página de vendas
+      location.replace("https://rodrigobondioli.com/mateopato"); // sem acesso -> página de vendas
       return;
     }
   } catch (e) { /* fail-open: conteúdo já é protegido no servidor */ }

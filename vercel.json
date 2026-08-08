@@ -1,6 +1,33 @@
 {
   "headers": [
     {
+      "source": "/mateopato/assets/icons/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
+      ]
+    },
+    {
+      "source": "/mateopato/assets/img/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
+      ]
+    },
+    {
+      "source": "/mateopato/assets/js/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
+      ]
+    },
+    {
       "source": "/quak/assets/icons/(.*)",
       "headers": [
         {
@@ -87,6 +114,23 @@
           "value": "max-age=31536000"
         }
       ]
+    }
+  ],
+  "redirects": [
+    {
+      "source": "/antipato",
+      "destination": "/mateopato",
+      "permanent": true
+    },
+    {
+      "source": "/antipato/",
+      "destination": "/mateopato",
+      "permanent": true
+    },
+    {
+      "source": "/antipato/index.html",
+      "destination": "/mateopato",
+      "permanent": true
     }
   ]
 }
