@@ -47,6 +47,7 @@
     <div class="navsec">Trabalho</div>
     <a class="navbtn" href="/estrategia/">Projetos</a>
     <a class="navbtn on" href="#">Este projeto</a>
+    <a class="navbtn" id="linkWs" href="/estrategia/workshop.html">Conduzir workshop</a>
     <a class="navbtn" id="linkEx" href="/estrategia/exercicio.html">Instrumentos deste projeto</a>
     <div class="navsec">Consulta</div>
     <a class="navbtn" href="/estrategia/metodo/PLAYBOOK-NAVE.html">Playbook N.A.V.E.</a>
@@ -90,6 +91,7 @@ async function carregar(){
   document.getElementById('kicker').textContent = proj.client ? proj.client.name : 'Projeto';
   document.getElementById('titulo').textContent = proj.project.name;
   document.getElementById('linkEx').href = '/estrategia/exercicio.html?p=' + PROJ;
+  document.getElementById('linkWs').href = '/estrategia/workshop.html?p=' + PROJ;
   const feitas = proj.phases.filter(p => p.status === 'concluido').length;
   document.getElementById('sub').textContent =
     `${feitas} de ${proj.phases.length} fases concluídas · ${proj.tasks.filter(t=>t.status==='concluido').length} de ${proj.tasks.length} tarefas`;
