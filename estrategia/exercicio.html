@@ -125,21 +125,19 @@ const ax = e => ['N','A','V','E'].includes(e.axis) ? e.axis : 'X';
 const PHASE = {F0:'Primeira call',F2:'Pré-diagnóstico',F3:'Imersão',F4:'Descompressão',F5:'Pesquisas',F6:'Diagnóstico',
   F7:'Estratégia',F8:'Posicionamento',F10:'Naming',F11:'Verbal',F12:'Key Word',F13:'Direção de arte',F14:'Sistema e Key Visual',F15:'Guia de marca'};
 let EX = [], cur = null;
-const PROJ = new URLSearchParams(location.search).get('p') || 'rascunho';
-const ONLINE = PROJ !== 'rascunho';        // com ?p=<uuid> grava no banco; sem, é rascunho local
+const PROJ = new URLSearchParams(location.search).get('p') || null;
+// Instrumento só se preenche DENTRO de um projeto. Sem ?p=, isto é catálogo de consulta:
+// dá para ler o instrumento inteiro, não dá para responder. Resposta sem cliente não é trabalho, é lixo.
+const ONLINE = !!PROJ;
 const key = (code) => `nave:${PROJ}:${code}`;
 
 // Store: mesma interface nos dois modos. Sem projeto na URL, tudo fica no navegador.
 const DB = { pe:{}, val:{} };              // code -> project_exercise_id | code -> {campo:valor}
 const Store = {
-  get(code){
-    if (ONLINE) return DB.val[code] || null;
-    const raw = localStorage.getItem(key(code));
-    return raw ? JSON.parse(raw) : null;
-  },
-  has(code){ return !!Store.get(code); },
+  get(code){ return ONLINE ? (DB.val[code] || null) : null; },
+  has(code){ return ONLINE && !!DB.val[code]; },
   async save(code, data){
-    if (!ONLINE) { localStorage.setItem(key(code), JSON.stringify(data)); return; }
+    if (!ONLINE) throw new Error('Abra este instrumento dentro de um projeto para poder preencher.');
     let pe = DB.pe[code];
     if (!pe) {                              // primeiro salvamento cria a linha de seleção
       const r = await NAVE.post('selecao', { project_id: PROJ,
@@ -152,10 +150,10 @@ const Store = {
     DB.val[code] = data;
   },
   async clear(code){
-    if (!ONLINE) { localStorage.removeItem(key(code)); return; }
+    if (!ONLINE || !DB.pe[code]) return;
     const e = EX.find(x=>x.code===code); if(!e) return;
     const vazio = {}; e.fields.forEach(f => vazio[f.key] = null);
-    if (DB.pe[code]) await NAVE.post('resposta', { project_exercise_id: DB.pe[code], values: vazio, status: 'nao_iniciado' });
+    await NAVE.post('resposta', { project_exercise_id: DB.pe[code], values: vazio, status: 'nao_iniciado' });
     delete DB.val[code];
   }
 };
@@ -172,15 +170,15 @@ const Store = {
       proj.selection.forEach(s => { if (porPe[s.id]) DB.val[s.exercise_id] = porPe[s.id]; });
       marcarProjeto(proj);
     } else {
-      EX = await fetch('data/nave-exercicios.json').then(r=>r.json());
+      await NAVE.guard();                    // catálogo também exige login
+      EX = montarCatalogo(await NAVE.catalogo());
+      marcarCatalogo();
     }
     renderList();
     open(new URLSearchParams(location.search).get('ex') || EX[0].code);
   } catch (err) {
     document.getElementById('main').innerHTML =
-      `<div class="empty">${err.message||'Não consegui carregar.'}<br>` +
-      `<span style="font-size:13px">Sem <code>?p=&lt;projeto&gt;</code> o formulário roda em rascunho local. ` +
-      `Servido por HTTP — abrir o arquivo direto no disco bloqueia o fetch.</span></div>`;
+      `<div class="empty">${err.message||'Não consegui carregar.'}</div>`;
   }
 })();
 
@@ -196,6 +194,12 @@ function montarCatalogo(cat){
       key: f.key, label: f.label, type: f.type, hint: f.hint, ...(f.config||{})
     }))
   }));
+}
+
+function marcarCatalogo(){
+  const hd = document.querySelector('.cat .hd span');
+  if (hd) hd.textContent = 'catálogo';
+  document.title = 'Catálogo de instrumentos · N.A.V.E.';
 }
 
 function marcarProjeto(proj){
@@ -228,7 +232,7 @@ function open_(code){ open(code); }
 function open(code){
   const e = EX.find(x=>x.code===code); if(!e) return;
   cur = code;
-  history.replaceState(null,'',`?ex=${code}${PROJ!=='rascunho'?'&p='+PROJ:''}`);
+  history.replaceState(null,'',`?ex=${code}${PROJ?'&p='+PROJ:''}`);
   const saved = Store.get(code) || {};
   const chips = [
     e.minimum ? '<span class="tarja">mínimo viável</span>' : '',
@@ -244,15 +248,20 @@ function open(code){
     <h1>${e.code} · ${e.name}</h1>
     <div class="chips">${chips}</div>
     ${e.intro ? `<div class="note">${e.intro}</div>` : ''}
-    <div class="bar">
+    ${ONLINE ? `<div class="bar">
       <button class="btn" onclick="save()">Salvar</button>
       <button class="btn btn--line" onclick="exportMd()">Exportar markdown</button>
       <button class="btn btn--line" onclick="clearEx()">Limpar</button>
       <span class="saved" id="saved"></span>
-    </div>
-    <form id="f">${e.fields.map(f=>renderField(f, saved[f.key])).join('')}</form>`;
+    </div>` : `<div class="note" style="border-color:var(--bnd-ink)">
+      <b>Modo catálogo.</b> Aqui você lê o instrumento — não dá para preencher.
+      Instrumento se responde <b>dentro de um projeto</b>, senão a resposta não pertence a cliente nenhum.
+      <a href="/estrategia/" style="text-decoration:underline">Escolher um projeto</a>
+    </div>`}
+    <form id="f" ${ONLINE ? '' : 'inert'} style="${ONLINE ? '' : 'opacity:.55'}">${e.fields.map(f=>renderField(f, saved[f.key])).join('')}</form>`;
   renderList(document.getElementById('q').value);
-  if (Store.has(code)) document.getElementById('saved').textContent = 'preenchido';
+  const sv = document.getElementById('saved');
+  if (sv && Store.has(code)) sv.textContent = 'preenchido';
 }
 
 function renderField(f, v){
@@ -396,7 +405,7 @@ function exportMd(){
   const a = document.createElement('a');
   a.href = URL.createObjectURL(b); a.download = `${e.code}-${e.name.toLowerCase().replace(/[^a-z0-9]+/g,'-')}.md`; a.click();
 }
-document.addEventListener('keydown', ev => { if((ev.metaKey||ev.ctrlKey) && ev.key==='s'){ ev.preventDefault(); save(); }});
+document.addEventListener('keydown', ev => { if(ONLINE && (ev.metaKey||ev.ctrlKey) && ev.key==='s'){ ev.preventDefault(); save(); }});
 </script>
 </body>
 </html>
