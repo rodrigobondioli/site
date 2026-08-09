@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Projetos · Estratégia de Marca</title>
+<link rel="icon" type="image/png" href="/shared/favicon.png">
+<link rel="stylesheet" href="/shared/shared.css">
+<link rel="stylesheet" href="/estrategia/ui.css">
+<style>
+.dlg{position:fixed;inset:0;background:rgba(16,16,16,.35);display:none;place-items:center;padding:24px;z-index:40}
+.dlg.on{display:grid}
+.dlg .box{width:min(520px,100%);background:var(--bnd-white);border-radius:var(--bnd-radius);padding:30px}
+.fld{margin-bottom:16px}
+.fld label{display:block;font-size:11.2px;font-weight:600;letter-spacing:1.12px;color:var(--ink-50);margin-bottom:7px}
+.fld input,.fld select,.fld textarea{width:100%;padding:11px 13px;border:1px solid var(--ink-10);
+ border-radius:10px;background:var(--bnd-bg);font:inherit;color:inherit;outline:none}
+.fld input:focus,.fld select:focus,.fld textarea:focus{border-color:var(--bnd-ink)}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.err{color:#b00020;font-size:13.5px;margin-top:10px;min-height:18px}
+.prj{display:block;width:100%;text-align:left;background:var(--bnd-white);border:0;border-radius:var(--bnd-radius);
+ padding:20px 22px;margin-bottom:12px;text-decoration:none}
+.prj:hover{outline:1px solid var(--ink-25)}
+.prj .nm{font-family:var(--bnd-display);font-weight:800;font-size:19px;display:block;margin-bottom:4px}
+.prj .cl{color:var(--ink-50);font-size:13.5px}
+.prj .bar{height:5px;background:var(--ink-10);border-radius:99px;margin-top:14px;overflow:hidden}
+.prj .bar i{display:block;height:100%;background:var(--bnd-ink)}
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="side">
+    <div class="brand">
+      <img src="/shared/logo.svg" alt="Bondioli" onerror="this.outerHTML='<b style=&quot;font-family:var(--bnd-display);font-weight:800;font-size:16px&quot;>BOND</b>'">
+      <span>estratégia</span>
+    </div>
+    <div class="navsec">Trabalho</div>
+    <a class="navbtn on" href="/estrategia/">Projetos</a>
+    <a class="navbtn" href="/estrategia/exercicio.html">Instrumentos</a>
+    <div class="navsec">Método</div>
+    <a class="navbtn" href="/estrategia/metodo/PLAYBOOK-NAVE.html">Playbook N.A.V.E.</a>
+    <a class="navbtn" href="/estrategia/prototipo.html">Protótipo de telas</a>
+    <div class="navsec">Conta</div>
+    <button class="navbtn" onclick="NAVE.logout()">Sair</button>
+  </aside>
+
+  <main class="main">
+    <div class="top">
+      <div>
+        <div class="kicker">Bondioli</div>
+        <h1>Projetos</h1>
+        <p class="sub">Cliente novo entra aqui. Ao criar o projeto, as 16 fases e as 135 tarefas
+        do método são instanciadas — você não monta nada à mão.</p>
+      </div>
+      <button class="btn" onclick="abrirNovo()">Novo projeto</button>
+    </div>
+
+    <div id="lista"><div class="note">Carregando…</div></div>
+  </main>
+</div>
+
+<div class="dlg" id="dlg">
+  <div class="box">
+    <div class="kicker">Novo</div>
+    <h1 style="font-size:24px;margin:8px 0 18px">Cliente e projeto</h1>
+    <form id="form">
+      <div class="fld"><label>Nome do cliente</label><input name="cliente" required placeholder="Bem-V"></div>
+      <div class="row2">
+        <div class="fld"><label>Segmento</label><input name="segmento" placeholder="Cosmético natural"></div>
+        <div class="fld"><label>E-mail do contato</label><input name="email" type="email"></div>
+      </div>
+      <div class="fld">
+        <label>A marca já existe?</label>
+        <select name="existe">
+          <option value="sim">Sim — rebranding</option>
+          <option value="nao">Não — marca nova</option>
+        </select>
+      </div>
+      <div class="fld"><label>Nome do projeto</label><input name="projeto" required placeholder="Reposicionamento 2026"></div>
+      <div class="row2">
+        <div class="fld"><label>Início</label><input name="inicio" type="date"></div>
+        <div class="fld"><label>Entrega prevista</label><input name="fim" type="date"></div>
+      </div>
+      <div class="err" id="err"></div>
+      <div style="display:flex;gap:10px;margin-top:6px">
+        <button class="btn" id="ok" type="submit">Criar projeto</button>
+        <button class="btn btn--line" type="button" onclick="fecharNovo()">Cancelar</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="/estrategia/config.js"></script>
+<script src="/estrategia/nave.js"></script>
+<script>
+const dlg = document.getElementById('dlg');
+function abrirNovo(){ dlg.classList.add('on'); document.querySelector('[name=cliente]').focus(); }
+function fecharNovo(){ dlg.classList.remove('on'); document.getElementById('err').textContent=''; }
+dlg.addEventListener('click', e => { if (e.target === dlg) fecharNovo(); });
+
+function pct(p){ return Math.round((p && p.pct ? p.pct : 0) * 100); }
+
+async function carregar(){
+  const projetos = await NAVE.get('projetos');
+  const el = document.getElementById('lista');
+  if (!projetos.length) {
+    el.innerHTML = `<div class="note">Nenhum projeto ainda. O primeiro passo do método é a
+      <b>primeira call</b> (F0) — crie o projeto e ela já vai estar na lista de tarefas.</div>`;
+    return;
+  }
+  el.innerHTML = projetos.map(p => {
+    const cliente = p.nave_clients ? p.nave_clients.name : '—';
+    const espera = p.progress && p.progress.awaiting_approval;
+    return `<a class="prj" href="/estrategia/projeto.html?p=${p.id}">
+      <span class="nm">${esc(p.name)}</span>
+      <span class="cl">${esc(cliente)}${p.nave_clients && p.nave_clients.segment ? ' · ' + esc(p.nave_clients.segment) : ''}</span>
+      ${espera ? '<span class="tarja tarja--cyan" style="margin-left:8px">aguardando aprovação</span>' : ''}
+      <span class="bar"><i style="width:${pct(p.progress)}%"></i></span>
+      <span class="cl" style="display:block;margin-top:8px">${pct(p.progress)}% das fases concluídas</span>
+    </a>`;
+  }).join('');
+}
+
+document.getElementById('form').addEventListener('submit', async e => {
+  e.preventDefault();
+  const f = new FormData(e.target), btn = document.getElementById('ok'), err = document.getElementById('err');
+  btn.disabled = true; err.textContent = 'Criando…';
+  try {
+    const cliente = await NAVE.post('cliente', {
+      name: f.get('cliente'), segment: f.get('segmento') || null,
+      email: f.get('email') || null, brand_exists: f.get('existe') === 'sim'
+    });
+    const r = await NAVE.post('projeto', {
+      client_id: cliente.id, name: f.get('projeto'),
+      started_at: f.get('inicio') || null, target_end: f.get('fim') || null
+    });
+    location.href = '/estrategia/projeto.html?p=' + r.project.id;
+  } catch (ex) {
+    err.textContent = ex.message || 'Não consegui criar.';
+    btn.disabled = false;
+  }
+});
+
+function esc(s){ return String(s==null?'':s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+
+(async function(){
+  const u = await NAVE.guard();
+  if (!u) return;
+  try { await carregar(); }
+  catch (e) { document.getElementById('lista').innerHTML = `<div class="note">${esc(e.message)}</div>`; }
+})();
+</script>
+</body>
+</html>

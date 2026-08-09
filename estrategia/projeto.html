@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Projeto · Estratégia de Marca</title>
+<link rel="icon" type="image/png" href="/shared/favicon.png">
+<link rel="stylesheet" href="/shared/shared.css">
+<link rel="stylesheet" href="/estrategia/ui.css">
+<style>
+.fase{background:var(--bnd-white);border-radius:var(--bnd-radius);padding:0;margin-bottom:10px;overflow:hidden}
+.fase.gate{outline:1px solid var(--bnd-ink)}
+.fase>summary{list-style:none;cursor:pointer;padding:18px 22px;display:flex;align-items:center;gap:14px}
+.fase>summary::-webkit-details-marker{display:none}
+.fase .code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11.5px;color:var(--ink-50);
+ min-width:30px;letter-spacing:.5px}
+.fase .nm{font-family:var(--bnd-display);font-weight:800;font-size:16px;flex:1}
+.fase .ob{display:block;font-family:var(--bnd-body);font-weight:400;font-size:13px;color:var(--ink-50);margin-top:3px}
+.fase .body{padding:4px 22px 22px;border-top:var(--bnd-rule-soft);margin-top:2px}
+.tk{display:flex;align-items:flex-start;gap:11px;padding:8px 0;font-size:14.5px}
+.tk input{margin-top:3px;accent-color:var(--bnd-ink);width:16px;height:16px}
+.tk.done span{color:var(--ink-25);text-decoration:line-through}
+.gatebox{margin-top:16px;padding:16px 18px;border-radius:12px;background:var(--bnd-lime)}
+.gatebox .t{font-size:11.2px;font-weight:600;letter-spacing:1.12px;margin-bottom:8px}
+.gatebox textarea{width:100%;padding:10px 12px;border:1px solid var(--ink-10);border-radius:10px;
+ background:var(--bnd-white);font:inherit;min-height:62px;outline:none;margin-bottom:10px}
+.mini{font-size:12px;color:var(--ink-50)}
+.obj{background:var(--bnd-lime);border-radius:var(--bnd-radius);padding:22px;margin-bottom:24px}
+.obj textarea{width:100%;border:0;background:transparent;font:inherit;font-family:var(--bnd-display);
+ font-size:17px;line-height:1.35;resize:vertical;min-height:58px;outline:none}
+.exgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:10px;margin-top:12px}
+.exc{display:block;background:var(--bnd-bg);border-radius:12px;padding:14px 15px;text-decoration:none;font-size:14px}
+.exc:hover{outline:1px solid var(--ink-25)}
+.exc b{display:block;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11px;color:var(--ink-50);margin-bottom:5px}
+.toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%);background:var(--bnd-ink);color:var(--bnd-white);
+ padding:11px 18px;border-radius:99px;font-size:13.5px;opacity:0;pointer-events:none;transition:opacity .2s;z-index:50;max-width:80vw}
+.toast.on{opacity:1}
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="side">
+    <div class="brand">
+      <img src="/shared/logo.svg" alt="Bondioli" onerror="this.outerHTML='<b style=&quot;font-family:var(--bnd-display);font-weight:800;font-size:16px&quot;>BOND</b>'">
+      <span>estratégia</span>
+    </div>
+    <div class="navsec">Trabalho</div>
+    <a class="navbtn" href="/estrategia/">Projetos</a>
+    <a class="navbtn on" href="#">Este projeto</a>
+    <a class="navbtn" id="linkEx" href="/estrategia/exercicio.html">Instrumentos</a>
+    <div class="navsec">Método</div>
+    <a class="navbtn" href="/estrategia/metodo/PLAYBOOK-NAVE.html">Playbook N.A.V.E.</a>
+    <div class="navsec">Conta</div>
+    <button class="navbtn" onclick="NAVE.logout()">Sair</button>
+  </aside>
+
+  <main class="main">
+    <div class="top">
+      <div>
+        <div class="kicker" id="kicker">Carregando…</div>
+        <h1 id="titulo">&nbsp;</h1>
+        <p class="sub" id="sub"></p>
+      </div>
+    </div>
+    <div id="conteudo"></div>
+  </main>
+</div>
+<div class="toast" id="toast"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="/estrategia/config.js"></script>
+<script src="/estrategia/nave.js"></script>
+<script>
+const PROJ = new URLSearchParams(location.search).get('p');
+const MACRO = { PRE:'Pré', COLETANDO:'Coletando', EXPLORANDO:'Explorando',
+                CRIANDO:'Criando', DEFININDO:'Definindo', POS:'Pós' };
+let D = null, EXCAT = [];
+
+function esc(s){ return String(s==null?'':s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+let tt;
+function toast(msg){
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('on');
+  clearTimeout(tt); tt = setTimeout(()=>t.classList.remove('on'), 3200);
+}
+
+async function carregar(){
+  const [proj, cat] = await Promise.all([ NAVE.get('projeto', { id: PROJ }), NAVE.catalogo() ]);
+  D = proj; EXCAT = cat.exercises;
+  document.getElementById('kicker').textContent = proj.client ? proj.client.name : 'Projeto';
+  document.getElementById('titulo').textContent = proj.project.name;
+  document.getElementById('linkEx').href = '/estrategia/exercicio.html?p=' + PROJ;
+  const feitas = proj.phases.filter(p => p.status === 'concluido').length;
+  document.getElementById('sub').textContent =
+    `${feitas} de ${proj.phases.length} fases concluídas · ${proj.tasks.filter(t=>t.status==='concluido').length} de ${proj.tasks.length} tarefas`;
+  render();
+}
+
+function render(){
+  const objetivo = D.project.main_objective || '';
+  let html = `
+  <div class="obj">
+    <div class="kicker">Objetivo principal do projeto · exercício N7</div>
+    <textarea id="obj" placeholder="Um parágrafo com todos os problemas a resolver e o estado almejado. Fica na parede até o fim.">${esc(objetivo)}</textarea>
+    <div class="mini">Salva ao sair do campo. O método manda retomar isto na abertura de toda fase.</div>
+  </div>`;
+
+  let macroAtual = null;
+  D.phases.forEach(pp => {
+    const f = pp.nave_phases || {};
+    if (f.macro !== macroAtual) {
+      macroAtual = f.macro;
+      html += `<div class="navsec" style="padding:22px 0 8px">${MACRO[macroAtual] || macroAtual}</div>`;
+    }
+    const tarefas = D.tasks.filter(t => t.project_phase_id === pp.id);
+    const feitas = tarefas.filter(t => t.status === 'concluido').length;
+    const exs = EXCAT.filter(e => e.phase_id === f.id);
+    const aberta = pp.status === 'em_andamento';
+    html += `
+    <details class="fase ${f.is_gate ? 'gate' : ''}" ${aberta ? 'open' : ''}>
+      <summary>
+        <span class="code">${f.id}</span>
+        <span class="nm">${esc(f.name)}<span class="ob">${esc(f.objective || '')}</span></span>
+        <span class="mini">${feitas}/${tarefas.length}</span>
+        ${statusTarja(pp, f)}
+      </summary>
+      <div class="body">
+        ${tarefas.map(t => `
+          <label class="tk ${t.status === 'concluido' ? 'done' : ''}">
+            <input type="checkbox" ${t.status === 'concluido' ? 'checked' : ''}
+              onchange="marcarTarefa('${t.id}', this.checked, this)">
+            <span>${esc(t.title)}</span>
+          </label>`).join('') || '<div class="mini">Sem tarefas nesta fase.</div>'}
+
+        ${exs.length ? `<div class="navsec" style="padding:18px 0 4px">Instrumentos desta fase</div>
+          <div class="exgrid">${exs.map(e => `
+            <a class="exc" href="/estrategia/exercicio.html?ex=${e.id}&p=${PROJ}">
+              <b>${e.id}${e.minimum ? ' · mínimo' : ''}</b>${esc(e.name)}
+            </a>`).join('')}</div>` : ''}
+
+        <div style="display:flex;gap:8px;margin-top:18px;flex-wrap:wrap">
+          ${pp.status !== 'em_andamento' ? `<button class="btn btn--line" onclick="mudarFase('${pp.id}','em_andamento')">Iniciar fase</button>` : ''}
+          ${pp.status !== 'concluido' ? `<button class="btn btn--line" onclick="mudarFase('${pp.id}','concluido')">Concluir fase</button>` : ''}
+        </div>
+
+        ${f.is_gate ? caixaGate(pp, f) : ''}
+      </div>
+    </details>`;
+  });
+  document.getElementById('conteudo').innerHTML = html;
+
+  const obj = document.getElementById('obj');
+  obj.addEventListener('blur', async () => {
+    if (obj.value === (D.project.main_objective || '')) return;
+    try {
+      await NAVE.post('projeto_upd', { id: PROJ, main_objective: obj.value });
+      D.project.main_objective = obj.value;
+      toast('Objetivo salvo.');
+    } catch (e) { toast(e.message); }
+  });
+}
+
+function statusTarja(pp, f){
+  if (f.is_gate && pp.gate === 'aprovado') return '<span class="tarja">âncora aprovada</span>';
+  if (f.is_gate && pp.gate === 'enviado') return '<span class="tarja tarja--cyan">aguardando cliente</span>';
+  if (pp.status === 'concluido') return '<span class="tarja">concluída</span>';
+  if (pp.status === 'em_andamento') return '<span class="tarja tarja--cyan">em andamento</span>';
+  return '<span class="tarja tarja--line">a fazer</span>';
+}
+
+function caixaGate(pp, f){
+  if (pp.gate === 'aprovado') {
+    return `<div class="gatebox"><div class="t">${esc(f.gate_label || 'Âncora')}</div>
+      <div class="mini">Aprovada${pp.approved_at ? ' em ' + new Date(pp.approved_at).toLocaleDateString('pt-BR') : ''}.
+      ${esc(pp.gate_note || '')}</div></div>`;
+  }
+  return `<div class="gatebox">
+    <div class="t">${esc(f.gate_label || 'Âncora')}</div>
+    <div class="mini" style="margin-bottom:10px">Projeto ancorado não afunda. Enquanto esta âncora não for
+    aprovada, as fases seguintes ficam travadas — o banco recusa.</div>
+    <textarea id="gn_${pp.id}" placeholder="Como o cliente aprovou? Em reunião, por e-mail, com quais ajustes?">${esc(pp.gate_note || '')}</textarea>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <button class="btn" onclick="mudarGate('${pp.id}','aprovado')">Registrar aprovação</button>
+      <button class="btn btn--line" onclick="mudarGate('${pp.id}','enviado')">Enviado ao cliente</button>
+      <button class="btn btn--line" onclick="mudarGate('${pp.id}','ajustes_pedidos')">Pediu ajustes</button>
+    </div>
+  </div>`;
+}
+
+async function marcarTarefa(id, feito, el){
+  el.disabled = true;
+  try {
+    await NAVE.post('tarefa', { id, status: feito ? 'concluido' : 'nao_iniciado' });
+    const t = D.tasks.find(x => x.id === id);
+    if (t) t.status = feito ? 'concluido' : 'nao_iniciado';
+    el.closest('.tk').classList.toggle('done', feito);
+    const pp = D.tasks.filter(x => x.project_phase_id === t.project_phase_id);
+    const cont = el.closest('details').querySelector('summary .mini');
+    if (cont) cont.textContent = `${pp.filter(x=>x.status==='concluido').length}/${pp.length}`;
+  } catch (e) {
+    el.checked = !feito;
+    toast(e.message);
+  } finally { el.disabled = false; }
+}
+
+async function mudarFase(id, status){
+  try { await NAVE.post('fase', { id, status }); await carregar(); toast('Fase atualizada.'); }
+  catch (e) { toast(e.message); }   // aqui aparece o recado do trigger de âncora
+}
+
+async function mudarGate(id, gate){
+  const nota = (document.getElementById('gn_' + id) || {}).value || null;
+  try { await NAVE.post('fase', { id, gate, gate_note: nota }); await carregar(); toast('Âncora atualizada.'); }
+  catch (e) { toast(e.message); }
+}
+
+(async function(){
+  const u = await NAVE.guard();
+  if (!u) return;
+  if (!PROJ) { location.replace('/estrategia/'); return; }
+  try { await carregar(); }
+  catch (e) { document.getElementById('conteudo').innerHTML = `<div class="note">${esc(e.message)}</div>`; }
+})();
+</script>
+</body>
+</html>

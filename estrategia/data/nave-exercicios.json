@@ -1,0 +1,2855 @@
+[
+  {
+    "code": "N1",
+    "axis": "N",
+    "phase": "F3",
+    "name": "Alinhamento de Objetivos",
+    "minimum": true,
+    "duration": 45,
+    "source": "M05 A05 (transcrição)",
+    "intro": "Primeiro exercício do workshop inteiro. Duas partes: a abertura solta, e depois passado, presente e futuro. Sozinho já dá clareza tremenda — se você só tem 30 minutos com o cliente, faça este.",
+    "fields": [
+      {
+        "key": "marca_hoje",
+        "label": "Quem é sua marca hoje?",
+        "type": "longtext",
+        "hint": "5 a 10 minutos. Cronometre. A ideia é abrir a discussão, não concluir."
+      },
+      {
+        "key": "por_que_aqui",
+        "label": "Por que estamos aqui?",
+        "type": "longtext",
+        "hint": "5 a 10 minutos. Todas as razões que estão na cabeça das pessoas sobre a necessidade deste projeto."
+      },
+      {
+        "key": "p_inicio",
+        "label": "Passado · Como foi o nosso início? De onde veio a ideia do negócio?",
+        "type": "longtext",
+        "hint": "Quem ou o que te inspirou no começo. Sim, a história volta no eixo E — aqui é para entender o negócio."
+      },
+      {
+        "key": "p_certo",
+        "label": "Passado · O que deu certo até aqui e o que dá mais orgulho?",
+        "type": "longtext",
+        "hint": "Revela o que já funciona e não pode ser perdido. Muitos problemas existem porque pararam de dar foco nisso."
+      },
+      {
+        "key": "p_errado",
+        "label": "Passado · O que deu errado? Quais foram os obstáculos e o que fariam diferente?",
+        "type": "longtext"
+      },
+      {
+        "key": "pr_produtos",
+        "label": "Presente · Quais são os produtos e serviços de hoje?",
+        "type": "longtext",
+        "hint": "Qual é o principal, o que vende mais — a vaca leiteira."
+      },
+      {
+        "key": "pr_equipe",
+        "label": "Presente · Quem são os envolvidos no negócio?",
+        "type": "longtext",
+        "hint": "Quem toca a operação, quem é responsável por fazer as coisas rodarem."
+      },
+      {
+        "key": "pr_desafios",
+        "label": "Presente · Quais são os desafios e as oportunidades atuais?",
+        "type": "longtext",
+        "hint": "Corte o devaneio. Reflexão profunda fica para o intervalo — aqui é resposta rápida."
+      },
+      {
+        "key": "f_1_3",
+        "label": "Futuro · Objetivos de 1 a 3 anos",
+        "type": "longtext"
+      },
+      {
+        "key": "f_5",
+        "label": "Futuro · Objetivos de 5 anos",
+        "type": "longtext"
+      },
+      {
+        "key": "f_legado",
+        "label": "Futuro · Qual legado querem deixar?",
+        "type": "longtext",
+        "hint": "Aqui já começa a aparecer propósito e o que de fato importa para eles."
+      },
+      {
+        "key": "f_fracasso",
+        "label": "Futuro · E se tudo der errado? Por que falhamos?",
+        "type": "longtext",
+        "hint": "Pergunte direto. Os gargalos costumam ser conhecidos — eles sabem onde está o problema."
+      },
+      {
+        "key": "timing",
+        "label": "Qual é o timing?",
+        "type": "text",
+        "hint": "Quando precisa estar resolvido. Define se você coloca pressão ou não, e protege a sua agenda."
+      }
+    ]
+  },
+  {
+    "code": "N2",
+    "axis": "N",
+    "phase": "F3",
+    "name": "Ponto A e Ponto B",
+    "minimum": false,
+    "duration": 30,
+    "source": "M05 A05",
+    "intro": "Sair de onde, ir para onde. 10 minutos por camada. Uma empresa precisa de alinhamento entre negócio, marca e comunicação para construir valor no longo prazo.",
+    "fields": [
+      {
+        "key": "matriz",
+        "label": "Sair de → Ir para",
+        "type": "table",
+        "columns": [
+          "Camada",
+          "Sair de",
+          "Ir para"
+        ],
+        "rows": [
+          "Negócio",
+          "Marca",
+          "Comunicação"
+        ]
+      }
+    ]
+  },
+  {
+    "code": "N3",
+    "axis": "N",
+    "phase": "F3",
+    "name": "Fatos, Obstáculos e Oportunidades",
+    "minimum": false,
+    "duration": 15,
+    "source": "M05 A05",
+    "intro": "5 a 10 minutos no máximo. É o que o cliente já sabe — não precisa ir fundo agora.",
+    "fields": [
+      {
+        "key": "fatos",
+        "label": "Fatos",
+        "type": "list",
+        "hint": "Aquilo que é do jeito que é: mercado, ambiente, categoria, economia, comunidade, clientes, tendências."
+      },
+      {
+        "key": "obstaculos",
+        "label": "Obstáculos",
+        "type": "list",
+        "hint": "Desafios principais que enfrentamos, ou que precisamos enfrentar para chegar onde queremos. Podem vir dos fatos ou não."
+      },
+      {
+        "key": "oportunidades",
+        "label": "Oportunidades",
+        "type": "list",
+        "hint": "Elementos do contexto que podem virar vantagem: tendência, tecnologia nova, isenção de imposto, patente que caiu."
+      }
+    ]
+  },
+  {
+    "code": "N4",
+    "axis": "N",
+    "phase": "F3",
+    "name": "Análise de Contexto",
+    "minimum": true,
+    "duration": 30,
+    "source": "M05 A05 (transcrição — ausente do PDF)",
+    "intro": "Panorama geral do contexto. Vários itens aqui serão aprofundados nas etapas seguintes — aqui é só para abrir o mapa.",
+    "fields": [
+      {
+        "key": "maior_desafio",
+        "label": "Qual é o problema mais importante que precisa ser resolvido com este projeto?",
+        "type": "longtext",
+        "hint": "A pergunta matadora. Marcas têm motivações muito diferentes para passar por um rebranding."
+      },
+      {
+        "key": "contexto",
+        "label": "Por que esse desafio é relevante?",
+        "type": "longtext",
+        "hint": "Relevante para vocês e relevante para eles. Por quê?"
+      },
+      {
+        "key": "mercado",
+        "label": "O que podemos dizer sobre o mercado em que estamos inseridos?",
+        "type": "longtext",
+        "hint": "Ex.: mercado em formação · culturalmente não paga caro · só compra parcelado · consome só em certo momento."
+      },
+      {
+        "key": "similares",
+        "label": "Quais empresas têm propostas similares às nossas?",
+        "type": "list",
+        "hint": "Os primeiros nomes que vierem — as empresas que incomodam eles."
+      },
+      {
+        "key": "tendencias",
+        "label": "Quais tendências pop culturais e socioeconômicas tangenciam a nossa marca?",
+        "type": "list",
+        "hint": "Ex. em wellness: bem-estar como novo luxo · shape como novo luxo · alta performance como estilo de vida · quantificar tudo."
+      },
+      {
+        "key": "segmentos",
+        "label": "Quais segmentos de público queremos atender ou já atendemos?",
+        "type": "list",
+        "hint": "Primeira vez que se pergunta sobre público. Começa devagar — o aprofundamento é no eixo A."
+      }
+    ]
+  },
+  {
+    "code": "N5",
+    "axis": "N",
+    "phase": "F3",
+    "name": "Canvas do Modelo de Negócio",
+    "minimum": false,
+    "duration": 90,
+    "source": "M05 A05",
+    "intro": "Nove blocos. Demorado — reserve para empresas onde você percebe mais desorganização. Ensina a pensar como dono de negócio.",
+    "fields": [
+      {
+        "key": "segmentos",
+        "label": "Segmentos de Clientes",
+        "type": "longtext",
+        "hint": "Perfil de público, quem são essas pessoas."
+      },
+      {
+        "key": "proposta",
+        "label": "Proposta de Valor",
+        "type": "longtext",
+        "hint": "Problemas que resolve, necessidades atendidas, transformação gerada."
+      },
+      {
+        "key": "canais",
+        "label": "Canais",
+        "type": "longtext",
+        "hint": "Por onde falamos com o cliente. Qual é o ponto de contato da empresa com ele."
+      },
+      {
+        "key": "relacionamento",
+        "label": "Relacionamento",
+        "type": "longtext",
+        "hint": "Que tipo de relação temos ou deveríamos ter. Que postura esperam de nós."
+      },
+      {
+        "key": "receita",
+        "label": "Fontes de Renda",
+        "type": "table",
+        "columns": [
+          "Produto/Serviço",
+          "% do faturamento"
+        ],
+        "hint": "Como entra dinheiro. Identifique a vaca leiteira — o produto que traz mais dinheiro."
+      },
+      {
+        "key": "recursos",
+        "label": "Recursos-Chave",
+        "type": "list",
+        "hint": "O que é indispensável para a operação. Pode ser pessoa, equipamento, tecnologia, patente, ritual."
+      },
+      {
+        "key": "atividades",
+        "label": "Atividades-Chave",
+        "type": "list",
+        "hint": "As principais atividades necessárias para entregar a proposta de valor."
+      },
+      {
+        "key": "parcerias",
+        "label": "Parcerias-Chave",
+        "type": "list",
+        "hint": "De quem a empresa depende para entregar o que promete. Sem isso, não acontece."
+      },
+      {
+        "key": "custos",
+        "label": "Estruturas de Custos",
+        "type": "longtext",
+        "hint": "Quanto a empresa gasta e o que custa mais caro."
+      }
+    ]
+  },
+  {
+    "code": "N6",
+    "axis": "N",
+    "phase": "F3",
+    "name": "O Mapa (Sprint) + notas Como Poderíamos",
+    "minimum": false,
+    "duration": 60,
+    "source": "M05 A05",
+    "intro": "Técnica do livro Sprint, do Google. Personagens à esquerda, final feliz à direita, o fluxo no meio. Na prática é quase uma jornada do cliente.",
+    "fields": [
+      {
+        "key": "personagens",
+        "label": "Personagens",
+        "type": "list",
+        "hint": "Todas as pessoas envolvidas no que vai acontecer."
+      },
+      {
+        "key": "final_feliz",
+        "label": "Final feliz",
+        "type": "text",
+        "hint": "O que precisa de fato acontecer no final."
+      },
+      {
+        "key": "fluxo",
+        "label": "Fluxo de ações",
+        "type": "longtext",
+        "hint": "Palavras e setas, estilo rascunho de interface. Tudo o que acontece entre os personagens e o final feliz."
+      },
+      {
+        "key": "areas_criticas",
+        "label": "Áreas que precisam de mais atenção",
+        "type": "list",
+        "hint": "Circule no mapa. Eles próprios vão apontar onde está o problema."
+      },
+      {
+        "key": "cp",
+        "label": "Como poderíamos…",
+        "type": "list",
+        "hint": "Cada área problemática vira pergunta. Vai ter coisa que compete a você e coisa que não — mapeie as duas."
+      }
+    ]
+  },
+  {
+    "code": "N7",
+    "axis": "N",
+    "phase": "F3",
+    "name": "Objetivo Principal Definido",
+    "minimum": true,
+    "duration": 20,
+    "source": "M05 A05",
+    "intro": "Sempre fazer. Definido junto com o cliente e colado na parede — retomado na abertura de toda etapa nova até o fim do projeto.",
+    "fields": [
+      {
+        "key": "objetivo",
+        "label": "Objetivo principal do projeto",
+        "type": "longtext",
+        "hint": "Um parágrafo que resume todos os problemas a resolver + o estado almejado."
+      }
+    ]
+  },
+  {
+    "code": "A1",
+    "axis": "A",
+    "phase": "F3",
+    "name": "Tipo de Público e Segmento",
+    "minimum": true,
+    "duration": 25,
+    "source": "M05 A07",
+    "fields": [
+      {
+        "key": "tipo",
+        "label": "Tipo de público",
+        "type": "multiselect",
+        "options": [
+          "B2B",
+          "B2C",
+          "B2G"
+        ]
+      },
+      {
+        "key": "segmento",
+        "label": "Segmento / categoria de mercado",
+        "type": "text",
+        "hint": "E o sub-segmento: se é alimentação, é fast food? fine dining? delivery?"
+      },
+      {
+        "key": "industrias",
+        "label": "Indústrias onde o público atua",
+        "type": "list"
+      },
+      {
+        "key": "concorrentes",
+        "label": "Primeiros concorrentes que vêm à cabeça",
+        "type": "list",
+        "hint": "As empresas que incomodam eles."
+      },
+      {
+        "key": "tendencias",
+        "label": "Tendências pop culturais e socioeconômicas que tangenciam a marca",
+        "type": "list",
+        "hint": "O que está rolando. Ex.: bem-estar como novo luxo, alta performance como estilo de vida, quantificar tudo."
+      },
+      {
+        "key": "segmentos_publico",
+        "label": "Segmentos de público que atendemos ou queremos atender",
+        "type": "list"
+      }
+    ]
+  },
+  {
+    "code": "A2",
+    "axis": "A",
+    "phase": "F3",
+    "name": "Público-alvo do Maior para o Menor",
+    "minimum": false,
+    "duration": 20,
+    "source": "M05 A07",
+    "intro": "Funil. Ir direto para a persona vira chute.",
+    "fields": [
+      {
+        "key": "funil",
+        "label": "Tipo → Segmento → Indústrias → Persona",
+        "type": "table",
+        "columns": [
+          "Nível",
+          "Definição"
+        ],
+        "rows": [
+          "Tipo",
+          "Segmento",
+          "Indústrias",
+          "Persona"
+        ]
+      }
+    ]
+  },
+  {
+    "code": "A3",
+    "axis": "A",
+    "phase": "F3",
+    "name": "Roteiro de Persona",
+    "minimum": true,
+    "duration": 45,
+    "source": "M05 A07",
+    "intro": "13 campos. Faça como conversa. O ouro está da psicografia para baixo.",
+    "fields": [
+      {
+        "key": "segmento",
+        "label": "1. Segmento de público",
+        "type": "text",
+        "hint": "De onde vem essa persona no funil."
+      },
+      {
+        "key": "demografia",
+        "label": "2. Demografia",
+        "type": "text",
+        "hint": "Idade, sexo, estado civil, localização, renda."
+      },
+      {
+        "key": "frase",
+        "label": "3. Uma frase",
+        "type": "text",
+        "hint": "Resumo de quem ela é em uma frase."
+      },
+      {
+        "key": "tags",
+        "label": "4. Tags de destaque",
+        "type": "list",
+        "hint": "3 a 5 palavras que definem essa persona."
+      },
+      {
+        "key": "foto",
+        "label": "5. Foto",
+        "type": "file",
+        "hint": "Imagem representativa, pode ser banco de imagens."
+      },
+      {
+        "key": "nome",
+        "label": "6. Nome",
+        "type": "text",
+        "hint": "Humaniza."
+      },
+      {
+        "key": "tipo",
+        "label": "7. Tipo",
+        "type": "text",
+        "hint": "Ex.: 'o empresário vaidoso', 'a ativista vegetariana'."
+      },
+      {
+        "key": "habilidades",
+        "label": "8. Habilidades",
+        "type": "longtext",
+        "hint": "O que sabe fazer, quais competências."
+      },
+      {
+        "key": "geodemografia",
+        "label": "9. Geodemografia",
+        "type": "text",
+        "hint": "Onde vive, em que tipo de lugar."
+      },
+      {
+        "key": "psicografia",
+        "label": "10. Psicografia",
+        "type": "longtext",
+        "hint": "Valores mais importantes · como gasta o tempo livre · aspirações · estilo de vida."
+      },
+      {
+        "key": "comportamento",
+        "label": "11. Comportamento",
+        "type": "longtext",
+        "hint": "Onde busca informação · como decide a compra · que marcas já consome."
+      },
+      {
+        "key": "objetivos",
+        "label": "12. Objetivos e vontades",
+        "type": "longtext",
+        "hint": "O que está tentando alcançar na vida · o que seria sucesso para ela."
+      },
+      {
+        "key": "necessidades",
+        "label": "13. Necessidades e medos",
+        "type": "longtext",
+        "hint": "Que problemas tenta resolver · o que facilitaria a vida · do que tem medo."
+      }
+    ]
+  },
+  {
+    "code": "A4",
+    "axis": "A",
+    "phase": "F3",
+    "name": "Mapa de Empatia",
+    "minimum": true,
+    "duration": 30,
+    "source": "M05 A07",
+    "intro": "Muito visual. Faz a equipe inteira ter empatia real com o público.",
+    "fields": [
+      {
+        "key": "ve",
+        "label": "O que ela vê?",
+        "type": "longtext",
+        "hint": "Ambiente ao redor, o que os amigos fazem, o que o mercado oferece."
+      },
+      {
+        "key": "escuta",
+        "label": "O que ela escuta?",
+        "type": "longtext",
+        "hint": "O que dizem os amigos, o chefe, os influenciadores."
+      },
+      {
+        "key": "pensa",
+        "label": "O que ela pensa e sente?",
+        "type": "longtext",
+        "hint": "Preocupações, sonhos, o que realmente importa."
+      },
+      {
+        "key": "fala",
+        "label": "O que ela fala e faz?",
+        "type": "longtext",
+        "hint": "Comportamento em público, como age, o que diz."
+      },
+      {
+        "key": "dores",
+        "label": "Dores",
+        "type": "longtext",
+        "hint": "Medos, frustrações, obstáculos."
+      },
+      {
+        "key": "ganhos",
+        "label": "Ganhos",
+        "type": "longtext",
+        "hint": "Desejos, o que é sucesso, o que quer alcançar."
+      }
+    ]
+  },
+  {
+    "code": "A5",
+    "axis": "A",
+    "phase": "F3",
+    "name": "Necessidades Emergentes, Relação Pretendida e Referências",
+    "minimum": false,
+    "duration": 20,
+    "source": "M05 A07",
+    "fields": [
+      {
+        "key": "emergentes",
+        "label": "Necessidades emergentes para a nossa categoria",
+        "type": "longtext",
+        "hint": "O que o público precisa agora que antes não precisava."
+      },
+      {
+        "key": "relacao",
+        "label": "Relação pretendida com a marca",
+        "type": "longtext",
+        "hint": "Que interação o consumidor deve buscar. Será referência? Evangelizador? Apenas consumidor?"
+      },
+      {
+        "key": "referencias",
+        "label": "Referências de consumo do público",
+        "type": "list"
+      }
+    ]
+  },
+  {
+    "code": "V1",
+    "axis": "V",
+    "phase": "F3",
+    "name": "As 3+1 Perguntas (The Brand Gap)",
+    "minimum": true,
+    "duration": 20,
+    "source": "M05 A09 (transcrição — o PDF traz outro exercício no lugar)",
+    "intro": "Abre a conversa do workshop de Valor. Marty Neumeier são três; Lona acrescentou a quarta. \"Quem é você é fácil, o que você faz é ok, por que é importante vai dar problema, e quem se importa é mais difícil ainda.\"",
+    "fields": [
+      {
+        "key": "quem",
+        "label": "Quem é você?",
+        "type": "longtext",
+        "hint": "Resposta direta e rápida."
+      },
+      {
+        "key": "faz",
+        "label": "O que você faz?",
+        "type": "longtext"
+      },
+      {
+        "key": "importa",
+        "label": "Por que isso é importante?",
+        "type": "longtext",
+        "hint": "Aqui começa a dar problema. Insista."
+      },
+      {
+        "key": "quem_se_importa",
+        "label": "Quem se importa com isso?",
+        "type": "longtext",
+        "hint": "A mais difícil das quatro."
+      }
+    ]
+  },
+  {
+    "code": "V2",
+    "axis": "V",
+    "phase": "F3",
+    "name": "As 5 Perguntas da Promessa",
+    "minimum": false,
+    "duration": 30,
+    "source": "M05 A09 (só no PDF — não aparece na transcrição da aula)",
+    "intro": "ATENÇÃO — divergência de fonte. Este exercício está no PDF da aula 09 mas não é falado no vídeo; no vídeo o primeiro exercício é o 3+1 do Brand Gap (V1). Use como complemento, não como substituto. Se você não responde claramente a cada uma, há problema no posicionamento.",
+    "fields": [
+      {
+        "key": "promessa",
+        "label": "Qual é a promessa da nossa marca?",
+        "type": "longtext",
+        "hint": "Que transformação oferecemos."
+      },
+      {
+        "key": "mesma_promessa",
+        "label": "Quem faz a mesma promessa que a gente?",
+        "type": "list"
+      },
+      {
+        "key": "diferente",
+        "label": "Por que a nossa promessa é diferente?",
+        "type": "longtext"
+      },
+      {
+        "key": "importante",
+        "label": "Por que a nossa promessa é importante?",
+        "type": "longtext",
+        "hint": "Qual o impacto real na vida das pessoas."
+      },
+      {
+        "key": "verdadeira",
+        "label": "Por que a nossa promessa é verdadeira?",
+        "type": "longtext",
+        "hint": "Quais são as evidências de que entregamos."
+      }
+    ]
+  },
+  {
+    "code": "V3",
+    "axis": "V",
+    "phase": "F3",
+    "name": "Diagrama de Percepção: Passado, Presente e Futuro",
+    "minimum": false,
+    "duration": 25,
+    "source": "M05 A09",
+    "intro": "Só se aplica a marca que já existe — marca nova pula direto para o V4. Os donos sabem muito bem o passado: \"ano passado a gente estava bem\". Se o passado foi diferente do presente, já nasce uma conversa dentro da equipe sobre por que isso aconteceu.",
+    "condition": "marca_existente",
+    "fields": [
+      {
+        "key": "passado",
+        "label": "Como a marca era percebida no passado?",
+        "type": "longtext"
+      },
+      {
+        "key": "presente",
+        "label": "Qual é a percepção hoje?",
+        "type": "longtext",
+        "hint": "Provavelmente uma percepção que eles não gostariam de ter — é para isso que te contrataram."
+      },
+      {
+        "key": "futuro",
+        "label": "Como gostariam de ser percebidos?",
+        "type": "longtext",
+        "hint": "Aqui tem muito ouro."
+      },
+      {
+        "key": "porque",
+        "label": "Por que chegou até aqui?",
+        "type": "longtext",
+        "hint": "Houve planejamento? Se houve, por que não foi feito? Passado e presente revelam a responsabilidade da própria empresa."
+      }
+    ]
+  },
+  {
+    "code": "V4",
+    "axis": "V",
+    "phase": "F3",
+    "name": "Percepção: Categoria, Comunidade e Impacto",
+    "minimum": false,
+    "duration": 25,
+    "source": "M05 A09 (transcrição — o PDF troca o 3º bloco por 'Promessa')",
+    "intro": "Complementa o V3, ou substitui se a marca for nova. Exercício de post-it — deixe as pessoas responderem. Se acharem redundante, diga na cara: \"a gente investiga o mesmo lugar por ângulos diferentes para ter certeza\".",
+    "fields": [
+      {
+        "key": "faz",
+        "label": "Categoria — o que a marca faz?",
+        "type": "longtext"
+      },
+      {
+        "key": "nao_faz",
+        "label": "Categoria — o que a marca NÃO faz?",
+        "type": "longtext",
+        "hint": "A negativa costuma ser mais importante que a positiva."
+      },
+      {
+        "key": "comunidade",
+        "label": "Comunidade — quem faz parte?",
+        "type": "longtext",
+        "hint": "Não vale 'todo mundo'. Se é a galera da maromba, qual maromba? As comunidades já existem; você é adotado por ela."
+      },
+      {
+        "key": "nao_comunidade",
+        "label": "Comunidade — quem NÃO faz parte?",
+        "type": "longtext",
+        "hint": "O inimigo e o descrente do Branding Primitivo. É a linha que define: daqui pra lá não é nós."
+      },
+      {
+        "key": "impacto_hoje",
+        "label": "Impacto — como as pessoas se sentem ao interagir com a gente hoje?",
+        "type": "longtext",
+        "hint": "Interagir é qualquer coisa: ver o conteúdo, ver o logo, entrar na loja, entrar no Instagram."
+      },
+      {
+        "key": "impacto_futuro",
+        "label": "Impacto — como elas deveriam se sentir?",
+        "type": "longtext"
+      }
+    ]
+  },
+  {
+    "code": "V5",
+    "axis": "V",
+    "phase": "F3",
+    "name": "Fatos, Obstáculos e Oportunidades (marca)",
+    "minimum": false,
+    "duration": 15,
+    "source": "M05 A09",
+    "intro": "Quase uma SWOT, mas mais prático. 5 minutos por bloco: é o que o cliente já sabe, sem estudar, sem olhar o chat. Obstáculo não precisa derivar do fato — é provável que ele lembre de coisa nova aqui.",
+    "fields": [
+      {
+        "key": "fatos",
+        "label": "Fatos sobre a nossa marca e o nosso mercado",
+        "type": "list"
+      },
+      {
+        "key": "obstaculos",
+        "label": "Obstáculos e desafios de hoje",
+        "type": "list",
+        "hint": "Quando ele começar a falar algo promissor, afunde: 'peraí, o que você quer dizer com isso?'"
+      },
+      {
+        "key": "oportunidades",
+        "label": "Oportunidades que dá para aproveitar",
+        "type": "list"
+      }
+    ]
+  },
+  {
+    "code": "V6",
+    "axis": "V",
+    "phase": "F3",
+    "name": "Problemas e Conflitos",
+    "minimum": false,
+    "duration": 30,
+    "source": "M05 A09",
+    "intro": "Expõe as tensões verdadeiras. Cada bloco fecha com 'e como a nossa marca resolve isso?'. Os conflitos externos e internos aqui são do PÚBLICO, não da empresa.",
+    "fields": [
+      {
+        "key": "externos",
+        "label": "Conflitos externos — quais problemas identificamos no mercado?",
+        "type": "longtext",
+        "hint": "Quais obstáculos e desafios as pessoas precisam enfrentar."
+      },
+      {
+        "key": "externos_resolve",
+        "label": "Como a nossa marca resolve esses problemas?",
+        "type": "longtext"
+      },
+      {
+        "key": "internos",
+        "label": "Conflitos internos — como esses problemas fazem o cliente se sentir?",
+        "type": "longtext",
+        "hint": "Quais mais se repetem e quais se destacam pela intensidade — os que tiram o sono, que ele paga caro para resolver."
+      },
+      {
+        "key": "internos_resolve",
+        "label": "Como a nossa marca resolve ou minimiza essas frustrações?",
+        "type": "longtext"
+      },
+      {
+        "key": "filosoficos",
+        "label": "Conflitos filosóficos — qual é o problema mais profundo?",
+        "type": "longtext",
+        "hint": "Existe um conflito maior e mais abrangente com o qual a marca contribui ou luta contra? Ex. Marcados: fazer o designer ser valorizado e não marginalizado."
+      },
+      {
+        "key": "filosoficos_resolve",
+        "label": "Como a marca contribui com esse desafio?",
+        "type": "longtext"
+      }
+    ]
+  },
+  {
+    "code": "V7",
+    "axis": "V",
+    "phase": "F3",
+    "name": "Radar dos Principais Players",
+    "minimum": false,
+    "duration": 25,
+    "source": "M05 A09 (transcrição — ausente do PDF)",
+    "intro": "Desenhe um alvo. O logo do cliente no centro. Ele cola os concorrentes em post-it: quanto mais perto do centro, mais parecida a proposta — ou mais clientes eles estão tirando dele. Os de fora têm proposta similar mas não são considerados concorrentes diretos. É a partir daqui que o workshop para de olhar para dentro e começa a olhar para os outros.",
+    "fields": [
+      {
+        "key": "radar",
+        "label": "Players por proximidade",
+        "type": "table",
+        "columns": [
+          "Player",
+          "Anel (1 = mais próximo · 3 = periferia)",
+          "Por que está nesse anel"
+        ],
+        "repeatable": true,
+        "min_rows": 3
+      }
+    ]
+  },
+  {
+    "code": "V8",
+    "axis": "V",
+    "phase": "F3",
+    "name": "Fã e Hater — a marca e os concorrentes",
+    "minimum": true,
+    "duration": 40,
+    "source": "M05 A09 (transcrição — o PDF omite a rodada sobre a própria marca)",
+    "intro": "\"Branding é o que dizem sobre você quando você não está na sala\" — virou exercício. Duas rodadas: primeiro sobre a MARCA DO CLIENTE, depois sobre cada concorrente. Vale para marca que ainda não existe: imagine o que um fã diria. 5 minutos no relógio por rodada.",
+    "fields": [
+      {
+        "key": "propria_fa",
+        "label": "O que um FÃ diria da nossa marca se a gente não estivesse na sala?",
+        "type": "longtext"
+      },
+      {
+        "key": "propria_hater",
+        "label": "O que um HATER diria da nossa marca se a gente não estivesse na sala?",
+        "type": "longtext"
+      },
+      {
+        "key": "matriz",
+        "label": "Por concorrente",
+        "type": "table",
+        "columns": [
+          "Concorrente",
+          "O que um FÃ diria",
+          "O que um HATER diria"
+        ],
+        "repeatable": true,
+        "min_rows": 3,
+        "max_rows": 5
+      }
+    ]
+  },
+  {
+    "code": "V9",
+    "axis": "V",
+    "phase": "F3",
+    "name": "Transformação (Ponto A e B do cliente)",
+    "minimum": true,
+    "duration": 25,
+    "source": "M05 A09",
+    "intro": "É o ponto A/B aplicado ao consumidor, não à empresa. Só funciona depois da persona e do mapa de empatia.",
+    "fields": [
+      {
+        "key": "emergentes",
+        "label": "Necessidades emergentes no mundo para a nossa categoria",
+        "type": "longtext"
+      },
+      {
+        "key": "hoje",
+        "label": "Onde os nossos clientes estão hoje?",
+        "type": "longtext"
+      },
+      {
+        "key": "desejado",
+        "label": "Onde eles gostariam de estar?",
+        "type": "longtext"
+      }
+    ]
+  },
+  {
+    "code": "V10",
+    "axis": "V",
+    "phase": "F3",
+    "name": "Jobs to be Done",
+    "minimum": false,
+    "duration": 30,
+    "source": "M05 A09",
+    "intro": "Serve para descobrir concorrentes que o cliente não sabia que tinha. Em vez de partir das empresas, parte das dores. Faz você pesquisar coisas que não pesquisaria. Use quando houver dificuldade em definir os players. Ex.: o TikTok Shop virou concorrente de plataforma de e-commerce — e já era falado havia anos.",
+    "fields": [
+      {
+        "key": "dores",
+        "label": "Dores do público",
+        "type": "table",
+        "columns": [
+          "Dor",
+          "Tipo (funcional/emocional/simbólica)"
+        ]
+      },
+      {
+        "key": "problemas",
+        "label": "Problemas que tentam resolver com o nosso produto",
+        "type": "list"
+      },
+      {
+        "key": "como_resolvem",
+        "label": "Que outras marcas ou produtos resolvem esses mesmos problemas de outra forma?",
+        "type": "longtext"
+      },
+      {
+        "key": "curto",
+        "label": "Concorrentes de curto prazo",
+        "type": "list",
+        "hint": "A teoria troca 'direto/indireto' por 'curto/longo prazo'."
+      },
+      {
+        "key": "longo",
+        "label": "Concorrentes de longo prazo",
+        "type": "list"
+      }
+    ]
+  },
+  {
+    "code": "V11",
+    "axis": "V",
+    "phase": "F3",
+    "name": "Equação da Proposta de Valor",
+    "minimum": false,
+    "duration": 40,
+    "source": "M05 A09 parte 2 (transcrição — ausente do PDF)",
+    "intro": "Benefícios − custos = valor. Toda oferta tem lado positivo e lado negativo; o projeto de marca costuma cuidar só dos benefícios. Se você quer vender um serviço de 100 mil, precisa gerar mais de 100 mil nessa conta. Facilitação: aqui Lona prefere ir escrevendo e puxando debate, em vez de post-it.",
+    "fields": [
+      {
+        "key": "b_func",
+        "label": "Benefícios funcionais",
+        "type": "list",
+        "hint": "A função. A água que mata a sede."
+      },
+      {
+        "key": "b_emo",
+        "label": "Benefícios emocionais",
+        "type": "list",
+        "hint": "As sensações ao usar o produto ou consumir a marca."
+      },
+      {
+        "key": "b_simb",
+        "label": "Benefícios simbólicos",
+        "type": "list",
+        "hint": "A personalidade. Se me veem bebendo esta água, o que isso faz de mim?"
+      },
+      {
+        "key": "c_fin",
+        "label": "Custo financeiro",
+        "type": "longtext",
+        "hint": "O preço de acesso. Quando o valor é maior que o preço, as pessoas compram."
+      },
+      {
+        "key": "c_tempo",
+        "label": "Custos de tempo e de acesso",
+        "type": "longtext",
+        "hint": "Demora 15 dias para chegar · só dá para usar em um momento · carro elétrico sem onde carregar na estrada."
+      },
+      {
+        "key": "c_psi",
+        "label": "Custos psicológicos",
+        "type": "longtext",
+        "hint": "Sempre relacionados ao outro. Shampoo não tem — ninguém te vê usando. Sex shop tem. Cosmético masculino tem."
+      },
+      {
+        "key": "valor",
+        "label": "Conclusão: qual é o valor líquido percebido?",
+        "type": "longtext"
+      }
+    ]
+  },
+  {
+    "code": "V12",
+    "axis": "V",
+    "phase": "F3",
+    "name": "Escada da Marca",
+    "minimum": false,
+    "duration": 35,
+    "source": "M05 A09 parte 2 (transcrição — ausente do PDF)",
+    "intro": "Sobe do mais fácil ao mais difícil, e cada degrau se constrói a partir do anterior — sempre volte à resposta de baixo. Exemplo Dove: 1/4 de creme hidratante → pele macia e confortável ao toque → sinto minha beleza valorizada → mereço ter minha autoestima elevada. Um sabonete conectado ao sistema de crenças mais íntimo da consumidora. Faça com post-it e escracho; a poesia vem depois, com a equipe.",
+    "fields": [
+      {
+        "key": "caracteristicas",
+        "label": "1. Características do produto",
+        "type": "list",
+        "hint": "O que ele tem, o que ele faz."
+      },
+      {
+        "key": "b_func",
+        "label": "2. Benefícios funcionais",
+        "type": "list",
+        "hint": "Derive das características."
+      },
+      {
+        "key": "b_emo",
+        "label": "3. Benefícios emocionais",
+        "type": "list",
+        "hint": "Derive dos funcionais — e também podem vir direto das características."
+      },
+      {
+        "key": "valores",
+        "label": "4. Valores pessoais / propósito",
+        "type": "list",
+        "hint": "O degrau mais alto. Onde a marca toca o sistema de crenças."
+      }
+    ]
+  },
+  {
+    "code": "V13",
+    "axis": "V",
+    "phase": "F3",
+    "name": "Diferenciais Estratégicos",
+    "minimum": false,
+    "duration": 45,
+    "source": "M05 A09 parte 2 (transcrição — ausente do PDF)",
+    "intro": "Quatro partes em sequência. As duas últimas só funcionam bem porque vêm depois de todo o resto — se você perguntasse no começo, as respostas viriam horríveis.",
+    "fields": [
+      {
+        "key": "players",
+        "label": "1. Opções similares e o diferencial estratégico de cada uma",
+        "type": "table",
+        "columns": [
+          "Player",
+          "Diferencial estratégico dele"
+        ],
+        "repeatable": true,
+        "min_rows": 3,
+        "hint": "Use os players do radar (V7) mais os que apareceram no Jobs to be Done (V10)."
+      },
+      {
+        "key": "preferencia",
+        "label": "2. Preferência — por que nossos clientes deixariam cada um deles para comprar da gente?",
+        "type": "table",
+        "columns": [
+          "Player",
+          "Por que sairiam dele para vir para nós",
+          "(ou) Por que NÃO viriam"
+        ],
+        "repeatable": true,
+        "hint": "Não dá para ganhar sempre. Marcar 'não viriam' já economiza esforço de mercado."
+      },
+      {
+        "key": "unico",
+        "label": "3. Qual é o diferencial estratégico que faz a nossa marca única?",
+        "type": "longtext"
+      },
+      {
+        "key": "lembranca",
+        "label": "4. Qual lembrança queremos deixar na mente dos consumidores?",
+        "type": "longtext",
+        "hint": "Se travar: 'pensa na Nike; qual é a marca que você mais gosta e que lembrança ela deixou em você?'"
+      },
+      {
+        "key": "mensagem",
+        "label": "5. Qual é a mensagem central que queremos deixar?",
+        "type": "longtext",
+        "hint": "Deixe eles responderem do jeito deles. Veja o que sai."
+      }
+    ]
+  },
+  {
+    "code": "V14",
+    "axis": "V",
+    "phase": "F5",
+    "name": "Auditoria da Concorrência (verbal, presença e visual)",
+    "minimum": true,
+    "duration": 240,
+    "source": "M05 A09 parte 2 (transcrição — ausente do PDF)",
+    "intro": "ÚNICO exercício do bloco que NÃO é feito com o cliente — é feito por você e sua equipe depois do workshop. Entre no site, nas mídias sociais, nos grupos de WhatsApp, e tente comprar um produto para ver como tratam na venda. Objetivo: mapear as palavras, mensagens e territórios visuais já ocupados, para achar o espaço vazio.",
+    "fields": [
+      {
+        "key": "descricao",
+        "label": "Descrição do player e informações principais",
+        "type": "table",
+        "columns": [
+          "Player",
+          "Descrição",
+          "Informações principais"
+        ],
+        "repeatable": true
+      },
+      {
+        "key": "verbal",
+        "label": "Auditoria verbal — frases do site, bio do Instagram e do LinkedIn, embalagem",
+        "type": "table",
+        "columns": [
+          "Player",
+          "Frase capturada",
+          "Atributos que ela puxa"
+        ],
+        "repeatable": true,
+        "hint": "Ex. Shopify: 'abra uma loja virtual, não importa o nicho' → customização, democrático, acessível."
+      },
+      {
+        "key": "presenca",
+        "label": "Auditoria de presença online — comportamento, frequência, assuntos e temas",
+        "type": "longtext"
+      },
+      {
+        "key": "visual",
+        "label": "Auditoria visual — prints e fotos montados como moodboard de comportamento",
+        "type": "file",
+        "hint": "Não é referência de gosto: é leitura de comportamento de layout e de identidade visual."
+      },
+      {
+        "key": "espaco_vazio",
+        "label": "Conclusão: qual espaço de posicionamento está vazio?",
+        "type": "longtext",
+        "hint": "Verbal e visual. É o que a marca pode ocupar para ser percebida como de fato única."
+      }
+    ]
+  },
+  {
+    "code": "E1",
+    "axis": "E",
+    "phase": "F3",
+    "name": "História de Criação",
+    "minimum": true,
+    "duration": 40,
+    "source": "M05 A11",
+    "intro": "Pode ir como lição de casa ANTES da imersão — é assim que Lona costuma passar. Alguns fundadores voltam com seis páginas escritas sozinhos; outros só produzem se você extrair em conversa. Teste as duas formas. O que importa é chegar na origem, nos valores, na fagulha do começo.",
+    "homework": true,
+    "fields": [
+      {
+        "key": "passado",
+        "label": "Passado",
+        "type": "longtext",
+        "hint": "A história do fundador antes da empresa."
+      },
+      {
+        "key": "inflexao",
+        "label": "Ponto de inflexão",
+        "type": "longtext",
+        "hint": "A fagulha. O momento que gerou a ideia do negócio."
+      },
+      {
+        "key": "resultado",
+        "label": "Resultado e convite ao futuro",
+        "type": "longtext",
+        "hint": "Como está hoje e para onde convida."
+      }
+    ]
+  },
+  {
+    "code": "E2",
+    "axis": "E",
+    "phase": "F3",
+    "name": "Obituário",
+    "minimum": false,
+    "duration": 20,
+    "source": "M05 A11",
+    "intro": "Engenharia reversa: 30 anos se passaram e a marca chegou ao fim, tendo conseguido tudo que queria. O que você quer que seja dito é o que a marca tem que ser hoje.",
+    "fields": [
+      {
+        "key": "lembrada",
+        "label": "Como ela será lembrada?",
+        "type": "longtext"
+      },
+      {
+        "key": "legado",
+        "label": "Qual foi o legado?",
+        "type": "longtext"
+      },
+      {
+        "key": "construiu",
+        "label": "O que ela construiu?",
+        "type": "longtext"
+      },
+      {
+        "key": "importou",
+        "label": "Por que ela importou?",
+        "type": "longtext"
+      }
+    ]
+  },
+  {
+    "code": "E3",
+    "axis": "E",
+    "phase": "F3",
+    "name": "Pontos de Virada, Lições e Identidade",
+    "minimum": false,
+    "duration": 30,
+    "source": "M05 A11 (transcrição — ausente do PDF)",
+    "intro": "Rodada dinâmica de post-it que vem LOGO DEPOIS da História de Criação (E1) — o fundador olha o próprio texto e fica muito mais fácil responder. Três degraus encadeados. Se alguém questionar que isso é sobre o dono e não sobre a marca: \"não existe marca, existem as pessoas que constroem a empresa; a marca é o resultado, é a reputação\".",
+    "fields": [
+      {
+        "key": "viradas",
+        "label": "1. Liste os momentos em que você pensou: “a minha vida mudou aqui”",
+        "type": "list"
+      },
+      {
+        "key": "licoes",
+        "label": "2. O que você aprendeu com cada ponto de virada?",
+        "type": "longtext",
+        "hint": "Que lição ele te trouxe."
+      },
+      {
+        "key": "identidade",
+        "label": "3. Como essas lições refletiram na sua identidade?",
+        "type": "longtext",
+        "hint": "Como mudaram o seu jeito de fazer as coisas, de tomar decisões e de agir."
+      }
+    ]
+  },
+  {
+    "code": "E4",
+    "axis": "E",
+    "phase": "F3",
+    "name": "Sistema de Crenças: Defendemos / Somos contra",
+    "minimum": false,
+    "duration": 20,
+    "source": "M05 A11 (transcrição — ausente do PDF)",
+    "intro": "Primeira parte do bloco de crenças, antes de Visão e Missões. Para saber no que a marca acredita costuma ser mais fácil começar pelo que ela NÃO acredita — a negativa puxa a resposta para aquilo que a pessoa realmente se importa. Não é posição política pessoal: é a realidade da empresa e da marca. Formato dinâmico, todo mundo refletindo junto.",
+    "fields": [
+      {
+        "key": "defendemos",
+        "label": "Defendemos…",
+        "type": "list"
+      },
+      {
+        "key": "contra",
+        "label": "Somos contra…",
+        "type": "list"
+      },
+      {
+        "key": "acreditamos",
+        "label": "Acreditamos…",
+        "type": "list"
+      },
+      {
+        "key": "nao_acreditamos",
+        "label": "Não acreditamos…",
+        "type": "list"
+      }
+    ]
+  },
+  {
+    "code": "E5",
+    "axis": "E",
+    "phase": "F3",
+    "name": "Visão de Mundo e Missões",
+    "minimum": true,
+    "duration": 30,
+    "source": "M05 A11",
+    "intro": "Segunda parte do bloco de crenças — a razão de existência. NÃO explique a pirâmide para o cliente: você se enrola, ele fica confuso e trava. Faça as perguntas e organize depois. Depois é discussão · post-it · discussão · post-it.",
+    "fields": [
+      {
+        "key": "visao",
+        "label": "O que a marca está tentando construir? Ou exterminar?",
+        "type": "longtext",
+        "hint": "Como empresa, como instituição — não o futuro do fundador nem da família dele."
+      },
+      {
+        "key": "missoes",
+        "label": "Como a gente chega lá? O que a marca pode exercer?",
+        "type": "list",
+        "hint": "As missões são ações aplicáveis."
+      }
+    ]
+  },
+  {
+    "code": "E6",
+    "axis": "E",
+    "phase": "F3",
+    "name": "Valores Inegociáveis",
+    "minimum": false,
+    "duration": 25,
+    "source": "M05 A11",
+    "intro": "Formato de narrativa com frases para completar — você começa a frase e deixa eles terminarem. Dos textos você extrai os valores. Terceiro exercício seguido falando de valores: é de propósito, porque é difícil.",
+    "fields": [
+      {
+        "key": "nunca",
+        "label": "Eu nunca vou…",
+        "type": "list",
+        "hint": "O que a marca e o fundador nunca vão fazer."
+      },
+      {
+        "key": "sempre",
+        "label": "Eu sempre vou…",
+        "type": "list",
+        "hint": "O contraponto que aparece sozinho depois do 'nunca'."
+      },
+      {
+        "key": "move",
+        "label": "O que mais me move é…",
+        "type": "longtext"
+      },
+      {
+        "key": "inspiram",
+        "label": "As pessoas que me inspiram são…",
+        "type": "list"
+      },
+      {
+        "key": "valores",
+        "label": "Valores extraídos",
+        "type": "list",
+        "hint": "Preencher depois, na síntese."
+      }
+    ]
+  },
+  {
+    "code": "E7",
+    "axis": "E",
+    "phase": "F3",
+    "name": "Propósito — Ikigai adaptado (com negativos)",
+    "minimum": true,
+    "duration": 50,
+    "source": "M05 A11 (transcrição — o PDF omite os negativos e a etapa dos 4 parágrafos)",
+    "intro": "Existe para fugir do caráter abstrato do propósito — \"não é salvar as baleias e a mata atlântica\". Quatro áreas de observação, e CADA UMA tem um lado positivo e um negativo. Depois: agrupar os post-its em quatro colunas, escrever UM PARÁGRAFO por bloco, e só então gerar as declarações (com IA, a partir dos quatro textos). O propósito está na interseção — a zona azul do Ikigai.",
+    "fields": [
+      {
+        "key": "hab_pos",
+        "label": "Habilidades +",
+        "type": "list",
+        "hint": "No que você é bom, no que pode dizer que é o melhor do mundo mesmo que ainda não seja verdade."
+      },
+      {
+        "key": "hab_neg",
+        "label": "Habilidades −",
+        "type": "list",
+        "hint": "Fraquezas, gargalos, o que você não sabe, o que prefere não fazer."
+      },
+      {
+        "key": "int_pos",
+        "label": "Interesses / curiosidade +",
+        "type": "list",
+        "hint": "O que gera curiosidade, o que você gosta de fazer."
+      },
+      {
+        "key": "int_neg",
+        "label": "Interesses −",
+        "type": "list",
+        "hint": "O que te dá tédio."
+      },
+      {
+        "key": "pai_pos",
+        "label": "Paixão +",
+        "type": "list",
+        "hint": "O que você ama fazer, qual parte do trabalho mexe com seus sentimentos, o que te move."
+      },
+      {
+        "key": "pai_neg",
+        "label": "Paixão −",
+        "type": "list",
+        "hint": "O que te dá raiva, o que você não pode controlar, o que te prende, o que precisa ser repensado."
+      },
+      {
+        "key": "imp_pos",
+        "label": "Impacto +",
+        "type": "list",
+        "hint": "Que impacto quer deixar no mundo, como quer que as pessoas se sintam, como quer ser lembrado."
+      },
+      {
+        "key": "imp_neg",
+        "label": "Impacto −",
+        "type": "list",
+        "hint": "O que precisa ser evitado, o que não pode acontecer, o que não queremos causar."
+      },
+      {
+        "key": "t_hab",
+        "label": "Parágrafo — habilidades",
+        "type": "longtext",
+        "hint": "Ex. Marcados: \"Somos designers. Nossa essência é o pensamento estratégico… sabemos criar, mas preferimos traduzir.\""
+      },
+      {
+        "key": "t_int",
+        "label": "Parágrafo — interesses",
+        "type": "longtext"
+      },
+      {
+        "key": "t_pai",
+        "label": "Parágrafo — paixão",
+        "type": "longtext"
+      },
+      {
+        "key": "t_imp",
+        "label": "Parágrafo — impacto",
+        "type": "longtext"
+      },
+      {
+        "key": "declaracao",
+        "label": "Declaração de propósito",
+        "type": "text",
+        "hint": "Existimos para [ação] + [para quem] + [gerando que transformação]. Gere várias e deixe o cliente escolher."
+      }
+    ]
+  },
+  {
+    "code": "E8",
+    "axis": "E",
+    "phase": "F3",
+    "name": "Atributos de Personalidade",
+    "minimum": true,
+    "duration": 30,
+    "source": "M05 A11",
+    "intro": "A identidade visual E a verbal partem daqui. Tenha uma biblioteca de atributos pronta — baralho de mercado ou lista gerada por IA funciona igual. Cuidado com baralhos em que cada carta é um universo inteiro: cinco cartas viram cinco universos e você trava na hora de criar. Leve exemplos de marca por atributo (animada: Porsche, Absolut, Red Bull · competência: Amex, IBM, Toyota — e mostre como 'confiável' se quebra em cuidadoso, sóbrio, trabalhador). A mecânica é simples: a gente é / a gente não é.",
+    "fields": [
+      {
+        "key": "modo",
+        "label": "Modo do exercício",
+        "type": "select",
+        "options": [
+          "Seleção de lista (50–100 atributos, escolher 5–7)",
+          "Brainstorming livre ('se a marca fosse uma pessoa…')",
+          "Comparação binária (mais X ou mais Y?)"
+        ]
+      },
+      {
+        "key": "somos",
+        "label": "A gente É",
+        "type": "list"
+      },
+      {
+        "key": "nao_somos",
+        "label": "A gente NÃO é",
+        "type": "list"
+      },
+      {
+        "key": "selecionados",
+        "label": "Atributos selecionados",
+        "type": "list",
+        "hint": "5 a 7. Entram na prova real (E9). Refine em casa depois da imersão, buscando palavras melhores para a mesma ideia."
+      }
+    ]
+  },
+  {
+    "code": "E9",
+    "axis": "E",
+    "phase": "F3",
+    "name": "Prova Real da Personalidade",
+    "minimum": true,
+    "duration": 40,
+    "source": "M05 A11",
+    "intro": "Escolher atributo numa lista é fácil demais — \"ah, a gente é honesto e transparente\". Então tá bom, vamos ver. Seis atributos. Aqui você coloca o cliente contra ele mesmo.",
+    "fields": [
+      {
+        "key": "matriz",
+        "label": "Por atributo",
+        "type": "table",
+        "columns": [
+          "Atributo",
+          "Ações que demonstram",
+          "Práticas que comprovam",
+          "Como os relacionamentos refletem",
+          "Como a comunicação demonstra"
+        ],
+        "repeatable": true,
+        "max_rows": 6
+      },
+      {
+        "key": "lacunas",
+        "label": "Onde a marca NÃO está exercendo",
+        "type": "longtext",
+        "hint": "Vira conversa: querem exercer de verdade? Se querem, proponha ideias — 'se querem ser transparentes, dá para abrir as contas da empresa na internet'. É isso mesmo que vocês quiseram dizer?"
+      }
+    ]
+  },
+  {
+    "code": "E10",
+    "axis": "E",
+    "phase": "F3",
+    "name": "História da Marca (Donald Miller)",
+    "minimum": false,
+    "duration": 30,
+    "source": "M05 A11",
+    "intro": "O herói nunca é a marca. O herói é o cliente; a marca é o guia. Serve para todo cliente — e vale treinar com marcas que você admira antes de aplicar.",
+    "fields": [
+      {
+        "key": "heroi",
+        "label": "Herói",
+        "type": "text",
+        "hint": "O cliente, o público. Nunca a marca."
+      },
+      {
+        "key": "desafio",
+        "label": "Desafio",
+        "type": "longtext",
+        "hint": "O problema que o herói precisa resolver."
+      },
+      {
+        "key": "guia",
+        "label": "Guia",
+        "type": "text",
+        "hint": "Aqui sim é a marca."
+      },
+      {
+        "key": "plano",
+        "label": "Plano",
+        "type": "list",
+        "hint": "Como o guia ajuda. Qual é o método, quais são os passos."
+      },
+      {
+        "key": "convite",
+        "label": "Convite para ação",
+        "type": "text"
+      },
+      {
+        "key": "tragedia",
+        "label": "Tragédia",
+        "type": "longtext",
+        "hint": "O que acontece se o herói não agir."
+      },
+      {
+        "key": "final",
+        "label": "Final feliz",
+        "type": "longtext",
+        "hint": "A transformação quando ele segue o plano."
+      }
+    ]
+  },
+  {
+    "code": "E11",
+    "axis": "E",
+    "phase": "F3",
+    "name": "Universo da Marca (David Aaker)",
+    "minimum": false,
+    "duration": 35,
+    "source": "M05 A11",
+    "intro": "O mais difícil do bloco, e feito no FIM: junte TODAS as palavras e termos que apareceram durante a imersão, o workshop e o relatório de estratégia, e distribua nos três arcos. É a origem do sistema de keywords.",
+    "fields": [
+      {
+        "key": "todas",
+        "label": "Todas as palavras que apareceram no processo",
+        "type": "list"
+      },
+      {
+        "key": "essencia",
+        "label": "Essência",
+        "type": "list",
+        "hint": "A mensagem e a promessa central. A declaração mais importante da marca."
+      },
+      {
+        "key": "central",
+        "label": "Identidade central",
+        "type": "list",
+        "hint": "Os fatores convincentes e diferenciadores."
+      },
+      {
+        "key": "estendida",
+        "label": "Identidade estendida",
+        "type": "list",
+        "hint": "O que agrega textura: narrativas periféricas."
+      }
+    ]
+  },
+  {
+    "code": "PD1",
+    "axis": "—",
+    "phase": "F2",
+    "name": "Roteiro de Entrevista Individual",
+    "minimum": true,
+    "duration": 60,
+    "source": "M05 A03",
+    "intro": "Individual, fora do ambiente da empresa, com confidencialidade declarada. Anote à mão e grave.",
+    "repeatable_per": "pessoa",
+    "fields": [
+      {
+        "key": "pessoa",
+        "label": "Nome e papel na empresa",
+        "type": "text"
+      },
+      {
+        "key": "tempo_casa",
+        "label": "Há quanto tempo está na empresa",
+        "type": "text"
+      },
+      {
+        "key": "visao",
+        "label": "Visão pessoal: se explicasse a empresa para um estranho, o que diria?",
+        "type": "longtext"
+      },
+      {
+        "key": "n_funciona",
+        "label": "[N] O que funciona bem? O que não funciona? Onde está o gargalo?",
+        "type": "longtext"
+      },
+      {
+        "key": "n_objetivos",
+        "label": "[N] Quais objetivos da empresa você conhece?",
+        "type": "longtext"
+      },
+      {
+        "key": "a_cliente",
+        "label": "[A] Quem é o cliente da empresa na sua visão?",
+        "type": "longtext"
+      },
+      {
+        "key": "a_reclama",
+        "label": "[A] O que ele mais reclama? O que mais elogia?",
+        "type": "longtext"
+      },
+      {
+        "key": "v_escolha",
+        "label": "[V] Por que um cliente escolhe a gente e não o concorrente?",
+        "type": "longtext"
+      },
+      {
+        "key": "v_concorrentes",
+        "label": "[V] Quem são os concorrentes? Onde perdemos?",
+        "type": "longtext"
+      },
+      {
+        "key": "e_defende",
+        "label": "[E] O que você acredita que a empresa defende?",
+        "type": "longtext"
+      },
+      {
+        "key": "e_pessoa",
+        "label": "[E] Se a empresa fosse uma pessoa, como seria?",
+        "type": "longtext"
+      },
+      {
+        "key": "e_orgulho",
+        "label": "[E] Do que você tem orgulho aqui?",
+        "type": "longtext"
+      },
+      {
+        "key": "frustra",
+        "label": "O que te frustra? O que mudaria hoje se pudesse?",
+        "type": "longtext"
+      },
+      {
+        "key": "conversa",
+        "label": "Qual conversa a empresa não está tendo?",
+        "type": "longtext"
+      },
+      {
+        "key": "expectativa",
+        "label": "O que precisa acontecer para este projeto ter valido a pena para você?",
+        "type": "longtext"
+      },
+      {
+        "key": "gravacao",
+        "label": "Gravação / transcrição",
+        "type": "url"
+      }
+    ]
+  },
+  {
+    "code": "PD2",
+    "axis": "—",
+    "phase": "F4",
+    "name": "Descompressão do Estrategista",
+    "minimum": true,
+    "duration": 45,
+    "source": "M06 A02",
+    "intro": "No dia seguinte à imersão, grave 30–60 min contando suas percepções para alguém que NÃO participou.",
+    "fields": [
+      {
+        "key": "audio",
+        "label": "Gravação / transcrição",
+        "type": "url"
+      },
+      {
+        "key": "percepcoes",
+        "label": "Percepções cruas",
+        "type": "longtext"
+      },
+      {
+        "key": "discrepancias",
+        "label": "Discrepâncias e incongruências que já notei",
+        "type": "list"
+      }
+    ]
+  },
+  {
+    "code": "DG1",
+    "axis": "—",
+    "phase": "F6",
+    "name": "As 5 Validações Críticas",
+    "minimum": true,
+    "duration": 90,
+    "source": "M06 A01",
+    "intro": "Passe todo o material coletado por estes cinco filtros antes de escrever o laudo.",
+    "fields": [
+      {
+        "key": "conflitos",
+        "label": "1. Conflitos e incoerências",
+        "type": "list",
+        "hint": "A percepção desejada bate com o valor para o público-alvo?"
+      },
+      {
+        "key": "repeticoes",
+        "label": "2. Repetições significativas",
+        "type": "list",
+        "hint": "Que palavras e conceitos voltam sempre? É pauta do momento ou princípio de DNA?"
+      },
+      {
+        "key": "percepcao_dado",
+        "label": "3. Percepção vs. dado concreto",
+        "type": "list",
+        "hint": "Isso veio de dado ou de 'eu conheço o mercado'?"
+      },
+      {
+        "key": "discurso_pratica",
+        "label": "4. Discurso vs. prática",
+        "type": "list",
+        "hint": "Diz querer ser premium e vive fazendo promoção?"
+      },
+      {
+        "key": "genericas",
+        "label": "5. Respostas genéricas",
+        "type": "list",
+        "hint": "Devolva pedindo profundidade: 'me explica o que é maior na sua visão'."
+      },
+      {
+        "key": "contradicoes",
+        "label": "Contradições registradas",
+        "type": "list",
+        "hint": "É aqui que costuma estar a verdade que vira diferencial."
+      }
+    ]
+  },
+  {
+    "code": "DG2",
+    "axis": "—",
+    "phase": "F5",
+    "name": "Matriz de Concorrentes",
+    "minimum": true,
+    "duration": 120,
+    "source": "M06 A03",
+    "fields": [
+      {
+        "key": "matriz",
+        "label": "Por concorrente",
+        "type": "table",
+        "columns": [
+          "Concorrente",
+          "Direto/Indireto",
+          "Promessa declarada",
+          "Público aparente",
+          "Palavras que dominam",
+          "Necessidade que atende",
+          "Necessidade que deixa vaga"
+        ],
+        "repeatable": true
+      },
+      {
+        "key": "aglomeracao",
+        "label": "Onde há aglomeração",
+        "type": "longtext",
+        "hint": "Ex.: 8 batendo em preço = guerra de preços, não diferencial."
+      },
+      {
+        "key": "vazio",
+        "label": "Onde há vazio",
+        "type": "longtext",
+        "hint": "A oportunidade de discurso proprietário."
+      }
+    ]
+  },
+  {
+    "code": "DG3",
+    "axis": "—",
+    "phase": "F5",
+    "name": "Auditoria de Percepção Externa",
+    "minimum": false,
+    "duration": 120,
+    "source": "M06 A03",
+    "condition": "marca_existente",
+    "fields": [
+      {
+        "key": "percebida",
+        "label": "Como a marca é percebida hoje (com evidência)",
+        "type": "longtext"
+      },
+      {
+        "key": "acha",
+        "label": "Como o cliente acha que é percebida",
+        "type": "longtext"
+      },
+      {
+        "key": "gap",
+        "label": "GAP entre as duas colunas",
+        "type": "longtext",
+        "hint": "Costuma ser o coração do diagnóstico."
+      },
+      {
+        "key": "fontes",
+        "label": "Fontes consultadas",
+        "type": "list",
+        "hint": "Redes, fóruns, Reclame Aqui, reviews, conversas."
+      },
+      {
+        "key": "entrevistas",
+        "label": "Conversas com clientes",
+        "type": "table",
+        "columns": [
+          "Tipo (atual / ex / voltou / nunca comprou)",
+          "O que disse",
+          "O que NÃO disse"
+        ]
+      }
+    ]
+  },
+  {
+    "code": "DG4",
+    "axis": "—",
+    "phase": "F6",
+    "name": "Mapa de Insights",
+    "minimum": true,
+    "duration": 90,
+    "source": "M06 A06",
+    "intro": "A ponte entre diagnóstico e estratégia. Uma linha por insight.",
+    "fields": [
+      {
+        "key": "matriz",
+        "label": "Cadeia do insight",
+        "type": "table",
+        "columns": [
+          "Dado (com fonte)",
+          "Padrão",
+          "Tensão",
+          "Problema vs. sintoma",
+          "Oportunidade",
+          "Hipótese estratégica",
+          "Status",
+          "Vira qual bloco (1–6)"
+        ],
+        "repeatable": true
+      }
+    ]
+  },
+  {
+    "code": "ES1",
+    "axis": "—",
+    "phase": "F7",
+    "name": "Os 6 Blocos do Relatório de Estratégia",
+    "minimum": true,
+    "duration": 240,
+    "source": "M06 A05",
+    "intro": "Cada diretriz diz o que fazer, o que não fazer e por quê. O porquê vem todo do diagnóstico.",
+    "fields": [
+      {
+        "key": "promessa",
+        "label": "1. Promessa / Transformação",
+        "type": "longtext",
+        "hint": "Não é o que a empresa faz: é a mudança que gera, o impacto, a conversa para a qual convida."
+      },
+      {
+        "key": "personalidade",
+        "label": "2. Diretrizes de Personalidade",
+        "type": "table",
+        "columns": [
+          "Atributo",
+          "Definição (em 1ª pessoa do plural)",
+          "Do's",
+          "Don'ts"
+        ],
+        "repeatable": true,
+        "hint": "É o briefing direto para identidade visual e verbal."
+      },
+      {
+        "key": "valores",
+        "label": "3. Diretrizes de Valores",
+        "type": "table",
+        "columns": [
+          "Valor",
+          "Definição",
+          "Sinal vermelho: com quem NÃO nos relacionamos"
+        ],
+        "repeatable": true
+      },
+      {
+        "key": "oportunidades",
+        "label": "4. Oportunidades de Mercado",
+        "type": "longtext",
+        "hint": "Onde a marca terá discurso proprietário."
+      },
+      {
+        "key": "mensagens",
+        "label": "5. Principais Mensagens",
+        "type": "table",
+        "columns": [
+          "Mensagem",
+          "Papel (diferenciadora / especialidade / inimigo comum / diferencial)"
+        ],
+        "repeatable": true
+      },
+      {
+        "key": "posicionamento",
+        "label": "6. Declaração de Posicionamento",
+        "type": "longtext",
+        "hint": "Analítica, não poética. Conecta público, promessa, diferencial, crença e defesa."
+      },
+      {
+        "key": "renuncias",
+        "label": "Escolhas e renúncias",
+        "type": "longtext",
+        "hint": "O que a marca passa a NÃO fazer."
+      },
+      {
+        "key": "riscos",
+        "label": "Riscos e limitações sinalizados",
+        "type": "longtext",
+        "hint": "Erro #7: não fuja da notícia difícil."
+      }
+    ]
+  },
+  {
+    "code": "ES2",
+    "axis": "—",
+    "phase": "F8",
+    "name": "Os 3 Testes do Posicionamento",
+    "minimum": true,
+    "duration": 30,
+    "source": "M06 A08",
+    "intro": "Prova real. Reprovou em qualquer um: reescrever, não maquiar.",
+    "fields": [
+      {
+        "key": "declaracao",
+        "label": "Declaração em teste",
+        "type": "longtext"
+      },
+      {
+        "key": "contrario",
+        "label": "1. Escreva o contrário",
+        "type": "longtext"
+      },
+      {
+        "key": "contrario_ok",
+        "label": "Alguém defenderia o contrário?",
+        "type": "select",
+        "options": [
+          "Sim — passa",
+          "Não — é óbvio, reescrever"
+        ]
+      },
+      {
+        "key": "concorrente",
+        "label": "2. Coloque na boca do concorrente",
+        "type": "longtext"
+      },
+      {
+        "key": "concorrente_ok",
+        "label": "Como soa?",
+        "type": "select",
+        "options": [
+          "Gera estranheza — proprietário",
+          "Soa natural — genérico, reescrever"
+        ]
+      },
+      {
+        "key": "sem_segmento",
+        "label": "3. Remova o segmento de mercado",
+        "type": "longtext"
+      },
+      {
+        "key": "sem_segmento_ok",
+        "label": "Ainda há promessa?",
+        "type": "select",
+        "options": [
+          "Sim — passa",
+          "Não — depende da categoria, reescrever"
+        ]
+      }
+    ]
+  },
+  {
+    "code": "ES3",
+    "axis": "—",
+    "phase": "F8",
+    "name": "Plataforma de Marca",
+    "minimum": false,
+    "duration": 60,
+    "source": "M06 A09",
+    "intro": "Síntese em 7 elementos. Poucas palavras, mas dizendo algo específico. Passe cada campo pelos testes 1 e 2.",
+    "fields": [
+      {
+        "key": "proposito",
+        "label": "1. Propósito",
+        "type": "text",
+        "hint": "Por que estamos aqui. Tom emocional, ligado à história de criação."
+      },
+      {
+        "key": "posicionamento",
+        "label": "2. Posicionamento",
+        "type": "text",
+        "hint": "A posição competitiva: o que fazemos e como fazemos."
+      },
+      {
+        "key": "publico",
+        "label": "3. Público",
+        "type": "text",
+        "hint": "Para quem existe + o insight que conecta a marca a esse grupo."
+      },
+      {
+        "key": "valores",
+        "label": "4. Valores",
+        "type": "list",
+        "hint": "Princípios que estiveram lá desde o começo."
+      },
+      {
+        "key": "personalidade",
+        "label": "5. Personalidade",
+        "type": "list",
+        "hint": "As características humanas que formam o caráter."
+      },
+      {
+        "key": "drivers",
+        "label": "6. Drivers (diferencial / benefícios)",
+        "type": "list",
+        "hint": "Os motivos pelos quais devem consumir."
+      },
+      {
+        "key": "promessa",
+        "label": "7. Promessa",
+        "type": "text",
+        "hint": "O convite, a visão de mundo de longo prazo."
+      }
+    ]
+  },
+  {
+    "code": "NM1",
+    "axis": "—",
+    "phase": "F10",
+    "name": "Mapeamento de Naming (6 etapas)",
+    "minimum": true,
+    "duration": 120,
+    "source": "M07 A02",
+    "fields": [
+      {
+        "key": "e1_objetivos",
+        "label": "1. Olhe para frente — objetivos",
+        "type": "longtext",
+        "hint": "O que queremos transmitir? Como quer ser lembrada? Visão de sucesso para o nome? Falam o nome e pensam o quê?"
+      },
+      {
+        "key": "e1_longo_prazo",
+        "label": "1b. Visão de longo prazo",
+        "type": "longtext",
+        "hint": "Para o nome não bloquear a marca depois."
+      },
+      {
+        "key": "e2_historia",
+        "label": "2. Olhe para trás — a história",
+        "type": "longtext",
+        "hint": "Pontos de virada, reasons why, crises. A história de criação é mina de ouro."
+      },
+      {
+        "key": "e3_dentro",
+        "label": "3. Olhe para dentro — jeito de ser",
+        "type": "longtext",
+        "hint": "Princípios inegociáveis, propósito, diferenciais, personalidade. Daqui nascem os nomes sugestivos."
+      },
+      {
+        "key": "e4_publico",
+        "label": "4. Olhe para o público",
+        "type": "longtext",
+        "hint": "Dores, objetivos e restrições. Daqui nascem os nomes corajosos."
+      },
+      {
+        "key": "e5_concorrentes",
+        "label": "5. Olhe para o lado — o que o cliente acha do nome de cada concorrente",
+        "type": "table",
+        "columns": [
+          "Concorrente",
+          "O que o cliente acha do nome"
+        ],
+        "repeatable": true
+      },
+      {
+        "key": "e6_caminho",
+        "label": "6. Caminho escolhido",
+        "type": "select",
+        "options": [
+          "Descritivo",
+          "Sugestivo",
+          "Metafórico"
+        ],
+        "hint": "Validar com o cliente ANTES de criar."
+      }
+    ]
+  },
+  {
+    "code": "NM2",
+    "axis": "—",
+    "phase": "F10",
+    "name": "Ideação de Nomes",
+    "minimum": true,
+    "duration": 480,
+    "source": "M07 A03",
+    "intro": "2 a 3 dias, dormindo entre as sessões. Não faça sozinho. Anote a origem de cada nome.",
+    "fields": [
+      {
+        "key": "caca",
+        "label": "Caça-palavras: palavras que mais se repetem",
+        "type": "list"
+      },
+      {
+        "key": "mapas",
+        "label": "Multiplicação de palavras (mapas mentais)",
+        "type": "longtext"
+      },
+      {
+        "key": "candidatos",
+        "label": "Candidatos",
+        "type": "table",
+        "columns": [
+          "Nome",
+          "Técnica usada",
+          "Origem da ideia",
+          "Tipo"
+        ],
+        "repeatable": true,
+        "hint": "Técnicas: redução · adição · junção · substituição · anagrama · combinação · som."
+      }
+    ]
+  },
+  {
+    "code": "NM3",
+    "axis": "—",
+    "phase": "F10",
+    "name": "Os 12 Filtros de Validação",
+    "minimum": true,
+    "duration": 480,
+    "source": "M07 A04",
+    "intro": "Entusiasmo sem apego. Tenha 20 a 40 nomes alinhados — eles caem em cada etapa.",
+    "fields": [
+      {
+        "key": "filtros",
+        "label": "Board de filtros",
+        "type": "matrix",
+        "rows_from": "NM2.candidatos",
+        "columns": [
+          "1 Alinhamento estratégico",
+          "2 Grafia",
+          "3 Pronúncia",
+          "4 Originalidade",
+          "5 Durabilidade",
+          "6 Memorabilidade",
+          "7 Feedback honesto",
+          "8 Domínio",
+          "9 @ nas redes",
+          "10 Google",
+          "11 INPI",
+          "12 Alternativa"
+        ],
+        "cell_options": [
+          "—",
+          "OK",
+          "Risco",
+          "Reprovado"
+        ]
+      },
+      {
+        "key": "testes_memoria",
+        "label": "Testes de memória realizados",
+        "type": "longtext",
+        "hint": "Boteco, família, lista enviada e recall em 3h e 2 dias."
+      },
+      {
+        "key": "nao_dito",
+        "label": "O não-dito observado",
+        "type": "longtext",
+        "hint": "Expressão ao ouvir, sílaba onde travou, dificuldade de entender."
+      },
+      {
+        "key": "escritorio",
+        "label": "Parecer do escritório de marcas",
+        "type": "longtext"
+      },
+      {
+        "key": "escolhido",
+        "label": "Nome escolhido + conceito de defesa",
+        "type": "longtext"
+      }
+    ]
+  },
+  {
+    "code": "VB1",
+    "axis": "—",
+    "phase": "F11",
+    "name": "Mensagens e Narrativa",
+    "minimum": true,
+    "duration": 180,
+    "source": "M07 A06",
+    "intro": "Começa aqui, obrigatoriamente. É a fundação da identidade verbal.",
+    "fields": [
+      {
+        "key": "mensagens",
+        "label": "Principais mensagens",
+        "type": "table",
+        "columns": [
+          "Mensagem",
+          "Papel",
+          "De onde vem (crença / ponto de vista / propósito)"
+        ],
+        "repeatable": true
+      },
+      {
+        "key": "assets",
+        "label": "Assets verbais",
+        "type": "table",
+        "columns": [
+          "Tipo (lema / mantra / bordão / palavra sagrada / ritual)",
+          "Conteúdo"
+        ],
+        "repeatable": true
+      },
+      {
+        "key": "n1_conceito",
+        "label": "Eixo narrativo · 1. Conceito, crença ou visão de mundo",
+        "type": "longtext"
+      },
+      {
+        "key": "n2_problema",
+        "label": "Eixo narrativo · 2. Problema, dor ou objetivo do público",
+        "type": "longtext"
+      },
+      {
+        "key": "n3_gancho",
+        "label": "Eixo narrativo · 3. Gancho / transição",
+        "type": "longtext"
+      },
+      {
+        "key": "n4_solucao",
+        "label": "Eixo narrativo · 4. Solução e direcionamento",
+        "type": "longtext"
+      },
+      {
+        "key": "texto",
+        "label": "Eixo narrativo — texto final (4 a 5 parágrafos)",
+        "type": "longtext",
+        "hint": "Uso interno. É bússola de posicionamento, não peça pública."
+      }
+    ]
+  },
+  {
+    "code": "VB2",
+    "axis": "—",
+    "phase": "F11",
+    "name": "Voz e Tons de Voz",
+    "minimum": true,
+    "duration": 150,
+    "source": "M07 A07",
+    "intro": "Voz é estável (SER). Tom é mutável (ESTAR). Máximo 3 vozes; 2 a 4 tons por voz.",
+    "fields": [
+      {
+        "key": "atributos",
+        "label": "1. Atributos de personalidade (vindos da estratégia)",
+        "type": "list"
+      },
+      {
+        "key": "verbais",
+        "label": "2. Quais se expressam no campo verbal",
+        "type": "list"
+      },
+      {
+        "key": "vozes",
+        "label": "3–5. Vozes",
+        "type": "table",
+        "columns": [
+          "Nome da voz",
+          "Atributos de origem",
+          "Descrição"
+        ],
+        "repeatable": true,
+        "max_rows": 3
+      },
+      {
+        "key": "tons",
+        "label": "Tons de voz",
+        "type": "table",
+        "columns": [
+          "Voz",
+          "Tom",
+          "Como soa",
+          "Emoção que gera",
+          "Onde usar",
+          "Exemplo"
+        ],
+        "repeatable": true
+      },
+      {
+        "key": "antes_depois",
+        "label": "Antes e depois — um texto reescrito",
+        "type": "longtext",
+        "hint": "É o que mostra o impacto para o cliente."
+      }
+    ]
+  },
+  {
+    "code": "VB3",
+    "axis": "—",
+    "phase": "F11",
+    "name": "Dicionário da Marca",
+    "minimum": true,
+    "duration": 90,
+    "source": "M07 A08",
+    "intro": "Teste de cada palavra: coloque na boca do concorrente. Se ficar estranho, é sua.",
+    "fields": [
+      {
+        "key": "usamos",
+        "label": "Palavras que usamos",
+        "type": "table",
+        "columns": [
+          "Palavra",
+          "Por que é nossa",
+          "O que ela autoriza"
+        ],
+        "repeatable": true
+      },
+      {
+        "key": "evitamos",
+        "label": "Palavras que evitamos",
+        "type": "table",
+        "columns": [
+          "Palavra",
+          "Por que evitamos",
+          "Alternativa"
+        ],
+        "repeatable": true
+      }
+    ]
+  },
+  {
+    "code": "VB4",
+    "axis": "—",
+    "phase": "F11",
+    "name": "Guia de Estilo",
+    "minimum": true,
+    "duration": 90,
+    "source": "M07 A09",
+    "fields": [
+      {
+        "key": "pessoa",
+        "label": "Pessoa verbal",
+        "type": "select",
+        "options": [
+          "Eu",
+          "Nós",
+          "Você",
+          "A marca em 3ª pessoa",
+          "Mistura"
+        ]
+      },
+      {
+        "key": "porta_voz",
+        "label": "Quem fala pela marca",
+        "type": "select",
+        "options": [
+          "O fundador",
+          "Um porta-voz",
+          "A marca como entidade",
+          "A equipe coletiva"
+        ]
+      },
+      {
+        "key": "humor",
+        "label": "Como a marca ri",
+        "type": "text",
+        "hint": "kkk · hahaha · emoji · não ri. Atenção geracional: 💀 é risada para a Gen Z."
+      },
+      {
+        "key": "pontuacao",
+        "label": "Pontuação e formatação",
+        "type": "longtext",
+        "hint": "Maiúsculas, exclamações, reticências, aspas, tamanho de frase."
+      },
+      {
+        "key": "tratamento",
+        "label": "Tratamento e nível de formalidade",
+        "type": "longtext",
+        "hint": "Como se dirige ao público, gírias permitidas."
+      },
+      {
+        "key": "plataformas",
+        "label": "Adaptação por plataforma",
+        "type": "table",
+        "columns": [
+          "Plataforma",
+          "Ajuste"
+        ]
+      }
+    ]
+  },
+  {
+    "code": "VB5",
+    "axis": "—",
+    "phase": "F11",
+    "name": "Manifesto",
+    "minimum": false,
+    "duration": 120,
+    "source": "M07 A10",
+    "intro": "Nem toda marca precisa. Só faz sentido com convicção forte, inimigo claro, público que compartilha e capacidade de agir.",
+    "fields": [
+      {
+        "key": "cabe",
+        "label": "Faz sentido ter manifesto?",
+        "type": "select",
+        "options": [
+          "Sim",
+          "Não"
+        ]
+      },
+      {
+        "key": "diagnostico",
+        "label": "1. Diagnóstico — o que está errado com o mundo atual",
+        "type": "longtext"
+      },
+      {
+        "key": "conviccao",
+        "label": "2. Convicção — no que acreditamos diferente",
+        "type": "longtext"
+      },
+      {
+        "key": "chamada",
+        "label": "3. Chamada — o que vamos fazer e como você participa",
+        "type": "longtext"
+      },
+      {
+        "key": "texto",
+        "label": "Manifesto final",
+        "type": "longtext"
+      }
+    ]
+  },
+  {
+    "code": "VB6",
+    "axis": "—",
+    "phase": "F11",
+    "name": "Tagline e Slogan",
+    "minimum": false,
+    "duration": 90,
+    "source": "M07 A11",
+    "intro": "Máximo 6–7 palavras. Melhor não ter do que ter uma ruim.",
+    "fields": [
+      {
+        "key": "abordagem",
+        "label": "Abordagem",
+        "type": "select",
+        "options": [
+          "Funcional",
+          "Emocional",
+          "Aspiracional",
+          "Provocativa"
+        ]
+      },
+      {
+        "key": "candidatas",
+        "label": "Candidatas",
+        "type": "table",
+        "columns": [
+          "Tagline",
+          "Abordagem",
+          "Memorável?",
+          "Diferenciadora?",
+          "Conecta?",
+          "≤7 palavras?"
+        ],
+        "repeatable": true
+      },
+      {
+        "key": "escolhida",
+        "label": "Tagline escolhida",
+        "type": "text"
+      }
+    ]
+  },
+  {
+    "code": "VB7",
+    "axis": "—",
+    "phase": "F12",
+    "name": "Textos de Apresentação (Key Word)",
+    "minimum": true,
+    "duration": 120,
+    "source": "M07 A12",
+    "fields": [
+      {
+        "key": "elevador",
+        "label": "Versão elevador (30s)",
+        "type": "longtext",
+        "hint": "2–3 frases: o que fazemos · para quem · principal diferencial."
+      },
+      {
+        "key": "comercial",
+        "label": "Versão comercial (2min)",
+        "type": "longtext",
+        "hint": "1 parágrafo: problema · como resolvemos · resultados · por que somos diferentes."
+      },
+      {
+        "key": "institucional",
+        "label": "Versão institucional (5min)",
+        "type": "longtext",
+        "hint": "2–3 parágrafos: história de criação · propósito e missão · como atuamos · visão."
+      },
+      {
+        "key": "imprensa",
+        "label": "Versão imprensa",
+        "type": "longtext",
+        "hint": "Fundação · atuação · números · diferenciais técnicos."
+      },
+      {
+        "key": "testes",
+        "label": "Testes aplicados",
+        "type": "multiselect",
+        "options": [
+          "Clareza — quem não conhece entende",
+          "Diferenciação — não serviria para o concorrente",
+          "Interesse",
+          "Ação"
+        ]
+      }
+    ]
+  },
+  {
+    "code": "VS1",
+    "axis": "—",
+    "phase": "F13",
+    "name": "Conceitos Criativos e Moodboard",
+    "minimum": true,
+    "duration": 240,
+    "source": "M07 A14 (transcrição)",
+    "intro": "A ordem é fixa e a aula é explícita: estratégia → conceitos criativos → moodboards (se necessário) → Key Visual → identidade visual final. Só abra depois de estratégia, posicionamento, verbal e Key Word aprovados — \"o designer que não entende de processo está tentando resolver o problema com 20% das informações\". Durante o processo todo as ideias visuais aparecem: guarde num bloco de notas e NÃO execute antes da hora. AVISO DA AULA: moodboard não é piquenique. Não use para o cliente fazer o seu trabalho — ele não sabe o que quer, o especialista é você. Você apresenta num momento definido e pergunta o que ele acha; isso é diferente de ficar trocando figurinha o tempo todo e entregar o volante. E não suma: no máximo duas semanas entre uma validação e outra.",
+    "fields": [
+      {
+        "key": "tipo",
+        "label": "Tipo de moodboard",
+        "type": "select",
+        "options": [
+          "Teste de temperatura — várias opções de estilo/logo lado a lado, com os atributos ao lado, cliente comenta no Miro",
+          "Painéis por conceito — um board por conceito criativo (ex.: sóbrio · colorido · divertido)",
+          "Não vou usar moodboard neste projeto"
+        ],
+        "hint": "Os dois tipos aparecem na aula. O primeiro testa território cedo; o segundo valida conceitos já formulados."
+      },
+      {
+        "key": "conceitos",
+        "label": "Conceitos criativos (2 a 4)",
+        "type": "table",
+        "columns": [
+          "Nome do conceito",
+          "Justificativa estratégica",
+          "Origem (história/personalidade/diferenciação/valores)",
+          "Características visuais",
+          "Aplicações possíveis"
+        ],
+        "repeatable": true,
+        "min_rows": 2,
+        "max_rows": 4,
+        "hint": "São hipóteses e direções, não elementos. Ex.: resgatar o objeto renascentista que a fundadora ganhou da avó."
+      },
+      {
+        "key": "moodboards",
+        "label": "Moodboards",
+        "type": "table",
+        "columns": [
+          "Conceito",
+          "Paleta e energia",
+          "Referências tipográficas",
+          "Estilo visual",
+          "Aplicações sugeridas",
+          "Link"
+        ],
+        "repeatable": true
+      },
+      {
+        "key": "argumento",
+        "label": "Roteiro de apresentação antes de mostrar o board",
+        "type": "longtext",
+        "hint": "Recapitule a estratégia inteira e as decisões do caminho ANTES de mostrar os painéis — \"um projeto de marca é uma construção de argumentos para defender uma tese\". Se você não construiu o argumento, o board não faz sentido nenhum."
+      },
+      {
+        "key": "reacao",
+        "label": "Reação do cliente",
+        "type": "longtext",
+        "hint": "Onde ele se sentiu proprietário? Onde ele se imagina habitando? O que gerou resistência? Se alguém pedir 'efeito uau', é sinal de que não é profissional de verdade."
+      },
+      {
+        "key": "direcao",
+        "label": "Direção de arte escolhida",
+        "type": "longtext",
+        "hint": "É isto que entra no Key Visual (VS3)."
+      }
+    ]
+  },
+  {
+    "code": "VS2",
+    "axis": "—",
+    "phase": "F14",
+    "name": "Sistema de Identidade (ativos de marca)",
+    "minimum": true,
+    "duration": 600,
+    "source": "M07 A13 (transcrição)",
+    "intro": "Ativos de marca, não checklist de logo/tipografia/cor. Um elemento vira ativo quando gera reconhecimento sozinho: cor, assinatura gráfica, símbolo, frase, expressão, som, nome, forma, gesto. A provocação da aula: \"quando você tira o logo, o que resta é a identidade da marca\". REGRA QUE MANDA EM TUDO: o sistema segue o cliente. A complexidade tem que partir da CAPACIDADE E DOS RECURSOS dele — não adianta entregar família de motion para quem não tem ninguém no social media. Se o cliente não sabe o que fazer com a entrega, a culpa é sua: entrega acadêmica copiada do guia do Google ou da Uber não serve. Ativo só é ativo se estiver sendo usado; se não é usado, não constrói valor.",
+    "fields": [
+      {
+        "key": "logo",
+        "label": "Logo e variações",
+        "type": "longtext",
+        "hint": "Principal, simplificadas, aplicações especiais, regras de uso."
+      },
+      {
+        "key": "paleta",
+        "label": "Paleta cromática",
+        "type": "longtext",
+        "hint": "Primárias, secundárias, funcionais, especificações."
+      },
+      {
+        "key": "tipografia",
+        "label": "Sistema tipográfico",
+        "type": "longtext",
+        "hint": "Família principal e secundária, hierarquia, regras."
+      },
+      {
+        "key": "grafica",
+        "label": "Linguagem gráfica",
+        "type": "longtext",
+        "hint": "Ilustração, tratamento fotográfico, padrões, ícones."
+      },
+      {
+        "key": "arquitetura",
+        "label": "Arquitetura visual",
+        "type": "longtext",
+        "hint": "Grids, espaçamentos, composições, aplicações."
+      },
+      {
+        "key": "justificativas",
+        "label": "Por que cada decisão existe",
+        "type": "table",
+        "columns": [
+          "Elemento",
+          "Atributo ou diretriz de origem"
+        ],
+        "repeatable": true
+      },
+      {
+        "key": "pontos_contato",
+        "label": "Priorização de pontos de contato",
+        "type": "table",
+        "columns": [
+          "Ponto de contato",
+          "Prioridade (crítico/frequente/especial)"
+        ],
+        "repeatable": true
+      }
+    ]
+  },
+  {
+    "code": "VS3",
+    "axis": "—",
+    "phase": "F13",
+    "name": "Key Visual (o cenário)",
+    "minimum": true,
+    "duration": 300,
+    "source": "M07 A15 (transcrição — o PDF descreve outra coisa)",
+    "intro": "ATENÇÃO — o PDF define Key Visual como um elemento gráfico proprietário. A aula define outra coisa: o KV é o DOCUMENTO que apresenta a proposta de linguagem visual num estágio inicial, montando um cenário de como a marca vai se parecer funcionando. Formato Style Scape (Chris Do): antes eram 3 folhas A3 na horizontal impressas; hoje são 3 slides. \"Não tem nada refinado. O logo não está certo, o kerning não está resolvido.\" É uma fachada — e é isso mesmo. Existe para o cliente conseguir dar feedback informado sem entrar no seu Figma, e para ancorar o projeto antes do refino: ir da estratégia direto para a identidade acabada \"vai dar merda\". Uma opção só — o moodboard é o que dispensa fazer duas. Prazo: uma semana ou menos.",
+    "fields": [
+      {
+        "key": "cena",
+        "label": "A peça de abertura — a marca como se já estivesse funcionando",
+        "type": "longtext",
+        "hint": "Um pôster, uma embalagem, uma tela: a peça que o cliente reconhece como sendo o negócio dele."
+      },
+      {
+        "key": "logo",
+        "label": "Logo (rascunho, sem refino)",
+        "type": "file"
+      },
+      {
+        "key": "paleta",
+        "label": "Paleta de cor",
+        "type": "longtext"
+      },
+      {
+        "key": "tipografia",
+        "label": "Tipografias e como trabalham juntas",
+        "type": "longtext"
+      },
+      {
+        "key": "grafismos",
+        "label": "Complementos gráficos e grafismos",
+        "type": "longtext",
+        "hint": "Ex. Santa Cecília: linhas derivadas da partitura, que também servem de grid para os blocos de texto."
+      },
+      {
+        "key": "fotografia",
+        "label": "Tratamento fotográfico",
+        "type": "longtext",
+        "hint": "Ex. fotos em duotone com efeito de jornal."
+      },
+      {
+        "key": "layout",
+        "label": "Comportamento de layout",
+        "type": "longtext"
+      },
+      {
+        "key": "aplicacoes",
+        "label": "Aplicações escolhidas para ESTE cliente",
+        "type": "list",
+        "hint": "Negócio digital pede site, app, stories. Negócio físico pede embalagem, PDV, cardápio, brinde. Monte o cenário que este cliente precisa para conseguir analisar."
+      },
+      {
+        "key": "arquivo",
+        "label": "Arquivo do KV (3 slides)",
+        "type": "file"
+      },
+      {
+        "key": "feedback",
+        "label": "Feedback do cliente e ajustes acordados",
+        "type": "longtext",
+        "hint": "É âncora: sem o aceite aqui, não começa o refino."
+      }
+    ]
+  },
+  {
+    "code": "GM1",
+    "axis": "—",
+    "phase": "F15",
+    "name": "Guia de Marca (Fix / Flex / Free)",
+    "minimum": true,
+    "duration": 600,
+    "source": "M07 A16",
+    "intro": "Ordem sempre: estratégia → posicionamento → verbal → visual. É do cliente, não seu.",
+    "fields": [
+      {
+        "key": "formato",
+        "label": "Formato escolhido",
+        "type": "select",
+        "options": [
+          "Site",
+          "PDF",
+          "Pôster",
+          "Uma página",
+          "Notion",
+          "Outro"
+        ],
+        "hint": "Depende do cliente, não do seu portfólio."
+      },
+      {
+        "key": "leitor",
+        "label": "Quem vai usar este guia",
+        "type": "text",
+        "hint": "Define o layout e o nível técnico."
+      },
+      {
+        "key": "secoes",
+        "label": "Seções e classificação 3F",
+        "type": "table",
+        "columns": [
+          "Seção",
+          "Conteúdo",
+          "Fix / Flex / Free"
+        ],
+        "repeatable": true
+      },
+      {
+        "key": "direcionado",
+        "label": "O que foi apenas direcionado para o time desenvolver",
+        "type": "list"
+      },
+      {
+        "key": "governanca",
+        "label": "Governança: quem aprova o quê e com que critério",
+        "type": "longtext"
+      }
+    ]
+  },
+  {
+    "code": "C1",
+    "axis": "—",
+    "phase": "F0",
+    "name": "As 7 Perguntas da Primeira Call",
+    "minimum": true,
+    "duration": 60,
+    "source": "Aula 18",
+    "intro": "Não prescreva, diagnostique. Entre uma pergunta e outra: escute, simplifique, devolva, confirme.",
+    "fields": [
+      {
+        "key": "q1",
+        "label": "01. O que você tem em mente?",
+        "type": "longtext",
+        "hint": "Problema declarado."
+      },
+      {
+        "key": "q2",
+        "label": "02. E o que mais? Tem algo que você deixou de fora?",
+        "type": "longtext",
+        "hint": "Repita até secar."
+      },
+      {
+        "key": "q3",
+        "label": "03. Qual é o verdadeiro desafio aqui pra você?",
+        "type": "longtext",
+        "hint": "PONTO A — o problema real."
+      },
+      {
+        "key": "q4",
+        "label": "04. O que você quer que aconteça?",
+        "type": "longtext",
+        "hint": "PONTO B — o estado desejado."
+      },
+      {
+        "key": "q5",
+        "label": "05. Como eu posso ajudar? Se fosse só uma coisa, qual seria?",
+        "type": "longtext",
+        "hint": "Prioridade nº 1."
+      },
+      {
+        "key": "q6a",
+        "label": "06a. Por quanto você vende isso?",
+        "type": "text"
+      },
+      {
+        "key": "q6b",
+        "label": "06b. Quanto o pacote inteiro pode valer?",
+        "type": "text"
+      },
+      {
+        "key": "q6c",
+        "label": "06c. Quanto está disposto a investir?",
+        "type": "text"
+      },
+      {
+        "key": "q7",
+        "label": "07. O que mais foi útil pra você nessa conversa?",
+        "type": "longtext",
+        "hint": "Anotar LITERAL — vira a abertura da proposta."
+      },
+      {
+        "key": "q_opt",
+        "label": "Opcional: o que te fez buscar uma solução agora?",
+        "type": "longtext",
+        "hint": "Urgência e timing."
+      },
+      {
+        "key": "reformulacoes",
+        "label": "Reformulações que eu devolvi",
+        "type": "list"
+      },
+      {
+        "key": "consciencia",
+        "label": "Nível de consciência do cliente",
+        "type": "select",
+        "options": [
+          "Tático",
+          "Estratégico",
+          "Convertível"
+        ]
+      },
+      {
+        "key": "redflags",
+        "label": "Red flags",
+        "type": "list",
+        "hint": "Modelo de negócio indefinido, não passa informação nem com NDA."
+      }
+    ]
+  }
+]

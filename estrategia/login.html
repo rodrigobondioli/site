@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Entrar · Estratégia de Marca</title>
+<link rel="icon" type="image/png" href="/shared/favicon.png">
+<link rel="stylesheet" href="/shared/shared.css">
+<style>
+:root{
+  --bnd-ink:#101010; --bnd-bg:#f1f1f1; --bnd-white:#fff; --bnd-lime:#e7f99a;
+  --bnd-body:"Vinila","Inter",-apple-system,BlinkMacSystemFont,sans-serif;
+  --bnd-display:"Vinila","Inter",-apple-system,BlinkMacSystemFont,sans-serif;
+  --bnd-radius:16px; --bnd-rule-soft:1px dashed rgba(16,16,16,.5);
+  --ink-50:rgba(16,16,16,.5); --ink-25:rgba(16,16,16,.25);
+}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;display:grid;place-items:center;background:var(--bnd-bg);
+ color:var(--bnd-ink);font-family:var(--bnd-body);font-size:15px;line-height:1.35;
+ -webkit-font-smoothing:antialiased;padding:24px}
+.card{width:min(420px,100%);background:var(--bnd-white);border-radius:var(--bnd-radius);padding:34px 30px}
+.kicker{font-size:11.2px;font-weight:600;letter-spacing:1.12px;color:var(--ink-50)}
+h1{font-family:var(--bnd-display);font-weight:800;font-size:26px;margin:10px 0 8px;line-height:1.2}
+p{margin:0 0 20px;color:var(--ink-50);font-size:14.5px;line-height:1.45}
+label{display:block;font-size:11.2px;font-weight:600;letter-spacing:1.12px;color:var(--ink-50);margin-bottom:7px}
+input{width:100%;padding:12px 14px;border:1px solid rgba(16,16,16,.15);border-radius:10px;
+ background:var(--bnd-bg);font:inherit;color:inherit;outline:none}
+input:focus{border-color:var(--bnd-ink)}
+button{width:100%;margin-top:14px;padding:12px 16px;border:0;border-radius:10px;
+ background:var(--bnd-ink);color:var(--bnd-white);font:inherit;font-weight:600;cursor:pointer}
+button:disabled{opacity:.5;cursor:default}
+.msg{margin-top:16px;font-size:13.5px;line-height:1.45;display:none}
+.msg.on{display:block}
+.msg.ok{color:var(--bnd-ink)}
+.msg.err{color:#b00020}
+.foot{margin-top:26px;padding-top:18px;border-top:var(--bnd-rule-soft);font-size:12px;color:var(--ink-25)}
+</style>
+</head>
+<body>
+<main class="card">
+  <div class="kicker">Bondioli</div>
+  <h1>Estratégia de marca</h1>
+  <p>Um link de acesso vai chegar no seu e-mail. Sem senha.</p>
+  <form id="f">
+    <label for="email">E-mail</label>
+    <input id="email" type="email" required autocomplete="email" placeholder="voce@dominio.com">
+    <button id="go" type="submit">Enviar link</button>
+  </form>
+  <div class="msg" id="msg"></div>
+  <div class="foot">Método N.A.V.E. · uso interno</div>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="/estrategia/config.js"></script>
+<script src="/estrategia/nave.js"></script>
+<script>
+(function(){
+  var f=document.getElementById('f'), go=document.getElementById('go'), msg=document.getElementById('msg');
+  function say(t,cls){ msg.textContent=t; msg.className='msg on '+(cls||''); }
+  var next=new URLSearchParams(location.search).get('next')||'/';
+
+  // já logado? entra direto.
+  NAVE.getSession().then(function(s){ if(s) location.replace(next); });
+
+  f.addEventListener('submit', async function(e){
+    e.preventDefault();
+    go.disabled=true; say('Enviando…');
+    try{
+      await NAVE.login(document.getElementById('email').value.trim());
+      say('Link enviado. Abra o e-mail neste mesmo navegador.','ok');
+    }catch(err){
+      say(err.message||'Não consegui enviar. Tente de novo.','err');
+      go.disabled=false;
+    }
+  });
+})();
+</script>
+</body>
+</html>

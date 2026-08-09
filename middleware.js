@@ -1,7 +1,24 @@
-export const config = { matcher: ['/', '/cursos', '/cursos/', '/curso', '/curso/:path*', '/admin', '/admin/:path*'] };
+export const config = {
+  matcher: [
+    '/', '/cursos', '/cursos/', '/curso', '/curso/:path*',
+    '/admin', '/admin/:path*',
+    '/estrategia', '/estrategia/:path*'
+  ]
+};
 
 export default function middleware(request) {
   const host = (request.headers.get('host') || '').toLowerCase();
+
+  if (host === 'estrategia.rodrigobondioli.com') {
+    const url = new URL(request.url);
+    if (url.pathname === '/') {
+      url.pathname = '/estrategia/index.html';
+    } else if (!url.pathname.startsWith('/estrategia/')) {
+      url.pathname = '/estrategia' + url.pathname;
+    }
+    return new Response(null, { headers: { 'x-middleware-rewrite': url.toString() } });
+  }
+
   if (host === 'app.rodrigobondioli.com') {
     const url = new URL(request.url);
     if (url.pathname === '/') {
@@ -17,5 +34,6 @@ export default function middleware(request) {
     }
     return new Response(null, { headers: { 'x-middleware-rewrite': url.toString() } });
   }
+
   return new Response(null, { headers: { 'x-middleware-next': '1' } });
 }

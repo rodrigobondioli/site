@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Exercício · Estratégia de Marca</title>
+<link rel="icon" type="image/png" href="/shared/favicon.png">
+<link rel="stylesheet" href="/shared/shared.css">
+<style>
+:root{
+  --bnd-ink:#101010; --bnd-bg:#f1f1f1; --bnd-white:#fff;
+  --bnd-lime:#e7f99a; --bnd-cyan:#00fff6; --bnd-pink:#ff00d7;
+  --bnd-display:"Vinila","Inter",-apple-system,sans-serif;
+  --bnd-body:"Vinila","Inter",-apple-system,sans-serif;
+  --bnd-radius:16px; --bnd-rule:1px dashed var(--bnd-ink); --bnd-rule-soft:1px dashed rgba(16,16,16,.5);
+  --ink-50:rgba(16,16,16,.5); --ink-25:rgba(16,16,16,.25); --ink-10:rgba(16,16,16,.1);
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bnd-bg);color:var(--bnd-ink);font-family:var(--bnd-body);font-size:15px;line-height:1.35;-webkit-font-smoothing:antialiased}
+h1,h2,h3,h4{margin:0;font-family:var(--bnd-display);font-weight:800;line-height:1.2;text-transform:none}
+button{font:inherit;cursor:pointer;font-family:var(--bnd-body)}
+a{color:inherit}
+.wrap{display:flex;min-height:100vh}
+
+/* lateral: catálogo */
+.cat{width:290px;flex:0 0 290px;border-right:var(--bnd-rule-soft);height:100vh;overflow:auto;position:sticky;top:0;padding:26px 0}
+.cat .hd{padding:0 20px 16px;display:flex;align-items:center;gap:10px}
+.cat .hd img{height:18px}
+.cat .hd span{font-size:11.2px;font-weight:600;letter-spacing:1.12px;color:var(--ink-50)}
+.search{margin:0 20px 14px;width:calc(100% - 40px);background:var(--bnd-white);border:0;border-radius:99px;padding:10px 16px;font:inherit;font-size:14px}
+.search:focus{outline:0;box-shadow:inset 0 0 0 1px var(--bnd-ink)}
+.grp{padding:16px 20px 6px;font-size:11.2px;font-weight:600;letter-spacing:1.12px;color:var(--ink-25)}
+.item{display:grid;grid-template-columns:38px 1fr;gap:10px;align-items:baseline;width:100%;background:none;border:0;
+ padding:8px 20px;text-align:left;color:var(--ink-50);font-size:13.5px}
+.item:hover{color:var(--bnd-ink);background:var(--bnd-white)}
+.item.on{background:var(--bnd-white);color:var(--bnd-ink);font-weight:700}
+.item .c{font-family:var(--bnd-display);font-weight:700;font-size:12px}
+.item .m{display:block;font-size:11.5px;color:var(--ink-25);font-weight:400}
+
+/* corpo */
+.main{flex:1;min-width:0;padding:36px clamp(20px,4vw,54px) 120px;max-width:1000px}
+.kicker{font-size:11.2px;font-weight:600;letter-spacing:1.12px;color:var(--ink-50)}
+h1{font-size:clamp(26px,3.2vw,38px);margin:8px 0 8px}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:6px}
+.tarja{display:inline-block;background:var(--bnd-lime);padding:4px 9px;font-family:var(--bnd-display);font-weight:700;font-size:12.5px}
+.tarja--line{background:transparent;border:var(--bnd-rule-soft);font-weight:500;color:var(--ink-50)}
+.tarja--cyan{background:var(--bnd-cyan)}
+.note{font-size:14px;color:var(--ink-50);border-left:2px solid var(--bnd-ink);padding-left:14px;margin:20px 0;line-height:1.45}
+.bar{display:flex;gap:8px;align-items:center;margin:22px 0 26px;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:8px;background:var(--bnd-white);color:var(--bnd-ink);border:0;
+ font-weight:500;font-size:14px;line-height:1;padding:12px 24px;border-radius:99px}
+.btn:hover{background:var(--bnd-lime)}
+.btn--line{background:transparent;border:var(--bnd-rule)}
+.btn--line:hover{background:var(--bnd-white)}
+.saved{font-size:12.5px;color:var(--ink-50)}
+
+.field{margin-bottom:24px}
+.lab{display:block;font-family:var(--bnd-display);font-weight:700;font-size:16px;margin-bottom:3px}
+.hint{font-size:13px;color:var(--ink-50);margin-bottom:9px;line-height:1.4}
+.inp{width:100%;background:var(--bnd-white);border:0;border-radius:12px;color:var(--bnd-ink);
+ padding:13px 15px;font:inherit;font-size:15px;resize:vertical}
+.inp:focus{outline:0;box-shadow:inset 0 0 0 1px var(--bnd-ink)}
+textarea.inp{min-height:78px;line-height:1.45}
+select.inp{appearance:none;background-image:linear-gradient(45deg,transparent 50%,var(--bnd-ink) 50%),linear-gradient(135deg,var(--bnd-ink) 50%,transparent 50%);
+ background-position:calc(100% - 20px) 20px,calc(100% - 15px) 20px;background-size:5px 5px;background-repeat:no-repeat}
+
+/* lista */
+.li{display:flex;gap:8px;margin-bottom:7px;align-items:center}
+.li .inp{flex:1}
+.x{background:transparent;border:var(--bnd-rule-soft);border-radius:99px;width:34px;height:34px;flex:0 0 auto;color:var(--ink-50);line-height:1}
+.x:hover{background:var(--bnd-pink);border-color:var(--bnd-pink);color:var(--bnd-ink)}
+.add{background:transparent;border:var(--bnd-rule);border-radius:99px;padding:8px 18px;font-size:13.5px}
+.add:hover{background:var(--bnd-white)}
+
+/* tabela */
+.tw{overflow-x:auto;background:var(--bnd-white);border-radius:var(--bnd-radius);padding:12px}
+.tbl{width:100%;border-collapse:collapse;font-size:14px;min-width:520px}
+.tbl th{text-align:left;font-size:11.2px;font-weight:600;letter-spacing:1.12px;color:var(--ink-50);padding:8px 10px;border-bottom:var(--bnd-rule-soft)}
+.tbl td{padding:4px;border-bottom:var(--bnd-rule-soft);vertical-align:top}
+.tbl td:last-child{width:44px}
+.tbl .inp{background:transparent;border-radius:8px;padding:9px 10px;font-size:14px}
+.tbl .inp:focus{background:var(--bnd-bg)}
+.rowlbl{font-family:var(--bnd-display);font-weight:700;font-size:13.5px;padding:14px 10px;white-space:nowrap}
+
+/* opções */
+.opts{display:flex;flex-wrap:wrap;gap:8px}
+.opt{border:var(--bnd-rule-soft);background:transparent;border-radius:99px;padding:9px 17px;font-size:14px;color:var(--ink-50)}
+.opt.on{background:var(--bnd-lime);border:1px solid var(--bnd-ink);color:var(--bnd-ink);font-weight:600}
+
+/* matriz */
+.mx{overflow-x:auto;background:var(--bnd-white);border-radius:var(--bnd-radius);padding:12px}
+.mx table{border-collapse:collapse;font-size:13px;min-width:640px;width:100%}
+.mx th{font-size:11px;font-weight:600;color:var(--ink-50);padding:8px 6px;text-align:center;border-bottom:var(--bnd-rule-soft);vertical-align:bottom}
+.mx th:first-child{text-align:left;min-width:150px}
+.mx td{padding:5px 4px;border-bottom:var(--bnd-rule-soft);text-align:center}
+.mx td:first-child{text-align:left}
+.cell{border:0;background:var(--bnd-bg);border-radius:7px;padding:6px 8px;font-size:12px;font:inherit;font-size:12.5px;width:100%;min-width:64px}
+.cell.ok{background:var(--bnd-lime)} .cell.risk{background:var(--bnd-cyan)} .cell.no{background:var(--bnd-pink)}
+
+.empty{padding:70px 20px;text-align:center;color:var(--ink-50)}
+@media(max-width:980px){.cat{display:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <aside class="cat">
+    <div class="hd">
+      <img src="/shared/logo.svg" alt="Bondioli" onerror="this.outerHTML='<b style=\'font-family:var(--bnd-display);font-weight:800;font-size:16px\'>BOND</b>'">
+      <span>instrumentos</span>
+    </div>
+    <input class="search" id="q" placeholder="Buscar exercício…">
+    <div id="list"></div>
+  </aside>
+  <main class="main" id="main">
+    <div class="empty">Carregando o catálogo…</div>
+  </main>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="/estrategia/config.js"></script>
+<script src="/estrategia/nave.js"></script>
+<script>
+const AXIS = {N:'Eixo N — negócio', A:'Eixo A — audiência', V:'Eixo V — valor', E:'Eixo E — estória', X:'Diagnóstico, estratégia e identidade'};
+const ax = e => ['N','A','V','E'].includes(e.axis) ? e.axis : 'X';
+const PHASE = {F0:'Primeira call',F2:'Pré-diagnóstico',F3:'Imersão',F4:'Descompressão',F5:'Pesquisas',F6:'Diagnóstico',
+  F7:'Estratégia',F8:'Posicionamento',F10:'Naming',F11:'Verbal',F12:'Key Word',F13:'Direção de arte',F14:'Sistema e Key Visual',F15:'Guia de marca'};
+let EX = [], cur = null;
+const PROJ = new URLSearchParams(location.search).get('p') || 'rascunho';
+const ONLINE = PROJ !== 'rascunho';        // com ?p=<uuid> grava no banco; sem, é rascunho local
+const key = (code) => `nave:${PROJ}:${code}`;
+
+// Store: mesma interface nos dois modos. Sem projeto na URL, tudo fica no navegador.
+const DB = { pe:{}, val:{} };              // code -> project_exercise_id | code -> {campo:valor}
+const Store = {
+  get(code){
+    if (ONLINE) return DB.val[code] || null;
+    const raw = localStorage.getItem(key(code));
+    return raw ? JSON.parse(raw) : null;
+  },
+  has(code){ return !!Store.get(code); },
+  async save(code, data){
+    if (!ONLINE) { localStorage.setItem(key(code), JSON.stringify(data)); return; }
+    let pe = DB.pe[code];
+    if (!pe) {                              // primeiro salvamento cria a linha de seleção
+      const r = await NAVE.post('selecao', { project_id: PROJ,
+        items: [{ exercise_id: code, selected: true, rationale: 'aberto direto no formulário' }] });
+      pe = (r.items && r.items[0] && r.items[0].id) || null;
+      if (!pe) throw new Error('não consegui registrar o exercício no projeto');
+      DB.pe[code] = pe;
+    }
+    await NAVE.post('resposta', { project_exercise_id: pe, values: data, status: 'em_andamento' });
+    DB.val[code] = data;
+  },
+  async clear(code){
+    if (!ONLINE) { localStorage.removeItem(key(code)); return; }
+    const e = EX.find(x=>x.code===code); if(!e) return;
+    const vazio = {}; e.fields.forEach(f => vazio[f.key] = null);
+    if (DB.pe[code]) await NAVE.post('resposta', { project_exercise_id: DB.pe[code], values: vazio, status: 'nao_iniciado' });
+    delete DB.val[code];
+  }
+};
+
+(async function boot(){
+  try {
+    if (ONLINE) {
+      await NAVE.guard();
+      const [cat, proj] = await Promise.all([ NAVE.catalogo(), NAVE.get('projeto', { id: PROJ }) ]);
+      EX = montarCatalogo(cat);
+      proj.selection.forEach(s => { DB.pe[s.exercise_id] = s.id; });
+      const porPe = {};
+      proj.responses.forEach(r => { (porPe[r.project_exercise_id] ||= {})[r.field_key] = r.value; });
+      proj.selection.forEach(s => { if (porPe[s.id]) DB.val[s.exercise_id] = porPe[s.id]; });
+      marcarProjeto(proj);
+    } else {
+      EX = await fetch('data/nave-exercicios.json').then(r=>r.json());
+    }
+    renderList();
+    open(new URLSearchParams(location.search).get('ex') || EX[0].code);
+  } catch (err) {
+    document.getElementById('main').innerHTML =
+      `<div class="empty">${err.message||'Não consegui carregar.'}<br>` +
+      `<span style="font-size:13px">Sem <code>?p=&lt;projeto&gt;</code> o formulário roda em rascunho local. ` +
+      `Servido por HTTP — abrir o arquivo direto no disco bloqueia o fetch.</span></div>`;
+  }
+})();
+
+// o banco devolve catálogo normalizado; o formulário espera o formato do JSON
+function montarCatalogo(cat){
+  const porEx = {};
+  cat.fields.forEach(f => (porEx[f.exercise_id] ||= []).push(f));
+  return cat.exercises.map(e => ({
+    code: e.id, axis: e.axis === '-' ? '—' : e.axis, phase: e.phase_id, name: e.name,
+    intro: e.intro, minimum: e.minimum, duration: e.duration_min, source: e.source,
+    condition: e.condition, homework: e.homework, repeatable_per: e.repeatable_per,
+    fields: (porEx[e.id]||[]).sort((a,b)=>a.ord-b.ord).map(f => ({
+      key: f.key, label: f.label, type: f.type, hint: f.hint, ...(f.config||{})
+    }))
+  }));
+}
+
+function marcarProjeto(proj){
+  const hd = document.querySelector('.cat .hd span');
+  if (hd && proj.client) hd.textContent = proj.client.name;
+  document.title = (proj.client ? proj.client.name + ' · ' : '') + 'Instrumentos NAVE';
+}
+
+function renderList(filter=''){
+  const f = filter.toLowerCase();
+  const hit = EX.filter(e => !f || (e.name+e.code+(e.source||'')).toLowerCase().includes(f));
+  const groups = {};
+  hit.forEach(e => { (groups[ax(e)] ||= []).push(e); });
+  let html = '';
+  for (const g of ['N','A','V','E','X']) {
+    if (!groups[g]) continue;
+    html += `<div class="grp">${AXIS[g]}</div>`;
+    groups[g].forEach(e => {
+      const done = Store.has(e.code) ? '●' : '';
+      html += `<button class="item ${cur===e.code?'on':''}" onclick="open_('${e.code}')">
+        <span class="c">${e.code}</span>
+        <span>${e.name} ${done}<span class="m">${PHASE[e.phase]||e.phase} · ${e.duration||'—'} min</span></span></button>`;
+    });
+  }
+  document.getElementById('list').innerHTML = html || '<div class="grp">Nada encontrado</div>';
+}
+document.getElementById('q').addEventListener('input', e => renderList(e.target.value));
+
+function open_(code){ open(code); }
+function open(code){
+  const e = EX.find(x=>x.code===code); if(!e) return;
+  cur = code;
+  history.replaceState(null,'',`?ex=${code}${PROJ!=='rascunho'?'&p='+PROJ:''}`);
+  const saved = Store.get(code) || {};
+  const chips = [
+    e.minimum ? '<span class="tarja">mínimo viável</span>' : '',
+    e.duration ? `<span class="tarja tarja--line">${e.duration} min</span>` : '',
+    e.source ? `<span class="tarja tarja--line">${e.source}</span>` : '',
+    e.homework ? '<span class="tarja tarja--cyan">pode ir como lição de casa</span>' : '',
+    e.condition ? `<span class="tarja tarja--line">só se: ${e.condition.replace('_',' ')}</span>` : '',
+    e.repeatable_per ? `<span class="tarja tarja--cyan">um por ${e.repeatable_per}</span>` : ''
+  ].filter(Boolean).join('');
+
+  document.getElementById('main').innerHTML = `
+    <div class="kicker">${AXIS[ax(e)]} · ${PHASE[e.phase]||e.phase}</div>
+    <h1>${e.code} · ${e.name}</h1>
+    <div class="chips">${chips}</div>
+    ${e.intro ? `<div class="note">${e.intro}</div>` : ''}
+    <div class="bar">
+      <button class="btn" onclick="save()">Salvar</button>
+      <button class="btn btn--line" onclick="exportMd()">Exportar markdown</button>
+      <button class="btn btn--line" onclick="clearEx()">Limpar</button>
+      <span class="saved" id="saved"></span>
+    </div>
+    <form id="f">${e.fields.map(f=>renderField(f, saved[f.key])).join('')}</form>`;
+  renderList(document.getElementById('q').value);
+  if (Store.has(code)) document.getElementById('saved').textContent = 'preenchido';
+}
+
+function renderField(f, v){
+  const head = `<label class="lab">${f.label}</label>${f.hint?`<div class="hint">${f.hint}</div>`:''}`;
+  const id = `f_${f.key}`;
+  let body = '';
+  switch(f.type){
+    case 'longtext':
+      body = `<textarea class="inp" data-k="${f.key}" id="${id}">${v||''}</textarea>`; break;
+    case 'text': case 'url': case 'number': case 'file':
+      body = `<input class="inp" data-k="${f.key}" id="${id}" value="${esc(v||'')}" placeholder="${f.type==='url'?'https://…':''}">`; break;
+    case 'select':
+      body = `<select class="inp" data-k="${f.key}"><option value=""></option>` +
+        (f.config?.options||f.options||[]).map(o=>`<option ${v===o?'selected':''}>${o}</option>`).join('') + `</select>`; break;
+    case 'multiselect':
+      body = `<div class="opts" data-k="${f.key}" data-multi="1">` +
+        (f.config?.options||f.options||[]).map(o=>`<button type="button" class="opt ${(v||[]).includes(o)?'on':''}" onclick="tog(this)">${o}</button>`).join('') + `</div>`; break;
+    case 'list':
+      body = `<div data-k="${f.key}" data-list="1">${((v&&v.length?v:['']).map(x=>liRow(x)).join(''))}
+        </div><button type="button" class="add" onclick="addLi(this)">Adicionar linha</button>`; break;
+    case 'table':
+      body = tableField(f, v); break;
+    case 'matrix':
+      body = matrixField(f, v); break;
+    default:
+      body = `<input class="inp" data-k="${f.key}" value="${esc(v||'')}">`;
+  }
+  return `<div class="field">${head}${body}</div>`;
+}
+const esc = s => String(s).replace(/"/g,'&quot;');
+const liRow = x => `<div class="li"><input class="inp" value="${esc(x||'')}"><button type="button" class="x" onclick="this.parentElement.remove()">×</button></div>`;
+function addLi(btn){ const box = btn.previousElementSibling; box.insertAdjacentHTML('beforeend', liRow('')); box.lastElementChild.querySelector('input').focus(); }
+function tog(b){ b.classList.toggle('on'); }
+
+function tableField(f, v){
+  const cols = f.config?.columns || f.columns || [];
+  const fixed = f.config?.rows || f.rows;
+  const rows = v && v.length ? v : (fixed ? fixed.map(r=>[r].concat(cols.slice(1).map(()=>''))) : [cols.map(()=>'')]);
+  const body = rows.map(r=>tr(cols, r, !!fixed)).join('');
+  return `<div class="tw" data-k="${f.key}" data-table="1" ${fixed?'data-fixed="1"':''}>
+    <table class="tbl"><thead><tr>${cols.map(c=>`<th>${c}</th>`).join('')}${fixed?'':'<th></th>'}</tr></thead>
+    <tbody>${body}</tbody></table></div>
+    ${fixed?'':`<button type="button" class="add" onclick="addRow(this)">Adicionar linha</button>`}`;
+}
+function tr(cols, r, fixed){
+  const cells = cols.map((c,i)=> (fixed && i===0)
+    ? `<td class="rowlbl">${esc(r[0]||'')}</td>`
+    : `<td><textarea class="inp" rows="1">${r[i]||''}</textarea></td>`).join('');
+  return `<tr>${cells}${fixed?'':'<td><button type="button" class="x" onclick="this.closest(\'tr\').remove()">×</button></td>'}</tr>`;
+}
+function addRow(btn){
+  const tw = btn.previousElementSibling, tb = tw.querySelector('tbody');
+  const n = tw.querySelectorAll('thead th').length - 1;
+  tb.insertAdjacentHTML('beforeend', `<tr>${Array(n).fill('<td><textarea class="inp" rows="1"></textarea></td>').join('')}<td><button type="button" class="x" onclick="this.closest('tr').remove()">×</button></td></tr>`);
+}
+
+function matrixField(f, v){
+  const cols = f.config?.columns || f.columns || [];
+  const opts = f.config?.cell_options || f.cell_options || ['—','OK','Risco','Reprovado'];
+  const rows = (v && v.rows) ? v.rows : ['','',''];
+  const vals = (v && v.vals) || {};
+  const body = rows.map((r,ri)=>`<tr><td><input class="cell" style="min-width:140px;background:var(--bnd-bg)" value="${esc(r)}"></td>` +
+    cols.map((c,ci)=>`<td><select class="cell" onchange="paint(this)">${opts.map(o=>`<option ${((vals[ri]||[])[ci]===o)?'selected':''}>${o}</option>`).join('')}</select></td>`).join('') + '</tr>').join('');
+  return `<div class="mx" data-k="${f.key}" data-matrix="1">
+    <table><thead><tr><th>Candidato</th>${cols.map(c=>`<th>${c}</th>`).join('')}</tr></thead>
+    <tbody>${body}</tbody></table></div>
+    <button type="button" class="add" onclick="addMx(this)">Adicionar candidato</button>`;
+}
+function addMx(btn){
+  const mx = btn.previousElementSibling, tb = mx.querySelector('tbody');
+  const first = tb.querySelector('tr');
+  const clone = first.cloneNode(true);
+  clone.querySelectorAll('input').forEach(i=>i.value='');
+  clone.querySelectorAll('select').forEach(s=>{s.selectedIndex=0;paint(s)});
+  tb.appendChild(clone);
+}
+function paint(s){ s.className = 'cell ' + ({'OK':'ok','Risco':'risk','Reprovado':'no'}[s.value] || ''); }
+
+function collect(){
+  const out = {};
+  document.querySelectorAll('#f [data-k]').forEach(el=>{
+    const k = el.dataset.k;
+    if (el.dataset.list) out[k] = [...el.querySelectorAll('input')].map(i=>i.value).filter(Boolean);
+    else if (el.dataset.multi) out[k] = [...el.querySelectorAll('.opt.on')].map(b=>b.textContent);
+    else if (el.dataset.table) {
+      const fixed = !!el.dataset.fixed;
+      out[k] = [...el.querySelectorAll('tbody tr')].map(tr=>{
+        const cells = [...tr.children];
+        return cells.slice(0, fixed ? cells.length : cells.length-1)
+          .map(td => td.classList.contains('rowlbl') ? td.textContent.trim() : (td.querySelector('textarea')?.value || ''));
+      }).filter(r=>r.some(Boolean));
+    }
+    else if (el.dataset.matrix) {
+      const rows = [], vals = {};
+      [...el.querySelectorAll('tbody tr')].forEach((tr,i)=>{
+        rows.push(tr.querySelector('input').value);
+        vals[i] = [...tr.querySelectorAll('select')].map(s=>s.value);
+      });
+      out[k] = { rows, vals };
+    }
+    else out[k] = el.value;
+  });
+  return out;
+}
+let salvando = false;
+async function save(){
+  if (salvando) return;
+  salvando = true;
+  const el = document.getElementById('saved');
+  el.textContent = 'salvando…';
+  try {
+    await Store.save(cur, collect());
+    el.textContent = 'salvo ' + new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
+    renderList(document.getElementById('q').value);
+  } catch (e) {
+    // nunca perde o que foi digitado: guarda local e avisa
+    localStorage.setItem(key(cur), JSON.stringify(collect()));
+    el.textContent = 'sem conexão — guardado neste navegador';
+  } finally { salvando = false; }
+}
+async function clearEx(){
+  if(!confirm('Limpar as respostas deste exercício?'))return;
+  await Store.clear(cur); open(cur);
+}
+function exportMd(){
+  const e = EX.find(x=>x.code===cur), d = collect();
+  let md = `# ${e.code} · ${e.name}\n\n_${e.source||''}_\n\n`;
+  e.fields.forEach(f=>{
+    const v = d[f.key]; if(!v || (Array.isArray(v)&&!v.length)) return;
+    md += `## ${f.label}\n\n`;
+    if (Array.isArray(v) && Array.isArray(v[0])) {
+      const cols = f.config?.columns || f.columns || [];
+      md += `| ${cols.join(' | ')} |\n|${cols.map(()=>'---').join('|')}|\n`;
+      v.forEach(r=> md += `| ${r.map(c=>String(c).replace(/\n/g,' ')).join(' | ')} |\n`);
+      md += '\n';
+    } else if (Array.isArray(v)) md += v.map(x=>`- ${x}`).join('\n') + '\n\n';
+    else if (v && v.rows) { v.rows.forEach((r,i)=> md += `- **${r}** — ${(v.vals[i]||[]).join(' · ')}\n`); md += '\n'; }
+    else md += v + '\n\n';
+  });
+  const b = new Blob([md], {type:'text/markdown'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(b); a.download = `${e.code}-${e.name.toLowerCase().replace(/[^a-z0-9]+/g,'-')}.md`; a.click();
+}
+document.addEventListener('keydown', ev => { if((ev.metaKey||ev.ctrlKey) && ev.key==='s'){ ev.preventDefault(); save(); }});
+</script>
+</body>
+</html>
