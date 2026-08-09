@@ -29,10 +29,14 @@ a{color:inherit}
  border-bottom:1px dashed var(--ink-25);background:var(--bnd-white)}
 .bar .cli{font-size:12px;color:var(--ink-50);white-space:nowrap}
 .bar .cli b{display:block;color:var(--bnd-ink);font-size:14px;font-weight:600}
-.trilha{flex:1;display:flex;gap:3px;align-items:center;min-width:0}
-.tp{flex:1;height:6px;border-radius:99px;background:var(--ink-10);min-width:4px;position:relative}
+.trilha{flex:1;display:flex;gap:6px;align-items:center;min-width:0}
+.tg{flex:1;min-width:10px;position:relative;display:flex;gap:2px}
+.tp{flex:1;height:6px;border-radius:99px;background:var(--ink-10);min-width:2px}
 .tp.feito{background:var(--bnd-ink)}
 .tp.atual{background:var(--bnd-pink)}
+.tg::before{content:attr(data-cod);position:absolute;top:-13px;left:0;font-size:9px;
+ font-family:ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--ink-25);letter-spacing:.3px}
+.tg.aqui::before{color:var(--bnd-ink)}
 .tp:hover::after{content:attr(data-nm);position:absolute;top:14px;left:0;white-space:nowrap;
  background:var(--bnd-ink);color:#fff;font-size:11px;padding:4px 8px;border-radius:6px;z-index:9}
 
@@ -102,7 +106,14 @@ textarea{min-height:220px;line-height:1.5}
 .tela.on{display:block}
 .wrap{max-width:840px}
 .lin{display:flex;align-items:center;gap:14px;background:var(--bnd-white);border-radius:14px;
- padding:16px 20px;margin-bottom:8px}
+ padding:16px 20px;margin-bottom:8px;width:100%;text-align:left;border:0;font:inherit}
+button.lin{cursor:pointer}
+.lin.fora{opacity:.4}
+.mk{width:20px;height:20px;border-radius:6px;border:1px dashed var(--ink-25);flex:0 0 20px;
+ display:grid;place-items:center;font-size:12px;color:transparent}
+.lin:not(.fora) .mk{background:var(--bnd-ink);border-color:var(--bnd-ink);color:#fff}
+.aviso{background:var(--bnd-lime);border-radius:var(--bnd-radius);padding:16px 20px;
+ font-size:14.5px;line-height:1.45;margin-bottom:20px}
 .lin .cod{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11.5px;color:var(--ink-50);min-width:34px}
 .lin .nm{flex:1;font-weight:600}
 .lin .ax{font-size:11.5px;color:var(--ink-50)}
@@ -201,6 +212,7 @@ const PROJ = new URLSearchParams(location.search).get('p');
 const AXIS = {N:'negócio', A:'audiência', V:'valor', E:'estória'};
 
 let D=null, CAT=null, FILA=[], i=0, PE={}, VAL={};
+let INSTS=[], CAMPOS={}, DENTRO=new Set();
 let t0=null, acc=0, rodando=false, tick=null;
 
 const $ = id => document.getElementById(id);
@@ -242,30 +254,75 @@ const mmss = ms => {
   proj.responses.forEach(r => (porPe[r.project_exercise_id] ||= {})[r.field_key] = r.value);
   proj.selection.forEach(s => { if (porPe[s.id]) VAL[s.exercise_id] = porPe[s.id]; });
 
-  // uma pergunta por passo — é assim que o método roda, cronometrado por bloco
-  insts.forEach(e => (campos[e.id]||[]).forEach((f, idx, arr) => {
+  INSTS = insts; CAMPOS = campos;
+  insts.forEach(e => DENTRO.add(e.id));
+  agenda(escolhidos.length > 0);
+})();
+
+// A sessão não é o projeto inteiro. O método roda em blocos — ligue e desligue
+// aqui o que entra NESTA sessão, e o tempo vai somando ao lado.
+function agenda(temSelecao){
+  $('aLista').innerHTML = INSTS.map(e => `
+    <button class="lin ${DENTRO.has(e.id)?'':'fora'}" id="lin_${e.id}" onclick="alterna('${e.id}')">
+      <span class="mk">✓</span>
+      <span class="cod">${e.id}</span>
+      <span class="nm">${esc(e.name)}<span class="ax" style="display:block">eixo ${AXIS[e.axis]||'—'} · ${(CAMPOS[e.id]||[]).length} perguntas</span></span>
+      ${e.minimum ? '<span class="tag">mínimo viável</span>' : ''}
+      <span class="dur">${e.duration_min||'—'} min</span>
+    </button>`).join('') || '<div class="lin">Nada disponível.</div>';
+  $('aResumo').dataset.tem = temSelecao ? '1' : '';
+  soma();
+}
+
+function alterna(id){
+  DENTRO.has(id) ? DENTRO.delete(id) : DENTRO.add(id);
+  $('lin_'+id).classList.toggle('fora', !DENTRO.has(id));
+  soma();
+}
+window.alterna = alterna;
+
+function soma(){
+  const dentro = INSTS.filter(e => DENTRO.has(e.id));
+  const min = dentro.reduce((s,e)=> s + (e.duration_min||0), 0);
+  const perg = dentro.reduce((s,e)=> s + (CAMPOS[e.id]||[]).length, 0);
+  const h = Math.floor(min/60), m = min%60;
+  const tempo = (h ? h+'h' : '') + (m ? (h?' ':'')+m+'min' : (h?'':'0min'));
+
+  const origem = $('aResumo').dataset.tem
+    ? 'Esta é a seleção que você fez para este cliente.'
+    : 'Você ainda não selecionou os instrumentos deste projeto, então liguei o <b>mínimo viável dos quatro eixos</b>.';
+
+  let alerta = '';
+  if (min > 240) alerta = `<div class="aviso"><b>${tempo} não cabe numa sessão.</b>
+    Uma imersão costuma render 3 a 4 horas antes de todo mundo cansar — e o próprio método manda
+    <b>selecionar</b>, não fazer tudo. Desligue instrumentos aqui e rode o resto em outro bloco.
+    O que ficar de fora continua no projeto, esperando.</div>`;
+  else if (min > 0 && min <= 240) alerta = `<div class="aviso"><b>${tempo} de sessão.</b>
+    Cabe num bloco. O que você desligar aqui continua no projeto para outra sessão.</div>`;
+
+  $('aResumo').innerHTML = origem +
+    ` <b>${dentro.length} instrumentos · ${perg} perguntas · ${tempo}.</b>` + alerta;
+  $('bComecar').disabled = dentro.length === 0;
+}
+
+function montaFila(){
+  FILA = [];
+  INSTS.filter(e => DENTRO.has(e.id)).forEach(e => (CAMPOS[e.id]||[]).forEach((f, idx, arr) => {
     FILA.push({ ex:e, campo:f, idx, total:arr.length,
                 dur: Math.max(2, Math.round((e.duration_min || 20) / arr.length)) });
   }));
-
-  const minutos = insts.reduce((s,e) => s + (e.duration_min||0), 0);
-  $('aResumo').innerHTML = escolhidos.length
-    ? `<b>${insts.length} instrumentos · ${FILA.length} perguntas · ${minutos} minutos.</b> ` +
-      `Esta é a seleção que você fez para este cliente. Uma pergunta por vez, cronometrada.`
-    : `Você ainda não selecionou os instrumentos deste projeto, então montei a sessão com o ` +
-      `<b>mínimo viável dos quatro eixos</b>: ${insts.length} instrumentos · ${FILA.length} perguntas · ${minutos} minutos.`;
-
-  $('aLista').innerHTML = insts.map(e => `
-    <div class="lin">
-      <span class="cod">${e.id}</span>
-      <span class="nm">${esc(e.name)}<span class="ax" style="display:block">eixo ${AXIS[e.axis]||'—'}</span></span>
-      ${e.minimum ? '<span class="tag">mínimo viável</span>' : ''}
-      <span class="dur">${e.duration_min||'—'} min</span>
-    </div>`).join('') || '<div class="lin">Nada selecionado.</div>';
-
-  $('trilha').innerHTML = FILA.map((p,n) =>
-    `<div class="tp" data-nm="${esc(p.ex.id + ' · ' + p.campo.label)}" onclick="irPara(${n})"></div>`).join('');
-})();
+  // trilha agrupada por instrumento: 14 grupos legíveis, não 79 tracinhos
+  const grupos = [];
+  FILA.forEach((p,n) => {
+    let g = grupos[grupos.length-1];
+    if (!g || g.cod !== p.ex.id) { g = {cod:p.ex.id, itens:[]}; grupos.push(g); }
+    g.itens.push(n);
+  });
+  $('trilha').innerHTML = grupos.map(g =>
+    `<div class="tg" data-cod="${g.cod}">` +
+    g.itens.map(n => `<div class="tp" data-n="${n}" title="${esc(FILA[n].campo.label)}" onclick="irPara(${n})"></div>`).join('') +
+    `</div>`).join('');
+}
 
 // ---------------------------------------------------------------- cronômetro
 function zeraCrono(min){
@@ -315,10 +372,13 @@ function render(){
     $('dica').innerHTML = '<div class="lbl">como conduzir</div>' + esc(p.campo.hint); }
   else $('dica').style.display = 'none';
 
-  [...document.querySelectorAll('.tp')].forEach((el,n) => {
+  document.querySelectorAll('.tp').forEach(el => {
+    const n = +el.dataset.n;
     el.classList.toggle('feito', n < i);
     el.classList.toggle('atual', n === i);
   });
+  document.querySelectorAll('.tg').forEach(g =>
+    g.classList.toggle('aqui', !!g.querySelector('.tp.atual')));
 
   $('bAnt').disabled = i === 0;
   $('bProx').innerHTML = (i === FILA.length-1)
@@ -417,7 +477,7 @@ async function salvar(){
 }
 
 // ---------------------------------------------------------------- ações
-$('bComecar').onclick = () => { if (FILA.length) render(); };
+$('bComecar').onclick = () => { montaFila(); if (FILA.length) { i = 0; render(); } };
 $('bAnt').onclick = () => irPara(i-1);
 $('bProx').onclick = () => {
   if (i === FILA.length-1) encerrar(); else irPara(i+1);
