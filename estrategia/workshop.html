@@ -119,6 +119,11 @@ button.lin{cursor:pointer}
 .lin .ax{font-size:11.5px;color:var(--ink-50)}
 .lin .dur{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13px;color:var(--ink-50)}
 .tag{font-size:11px;letter-spacing:.6px;background:var(--bnd-lime);border-radius:99px;padding:4px 10px}
+.tag--line{background:none;border:1px dashed var(--ink-25)}
+.grupo{margin:30px 0 12px}
+.grupo h2{font-size:19px;letter-spacing:-.3px;margin-bottom:5px}
+.grupo p{font-size:13.5px;color:var(--ink-50);line-height:1.45;margin:0;max-width:70ch}
+.lin .pq{display:block;font-size:12px;color:var(--ink-50);font-weight:400;margin-top:3px;line-height:1.4}
 .grande{font-size:clamp(30px,4vw,46px);letter-spacing:-1px;margin-bottom:10px}
 .sub{color:var(--ink-50);font-size:16px;line-height:1.5;margin-bottom:28px;max-width:60ch}
 .sep{height:1px;border-top:1px dashed var(--ink-25);margin:28px 0}
@@ -241,9 +246,8 @@ const mmss = ms => {
   // a fila é a seleção do projeto; sem seleção, os mínimos dos 4 eixos
   const escolhidos = proj.selection.filter(s => s.selected).map(s => s.exercise_id);
   const doWorkshop = e => ['N','A','V','E'].includes(e.axis) && e.phase_id === 'F3';
-  let insts = escolhidos.length
-    ? cat.exercises.filter(e => escolhidos.includes(e.id))
-    : cat.exercises.filter(e => doWorkshop(e) && e.minimum);
+  // a lista sempre mostra todos os instrumentos de workshop; o que muda é o que vem ligado
+  let insts = cat.exercises.filter(e => doWorkshop(e) || e.sessao === 'casa' || e.sessao === 'solo');
 
   const ordem = {N:0, A:1, V:2, E:3};
   insts.sort((a,b) => (ordem[a.axis] ?? 9) - (ordem[b.axis] ?? 9)
@@ -255,21 +259,42 @@ const mmss = ms => {
   proj.selection.forEach(s => { if (porPe[s.id]) VAL[s.exercise_id] = porPe[s.id]; });
 
   INSTS = insts; CAMPOS = campos;
-  insts.forEach(e => DENTRO.add(e.id));
+  const ligar = escolhidos.length ? escolhidos : insts.filter(e => e.tier === 'espinha').map(e => e.id);
+  ligar.forEach(id => DENTRO.add(id));
   agenda(escolhidos.length > 0);
 })();
 
 // A sessão não é o projeto inteiro. O método roda em blocos — ligue e desligue
 // aqui o que entra NESTA sessão, e o tempo vai somando ao lado.
-function agenda(temSelecao){
-  $('aLista').innerHTML = INSTS.map(e => `
-    <button class="lin ${DENTRO.has(e.id)?'':'fora'}" id="lin_${e.id}" onclick="alterna('${e.id}')">
+const GRUPOS = [
+  {tier:'espinha', t:'Espinha — não negocia',
+   d:'Sem estes, algum campo do relatório de estratégia ou da plataforma de marca fica sem resposta. Vêm ligados.'},
+  {tier:'sinal', t:'Por sinal — só se apareceu nas entrevistas',
+   d:'Cada um resolve um problema específico. Ligue o que bate com o que você ouviu, não o que parece bonito.'},
+  {tier:'extra', t:'Ângulo extra',
+   d:'Cobre por outro caminho o que a espinha já resolve. Redundância é proposital no método, mas custa tempo.'}
+];
+
+function linha(e){
+  const pq = e.porque ? `<span class="pq">${esc(e.porque)}</span>` : '';
+  return `<button class="lin ${DENTRO.has(e.id)?'':'fora'}" id="lin_${e.id}" onclick="alterna('${e.id}')">
       <span class="mk">✓</span>
       <span class="cod">${e.id}</span>
-      <span class="nm">${esc(e.name)}<span class="ax" style="display:block">eixo ${AXIS[e.axis]||'—'} · ${(CAMPOS[e.id]||[]).length} perguntas</span></span>
-      ${e.minimum ? '<span class="tag">mínimo viável</span>' : ''}
-      <span class="dur">${e.duration_min||'—'} min</span>
-    </button>`).join('') || '<div class="lin">Nada disponível.</div>';
+      <span class="nm">${esc(e.name)}
+        <span class="ax" style="display:block">eixo ${AXIS[e.axis]||'—'} · ${(CAMPOS[e.id]||[]).length} perguntas</span>
+        ${pq}</span>
+      ${e.sessao === 'casa' ? '<span class="tag tag--line">lição de casa</span>' : ''}
+      ${e.sessao === 'solo' ? '<span class="tag tag--line">você, depois</span>' : ''}
+      <span class="dur">${e.sessao === 'workshop' ? (e.duration_min||'—')+' min' : '—'}</span>
+    </button>`;
+}
+
+function agenda(temSelecao){
+  $('aLista').innerHTML = GRUPOS.map(g => {
+    const itens = INSTS.filter(e => (e.tier||'extra') === g.tier);
+    if (!itens.length) return '';
+    return `<div class="grupo"><h2>${g.t}</h2><p>${g.d}</p></div>` + itens.map(linha).join('');
+  }).join('') || '<div class="lin">Nada disponível.</div>';
   $('aResumo').dataset.tem = temSelecao ? '1' : '';
   soma();
 }
@@ -282,7 +307,7 @@ function alterna(id){
 window.alterna = alterna;
 
 function soma(){
-  const dentro = INSTS.filter(e => DENTRO.has(e.id));
+  const dentro = INSTS.filter(e => DENTRO.has(e.id) && e.sessao !== 'casa' && e.sessao !== 'solo');
   const min = dentro.reduce((s,e)=> s + (e.duration_min||0), 0);
   const perg = dentro.reduce((s,e)=> s + (CAMPOS[e.id]||[]).length, 0);
   const h = Math.floor(min/60), m = min%60;
@@ -290,15 +315,15 @@ function soma(){
 
   const origem = $('aResumo').dataset.tem
     ? 'Esta é a seleção que você fez para este cliente.'
-    : 'Você ainda não selecionou os instrumentos deste projeto, então liguei o <b>mínimo viável dos quatro eixos</b>.';
+    : 'Liguei a <b>espinha</b> — o conjunto sem o qual os entregáveis não fecham. O resto está abaixo, desligado.';
 
   let alerta = '';
-  if (min > 240) alerta = `<div class="aviso"><b>${tempo} não cabe numa sessão.</b>
-    Uma imersão costuma render 3 a 4 horas antes de todo mundo cansar — e o próprio método manda
-    <b>selecionar</b>, não fazer tudo. Desligue instrumentos aqui e rode o resto em outro bloco.
+  if (min > 240) alerta = `<div class="aviso"><b>${tempo} não cabe num bloco só.</b>
+    Uma sessão rende 3 a 4 horas antes de todo mundo cansar. A imersão do método (F3) prevê
+    <b>2 dias</b> — então divida em dois blocos, ou desligue instrumentos aqui.
     O que ficar de fora continua no projeto, esperando.</div>`;
-  else if (min > 0 && min <= 240) alerta = `<div class="aviso"><b>${tempo} de sessão.</b>
-    Cabe num bloco. O que você desligar aqui continua no projeto para outra sessão.</div>`;
+  else if (min > 0) alerta = `<div class="aviso"><b>${tempo} de sessão.</b>
+    Cabe num bloco. O que você desligar continua no projeto para outra sessão.</div>`;
 
   $('aResumo').innerHTML = origem +
     ` <b>${dentro.length} instrumentos · ${perg} perguntas · ${tempo}.</b>` + alerta;
@@ -307,7 +332,8 @@ function soma(){
 
 function montaFila(){
   FILA = [];
-  INSTS.filter(e => DENTRO.has(e.id)).forEach(e => (CAMPOS[e.id]||[]).forEach((f, idx, arr) => {
+  INSTS.filter(e => DENTRO.has(e.id) && e.sessao !== 'casa' && e.sessao !== 'solo')
+       .forEach(e => (CAMPOS[e.id]||[]).forEach((f, idx, arr) => {
     FILA.push({ ex:e, campo:f, idx, total:arr.length,
                 dur: Math.max(2, Math.round((e.duration_min || 20) / arr.length)) });
   }));

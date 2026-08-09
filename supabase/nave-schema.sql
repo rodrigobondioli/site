@@ -73,6 +73,12 @@ create table if not exists nave_exercise_fields (
   unique (exercise_id, key)
 );
 
+
+-- curadoria em três camadas (espinha / sinal / extra) — inferência a partir dos entregáveis
+alter table nave_exercises add column if not exists tier   text;
+alter table nave_exercises add column if not exists sessao text;
+alter table nave_exercises add column if not exists porque text;
+
 -- Critérios de decisão (matrizes da Parte 7)
 create table if not exists nave_decision_criteria (
   id        uuid primary key default gen_random_uuid(),

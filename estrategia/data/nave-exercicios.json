@@ -84,7 +84,10 @@
         "type": "text",
         "hint": "Quando precisa estar resolvido. Define se você coloca pressão ou não, e protege a sua agenda."
       }
-    ]
+    ],
+    "tier": "espinha",
+    "sessao": "workshop",
+    "porque": "Enquadra o projeto inteiro. O próprio material diz: se você só tem 30 minutos, faça este."
   },
   {
     "code": "N2",
@@ -111,7 +114,10 @@
           "Comunicação"
         ]
       }
-    ]
+    ],
+    "tier": "sinal",
+    "sessao": "workshop",
+    "porque": "O cliente não consegue dizer onde quer chegar, só onde está."
   },
   {
     "code": "N3",
@@ -141,7 +147,10 @@
         "type": "list",
         "hint": "Elementos do contexto que podem virar vantagem: tendência, tecnologia nova, isenção de imposto, patente que caiu."
       }
-    ]
+    ],
+    "tier": "sinal",
+    "sessao": "workshop",
+    "porque": "Falta leitura de contexto e de mercado no discurso do cliente."
   },
   {
     "code": "N4",
@@ -189,7 +198,10 @@
         "type": "list",
         "hint": "Primeira vez que se pergunta sobre público. Começa devagar — o aprofundamento é no eixo A."
       }
-    ]
+    ],
+    "tier": "espinha",
+    "sessao": "workshop",
+    "porque": "Traz a pergunta matadora — qual problema este projeto precisa resolver — e alimenta o bloco 4 do relatório."
   },
   {
     "code": "N5",
@@ -259,7 +271,10 @@
         "type": "longtext",
         "hint": "Quanto a empresa gasta e o que custa mais caro."
       }
-    ]
+    ],
+    "tier": "sinal",
+    "sessao": "workshop",
+    "porque": "Modelo de negócio bagunçado: não sabem de onde vem o dinheiro nem qual é a vaca leiteira."
   },
   {
     "code": "N6",
@@ -301,7 +316,10 @@
         "type": "list",
         "hint": "Cada área problemática vira pergunta. Vai ter coisa que compete a você e coisa que não — mapeie as duas."
       }
-    ]
+    ],
+    "tier": "sinal",
+    "sessao": "workshop",
+    "porque": "Processo ou jornada do cliente confusa, com gargalos que ninguém mapeou."
   },
   {
     "code": "N7",
@@ -319,7 +337,10 @@
         "type": "longtext",
         "hint": "Um parágrafo que resume todos os problemas a resolver + o estado almejado."
       }
-    ]
+    ],
+    "tier": "espinha",
+    "sessao": "workshop",
+    "porque": "O parágrafo que fica na parede. Retomado na abertura de toda fase até a entrega."
   },
   {
     "code": "A1",
@@ -368,7 +389,10 @@
         "label": "Segmentos de público que atendemos ou queremos atender",
         "type": "list"
       }
-    ]
+    ],
+    "tier": "espinha",
+    "sessao": "workshop",
+    "porque": "Sem recorte de público não existe posicionamento nem plataforma (elemento 3)."
   },
   {
     "code": "A2",
@@ -395,7 +419,10 @@
           "Persona"
         ]
       }
-    ]
+    ],
+    "tier": "sinal",
+    "sessao": "workshop",
+    "porque": "Público amplo demais, resistência a nichar."
   },
   {
     "code": "A3",
@@ -485,7 +512,10 @@
         "type": "longtext",
         "hint": "Que problemas tenta resolver · o que facilitaria a vida · do que tem medo."
       }
-    ]
+    ],
+    "tier": "espinha",
+    "sessao": "workshop",
+    "porque": "A persona é pré-requisito declarado do V9. Sem ela, o ponto A/B do consumidor vira chute."
   },
   {
     "code": "A4",
@@ -533,7 +563,10 @@
         "type": "longtext",
         "hint": "Desejos, o que é sucesso, o que quer alcançar."
       }
-    ]
+    ],
+    "tier": "sinal",
+    "sessao": "workshop",
+    "porque": "A equipe diverge sobre quem é o público — o mapa alinha todo mundo visualmente."
   },
   {
     "code": "A5",
@@ -561,7 +594,10 @@
         "label": "Referências de consumo do público",
         "type": "list"
       }
-    ]
+    ],
+    "tier": "sinal",
+    "sessao": "workshop",
+    "porque": "Mercado em movimento e a marca não acompanhou."
   },
   {
     "code": "V1",
@@ -596,7 +632,10 @@
         "type": "longtext",
         "hint": "A mais difícil das quatro."
       }
-    ]
+    ],
+    "tier": "espinha",
+    "sessao": "workshop",
+    "porque": "Abre o bloco de valor e produz a matéria-prima da promessa."
   },
   {
     "code": "V2",
@@ -636,7 +675,10 @@
         "type": "longtext",
         "hint": "Quais são as evidências de que entregamos."
       }
-    ]
+    ],
+    "tier": "extra",
+    "sessao": "workshop",
+    "porque": "Divergência de fonte: está no PDF, não na aula. Use como complemento do V1, nunca no lugar dele."
   },
   {
     "code": "V3",
@@ -672,7 +714,10 @@
         "type": "longtext",
         "hint": "Houve planejamento? Se houve, por que não foi feito? Passado e presente revelam a responsabilidade da própria empresa."
       }
-    ]
+    ],
+    "tier": "sinal",
+    "sessao": "workshop",
+    "porque": "Só marca existente. A percepção caiu e ninguém sabe explicar quando."
   },
   {
     "code": "V4",
@@ -718,7 +763,10 @@
         "label": "Impacto — como elas deveriam se sentir?",
         "type": "longtext"
       }
-    ]
+    ],
+    "tier": "sinal",
+    "sessao": "workshop",
+    "porque": "Não está claro o que a marca faz e, principalmente, o que ela NÃO faz."
   },
   {
     "code": "V5",
@@ -746,7 +794,10 @@
         "label": "Oportunidades que dá para aproveitar",
         "type": "list"
       }
-    ]
+    ],
+    "tier": "sinal",
+    "sessao": "workshop",
+    "porque": "Faltam fatos: o cliente fala por impressão."
   },
   {
     "code": "V6",
@@ -791,7 +842,10 @@
         "label": "Como a marca contribui com esse desafio?",
         "type": "longtext"
       }
-    ]
+    ],
+    "tier": "sinal",
+    "sessao": "workshop",
+    "porque": "Discurso ≠ prática. O bloco de conflitos filosóficos existe para expor isso."
   },
   {
     "code": "V7",
@@ -815,7 +869,10 @@
         "repeatable": true,
         "min_rows": 3
       }
-    ]
+    ],
+    "tier": "sinal",
+    "sessao": "workshop",
+    "porque": "Concorrência mal mapeada ou negada."
   },
   {
     "code": "V8",
@@ -850,7 +907,10 @@
         "min_rows": 3,
         "max_rows": 5
       }
-    ]
+    ],
+    "tier": "espinha",
+    "sessao": "workshop",
+    "porque": "Listado no próprio material como um dos três a fazer quando o tempo é curto. Devolve o diferencial percebido."
   },
   {
     "code": "V9",
@@ -877,7 +937,10 @@
         "label": "Onde eles gostariam de estar?",
         "type": "longtext"
       }
-    ]
+    ],
+    "tier": "espinha",
+    "sessao": "workshop",
+    "porque": "Também nos três do material. É a promessa/transformação — bloco 1 do relatório."
   },
   {
     "code": "V10",
@@ -919,7 +982,10 @@
         "label": "Concorrentes de longo prazo",
         "type": "list"
       }
-    ]
+    ],
+    "tier": "sinal",
+    "sessao": "workshop",
+    "porque": "Dificuldade de definir quem são os players de verdade."
   },
   {
     "code": "V11",
@@ -972,7 +1038,10 @@
         "label": "Conclusão: qual é o valor líquido percebido?",
         "type": "longtext"
       }
-    ]
+    ],
+    "tier": "sinal",
+    "sessao": "workshop",
+    "porque": "Percepção de caro, guerra de preço, ou produto com custo psicológico."
   },
   {
     "code": "V12",
@@ -1008,7 +1077,10 @@
         "type": "list",
         "hint": "O degrau mais alto. Onde a marca toca o sistema de crenças."
       }
-    ]
+    ],
+    "tier": "sinal",
+    "sessao": "workshop",
+    "porque": "O produto não conecta com nada maior — falta a ponte do atributo até o propósito."
   },
   {
     "code": "V13",
@@ -1061,7 +1133,10 @@
         "type": "longtext",
         "hint": "Deixe eles responderem do jeito deles. Veja o que sai."
       }
-    ]
+    ],
+    "tier": "espinha",
+    "sessao": "workshop",
+    "porque": "Entrega diferencial único, lembrança e mensagem central: blocos 5 e 6 do relatório, praticamente prontos."
   },
   {
     "code": "V14",
@@ -1113,7 +1188,10 @@
         "type": "longtext",
         "hint": "Verbal e visual. É o que a marca pode ocupar para ser percebida como de fato única."
       }
-    ]
+    ],
+    "tier": "espinha",
+    "sessao": "solo",
+    "porque": "Sem a auditoria você não sabe qual espaço de posicionamento está livre. Feita por você, depois."
   },
   {
     "code": "E1",
@@ -1144,7 +1222,10 @@
         "type": "longtext",
         "hint": "Como está hoje e para onde convida."
       }
-    ]
+    ],
+    "tier": "espinha",
+    "sessao": "casa",
+    "porque": "Alimenta propósito, valores e narrativa — e vai como lição de casa, então não custa tempo de sala."
   },
   {
     "code": "E2",
@@ -1176,7 +1257,10 @@
         "label": "Por que ela importou?",
         "type": "longtext"
       }
-    ]
+    ],
+    "tier": "sinal",
+    "sessao": "workshop",
+    "porque": "O fundador trava quando o assunto é legado e propósito."
   },
   {
     "code": "E3",
@@ -1205,7 +1289,10 @@
         "type": "longtext",
         "hint": "Como mudaram o seu jeito de fazer as coisas, de tomar decisões e de agir."
       }
-    ]
+    ],
+    "tier": "sinal",
+    "sessao": "workshop",
+    "porque": "A história de criação voltou rasa. Este destrava."
   },
   {
     "code": "E4",
@@ -1237,7 +1324,10 @@
         "label": "Não acreditamos…",
         "type": "list"
       }
-    ]
+    ],
+    "tier": "sinal",
+    "sessao": "workshop",
+    "porque": "Valores genéricos: honestidade, transparência, qualidade. A negativa quebra isso."
   },
   {
     "code": "E5",
@@ -1261,7 +1351,10 @@
         "type": "list",
         "hint": "As missões são ações aplicáveis."
       }
-    ]
+    ],
+    "tier": "espinha",
+    "sessao": "workshop",
+    "porque": "Visão e missões — sem isso a plataforma não fecha e o propósito fica solto."
   },
   {
     "code": "E6",
@@ -1301,7 +1394,10 @@
         "type": "list",
         "hint": "Preencher depois, na síntese."
       }
-    ]
+    ],
+    "tier": "sinal",
+    "sessao": "workshop",
+    "porque": "Precisa de valores com sinal vermelho — com quem a marca NÃO se relaciona (bloco 3)."
   },
   {
     "code": "E7",
@@ -1388,7 +1484,10 @@
         "type": "text",
         "hint": "Existimos para [ação] + [para quem] + [gerando que transformação]. Gere várias e deixe o cliente escolher."
       }
-    ]
+    ],
+    "tier": "espinha",
+    "sessao": "workshop",
+    "porque": "Propósito é o elemento 1 da plataforma. Nenhum outro instrumento produz."
   },
   {
     "code": "E8",
@@ -1426,7 +1525,10 @@
         "type": "list",
         "hint": "5 a 7. Entram na prova real (E9). Refine em casa depois da imersão, buscando palavras melhores para a mesma ideia."
       }
-    ]
+    ],
+    "tier": "espinha",
+    "sessao": "workshop",
+    "porque": "A identidade visual E a verbal partem daqui. É o gargalo do módulo 7 inteiro."
   },
   {
     "code": "E9",
@@ -1458,7 +1560,10 @@
         "type": "longtext",
         "hint": "Vira conversa: querem exercer de verdade? Se querem, proponha ideias — 'se querem ser transparentes, dá para abrir as contas da empresa na internet'. É isso mesmo que vocês quiseram dizer?"
       }
-    ]
+    ],
+    "tier": "espinha",
+    "sessao": "workshop",
+    "porque": "Sem a prova real, atributo escolhido em lista é desejo, não diretriz. Vira o bloco 2 do relatório."
   },
   {
     "code": "E10",
@@ -1511,7 +1616,10 @@
         "type": "longtext",
         "hint": "A transformação quando ele segue o plano."
       }
-    ]
+    ],
+    "tier": "sinal",
+    "sessao": "workshop",
+    "porque": "A comunicação não tem narrativa: a marca se põe como herói em vez de guia."
   },
   {
     "code": "E11",
@@ -1546,7 +1654,10 @@
         "type": "list",
         "hint": "O que agrega textura: narrativas periféricas."
       }
-    ]
+    ],
+    "tier": "sinal",
+    "sessao": "workshop",
+    "porque": "Vai entrar em identidade e precisa da hierarquia de palavras. Feito no fim."
   },
   {
     "code": "PD1",
@@ -1639,7 +1750,10 @@
         "label": "Gravação / transcrição",
         "type": "url"
       }
-    ]
+    ],
+    "tier": "fase",
+    "sessao": "fase",
+    "porque": ""
   },
   {
     "code": "PD2",
@@ -1666,7 +1780,10 @@
         "label": "Discrepâncias e incongruências que já notei",
         "type": "list"
       }
-    ]
+    ],
+    "tier": "fase",
+    "sessao": "fase",
+    "porque": ""
   },
   {
     "code": "DG1",
@@ -1714,7 +1831,10 @@
         "type": "list",
         "hint": "É aqui que costuma estar a verdade que vira diferencial."
       }
-    ]
+    ],
+    "tier": "fase",
+    "sessao": "fase",
+    "porque": ""
   },
   {
     "code": "DG2",
@@ -1752,7 +1872,10 @@
         "type": "longtext",
         "hint": "A oportunidade de discurso proprietário."
       }
-    ]
+    ],
+    "tier": "fase",
+    "sessao": "fase",
+    "porque": ""
   },
   {
     "code": "DG3",
@@ -1796,7 +1919,10 @@
           "O que NÃO disse"
         ]
       }
-    ]
+    ],
+    "tier": "fase",
+    "sessao": "fase",
+    "porque": ""
   },
   {
     "code": "DG4",
@@ -1824,7 +1950,10 @@
         ],
         "repeatable": true
       }
-    ]
+    ],
+    "tier": "fase",
+    "sessao": "fase",
+    "porque": ""
   },
   {
     "code": "ES1",
@@ -1900,7 +2029,10 @@
         "type": "longtext",
         "hint": "Erro #7: não fuja da notícia difícil."
       }
-    ]
+    ],
+    "tier": "fase",
+    "sessao": "fase",
+    "porque": ""
   },
   {
     "code": "ES2",
@@ -1959,7 +2091,10 @@
           "Não — depende da categoria, reescrever"
         ]
       }
-    ]
+    ],
+    "tier": "fase",
+    "sessao": "fase",
+    "porque": ""
   },
   {
     "code": "ES3",
@@ -2013,7 +2148,10 @@
         "type": "text",
         "hint": "O convite, a visão de mundo de longo prazo."
       }
-    ]
+    ],
+    "tier": "fase",
+    "sessao": "fase",
+    "porque": ""
   },
   {
     "code": "NM1",
@@ -2075,7 +2213,10 @@
         ],
         "hint": "Validar com o cliente ANTES de criar."
       }
-    ]
+    ],
+    "tier": "fase",
+    "sessao": "fase",
+    "porque": ""
   },
   {
     "code": "NM2",
@@ -2110,7 +2251,10 @@
         "repeatable": true,
         "hint": "Técnicas: redução · adição · junção · substituição · anagrama · combinação · som."
       }
-    ]
+    ],
+    "tier": "fase",
+    "sessao": "fase",
+    "porque": ""
   },
   {
     "code": "NM3",
@@ -2170,7 +2314,10 @@
         "label": "Nome escolhido + conceito de defesa",
         "type": "longtext"
       }
-    ]
+    ],
+    "tier": "fase",
+    "sessao": "fase",
+    "porque": ""
   },
   {
     "code": "VB1",
@@ -2229,7 +2376,10 @@
         "type": "longtext",
         "hint": "Uso interno. É bússola de posicionamento, não peça pública."
       }
-    ]
+    ],
+    "tier": "fase",
+    "sessao": "fase",
+    "porque": ""
   },
   {
     "code": "VB2",
@@ -2283,7 +2433,10 @@
         "type": "longtext",
         "hint": "É o que mostra o impacto para o cliente."
       }
-    ]
+    ],
+    "tier": "fase",
+    "sessao": "fase",
+    "porque": ""
   },
   {
     "code": "VB3",
@@ -2317,7 +2470,10 @@
         ],
         "repeatable": true
       }
-    ]
+    ],
+    "tier": "fase",
+    "sessao": "fase",
+    "porque": ""
   },
   {
     "code": "VB4",
@@ -2378,7 +2534,10 @@
           "Ajuste"
         ]
       }
-    ]
+    ],
+    "tier": "fase",
+    "sessao": "fase",
+    "porque": ""
   },
   {
     "code": "VB5",
@@ -2419,7 +2578,10 @@
         "label": "Manifesto final",
         "type": "longtext"
       }
-    ]
+    ],
+    "tier": "fase",
+    "sessao": "fase",
+    "porque": ""
   },
   {
     "code": "VB6",
@@ -2461,7 +2623,10 @@
         "label": "Tagline escolhida",
         "type": "text"
       }
-    ]
+    ],
+    "tier": "fase",
+    "sessao": "fase",
+    "porque": ""
   },
   {
     "code": "VB7",
@@ -2507,7 +2672,10 @@
           "Ação"
         ]
       }
-    ]
+    ],
+    "tier": "fase",
+    "sessao": "fase",
+    "porque": ""
   },
   {
     "code": "VS1",
@@ -2578,7 +2746,10 @@
         "type": "longtext",
         "hint": "É isto que entra no Key Visual (VS3)."
       }
-    ]
+    ],
+    "tier": "fase",
+    "sessao": "fase",
+    "porque": ""
   },
   {
     "code": "VS2",
@@ -2640,7 +2811,10 @@
         ],
         "repeatable": true
       }
-    ]
+    ],
+    "tier": "fase",
+    "sessao": "fase",
+    "porque": ""
   },
   {
     "code": "VS3",
@@ -2707,7 +2881,10 @@
         "type": "longtext",
         "hint": "É âncora: sem o aceite aqui, não começa o refino."
       }
-    ]
+    ],
+    "tier": "fase",
+    "sessao": "fase",
+    "porque": ""
   },
   {
     "code": "GM1",
@@ -2760,7 +2937,10 @@
         "label": "Governança: quem aprova o quê e com que critério",
         "type": "longtext"
       }
-    ]
+    ],
+    "tier": "fase",
+    "sessao": "fase",
+    "porque": ""
   },
   {
     "code": "C1",
@@ -2850,6 +3030,9 @@
         "type": "list",
         "hint": "Modelo de negócio indefinido, não passa informação nem com NDA."
       }
-    ]
+    ],
+    "tier": "fase",
+    "sessao": "fase",
+    "porque": ""
   }
 ]
