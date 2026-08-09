@@ -23,16 +23,17 @@ body{margin:0;min-height:100vh;display:grid;place-items:center;background:var(--
 h1{font-family:var(--bnd-display);font-weight:800;font-size:26px;margin:10px 0 8px;line-height:1.2}
 p{margin:0 0 20px;color:var(--ink-50);font-size:14.5px;line-height:1.45}
 label{display:block;font-size:11.2px;font-weight:600;letter-spacing:1.12px;color:var(--ink-50);margin-bottom:7px}
+.fld{margin-bottom:14px}
 input{width:100%;padding:12px 14px;border:1px solid var(--ink-10);border-radius:10px;
  background:var(--bnd-bg);font:inherit;color:inherit;outline:none}
 input:focus{border-color:var(--bnd-ink)}
 input#codigo{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:22px;
  letter-spacing:8px;text-align:center;padding:14px}
-button{width:100%;margin-top:14px;padding:12px 16px;border:0;border-radius:10px;
+button{width:100%;margin-top:6px;padding:12px 16px;border:0;border-radius:10px;
  background:var(--bnd-ink);color:var(--bnd-white);font:inherit;font-weight:600;cursor:pointer}
 button:disabled{opacity:.45;cursor:default}
 button.link{background:none;color:var(--ink-50);font-weight:400;font-size:13.5px;
- text-decoration:underline;margin-top:10px;padding:6px}
+ text-decoration:underline;margin-top:12px;padding:6px}
 .msg{margin-top:16px;font-size:13.5px;line-height:1.45;display:none}
 .msg.on{display:block}
 .msg.err{color:#b00020}
@@ -46,26 +47,61 @@ button.link{background:none;color:var(--ink-50);font-weight:400;font-size:13.5px
   <div class="kicker">Bondioli</div>
   <h1>Estratégia de marca</h1>
 
-  <!-- passo 1: e-mail -->
+  <!-- 1. senha (padrão) -->
   <div class="step on" id="s1">
-    <p>Um código de acesso vai chegar no seu e-mail.</p>
-    <form id="fEmail">
-      <label for="email">E-mail</label>
-      <input id="email" type="email" required autocomplete="email" placeholder="voce@dominio.com">
-      <button id="btnEmail" type="submit">Enviar código</button>
+    <p>Entre com e-mail e senha. O navegador guarda a sessão — você não vai precisar fazer isso toda vez.</p>
+    <form id="fSenha">
+      <div class="fld">
+        <label for="email">E-mail</label>
+        <input id="email" type="email" required autocomplete="username">
+      </div>
+      <div class="fld">
+        <label for="senha">Senha</label>
+        <input id="senha" type="password" required autocomplete="current-password">
+      </div>
+      <button id="btnSenha" type="submit">Entrar</button>
     </form>
+    <button class="link" type="button" onclick="irPara(2)">Primeiro acesso ou esqueci a senha</button>
   </div>
 
-  <!-- passo 2: código -->
+  <!-- 2. pedir código -->
   <div class="step" id="s2">
+    <p>Vou mandar um código no seu e-mail. Com ele você cria a senha e não precisa mais disso.</p>
+    <form id="fEmail">
+      <div class="fld">
+        <label for="email2">E-mail</label>
+        <input id="email2" type="email" required autocomplete="username">
+      </div>
+      <button id="btnEmail" type="submit">Enviar código</button>
+    </form>
+    <button class="link" type="button" onclick="irPara(1)">Voltar</button>
+  </div>
+
+  <!-- 3. código -->
+  <div class="step" id="s3">
     <p>Código enviado para <span class="dest" id="dest"></span>. Vale por 1 hora e só funciona uma vez.</p>
     <form id="fCodigo">
-      <label for="codigo">Código</label>
-      <input id="codigo" required inputmode="numeric" autocomplete="one-time-code"
-             maxlength="8" placeholder="00000000">
-      <button id="btnCodigo" type="submit">Entrar</button>
+      <div class="fld">
+        <label for="codigo">Código</label>
+        <input id="codigo" required inputmode="numeric" autocomplete="one-time-code" maxlength="8" placeholder="00000000">
+      </div>
+      <button id="btnCodigo" type="submit">Confirmar</button>
     </form>
-    <button class="link" type="button" onclick="voltar()">Usar outro e-mail</button>
+    <button class="link" type="button" onclick="irPara(2)">Pedir outro código</button>
+  </div>
+
+  <!-- 4. criar senha -->
+  <div class="step" id="s4">
+    <p>Pronto, você está dentro. Crie uma senha agora e nunca mais precise do código.</p>
+    <form id="fNova">
+      <div class="fld">
+        <label for="nova">Nova senha</label>
+        <input id="nova" type="password" required minlength="8" autocomplete="new-password"
+               placeholder="mínimo 8 caracteres">
+      </div>
+      <button id="btnNova" type="submit">Salvar senha e entrar</button>
+    </form>
+    <button class="link" type="button" onclick="entrar()">Pular e entrar sem criar senha</button>
   </div>
 
   <div class="msg" id="msg"></div>
@@ -77,51 +113,93 @@ button.link{background:none;color:var(--ink-50);font-weight:400;font-size:13.5px
 <script src="/estrategia/nave.js"></script>
 <script>
 (function(){
-  var msg = document.getElementById('msg');
+  var msg  = document.getElementById('msg');
   var next = new URLSearchParams(location.search).get('next') || '/estrategia/';
   var email = '';
 
   function say(t, cls){ msg.textContent = t; msg.className = 'msg on ' + (cls||''); }
   function limpa(){ msg.className = 'msg'; }
-  function passo(n){
-    document.getElementById('s1').classList.toggle('on', n===1);
-    document.getElementById('s2').classList.toggle('on', n===2);
-  }
-  window.voltar = function(){ limpa(); passo(1); document.getElementById('email').focus(); };
+  window.irPara = function(n){
+    limpa();
+    [1,2,3,4].forEach(function(i){
+      document.getElementById('s'+i).classList.toggle('on', i===n);
+    });
+    var foco = {1:'email', 2:'email2', 3:'codigo', 4:'nova'}[n];
+    var el = document.getElementById(foco); if (el) el.focus();
+  };
+  window.entrar = function(){ location.replace(next); };
 
   // já logado? entra direto.
   NAVE.getSession().then(function(s){ if (s) location.replace(next); });
 
+  // --- senha ---
+  document.getElementById('fSenha').addEventListener('submit', async function(e){
+    e.preventDefault();
+    var btn = document.getElementById('btnSenha');
+    btn.disabled = true; say('Entrando…');
+    try {
+      var r = await NAVE.sb.auth.signInWithPassword({
+        email: document.getElementById('email').value.trim(),
+        password: document.getElementById('senha').value
+      });
+      if (r.error) throw r.error;
+      entrar();
+    } catch (err) {
+      say(/invalid login/i.test(err.message||'')
+            ? 'E-mail ou senha não conferem. Se ainda não criou senha, use o link abaixo.'
+            : (err.message || 'Não consegui entrar.'), 'err');
+      btn.disabled = false;
+    }
+  });
+
+  // --- pedir código ---
   document.getElementById('fEmail').addEventListener('submit', async function(e){
     e.preventDefault();
     var btn = document.getElementById('btnEmail');
     btn.disabled = true; say('Enviando…');
-    email = document.getElementById('email').value.trim();
+    email = document.getElementById('email2').value.trim();
     try {
-      // shouldCreateUser: o e-mail precisa já existir no Supabase.
       var r = await NAVE.sb.auth.signInWithOtp({ email: email, options: { shouldCreateUser: true } });
       if (r.error) throw r.error;
       document.getElementById('dest').textContent = email;
-      limpa(); passo(2);
-      document.getElementById('codigo').focus();
+      irPara(3);
     } catch (err) {
-      say(err.message || 'Não consegui enviar. Tente de novo.', 'err');
+      say(err.message || 'Não consegui enviar.', 'err');
     } finally { btn.disabled = false; }
   });
 
+  // --- verificar código ---
   document.getElementById('fCodigo').addEventListener('submit', async function(e){
     e.preventDefault();
     var btn = document.getElementById('btnCodigo');
-    var codigo = document.getElementById('codigo').value.replace(/\D/g, '');
     btn.disabled = true; say('Verificando…');
     try {
-      var r = await NAVE.sb.auth.verifyOtp({ email: email, token: codigo, type: 'email' });
+      var r = await NAVE.sb.auth.verifyOtp({
+        email: email,
+        token: document.getElementById('codigo').value.replace(/\D/g,''),
+        type: 'email'
+      });
       if (r.error) throw r.error;
-      location.replace(next);
+      irPara(4);
     } catch (err) {
       say(/expired|invalid/i.test(err.message||'')
             ? 'Código inválido ou expirado. Peça outro.'
             : (err.message || 'Não consegui verificar.'), 'err');
+      btn.disabled = false;
+    }
+  });
+
+  // --- criar senha ---
+  document.getElementById('fNova').addEventListener('submit', async function(e){
+    e.preventDefault();
+    var btn = document.getElementById('btnNova');
+    btn.disabled = true; say('Salvando…');
+    try {
+      var r = await NAVE.sb.auth.updateUser({ password: document.getElementById('nova').value });
+      if (r.error) throw r.error;
+      entrar();
+    } catch (err) {
+      say(err.message || 'Não consegui salvar a senha.', 'err');
       btn.disabled = false;
     }
   });
