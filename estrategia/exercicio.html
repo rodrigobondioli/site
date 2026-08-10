@@ -99,6 +99,13 @@ select.inp{appearance:none;background-image:linear-gradient(45deg,transparent 50
 
 .empty{padding:70px 20px;text-align:center;color:var(--ink-50)}
 @media(max-width:980px){.cat{display:none}}
+.dw-palco{height:min(64vh,620px);border:1px solid var(--ink-10);border-radius:12px;overflow:hidden}
+.dw-host{margin-bottom:8px}
+.dw-carregando,.dw-falhou{padding:22px;border:1px dashed var(--ink-25);border-radius:12px;
+ font-size:14px;color:var(--ink-50);line-height:1.5}
+.dw-falhou b{display:block;color:var(--bnd-ink);margin-bottom:6px}
+.dw-link{width:100%;margin-top:12px;padding:11px 13px;border:1px solid var(--ink-10);
+ border-radius:10px;background:var(--bnd-bg);font:inherit;outline:none}
 </style>
 </head>
 <body>
@@ -119,12 +126,13 @@ select.inp{appearance:none;background-image:linear-gradient(45deg,transparent 50
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="/estrategia/config.js"></script>
 <script src="/estrategia/nave.js"></script>
+<script src="/estrategia/desenho.js"></script>
 <script>
 const AXIS = {N:'Eixo N — negócio', A:'Eixo A — audiência', V:'Eixo V — valor', E:'Eixo E — estória', X:'Diagnóstico, estratégia e identidade'};
 const ax = e => ['N','A','V','E'].includes(e.axis) ? e.axis : 'X';
 const PHASE = {F0:'Primeira call',F2:'Pré-diagnóstico',F3:'Imersão',F4:'Descompressão',F5:'Pesquisas',F6:'Diagnóstico',
   F7:'Estratégia',F8:'Posicionamento',F10:'Naming',F11:'Verbal',F12:'Key Word',F13:'Direção de arte',F14:'Sistema e Key Visual',F15:'Guia de marca'};
-let EX = [], cur = null;
+let EX = [], cur = null, DRAW = {};
 const PROJ = new URLSearchParams(location.search).get('p') || null;
 // Instrumento só se preenche DENTRO de um projeto. Sem ?p=, isto é catálogo de consulta:
 // dá para ler o instrumento inteiro, não dá para responder. Resposta sem cliente não é trabalho, é lixo.
@@ -231,7 +239,7 @@ document.getElementById('q').addEventListener('input', e => renderList(e.target.
 function open_(code){ open(code); }
 function open(code){
   const e = EX.find(x=>x.code===code); if(!e) return;
-  cur = code;
+  cur = code; DRAW = {};
   history.replaceState(null,'',`?ex=${code}${PROJ?'&p='+PROJ:''}`);
   const saved = Store.get(code) || {};
   const chips = [
@@ -269,6 +277,14 @@ function renderField(f, v){
   const id = `f_${f.key}`;
   let body = '';
   switch(f.type){
+    case 'draw': {
+      body = `<div class="dw-host" data-k="${f.key}" data-id="${id}"></div>`;
+      setTimeout(() => {
+        const host = document.querySelector(`.dw-host[data-id="${id}"]`);
+        if (host && window.NAVE_DESENHO) NAVE_DESENHO.montar(host, v, val => { DRAW[f.key] = val; });
+      }, 0);
+      break;
+    }
     case 'longtext':
       body = `<textarea class="inp" data-k="${f.key}" id="${id}">${v||''}</textarea>`; break;
     case 'text': case 'url': case 'number': case 'file':
@@ -364,6 +380,7 @@ function collect(){
     }
     else out[k] = el.value;
   });
+  Object.assign(out, DRAW);
   return out;
 }
 let salvando = false;

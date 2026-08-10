@@ -230,6 +230,12 @@
     "intro": "Nove blocos. Demorado — reserve para empresas onde você percebe mais desorganização. Ensina a pensar como dono de negócio.",
     "fields": [
       {
+        "key": "quadro",
+        "label": "Quadro",
+        "type": "draw",
+        "hint": "Canvas em nove blocos — desenhe a grade e cole os post-its"
+      },
+      {
         "key": "segmentos",
         "label": "Segmentos de Clientes",
         "type": "longtext",
@@ -294,7 +300,8 @@
     "ficha": false,
     "blocos": 9,
     "min_bloco": 10,
-    "tempo_fonte": "M05 A05 · \"ele leva tempo\" — sem número; 10 por bloco é inferência minha"
+    "tempo_fonte": "M05 A05 · \"ele leva tempo\" — sem número; 10 por bloco é inferência minha",
+    "quadro": true
   },
   {
     "code": "N6",
@@ -306,6 +313,12 @@
     "source": "M05 A05",
     "intro": "Técnica do livro Sprint, do Google. Personagens à esquerda, final feliz à direita, o fluxo no meio. Na prática é quase uma jornada do cliente.",
     "fields": [
+      {
+        "key": "quadro",
+        "label": "Quadro",
+        "type": "draw",
+        "hint": "O Mapa: personagens à esquerda, final feliz à direita, as ações com setas no meio"
+      },
       {
         "key": "personagens",
         "label": "Personagens",
@@ -343,7 +356,8 @@
     "ficha": false,
     "blocos": 5,
     "min_bloco": 10,
-    "tempo_fonte": "inferência: mapa desenhado leva mais que listagem"
+    "tempo_fonte": "inferência: mapa desenhado leva mais que listagem",
+    "quadro": true
   },
   {
     "code": "N7",
@@ -568,6 +582,12 @@
     "intro": "Muito visual. Faz a equipe inteira ter empatia real com o público.",
     "fields": [
       {
+        "key": "quadro",
+        "label": "Quadro",
+        "type": "draw",
+        "hint": "Mapa de empatia: os quadrantes em volta da persona"
+      },
+      {
         "key": "ve",
         "label": "O que ela vê?",
         "type": "longtext",
@@ -610,7 +630,8 @@
     "ficha": true,
     "blocos": 6,
     "min_bloco": 5,
-    "tempo_fonte": "padrão do método: 5 min por bloco"
+    "tempo_fonte": "padrão do método: 5 min por bloco",
+    "quadro": true
   },
   {
     "code": "A5",
@@ -930,6 +951,12 @@
     "intro": "Desenhe um alvo. O logo do cliente no centro. Ele cola os concorrentes em post-it: quanto mais perto do centro, mais parecida a proposta — ou mais clientes eles estão tirando dele. Os de fora têm proposta similar mas não são considerados concorrentes diretos. É a partir daqui que o workshop para de olhar para dentro e começa a olhar para os outros.",
     "fields": [
       {
+        "key": "quadro",
+        "label": "Quadro",
+        "type": "draw",
+        "hint": "O radar: alvo com o cliente no centro, concorrentes por proximidade"
+      },
+      {
         "key": "radar",
         "label": "Players por proximidade",
         "type": "table",
@@ -948,7 +975,8 @@
     "ficha": false,
     "blocos": 1,
     "min_bloco": 5,
-    "tempo_fonte": "padrão do método: 5 min por bloco"
+    "tempo_fonte": "padrão do método: 5 min por bloco",
+    "quadro": true
   },
   {
     "code": "V8",
@@ -1146,6 +1174,12 @@
     "intro": "Sobe do mais fácil ao mais difícil, e cada degrau se constrói a partir do anterior — sempre volte à resposta de baixo. Exemplo Dove: 1/4 de creme hidratante → pele macia e confortável ao toque → sinto minha beleza valorizada → mereço ter minha autoestima elevada. Um sabonete conectado ao sistema de crenças mais íntimo da consumidora. Faça com post-it e escracho; a poesia vem depois, com a equipe.",
     "fields": [
       {
+        "key": "quadro",
+        "label": "Quadro",
+        "type": "draw",
+        "hint": "A escada: características → benefícios funcionais → emocionais → valores"
+      },
+      {
         "key": "caracteristicas",
         "label": "1. Características do produto",
         "type": "list",
@@ -1176,7 +1210,8 @@
     "ficha": false,
     "blocos": 4,
     "min_bloco": 5,
-    "tempo_fonte": "padrão do método: 5 min por bloco"
+    "tempo_fonte": "padrão do método: 5 min por bloco",
+    "quadro": true
   },
   {
     "code": "V13",
@@ -1776,6 +1811,12 @@
     "intro": "O mais difícil do bloco, e feito no FIM: junte TODAS as palavras e termos que apareceram durante a imersão, o workshop e o relatório de estratégia, e distribua nos três arcos. É a origem do sistema de keywords.",
     "fields": [
       {
+        "key": "quadro",
+        "label": "Quadro",
+        "type": "draw",
+        "hint": "Os três arcos do Aaker: essência no centro, identidade central, identidade estendida"
+      },
+      {
         "key": "todas",
         "label": "Todas as palavras que apareceram no processo",
         "type": "list"
@@ -1805,7 +1846,8 @@
     "ficha": false,
     "blocos": 4,
     "min_bloco": 5,
-    "tempo_fonte": "padrão do método: 5 min por bloco"
+    "tempo_fonte": "padrão do método: 5 min por bloco",
+    "quadro": true
   },
   {
     "code": "PD1",

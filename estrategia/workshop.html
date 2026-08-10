@@ -100,6 +100,15 @@ textarea{min-height:220px;line-height:1.5}
 .opt{display:inline-flex;align-items:center;gap:7px;border:1px dashed var(--ink-25);border-radius:99px;
  padding:8px 14px;margin:0 6px 7px 0;font-size:14px;background:none}
 .opt.on{background:var(--bnd-ink);color:#fff;border-color:var(--bnd-ink)}
+.dw-palco{height:min(62vh,560px);border:1px solid var(--ink-10);border-radius:12px;overflow:hidden}
+.dw-carregando,.dw-falhou{padding:22px;border:1px dashed var(--ink-25);border-radius:12px;
+ font-size:14px;color:var(--ink-50);line-height:1.5}
+.dw-falhou b{display:block;color:var(--bnd-ink);margin-bottom:6px}
+.dw-link{width:100%;margin-top:12px;padding:11px 13px;border:1px solid var(--ink-10);
+ border-radius:10px;background:var(--bnd-bg);font:inherit;outline:none}
+body.desenhando .dir{grid-column:1/-1}
+.palco.quadro{grid-template-columns:1fr}
+.palco.quadro .esq{max-height:34vh}
 
 /* rodapé */
 .rodape{display:flex;align-items:center;gap:10px;margin-top:24px;flex-wrap:wrap}
@@ -230,6 +239,7 @@ body.apresentando .palco{grid-template-columns:1fr .7fr}
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="/estrategia/config.js"></script>
 <script src="/estrategia/nave.js"></script>
+<script src="/estrategia/desenho.js"></script>
 <script>
 const PROJ = new URLSearchParams(location.search).get('p');
 const AXIS = {N:'negócio', A:'audiência', V:'valor', E:'estória'};
@@ -481,6 +491,7 @@ function valor(p, f){ return (VAL[p.ex.id] || {})[(f || p.campos[0]).key]; }
 
 function renderCampo(p){
   const el = $('campo');
+  document.getElementById('palco').classList.remove('quadro');
   if (p.campos.length === 1) { umCampo(p, p.campos[0], el); return; }
   el.innerHTML = p.campos.map((f,n) =>
     `<div class="bl"><label>${esc(curta(f.label))}</label><div id="bl_${n}"></div>` +
@@ -496,6 +507,12 @@ function umCampo(p, f, el, n){
   const foca = () => { const el2 = document.getElementById('sub_'+n); if (el2) {
       document.querySelectorAll('.subs li').forEach(x=>x.classList.remove('foco')); el2.classList.add('foco'); } };
 
+  if (f.type === 'draw') {
+    // o quadro ocupa a tela: exercício espacial não cabe em coluna estreita
+    document.getElementById('palco').classList.add('quadro');
+    NAVE_DESENHO.montar(el, v, val => grava(f, val));
+    return;
+  }
   if (f.type === 'list') {
     const itens = Array.isArray(v) ? v : [];
     el.innerHTML = itens.map((x,k)=>`<div class="pill"><span>${esc(x)}</span>
