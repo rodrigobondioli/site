@@ -218,22 +218,25 @@ function desenhaNos(){
         style="left:${f._x}px;top:${f._y}px;min-height:${H}px" onclick="abrirPasso('${f.id}')">
         <div class="tp"><span class="no">${String(k + 1).padStart(2,'0')}</span>${flag}</div>
         <h3>${esc(f.nave_phases.name)}</h3>
-        <div class="bt"><span class="mini"><i style="width:${t.length ? ok / t.length * 100 : 0}%"></i></span>
-          <span class="cnt">${t.length ? ok + '/' + t.length : '—'}</span></div>
-        ${exDoNo(f)}
+        <div class="mt">${meta(f, t, ok)}</div>
+        <span class="mini"><i style="width:${t.length ? ok / t.length * 100 : 0}%"></i></span>
       </button>`;
   }).join('');
   el('nos').innerHTML = nos + fl;
 }
 
-// quantos exercícios este passo tem na sessão, e quantos já estão preenchidos
-function exDoNo(f){
+// uma linha só: itens do passo, exercícios na sessão e o tempo que custam
+function meta(f, t, ok){
+  const p = [];
+  if (t.length) p.push(`<b>${ok}/${t.length}</b> iten${t.length > 1 ? 's' : ''}`);
   const exs = (D.exs[f.phase_id] || []).filter(roda);
-  if (!exs.length) return '';
-  const prontos = exs.filter(e => exFeito(e.id)).length;
-  const min = exs.reduce((a, e) => a + (e.duration_min || 0), 0);
-  return `<div class="ex ${prontos === exs.length ? 'todos' : ''}">
-    <b>${prontos}/${exs.length}</b> exercício${exs.length > 1 ? 's' : ''}${min ? ' · ' + hhmm(min) : ''}</div>`;
+  if (exs.length){
+    const prontos = exs.filter(e => exFeito(e.id)).length;
+    const min = exs.reduce((a, e) => a + (e.duration_min || 0), 0);
+    p.push(`<b class="${prontos === exs.length ? 'tudo' : ''}">${prontos}/${exs.length}</b> exercício${exs.length > 1 ? 's' : ''}`);
+    if (min) p.push(hhmm(min));
+  }
+  return p.join(' · ');
 }
 
 // ramos do nó selecionado
