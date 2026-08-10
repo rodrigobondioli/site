@@ -106,7 +106,9 @@ const agora = () => D.fases.find(f => f.status !== 'concluido') || D.fases[D.fas
 const idx = f => D.fases.indexOf(f);
 const roda = e => D.sel[e.id] ? D.sel[e.id].selected : !!e.minimum;
 const tarefas = f => D.tarefas[f.id] || [];
-const feitas = f => tarefas(f).filter(t => t.status === 'concluido').length;
+const feitas    = f => tarefas(f).filter(t => t.status === 'concluido').length;
+const resolvidas = f => tarefas(f).filter(t => t.status === 'concluido' || t.status === 'pulado').length;
+const pendentes  = f => tarefas(f).filter(t => t.status !== 'concluido' && t.status !== 'pulado');
 
 // ---------------------------------------------------------------- layout
 function pos(){
@@ -165,7 +167,7 @@ function desenhaNos(){
   const a = agora(), ia = idx(a);
   const fl = filhos();
   const nos = D.fases.map((f, k) => {
-    const t = tarefas(f), ok = feitas(f);
+    const t = tarefas(f), ok = resolvidas(f);
     const cls = f.status === 'concluido' ? 'feito' : (k === ia ? 'agora' : (k >= D.trava ? 'trava' : 'futuro'));
     const flag = f.nave_phases.is_gate
       ? `<span class="fl" style="background:${f.gate === 'aprovado' ? '#101010' : 'var(--pink)'}"></span>` : '';
@@ -234,13 +236,13 @@ function abrirPasso(id, foca = true){
   sel = id; desenhaNos();
   const f = D.fases.find(x => x.id === id), k = idx(f), a = agora();
   const eh = f.id === a.id, feito = f.status === 'concluido', trav = k >= D.trava;
-  const t = tarefas(f), ok = feitas(f), prox = t.find(x => x.status !== 'concluido');
+  const t = tarefas(f), ok = resolvidas(f), prox = pendentes(f)[0];
 
   const ant = D.fases[k - 1], dep = D.fases[k + 1];
   el('pnH').innerHTML = `<div class="rw">
       <span class="tag ${feito ? (ok === t.length ? 'd' : 'p') : (eh ? '' : 'm')}">
         <span class="cap">${feito
-          ? (ok === t.length ? 'Concluído' : `Fechado com ${t.length - ok} pendente${t.length - ok > 1 ? 's' : ''}`)
+          ? (ok === t.length ? 'Concluído' : 'Reabra: ficou item em aberto')
           : (eh ? 'Você está aqui' : (trav ? 'Travado' : 'Ainda não começou'))}</span></span>
       <button class="x" onclick="fecharPn()">✕</button>
     </div>
@@ -258,7 +260,7 @@ function abrirPasso(id, foca = true){
       <div class="rw"><p>${esc(prox.title)}</p><button class="b sm" onclick="tick('${prox.id}')">Feito ✓</button></div></div>`;
 
   if (t.length) b += `<section class="sec"><div class="hh"><span class="cap">Faça isso, nesta ordem</span>
-      <span class="r">${ok} de ${t.length} feitos</span></div></section>` + t.map(x => linhaTarefa(x, f)).join('');
+      <span class="r">${ok} de ${t.length} resolvidos</span></div></section>` + t.map(x => linhaTarefa(x, f)).join('');
 
   const exs = D.exs[f.phase_id] || [];
   if (exs.length){
@@ -286,13 +288,13 @@ function abrirPasso(id, foca = true){
 
   const falta = t.length - ok;
   el('pnF').innerHTML = feito
-    ? `<span class="hint">Passo fechado${ok < t.length ? ` com ${t.length - ok} item${t.length - ok > 1 ? 's' : ''} sem marcar` : ''}.</span>
+    ? `<span class="hint">${ok < t.length ? `Ficou <b>${t.length - ok}</b> item em aberto — reabra para resolver.` : 'Passo fechado.'}</span>
        <button class="b b--ghost" onclick="reabrir('${f.id}')">Reabrir passo</button>`
     : falta > 0
       ? `<span class="hint">Faltam <b>${falta}</b> ${falta === 1 ? 'item' : 'itens'}.
-         <button class="mesmo" onclick="concluir('${f.id}')">não se aplica, fechar assim mesmo</button></span>
-         <button class="b" disabled title="Marque tudo antes de fechar">Concluir passo ${k + 1} →</button>`
-      : `<span class="hint">Tudo marcado.</span>
+         Marque, ou use <i>não se aplica</i> no item.</span>
+         <button class="b" disabled title="Resolva todos os itens antes de fechar">Concluir passo ${k + 1} →</button>`
+      : `<span class="hint">Tudo resolvido.</span>
          <button class="b" onclick="concluir('${f.id}')">Concluir passo ${k + 1} →</button>`;
 
   el('pn').classList.add('on');
@@ -321,15 +323,26 @@ function alvo(x, f){
 }
 
 function linhaTarefa(x, f){
-  const a = alvo(x, f), feito = x.status === 'concluido';
-  return `<div class="it ${feito ? 'ok' : ''} ${a ? 'tem' : ''}">
+  const a = alvo(x, f), feito = x.status === 'concluido', na = x.status === 'pulado';
+  return `<div class="it ${feito ? 'ok' : ''} ${na ? 'na' : ''} ${a ? 'tem' : ''}">
     <button class="hit" onclick="tick('${x.id}')">
       <span class="bx"></span>
       <span class="col"><span class="tx">${esc(x.title)}</span>
       ${x.detail ? `<span class="dt">${esc(x.detail)}</span>` : ''}</span>
     </button>
+    <button class="na" onclick="pular('${x.id}')"
+      title="${na ? 'voltar a exigir este item' : 'este item não se aplica a esta marca'}">${na ? 'exigir de volta' : 'não se aplica'}</button>
     ${a ? `<button class="lk ${a.tipo}" onclick="irAlvo('${a.go}')">${esc(a.label)}</button>` : ''}
   </div>`;
+}
+
+async function pular(id){
+  const t = D.tasks.find(x => x.id === id);
+  const antes = t.status;
+  t.status = antes === 'pulado' ? 'nao_iniciado' : 'pulado';
+  abrirPasso(sel, false); desenhaNos();
+  try { await NAVE.post('tarefa', { id, status: t.status }); }
+  catch (e) { t.status = antes; abrirPasso(sel, false); toast(e.message); }
 }
 
 function irAlvo(go){
@@ -353,7 +366,7 @@ function linhaEx(e){
 async function tick(id){
   const t = D.tasks.find(x => x.id === id);
   const novo = t.status === 'concluido' ? 'nao_iniciado' : 'concluido';
-  t.status = novo; abrirPasso(sel, false);
+  t.status = novo; abrirPasso(sel, false); desenhaNos();
   try { await NAVE.post('tarefa', { id, status: novo }); }
   catch (e) { t.status = novo === 'concluido' ? 'nao_iniciado' : 'concluido'; abrirPasso(sel, false); toast(e.message); }
 }
