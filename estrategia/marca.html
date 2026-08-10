@@ -209,10 +209,11 @@ function desenhaNos(){
   const fl = filhos();
   const nos = D.fases.map((f, k) => {
     const t = tarefas(f), ok = resolvidas(f);
-    const cls = f.status === 'concluido' ? 'feito' : (k === ia ? 'agora' : (k >= D.trava ? 'trava' : 'futuro'));
+    const cls = (k === ia ? 'agora' : (f.status === 'concluido' || ok > 0 ? 'cheio' : 'vazio'))
+      + (k >= D.trava ? ' trava' : '');
     const flag = f.nave_phases.is_gate
       ? `<span class="fl" style="background:${f.gate === 'aprovado' ? '#101010' : 'var(--pink)'}"></span>` : '';
-    return `<button class="nd ${cls} ${sel === f.id ? 'sel' : ''} ${fl && sel !== f.id ? 'apaga' : ''}" data-id="${f.id}"
+    return `<button class="nd ${cls} ${sel === f.id ? 'sel' : ''}" data-id="${f.id}"
         style="left:${f._x}px;top:${f._y}px;min-height:${H}px" onclick="abrirPasso('${f.id}')">
         <div class="tp"><span class="no">${String(k + 1).padStart(2,'0')}</span>${flag}</div>
         <h3>${esc(f.nave_phases.name)}</h3>

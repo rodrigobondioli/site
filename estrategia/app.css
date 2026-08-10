@@ -53,47 +53,45 @@ a{color:inherit;text-decoration:none}
 
 /* etiqueta de etapa */
 .etapa{position:absolute;font-family:var(--disp);font-weight:800;font-size:13px;letter-spacing:2px;
- text-transform:uppercase;color:var(--i12);white-space:nowrap;pointer-events:none}
+ text-transform:uppercase;color:var(--i28);white-space:nowrap;pointer-events:none}
 
-/* nó */
-.nd{position:absolute;width:212px;border-radius:18px;background:var(--white);padding:17px 19px 16px;
- text-align:left;transition:transform .16s, box-shadow .16s, opacity .2s;
- box-shadow:0 1px 2px rgba(16,16,16,.05)}
-.nd:hover{transform:translateY(-3px);box-shadow:0 14px 30px rgba(16,16,16,.12)}
+/* nó — três estados: lima (agora), branco (tem coisa), contorno (vazio). Sem sombra. */
+.nd{position:absolute;width:212px;border-radius:18px;background:transparent;padding:17px 19px 16px;
+ text-align:left;box-shadow:inset 0 0 0 1.5px var(--i12);transition:background .16s, box-shadow .16s}
+.nd:hover{box-shadow:inset 0 0 0 1.5px var(--ink)}
 .nd .tp{display:flex;align-items:center;gap:8px;margin-bottom:11px}
 .nd .no{font-family:var(--disp);font-weight:800;font-size:11px;letter-spacing:.5px;color:var(--i28)}
 .nd .fl{margin-left:auto;width:8px;height:8px;border-radius:50%}
-.nd h3{font-size:15.5px;line-height:1.2}
+.nd h3{font-size:15.5px;line-height:1.2;color:var(--i50)}
 .nd .bt{display:flex;align-items:center;gap:9px;margin-top:15px}
 .nd .mini{flex:1;height:3px;border-radius:99px;background:var(--i12);overflow:hidden}
 .nd .mini i{display:block;height:100%;background:var(--ink)}
 .nd .cnt{font-size:10.5px;color:var(--i28);font-weight:600;white-space:nowrap}
 
-.nd.feito{background:var(--ink);color:#fff}
-.nd.feito .no{color:rgba(255,255,255,.4)} .nd.feito .cnt{color:rgba(255,255,255,.45)}
-.nd.feito .mini{background:rgba(255,255,255,.2)} .nd.feito .mini i{background:var(--lime)}
-.nd.agora{background:var(--lime);box-shadow:0 10px 30px rgba(16,16,16,.14),0 0 0 8px rgba(231,249,154,.5)}
-.nd.agora:hover{box-shadow:0 16px 40px rgba(16,16,16,.18),0 0 0 10px rgba(231,249,154,.65)}
-.nd.agora .no{color:rgba(16,16,16,.45)}
-.nd.agora .mini{background:rgba(16,16,16,.14)}
-.nd.futuro{background:var(--white)} .nd.futuro h3{color:var(--i50)}
-.nd.trava{background:transparent;box-shadow:inset 0 0 0 1px var(--i12)}
-.nd.trava h3{color:var(--i28)} .nd.trava .no{color:var(--i12)}
-.nd.sel{box-shadow:0 14px 34px rgba(16,16,16,.16);z-index:6}
-.nd.apaga{opacity:.3}
-.nd.apaga:hover{opacity:1}
+.nd.cheio{background:var(--white);box-shadow:none}
+.nd.cheio h3{color:var(--ink)}
+.nd.cheio:hover{box-shadow:inset 0 0 0 1.5px var(--ink)}
 
+.nd.agora{background:var(--lime);box-shadow:none}
+.nd.agora h3{color:var(--ink)}
+.nd.agora .no{color:rgba(16,16,16,.45)}
+.nd.agora .mini{background:rgba(16,16,16,.16)}
+.nd.agora .cnt{color:rgba(16,16,16,.5)}
+.nd.agora:hover{box-shadow:inset 0 0 0 1.5px var(--ink)}
+
+.nd.trava{box-shadow:inset 0 0 0 1.5px var(--i12)}
+.nd.sel{box-shadow:inset 0 0 0 2px var(--ink)}
 
 /* nós-filho (blocos / exercícios) */
-.ch{position:absolute;border-radius:12px;background:var(--white);padding:9px 13px;text-align:left;
- box-shadow:0 6px 18px rgba(16,16,16,.1);z-index:7;transition:.14s;
+.ch{position:absolute;border-radius:12px;background:var(--white);padding:10px 14px;text-align:left;
+ box-shadow:inset 0 0 0 1.5px var(--i12);z-index:7;transition:.14s;
  animation:pop .22s cubic-bezier(.2,.9,.3,1.2) both}
 @keyframes pop{from{opacity:0;transform:translateY(-6px) scale(.94)}to{opacity:1;transform:none}}
-.ch:hover{transform:translateY(-2px);box-shadow:0 12px 26px rgba(16,16,16,.16)}
+.ch:hover{box-shadow:inset 0 0 0 1.5px var(--ink)}
 .ch .t{font-family:var(--disp);font-weight:700;font-size:12.5px;line-height:1.25;display:block;
  white-space:normal;overflow-wrap:anywhere}
 .ch .s{display:block;font-size:10px;color:var(--i28);margin-top:3px;letter-spacing:.3px}
-.ch.ok{background:var(--lime)} .ch.ok .s{color:rgba(16,16,16,.45)}
+.ch.ok{background:var(--lime);box-shadow:none} .ch.ok .s{color:rgba(16,16,16,.45)}
 .ch.off{background:transparent;box-shadow:inset 0 0 0 1px var(--i12)}
 .ch.off .t{color:var(--i28)}
 
