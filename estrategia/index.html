@@ -6,137 +6,111 @@
 <title>Marcas · Estratégia</title>
 <link rel="icon" type="image/png" href="/shared/favicon.png">
 <link rel="stylesheet" href="/shared/shared.css">
-<link rel="stylesheet" href="/estrategia/ui.css">
-<link rel="stylesheet" href="/estrategia/fluxo.css">
-<style>
-.dlg{position:fixed;inset:0;background:rgba(16,16,16,.4);display:none;place-items:center;padding:24px;z-index:70}
-.dlg.on{display:grid}
-.dlg .box{width:min(500px,100%);background:var(--bnd-white);border-radius:var(--bnd-radius);padding:32px}
-.fld{margin-bottom:15px}
-.fld label{display:block;font-size:11.2px;font-weight:600;letter-spacing:1.12px;color:var(--ink-50);margin-bottom:7px}
-.fld input,.fld select{width:100%;padding:11px 13px;border:0;border-radius:10px;
- background:var(--bnd-bg);font:inherit;color:inherit;outline:none}
-.fld input:focus,.fld select:focus{box-shadow:inset 0 0 0 1px var(--bnd-ink)}
-.row2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-.err{color:#b00020;font-size:13.5px;margin-top:10px;min-height:18px}
-</style>
+<link rel="stylesheet" href="/estrategia/app.css">
 </head>
-<body>
-<div class="app">
-  <aside class="side">
-    <div class="brand">
-      <img src="/shared/logo.svg" alt="Bondioli" onerror="this.outerHTML='<b style=&quot;font-family:var(--bnd-display);font-weight:800;font-size:16px&quot;>BOND</b>'">
-      <span>estratégia</span>
-    </div>
-    <a class="navbtn on" href="/estrategia/">Marcas</a>
-    <a class="navbtn" href="/estrategia/metodo/PLAYBOOK-NAVE.html">Método</a>
-    <div class="navsec">Conta</div>
-    <button class="navbtn" onclick="NAVE.logout()">Sair</button>
-  </aside>
+<body class="lista">
 
-  <main class="main wrap">
-    <div class="hd" style="margin-bottom:30px">
-      <div>
-        <h1>Marcas</h1>
-        <div class="st">Fechou contrato? Abre a marca aqui e o passo 1 já está esperando.</div>
-      </div>
-      <button class="btn" onclick="abrir()">Nova marca</button>
+<div class="page">
+  <div class="top">
+    <div>
+      <h1>Marcas</h1>
+      <p>Fechou contrato? Abre a marca aqui. Os 16 passos do método já entram montados, em ordem.</p>
     </div>
-    <div id="lista"><div class="st">Carregando…</div></div>
-  </main>
+    <div style="display:flex;gap:10px">
+      <a class="b b--ghost" href="/estrategia/metodo/PLAYBOOK-NAVE.html">Método</a>
+      <button class="b" onclick="abrir()">Nova marca</button>
+    </div>
+  </div>
+  <div id="lista"><p style="color:var(--i28)">Carregando…</p></div>
+  <p style="margin-top:40px"><button class="b b--ghost sm" onclick="NAVE.logout()">Sair</button></p>
 </div>
 
 <div class="dlg" id="dlg">
-  <div class="box">
-    <h1 style="font-size:24px;margin:0 0 20px">Nova marca</h1>
+  <div class="bx2">
+    <h2>Nova marca</h2>
     <form id="form">
-      <div class="fld"><label>Nome da marca</label><input name="cliente" required placeholder="Bem-V" autocomplete="off"></div>
-      <div class="row2">
-        <div class="fld"><label>Segmento</label><input name="segmento" placeholder="Cosmético natural" autocomplete="off"></div>
-        <div class="fld"><label>E-mail do contato</label><input name="email" type="email" autocomplete="off"></div>
+      <div class="f"><label>Nome da marca</label><input name="cliente" required placeholder="Bem-V" autocomplete="off"></div>
+      <div class="f2">
+        <div class="f"><label>Segmento</label><input name="segmento" placeholder="Cosmético natural" autocomplete="off"></div>
+        <div class="f"><label>E-mail do contato</label><input name="email" type="email" autocomplete="off"></div>
       </div>
-      <div class="fld">
-        <label>A marca já existe?</label>
+      <div class="f"><label>A marca já existe?</label>
         <select name="existe">
           <option value="sim">Sim — vamos reposicionar</option>
           <option value="nao">Não — marca nova do zero</option>
-        </select>
+        </select></div>
+      <div class="f"><label>Como você chama esse trabalho</label><input name="projeto" required placeholder="Reposicionamento 2026" autocomplete="off"></div>
+      <div class="f2">
+        <div class="f"><label>Início</label><input name="inicio" type="date"></div>
+        <div class="f"><label>Entrega prevista</label><input name="fim" type="date"></div>
       </div>
-      <div class="fld"><label>Como você chama esse trabalho</label><input name="projeto" required placeholder="Reposicionamento 2026" autocomplete="off"></div>
-      <div class="row2">
-        <div class="fld"><label>Início</label><input name="inicio" type="date"></div>
-        <div class="fld"><label>Entrega prevista</label><input name="fim" type="date"></div>
-      </div>
-      <div class="err" id="err"></div>
-      <div style="display:flex;gap:10px;margin-top:6px">
-        <button class="btn" id="ok" type="submit">Começar</button>
-        <button class="btn btn--line" type="button" onclick="fechar()">Cancelar</button>
+      <div class="er" id="err"></div>
+      <div style="display:flex;gap:10px">
+        <button class="b" id="ok" type="submit">Começar</button>
+        <button class="b b--ghost" type="button" onclick="fechar()">Cancelar</button>
       </div>
     </form>
   </div>
 </div>
 
+<div class="toast" id="toast"></div>
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="/estrategia/config.js"></script>
 <script src="/estrategia/nave.js"></script>
 <script>
-const dlg = document.getElementById('dlg');
+const el = id => document.getElementById(id);
+const esc = s => String(s==null?'':s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const dlg = el('dlg');
 function abrir(){ dlg.classList.add('on'); document.querySelector('[name=cliente]').focus(); }
-function fechar(){ dlg.classList.remove('on'); document.getElementById('err').textContent=''; }
+function fechar(){ dlg.classList.remove('on'); el('err').textContent = ''; }
 dlg.addEventListener('click', e => { if (e.target === dlg) fechar(); });
-function esc(s){ return String(s==null?'':s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
 
 async function carregar(){
-  const marcas = await NAVE.get('projetos');
-  const el = document.getElementById('lista');
-  if (!marcas.length){
-    el.innerHTML = `<div class="vaz"><b>Nenhuma marca ainda.</b>
-      Crie a primeira e o método já entra montado: 16 passos, em ordem, com o que fazer em cada um.</div>`;
+  const ms = await NAVE.get('projetos');
+  if (!ms.length){
+    el('lista').innerHTML = `<div class="empty"><h3>Nenhuma marca ainda</h3>
+      <p>Crie a primeira. O fluxo inteiro do método aparece montado — e você começa pelo passo 1.</p></div>`;
     return;
   }
-  el.innerHTML = marcas.map(p => {
-    const nome  = p.nave_clients ? p.nave_clients.name : p.name;
-    const seg   = p.nave_clients && p.nave_clients.segment ? p.nave_clients.segment : '';
-    const pr    = p.progress || {};
-    const feito = pr.feitas || 0, total = pr.total || 16, atual = Math.min(feito, total - 1);
-    const trilho = Array.from({length: total}, (_, i) =>
-      `<i class="${i < feito ? 'd' : (i === atual ? 'n' : '')}"></i>`).join('');
-    return `<a class="mc" href="/estrategia/marca.html?p=${p.id}">
-      <span class="nm">${esc(nome)}</span>
-      <span class="sg">${esc(seg || p.name)}</span>
-      <span class="pr">${feito >= total
-        ? '<b>Entregue.</b>'
-        : `<b>Passo ${feito + 1} de ${total}</b> · ${esc(pr.passo || '')}`}
-        ${pr.awaiting_approval ? ' · aguardando o cliente' : ''}</span>
-      <span class="tr">${trilho}</span>
+  el('lista').innerHTML = ms.map(p => {
+    const nome = p.nave_clients ? p.nave_clients.name : p.name;
+    const seg  = (p.nave_clients && p.nave_clients.segment) || p.name;
+    const pr = p.progress || {}, total = pr.total || 16, feitas = pr.feitas || 0;
+    const fluxo = Array.from({length: total}, (_, i) =>
+      `<i class="${i < feitas ? 'd' : (i === feitas ? 'n' : '')}"></i>`).join('');
+    return `<a class="mk" href="/estrategia/marca.html?p=${p.id}">
+      <div>
+        <h3>${esc(nome)}</h3>
+        <div class="seg">${esc(seg)}</div>
+        <div class="now">${feitas >= total
+          ? '<b>Entregue.</b>'
+          : `<b>Passo ${feitas + 1} de ${total}</b> · ${esc(pr.passo || '')}`}${
+          pr.awaiting_approval ? ' · aguardando o cliente' : ''}</div>
+      </div>
+      <div class="fluxo">${fluxo}</div>
     </a>`;
   }).join('');
 }
 
-document.getElementById('form').addEventListener('submit', async e => {
+el('form').addEventListener('submit', async e => {
   e.preventDefault();
-  const f = new FormData(e.target), btn = document.getElementById('ok'), err = document.getElementById('err');
+  const f = new FormData(e.target), btn = el('ok'), err = el('err');
   btn.disabled = true; err.textContent = 'Montando os 16 passos…';
   try {
-    const cliente = await NAVE.post('cliente', {
-      name: f.get('cliente'), segment: f.get('segmento') || null,
-      email: f.get('email') || null, brand_exists: f.get('existe') === 'sim'
-    });
-    const r = await NAVE.post('projeto', {
-      client_id: cliente.id, name: f.get('projeto'),
-      started_at: f.get('inicio') || null, target_end: f.get('fim') || null
-    });
+    const cliente = await NAVE.post('cliente', { name: f.get('cliente'),
+      segment: f.get('segmento') || null, email: f.get('email') || null,
+      brand_exists: f.get('existe') === 'sim' });
+    const r = await NAVE.post('projeto', { client_id: cliente.id, name: f.get('projeto'),
+      started_at: f.get('inicio') || null, target_end: f.get('fim') || null });
     location.href = '/estrategia/marca.html?p=' + r.project.id;
-  } catch (ex) {
-    err.textContent = ex.message || 'Não consegui criar.';
-    btn.disabled = false;
-  }
+  } catch (ex) { err.textContent = ex.message || 'Não consegui criar.'; btn.disabled = false; }
 });
 
 (async function(){
   if (!await NAVE.guard()) return;
   try { await carregar(); }
-  catch (e) { document.getElementById('lista').innerHTML = `<div class="vaz">${esc(e.message)}</div>`; }
+  catch (e) { el('lista').innerHTML = `<div class="empty"><h3>Não consegui carregar</h3><p>${esc(e.message)}</p></div>`; }
 })();
 </script>
 </body>

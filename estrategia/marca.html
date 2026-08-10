@@ -6,65 +6,52 @@
 <title>Marca · Estratégia</title>
 <link rel="icon" type="image/png" href="/shared/favicon.png">
 <link rel="stylesheet" href="/shared/shared.css">
-<link rel="stylesheet" href="/estrategia/ui.css">
-<link rel="stylesheet" href="/estrategia/fluxo.css">
-<style>
-/* tabela editável dentro do exercício */
-.tb{width:100%;border-collapse:collapse;font-size:13px;margin-top:4px}
-.tb th{text-align:left;font-size:10.5px;font-weight:600;letter-spacing:.9px;color:var(--ink-50);
- padding:0 4px 6px;vertical-align:bottom;line-height:1.25}
-.tb td{padding:2px}
-.tb td input{width:100%;background:var(--bnd-bg);border:0;border-radius:7px;padding:8px 9px;
- font:inherit;font-size:13px;color:inherit;outline:none}
-.tb td input:focus{box-shadow:inset 0 0 0 1px var(--bnd-ink)}
-.addr{background:none;border:0;color:var(--ink-50);font-size:12.5px;padding:8px 0;text-decoration:underline}
-.addr:hover{color:var(--bnd-ink)}
-.q .opt{display:flex;align-items:center;gap:9px;font-size:13.5px;padding:5px 0;font-weight:400}
-.q select{width:100%;background:var(--bnd-bg);border:0;border-radius:10px;padding:11px 12px;font:inherit;font-size:14px}
-</style>
+<link rel="stylesheet" href="/estrategia/app.css">
 </head>
 <body>
-<div class="app">
-  <aside class="side">
-    <div class="brand">
-      <img src="/shared/logo.svg" alt="Bondioli" onerror="this.outerHTML='<b style=&quot;font-family:var(--bnd-display);font-weight:800;font-size:16px&quot;>BOND</b>'">
-      <span>estratégia</span>
-    </div>
-    <a class="navbtn" href="/estrategia/">Marcas</a>
-    <a class="navbtn" href="/estrategia/metodo/PLAYBOOK-NAVE.html">Método</a>
-    <div class="navsec">Conta</div>
-    <button class="navbtn" onclick="NAVE.logout()">Sair</button>
-  </aside>
 
-  <main class="main wrap">
-    <div class="crumb"><a href="/estrategia/">Marcas</a> ·&nbsp;<span id="cr">…</span></div>
-    <div class="hd">
-      <div>
-        <h1 id="nome">…</h1>
-        <div class="st" id="estado"></div>
-      </div>
-    </div>
-    <div class="passos" id="passos"></div>
-  </main>
+<header class="bar">
+  <a class="home" href="/estrategia/">← Marcas</a>
+  <span class="sep"></span>
+  <div><h1 id="bNome">…</h1><div class="seg" id="bSeg"></div></div>
+  <div class="mid">
+    <div class="pg"><span class="ln"><i id="bLn" style="width:0"></i></span><span id="bTx"></span></div>
+    <button class="b sm" id="bIr" onclick="irAgora()">Onde eu parei →</button>
+  </div>
+</header>
+
+<div class="canvas" id="canvas">
+  <div class="stage" id="stage">
+    <svg id="links"></svg>
+    <div id="labs"></div>
+    <div id="nos"></div>
+  </div>
 </div>
 
-<!-- tela cheia do exercício -->
+<div class="zoom">
+  <button onclick="zoom(-1)">−</button>
+  <span class="pct" id="zPct">100%</span>
+  <button onclick="zoom(1)">+</button>
+  <button class="fit" onclick="ajustar()">Ver tudo</button>
+</div>
+<div class="dica">Arraste para mover · role para dar zoom · clique num passo</div>
+
+<aside class="pn" id="pn">
+  <div class="ph" id="pnH"></div>
+  <div class="pb" id="pnB"></div>
+  <div class="pf" id="pnF"></div>
+</aside>
+
 <div class="full" id="full">
   <div class="fbar">
-    <button class="vb" onclick="fecharEx()">← Voltar</button>
-    <div>
-      <div class="ctx" id="exCtx"></div>
-      <div class="tit" id="exTit"></div>
-    </div>
-    <div class="dir">
+    <button class="x" onclick="fecharEx()">← Voltar ao passo</button>
+    <div><div class="cap cx" id="exCx"></div><div class="tt" id="exTt"></div></div>
+    <div class="rt">
       <span class="sv" id="exSv"></span>
-      <button class="btn sm btn--line" id="exFeito" onclick="marcarFeito()">Marcar como feito</button>
+      <button class="b sm b--ghost" id="exOk" onclick="marcarFeito()">Marcar como feito</button>
     </div>
   </div>
-  <div class="fcorpo">
-    <div class="fperg" id="exPerg"></div>
-    <div class="fquadro" id="exQuadro"></div>
-  </div>
+  <div class="fbody"><div class="fq" id="exQ"></div><div class="fdraw" id="exD"></div></div>
 </div>
 
 <div class="toast" id="toast"></div>
@@ -76,165 +63,332 @@
 <script>
 const PID = new URLSearchParams(location.search).get('p');
 const BLOCO = { N:'Negócio', A:'Audiência', V:'Valor', E:'Estória' };
-let D = null, CAT = null, aberto = null;
+const ETAPA = { PRE:'Antes de começar', COLETANDO:'Descoberta', EXPLORANDO:'Estratégia',
+                CRIANDO:'Criação', DEFININDO:'Entrega' };
+const W = 212, H = 104, GX = 116, GY = 176, COLS = 4;
 
-function esc(s){ return String(s==null?'':s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
-let tt;
-function toast(m){ const t = document.getElementById('toast'); t.textContent = m;
-  t.classList.add('on'); clearTimeout(tt); tt = setTimeout(() => t.classList.remove('on'), 4200); }
+let D = null, CAT = null, sel = null;
+const el = id => document.getElementById(id);
+const esc = s => String(s==null?'':s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+let tmT; const toast = m => { const t = el('toast'); t.textContent = m; t.classList.add('on');
+  clearTimeout(tmT); tmT = setTimeout(() => t.classList.remove('on'), 4500); };
+const hhmm = m => m >= 60 ? `${Math.floor(m/60)}h${String(m%60).padStart(2,'0')}` : `${m} min`;
 
-// ---------------------------------------------------------------- carregar
+// ---------------------------------------------------------------- dados
 async function carregar(){
   const [d, cat] = await Promise.all([NAVE.get('projeto', { id: PID }), NAVE.get('catalogo')]);
   D = d; CAT = cat;
   D.fases = d.phases.slice().sort((a,b) => (a.nave_phases?.ord ?? 0) - (b.nave_phases?.ord ?? 0));
-  D.porFase = {}; d.tasks.forEach(t => (D.porFase[t.project_phase_id] ||= []).push(t));
-  Object.values(D.porFase).forEach(l => l.sort((a,b) => a.ord - b.ord));
+  D.tarefas = {}; d.tasks.forEach(t => (D.tarefas[t.project_phase_id] ||= []).push(t));
+  Object.values(D.tarefas).forEach(l => l.sort((a,b) => a.ord - b.ord));
   D.sel = {}; d.selection.forEach(s => D.sel[s.exercise_id] = s);
   D.resp = {}; d.responses.forEach(r => (D.resp[r.project_exercise_id] ||= {})[r.field_key] = r.value);
-  D.exPorFase = {}; cat.exercises.forEach(e => (D.exPorFase[e.phase_id] ||= []).push(e));
+  D.exs = {}; cat.exercises.forEach(e => (D.exs[e.phase_id] ||= []).push(e));
   D.campos = {}; cat.fields.forEach(f => (D.campos[f.exercise_id] ||= []).push(f));
   Object.values(D.campos).forEach(l => l.sort((a,b) => a.ord - b.ord));
-  if (aberto == null) aberto = (D.fases.find(f => f.status !== 'concluido') || D.fases[0]).id;
-  render();
+
+  // trava a partir do primeiro portão não aprovado
+  D.trava = Infinity;
+  D.fases.forEach((f, k) => {
+    if (k < D.trava && f.nave_phases.is_gate && f.gate !== 'aprovado' && f.status !== 'concluido') D.trava = k + 1;
+  });
+
+  pos();
+  desenhaLinks();
+  desenhaNos();
+  topo();
+  abrirPasso(agora().id, false);
+  ajustar();
+  centrar(agora());
+}
+const agora = () => D.fases.find(f => f.status !== 'concluido') || D.fases[D.fases.length - 1];
+const idx = f => D.fases.indexOf(f);
+const roda = e => D.sel[e.id] ? D.sel[e.id].selected : !!e.minimum;
+const tarefas = f => D.tarefas[f.id] || [];
+const feitas = f => tarefas(f).filter(t => t.status === 'concluido').length;
+
+// ---------------------------------------------------------------- layout
+function pos(){
+  D.fases.forEach((f, i) => {
+    const r = Math.floor(i / COLS);
+    const c = (r % 2 === 0) ? (i % COLS) : (COLS - 1 - (i % COLS));
+    f._x = c * (W + GX);
+    f._y = r * (H + GY);
+    f._r = r; f._c = c;
+  });
+  D.wid = COLS * W + (COLS - 1) * GX;
+  D.hei = Math.ceil(D.fases.length / COLS) * H + (Math.ceil(D.fases.length / COLS) - 1) * GY;
 }
 
-function atual(){ return D.fases.find(f => f.status !== 'concluido') || null; }
+function desenhaLinks(){
+  const s = el('links');
+  s.setAttribute('width', D.wid + 40); s.setAttribute('height', D.hei + 40);
+  let p = '';
+  for (let i = 0; i < D.fases.length - 1; i++){
+    const a = D.fases[i], b = D.fases[i + 1];
+    const done = a.status === 'concluido';
+    const cor = done ? '#101010' : 'rgba(16,16,16,.16)';
+    const tra = done ? '' : 'stroke-dasharray="2 7"';
+    let d;
+    if (a._r === b._r){
+      const dir = b._x > a._x ? 1 : -1;
+      const x1 = a._x + (dir > 0 ? W : 0), x2 = b._x + (dir > 0 ? 0 : W), y = a._y + H / 2;
+      d = `M${x1},${y} L${x2},${y}`;
+      p += seta(x2, y, dir > 0 ? 0 : 180, cor);
+    } else {
+      const x = a._x + W / 2, y1 = a._y + H, y2 = b._y;
+      d = `M${x},${y1} L${x},${y2}`;
+      p += seta(x, y2, 90, cor);
+    }
+    p = `<path d="${d}" fill="none" stroke="${cor}" stroke-width="${done ? 2 : 1.5}" ${tra}/>` + p;
+  }
+  // etiquetas de etapa por linha
+  let lab = '';
+  const vistos = {};
+  D.fases.forEach((f, i) => {
+    const m = f.nave_phases.macro;
+    if (vistos[m]) return; vistos[m] = 1;
+    lab += `<div class="etapa" style="left:${f._x}px;top:${f._y - 26}px">${ETAPA[m] || m}</div>`;
+  });
+  s.innerHTML = p;
+  el('labs').innerHTML = lab;
+}
+function seta(x, y, deg, cor){
+  const off = deg === 90 ? `${x},${y-9} ${x-5},${y-16} ${x+5},${y-16}`
+    : deg === 0 ? `${x},${y} ${x-9},${y-5} ${x-9},${y+5}`
+                : `${x},${y} ${x+9},${y-5} ${x+9},${y+5}`;
+  return `<polygon points="${off}" fill="${cor}"/>`;
+}
 
-function render(){
-  const nome = D.client ? D.client.name : D.project.name;
-  document.title = nome + ' · Estratégia';
-  document.getElementById('cr').textContent = nome;
-  document.getElementById('nome').textContent = nome;
-
-  const a = atual(), i = a ? D.fases.indexOf(a) + 1 : D.fases.length;
-  document.getElementById('estado').innerHTML = a
-    ? `Passo <b>${i} de ${D.fases.length}</b> · ${esc(a.nave_phases.name)}`
-    : `<b>Entregue.</b> Os ${D.fases.length} passos estão fechados.`;
-
-  document.getElementById('passos').innerHTML = D.fases.map((f, k) => {
-    if (f.id === aberto) return passoAberto(f, k);
-    const feito = f.status === 'concluido';
-    const fut = a && k > D.fases.indexOf(a);
-    const tarefas = D.porFase[f.id] || [];
-    const ok = tarefas.filter(t => t.status === 'concluido').length;
-    return `<button class="pp ${feito ? 'feito' : (fut ? 'futuro' : '')}" onclick="abrirPasso('${f.id}')">
-      <span class="n">${feito ? '✓' : k + 1}</span>
-      <span class="t">${esc(f.nave_phases.name)}</span>
-      <span class="r">${feito ? 'feito' : (tarefas.length ? ok + '/' + tarefas.length : '')}</span>
-    </button>`;
+function desenhaNos(){
+  const a = agora(), ia = idx(a);
+  const fl = filhos();
+  const nos = D.fases.map((f, k) => {
+    const t = tarefas(f), ok = feitas(f);
+    const cls = f.status === 'concluido' ? 'feito' : (k === ia ? 'agora' : (k >= D.trava ? 'trava' : 'futuro'));
+    const flag = f.nave_phases.is_gate
+      ? `<span class="fl" style="background:${f.gate === 'aprovado' ? '#101010' : 'var(--pink)'}"></span>` : '';
+    return `${k === ia ? `<div class="pulse" style="left:${f._x}px;top:${f._y}px;width:${W}px;height:${H}px"></div>` : ''}
+      <button class="nd ${cls} ${sel === f.id ? 'sel' : ''} ${fl && sel !== f.id ? 'apaga' : ''}" data-id="${f.id}"
+        style="left:${f._x}px;top:${f._y}px;min-height:${H}px" onclick="abrirPasso('${f.id}')">
+        <div class="tp"><span class="no">${String(k + 1).padStart(2,'0')}</span>${flag}</div>
+        <h3>${esc(f.nave_phases.name)}</h3>
+        <div class="bt"><span class="mini"><i style="width:${t.length ? ok / t.length * 100 : 0}%"></i></span>
+          <span class="cnt">${t.length ? ok + '/' + t.length : '—'}</span></div>
+      </button>`;
   }).join('');
+  el('nos').innerHTML = nos + fl;
 }
 
-function passoAberto(f, k){
-  const tarefas = D.porFase[f.id] || [];
-  const ok = tarefas.filter(t => t.status === 'concluido').length;
-  const feito = f.status === 'concluido';
-  const eh = f.id === (atual() || {}).id;
+// ramos do nó selecionado
+function filhos(){
+  if (!sel) return '';
+  const f = D.fases.find(x => x.id === sel);
+  if (!f) return '';
+  const exs = D.exs[f.phase_id] || [];
+  if (!exs.length) return '';
+  const eixos = ['N','A','V','E'].filter(x => exs.some(e => e.axis === x));
+  const itens = eixos.length
+    ? eixos.map(x => { const l = exs.filter(e => e.axis === x), on = l.filter(roda);
+        return { t: BLOCO[x], s: `${on.length} de ${l.length} · ${hhmm(on.reduce((a,e)=>a+(e.duration_min||0),0))}`,
+                 ok: l.every(e => D.sel[e.id] && D.sel[e.id].status === 'concluido'), off: !on.length, go: `eixo:${x}` }; })
+    : exs.slice(0, 6).map(e => ({ t: e.name.length > 26 ? e.name.slice(0,25) + '…' : e.name,
+        s: (e.minimum ? 'ESSENCIAL' : 'OPCIONAL') + (e.duration_min ? ' · ' + e.duration_min + ' min' : ''),
+        ok: D.sel[e.id] && D.sel[e.id].status === 'concluido', off: !roda(e), go: `ex:${e.id}` }));
 
-  const lista = tarefas.map(t => `<button class="t ${t.status === 'concluido' ? 'ok' : ''}"
-      onclick="tick('${t.id}')"><span class="b"></span><span>${esc(t.title)}</span></button>`).join('');
+  // os ramos ficam na faixa vazia ACIMA da linha de nós — não cobrem nenhum passo
+  const CW = 158, CH = 44, CG = 12;
+  const total = itens.length * CW + (itens.length - 1) * CG;
+  const bx = f._x + W / 2 - total / 2;
+  const by = f._y - 96;
+  let out = '', ln = '';
+  const x1 = f._x + W / 2, y1 = f._y;
+  itens.forEach((n, i) => {
+    const x2 = bx + i * (CW + CG) + CW / 2, y2 = by + CH;
+    ln += `<svg style="position:absolute;left:0;top:0;overflow:visible;pointer-events:none;z-index:5">
+      <path d="M${x1},${y1} C${x1},${y1-34} ${x2},${y2+34} ${x2},${y2}"
+        fill="none" stroke="rgba(16,16,16,.3)" stroke-width="1.5"/>
+      <circle cx="${x2}" cy="${y2}" r="2.5" fill="rgba(16,16,16,.3)"/></svg>`;
+    out += `<button class="ch ${n.ok ? 'ok' : ''} ${n.off ? 'off' : ''}"
+      style="left:${bx + i * (CW + CG)}px;top:${by}px;width:${CW}px" onclick="ramo('${n.go}')">
+      <span class="t">${esc(n.t)}</span><span class="s">${esc(n.s)}</span></button>`;
+  });
+  return ln + out;
+}
 
-  const exs = D.exPorFase[f.phase_id] || [];
-  let bloco = '';
+function ramo(go){
+  if (go.startsWith('ex:')) return abrirEx(go.slice(3));
+  const eixo = go.slice(5);
+  el('pn').classList.add('on');
+  const alvo = el('pnB').querySelector(`[data-eixo="${eixo}"]`);
+  if (alvo) alvo.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function topo(){
+  el('bNome').textContent = D.client ? D.client.name : D.project.name;
+  el('bSeg').textContent  = (D.client && D.client.segment) || D.project.name || '';
+  const n = D.fases.filter(f => f.status === 'concluido').length;
+  el('bLn').style.width = Math.round(n / D.fases.length * 100) + '%';
+  el('bTx').textContent = `${n}/${D.fases.length} passos`;
+}
+
+// ---------------------------------------------------------------- painel
+function abrirPasso(id, foca = true){
+  sel = id; desenhaNos();
+  const f = D.fases.find(x => x.id === id), k = idx(f), a = agora();
+  const eh = f.id === a.id, feito = f.status === 'concluido', trav = k >= D.trava;
+  const t = tarefas(f), ok = feitas(f), prox = t.find(x => x.status !== 'concluido');
+
+  el('pnH').innerHTML = `<div class="rw">
+      <span class="tag ${feito ? 'd' : (eh ? '' : 'm')}">
+        <span class="cap">${feito ? 'Concluído' : (eh ? 'Você está aqui' : (trav ? 'Travado' : 'Passo ' + (k+1)))}</span></span>
+      <button class="x" onclick="fecharPn()">✕</button>
+    </div>
+    <h2>${esc(f.nave_phases.name)}</h2>
+    <p>${esc(f.nave_phases.objective || '')}</p>`;
+
+  let b = '';
+  if (prox && eh) b += `<div class="next"><span class="cap">Próxima ação</span>
+      <div class="rw"><p>${esc(prox.title)}</p><button class="b sm" onclick="tick('${prox.id}')">Feito ✓</button></div></div>`;
+
+  if (t.length) b += `<section class="sec"><div class="hh"><span class="cap">Faça isso, nesta ordem</span>
+      <span class="r">${ok}/${t.length}</span></div></section>` +
+      t.map(x => `<button class="it ${x.status === 'concluido' ? 'ok' : ''}" onclick="tick('${x.id}')">
+        <span class="bx"></span><span class="tx">${esc(x.title)}</span></button>`).join('');
+
+  const exs = D.exs[f.phase_id] || [];
   if (exs.length){
     const eixos = ['N','A','V','E'].filter(x => exs.some(e => e.axis === x));
+    const on = exs.filter(roda), mins = on.reduce((s,e) => s + (e.duration_min||0), 0);
+    b += `<section class="sec"><div class="hh"><span class="cap">Exercícios</span>
+      <span class="r">${on.length} na sessão${mins ? ' · ' + hhmm(mins) : ''}</span></div></section>`;
     if (eixos.length){
+      eixos.forEach(x => {
+        b += `<div class="sec" data-eixo="${x}" style="padding-top:14px"><span class="cap" style="color:var(--i28)">${BLOCO[x]}</span></div>` +
+          exs.filter(e => e.axis === x).map(linhaEx).join('');
+      });
       const soltos = exs.filter(e => !BLOCO[e.axis]);
-      bloco = `<div class="faz">Exercícios com o cliente</div><div class="blocos">` +
-        eixos.map(x => `<div class="bl"><h5>${BLOCO[x]}</h5>` +
-          exs.filter(e => e.axis === x).map(cardEx).join('') + `</div>`).join('') +
-        (soltos.length ? `<div class="bl"><h5>Também neste passo</h5>${soltos.map(cardEx).join('')}</div>` : '') +
-        `</div>`;
-    } else {
-      bloco = `<div class="faz">Instrumentos deste passo</div>
-        <div class="blocos"><div class="bl" style="grid-column:1/-1">` +
-        `<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:7px">` +
-        exs.map(cardEx).join('') + `</div></div></div>`;
-    }
+      if (soltos.length) b += `<div class="sec" style="padding-top:14px"><span class="cap" style="color:var(--i28)">Também aqui</span></div>` + soltos.map(linhaEx).join('');
+    } else b += exs.map(linhaEx).join('');
   }
 
-  let aprov = '';
   if (f.nave_phases.is_gate){
     const app = f.gate === 'aprovado';
-    aprov = `<div class="aprov ${app ? 'ok' : ''}">
-      <h4>${app ? 'Aprovado pelo cliente' : 'Precisa da aprovação do cliente'}</h4>
-      <p>${esc(f.nave_phases.gate_label || '')}. Sem isso registrado, o próximo passo não abre.</p>
-      ${app ? '' : `<button class="btn sm" onclick="aprovar('${f.id}')">Registrar aprovação</button>`}
-    </div>`;
+    b += `<div class="gate ${app ? 'ok' : ''}"><h4>${app ? 'Cliente aprovou' : 'Precisa da aprovação do cliente'}</h4>
+      <p>${esc(f.nave_phases.gate_label || '')}. Sem isso, os passos seguintes ficam travados no fluxo.</p>
+      ${app ? '' : `<button class="b" onclick="aprovar('${f.id}')">Registrar aprovação</button>`}</div>`;
   }
+  el('pnB').innerHTML = b;
 
-  return `<div class="pa">
-    <span class="agora">${feito ? 'FEITO' : (eh ? 'AGORA' : 'PASSO')} · PASSO ${k + 1}</span>
-    <h2>${esc(f.nave_phases.name)}</h2>
-    <p class="ob">${esc(f.nave_phases.objective || '')}</p>
-    ${tarefas.length ? `<div class="faz">Faça isso</div>${lista}` : ''}
-    ${bloco}
-    ${aprov}
-    <div class="fim">
-      ${feito
-        ? `<button class="btn btn--line sm" onclick="reabrir('${f.id}')">Reabrir passo</button>
-           <span class="msg">Passo fechado.</span>`
-        : `<button class="btn" onclick="concluir('${f.id}')">Concluir passo</button>
-           <span class="msg">${ok}/${tarefas.length} do que fazer aqui.</span>`}
-    </div>
-  </div>`;
+  el('pnF').innerHTML = feito
+    ? `<button class="b b--ghost" onclick="reabrir('${f.id}')">Reabrir passo</button><span class="hint">Passo fechado.</span>`
+    : `<button class="b" onclick="concluir('${f.id}')">Concluir passo ${k + 1} →</button>
+       <span class="hint">${t.length - ok > 0 ? `Faltam ${t.length - ok} itens` : 'Tudo marcado'}</span>`;
+
+  el('pn').classList.add('on');
+  if (foca) centrar(f);
 }
+function fecharPn(){ el('pn').classList.remove('on'); sel = null; desenhaNos(); }
 
-function cardEx(e){
-  const s = D.sel[e.id];
-  const pronto = s && s.status === 'concluido';
-  const min = e.duration_min ? e.duration_min + ' min' : '';
-  return `<button class="ex ${e.minimum ? 'ess' : ''} ${pronto ? 'done' : ''}" onclick="abrirEx('${e.id}')">
-    <span class="nm">${esc(e.name)}</span>
-    <span class="mt">${e.minimum ? 'essencial' : 'opcional'}${min ? ' · ' + min : ''}</span>
-  </button>`;
+function linhaEx(e){
+  const s = D.sel[e.id], pronto = s && s.status === 'concluido', on = roda(e);
+  return `<button class="ex ${pronto ? 'pronto' : ''}" onclick="abrirEx('${e.id}')">
+    <span class="pin ${on ? 'on' : ''}" onclick="event.stopPropagation();marcar('${e.id}')">${on ? '✓' : '+'}</span>
+    <span class="nm">${esc(e.name)}<b>${e.minimum ? 'ESSENCIAL' : 'OPCIONAL'}${e.duration_min ? ' · ' + e.duration_min + ' MIN' : ''}</b></span>
+    <span class="go">→</span></button>`;
 }
 
 // ---------------------------------------------------------------- ações
-function abrirPasso(id){ aberto = id; render(); window.scrollTo({ top: 0, behavior: 'smooth' }); }
-
 async function tick(id){
   const t = D.tasks.find(x => x.id === id);
   const novo = t.status === 'concluido' ? 'nao_iniciado' : 'concluido';
-  t.status = novo; render();
+  t.status = novo; abrirPasso(sel, false);
   try { await NAVE.post('tarefa', { id, status: novo }); }
-  catch (e) { t.status = novo === 'concluido' ? 'nao_iniciado' : 'concluido'; render(); toast(e.message); }
+  catch (e) { t.status = novo === 'concluido' ? 'nao_iniciado' : 'concluido'; abrirPasso(sel, false); toast(e.message); }
 }
-
+async function marcar(exId){
+  const on = !roda(CAT.exercises.find(e => e.id === exId));
+  try { const r = await NAVE.post('selecao', { project_id: PID, items: [{ exercise_id: exId, selected: on }] });
+    D.sel[exId] = r.items[0]; abrirPasso(sel, false); }
+  catch (e) { toast(e.message); }
+}
 async function concluir(id){
   try {
     await NAVE.post('fase', { id, status: 'concluido' });
-    const f = D.fases.find(x => x.id === id); f.status = 'concluido';
-    const prox = atual(); aberto = prox ? prox.id : id; render();
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    D.fases.find(x => x.id === id).status = 'concluido';
+    D.trava = Infinity;
+    D.fases.forEach((f, k) => { if (k < D.trava && f.nave_phases.is_gate && f.gate !== 'aprovado' && f.status !== 'concluido') D.trava = k + 1; });
+    desenhaLinks(); topo(); abrirPasso(agora().id);
   } catch (e) { toast(e.message); }
 }
-
 async function reabrir(id){
   try { await NAVE.post('fase', { id, status: 'em_andamento' });
-    D.fases.find(x => x.id === id).status = 'em_andamento'; render(); }
+    D.fases.find(x => x.id === id).status = 'em_andamento'; desenhaLinks(); topo(); abrirPasso(id, false); }
   catch (e) { toast(e.message); }
 }
-
 async function aprovar(id){
   try { await NAVE.post('fase', { id, gate: 'aprovado' });
-    D.fases.find(x => x.id === id).gate = 'aprovado'; render(); toast('Aprovação registrada.'); }
+    D.fases.find(x => x.id === id).gate = 'aprovado';
+    D.trava = Infinity;
+    D.fases.forEach((f, k) => { if (k < D.trava && f.nave_phases.is_gate && f.gate !== 'aprovado' && f.status !== 'concluido') D.trava = k + 1; });
+    abrirPasso(id, false); toast('Aprovação registrada. Fluxo destravado.'); }
   catch (e) { toast(e.message); }
 }
+function irAgora(){ abrirPasso(agora().id); }
+
+// ---------------------------------------------------------------- pan / zoom
+let V = { x: 0, y: 0, z: 1 };
+function aplica(){
+  el('stage').style.transform = `translate(${V.x}px,${V.y}px) scale(${V.z})`;
+  el('zPct').textContent = Math.round(V.z * 100) + '%';
+}
+function ajustar(){
+  const c = el('canvas').getBoundingClientRect();
+  const pad = 80, pn = el('pn').classList.contains('on') ? Math.min(456, c.width * .42) : 0;
+  const z = Math.min((c.width - pn - pad * 2) / D.wid, (c.height - pad * 2) / (D.hei + 40), 1.05);
+  V.z = Math.max(.3, z);
+  V.x = (c.width - pn - D.wid * V.z) / 2;
+  V.y = (c.height - D.hei * V.z) / 2 + 12;
+  aplica();
+}
+function centrar(f){
+  const c = el('canvas').getBoundingClientRect(), pn = 456;
+  V.x = (c.width - pn) / 2 - (f._x + W / 2) * V.z;
+  V.y = c.height / 2 - (f._y + H / 2) * V.z;
+  aplica();
+}
+function zoom(d){
+  const c = el('canvas').getBoundingClientRect();
+  const cx = (c.width / 2 - V.x) / V.z, cy = (c.height / 2 - V.y) / V.z;
+  V.z = Math.min(1.8, Math.max(.3, V.z * (d > 0 ? 1.18 : 1 / 1.18)));
+  V.x = c.width / 2 - cx * V.z; V.y = c.height / 2 - cy * V.z; aplica();
+}
+(function pan(){
+  const c = el('canvas');
+  let dr = false, sx = 0, sy = 0, ox = 0, oy = 0;
+  c.addEventListener('mousedown', e => {
+    if (e.target.closest('.nd,.ch')) return;
+    dr = true; sx = e.clientX; sy = e.clientY; ox = V.x; oy = V.y; c.classList.add('drag');
+  });
+  window.addEventListener('mousemove', e => { if (!dr) return; V.x = ox + e.clientX - sx; V.y = oy + e.clientY - sy; aplica(); });
+  window.addEventListener('mouseup', () => { dr = false; c.classList.remove('drag'); });
+  c.addEventListener('wheel', e => {
+    e.preventDefault();
+    const r = c.getBoundingClientRect(), mx = e.clientX - r.left, my = e.clientY - r.top;
+    const px = (mx - V.x) / V.z, py = (my - V.y) / V.z;
+    V.z = Math.min(1.8, Math.max(.3, V.z * (e.deltaY < 0 ? 1.09 : 1 / 1.09)));
+    V.x = mx - px * V.z; V.y = my - py * V.z; aplica();
+  }, { passive: false });
+})();
+window.addEventListener('resize', () => { if (D) aplica(); });
 
 // ---------------------------------------------------------------- exercício
-let EX = null, PE = null, VAL = {}, quadro = null, salvarTm = null;
-
+let EX = null, PE = null, VAL = {}, quadro = null, tmS = null;
 async function abrirEx(exId){
   EX = CAT.exercises.find(e => e.id === exId);
-  document.getElementById('exCtx').textContent =
-    (BLOCO[EX.axis] || 'Instrumento') + (EX.duration_min ? ' · ' + EX.duration_min + ' min' : '');
-  document.getElementById('exTit').textContent = EX.name;
-  document.getElementById('exSv').textContent = '';
-  document.getElementById('full').classList.add('on');
-  document.body.style.overflow = 'hidden';
-
+  el('exCx').textContent = (BLOCO[EX.axis] || 'Instrumento') + (EX.duration_min ? ' · ' + EX.duration_min + ' min' : '');
+  el('exTt').textContent = EX.name; el('exSv').textContent = '';
+  el('full').classList.add('on'); document.body.style.overflow = 'hidden';
   try {
     if (!D.sel[exId]){
       const r = await NAVE.post('selecao', { project_id: PID, items: [{ exercise_id: exId, selected: true }] });
@@ -243,146 +397,102 @@ async function abrirEx(exId){
   } catch (e) { toast(e.message); }
   PE = D.sel[exId];
   VAL = PE ? Object.assign({}, D.resp[PE.id] || {}) : {};
-  document.getElementById('exFeito').textContent =
-    PE && PE.status === 'concluido' ? 'Feito ✓' : 'Marcar como feito';
-
-  perguntas();
-  montarQuadro();
+  el('exOk').textContent = PE && PE.status === 'concluido' ? 'Feito ✓' : 'Marcar como feito';
+  perguntas(); desenhar();
 }
-
 function perguntas(){
-  const campos = (D.campos[EX.id] || []).filter(f => f.type !== 'draw' && f.key !== 'quadro');
-  const el = document.getElementById('exPerg');
-  el.innerHTML = (EX.intro ? `<p class="intro">${esc(EX.intro)}</p>` : '') +
-    campos.map(campo).join('') ||
-    (EX.intro ? '' : '<p class="intro">Sem perguntas fixas. Use o quadro ao lado.</p>');
-  el.querySelectorAll('[data-k]').forEach(i => {
-    i.addEventListener('input', () => { colher(); agendar(); });
-    i.addEventListener('change', () => { colher(); agendar(); });
+  const cps = (D.campos[EX.id] || []).filter(f => f.type !== 'draw' && f.key !== 'quadro');
+  const c = el('exQ');
+  c.innerHTML = (EX.intro ? `<p class="intro">${esc(EX.intro)}</p>` : '') +
+    (cps.length ? cps.map(campo).join('') : '<p class="intro">Sem perguntas fixas. O trabalho é no quadro ao lado.</p>');
+  c.querySelectorAll('[data-k]').forEach(i => {
+    i.addEventListener('input',  () => { colher(); agenda(); });
+    i.addEventListener('change', () => { colher(); agenda(); });
   });
-  el.querySelectorAll('.addr').forEach(b => b.addEventListener('click', () => {
-    const k = b.dataset.add, f = campos.find(x => x.key === k);
+  c.querySelectorAll('.addr').forEach(b => b.addEventListener('click', () => {
+    const k = b.dataset.add, f = cps.find(x => x.key === k);
     const cols = (f.config && f.config.columns) || [];
     const rows = Array.isArray(VAL[k]) ? VAL[k] : [];
-    rows.push(cols.map(() => '')); VAL[k] = rows; perguntas(); agendar();
+    rows.push(cols.map(() => '')); VAL[k] = rows; perguntas(); agenda();
   }));
 }
-
 function campo(f){
   const k = f.key, v = VAL[k], cfg = f.config || {};
   const cab = `<label>${esc(f.label)}</label>${f.hint ? `<div class="h">${esc(f.hint)}</div>` : ''}`;
-  let corpo = '';
-
+  let c = '';
   if (f.type === 'table' || f.type === 'matrix'){
     const cols = cfg.columns || ['Item'];
     let rows = Array.isArray(v) ? v : [];
     const min = Math.max(cfg.min_rows || 0, (cfg.rows || []).length, 3);
     while (rows.length < min) rows.push(cols.map(() => ''));
     if (!Array.isArray(v)) VAL[k] = rows;
-    corpo = `<table class="tb"><thead><tr>${cols.map(c => `<th>${esc(c)}</th>`).join('')}</tr></thead><tbody>` +
-      rows.map((r, ri) => `<tr>${cols.map((c, ci) => {
-        const fixa = (cfg.rows || [])[ri] && ci === 0;
-        return fixa
-          ? `<td><input data-k="${k}" data-r="${ri}" data-c="${ci}" value="${esc(cfg.rows[ri])}" readonly
-               style="background:transparent;font-weight:600"></td>`
-          : `<td><input data-k="${k}" data-r="${ri}" data-c="${ci}" value="${esc(r[ci] || '')}"></td>`;
-      }).join('')}</tr>`).join('') +
+    c = `<table class="tb"><thead><tr>${cols.map(x => `<th>${esc(x)}</th>`).join('')}</tr></thead><tbody>` +
+      rows.map((r, ri) => `<tr>${cols.map((x, ci) => (cfg.rows || [])[ri] && ci === 0
+        ? `<td><input data-k="${k}" data-r="${ri}" data-c="${ci}" value="${esc(cfg.rows[ri])}" readonly style="background:transparent;font-weight:700"></td>`
+        : `<td><input data-k="${k}" data-r="${ri}" data-c="${ci}" value="${esc(r[ci] || '')}"></td>`).join('')}</tr>`).join('') +
       `</tbody></table><button type="button" class="addr" data-add="${k}">+ linha</button>`;
   }
-  else if (f.type === 'list'){
-    corpo = `<textarea data-k="${k}" data-t="list" rows="4"
-      placeholder="um por linha">${esc(Array.isArray(v) ? v.join('\n') : (v || ''))}</textarea>`;
-  }
-  else if (f.type === 'select'){
-    const o = cfg.options || [];
-    corpo = `<select data-k="${k}"><option value="">—</option>` +
-      o.map(x => `<option ${v === x ? 'selected' : ''}>${esc(x)}</option>`).join('') + `</select>`;
-  }
-  else if (f.type === 'multiselect'){
-    const o = cfg.options || [], sel = Array.isArray(v) ? v : [];
-    corpo = o.map(x => `<label class="opt"><input type="checkbox" data-k="${k}" data-t="ms"
-      value="${esc(x)}" ${sel.includes(x) ? 'checked' : ''}> ${esc(x)}</label>`).join('');
-  }
-  else if (f.type === 'longtext'){
-    corpo = `<textarea data-k="${k}" rows="3">${esc(v || '')}</textarea>`;
-  }
-  else {
-    corpo = `<input data-k="${k}" type="${f.type === 'number' ? 'number' : 'text'}" value="${esc(v || '')}">`;
-  }
-  return `<div class="q">${cab}${corpo}</div>`;
+  else if (f.type === 'list') c = `<textarea data-k="${k}" data-t="list" rows="4" placeholder="um por linha">${esc(Array.isArray(v) ? v.join('\n') : (v || ''))}</textarea>`;
+  else if (f.type === 'select') c = `<select data-k="${k}"><option value="">—</option>` +
+      (cfg.options || []).map(x => `<option ${v === x ? 'selected' : ''}>${esc(x)}</option>`).join('') + `</select>`;
+  else if (f.type === 'multiselect'){ const s2 = Array.isArray(v) ? v : [];
+    c = (cfg.options || []).map(x => `<label class="opt"><input type="checkbox" data-k="${k}" data-t="ms" value="${esc(x)}" ${s2.includes(x) ? 'checked' : ''}> ${esc(x)}</label>`).join(''); }
+  else if (f.type === 'longtext') c = `<textarea data-k="${k}" rows="3">${esc(v || '')}</textarea>`;
+  else c = `<input data-k="${k}" type="${f.type === 'number' ? 'number' : 'text'}" value="${esc(v || '')}">`;
+  return `<div class="q">${cab}${c}</div>`;
 }
-
 function colher(){
-  const el = document.getElementById('exPerg');
   const ms = {};
-  el.querySelectorAll('[data-k]').forEach(i => {
+  el('exQ').querySelectorAll('[data-k]').forEach(i => {
     const k = i.dataset.k;
     if (i.dataset.t === 'ms'){ (ms[k] ||= []); if (i.checked) ms[k].push(i.value); return; }
-    if (i.dataset.r !== undefined){
-      const r = +i.dataset.r, c = +i.dataset.c;
-      const rows = Array.isArray(VAL[k]) ? VAL[k] : (VAL[k] = []);
-      (rows[r] ||= []); rows[r][c] = i.value; return;
-    }
-    if (i.dataset.t === 'list'){
-      VAL[k] = i.value.split('\n').map(s => s.trim()).filter(Boolean); return;
-    }
+    if (i.dataset.r !== undefined){ const rows = Array.isArray(VAL[k]) ? VAL[k] : (VAL[k] = []);
+      (rows[+i.dataset.r] ||= [])[+i.dataset.c] = i.value; return; }
+    if (i.dataset.t === 'list'){ VAL[k] = i.value.split('\n').map(s => s.trim()).filter(Boolean); return; }
     VAL[k] = i.value;
   });
   Object.assign(VAL, ms);
 }
-
-function agendar(){
-  document.getElementById('exSv').textContent = 'salvando…';
-  clearTimeout(salvarTm);
-  salvarTm = setTimeout(salvar, 800);
-}
-
+function agenda(){ el('exSv').textContent = 'salvando…'; clearTimeout(tmS); tmS = setTimeout(salvar, 800); }
 async function salvar(){
   if (!PE) return;
-  try {
-    await NAVE.post('resposta', { project_exercise_id: PE.id, values: VAL });
-    D.resp[PE.id] = Object.assign({}, VAL);
-    document.getElementById('exSv').textContent = 'salvo';
-  } catch (e) { document.getElementById('exSv').textContent = ''; toast(e.message); }
+  try { await NAVE.post('resposta', { project_exercise_id: PE.id, values: VAL });
+    D.resp[PE.id] = Object.assign({}, VAL); el('exSv').textContent = 'salvo'; }
+  catch (e) { el('exSv').textContent = ''; toast(e.message); }
 }
-
-async function montarQuadro(){
-  const el = document.getElementById('exQuadro');
-  if (quadro) { try { quadro.destruir(); } catch {} quadro = null; }
-  el.innerHTML = '';
-  quadro = await window.NAVE_DESENHO.montar(el, VAL.quadro || null, v => { VAL.quadro = v; agendar(); });
+async function desenhar(){
+  const d = el('exD');
+  if (quadro){ try { quadro.destruir(); } catch {} quadro = null; }
+  d.innerHTML = '';
+  quadro = await window.NAVE_DESENHO.montar(d, VAL.quadro || null, v => { VAL.quadro = v; agenda(); });
 }
-
 async function marcarFeito(){
   if (!PE) return;
   const novo = PE.status === 'concluido' ? 'em_andamento' : 'concluido';
-  try {
-    await NAVE.post('resposta', { project_exercise_id: PE.id, values: VAL, status: novo });
+  try { await NAVE.post('resposta', { project_exercise_id: PE.id, values: VAL, status: novo });
     PE.status = novo; D.sel[EX.id].status = novo;
-    document.getElementById('exFeito').textContent = novo === 'concluido' ? 'Feito ✓' : 'Marcar como feito';
-    document.getElementById('exSv').textContent = 'salvo';
-  } catch (e) { toast(e.message); }
+    el('exOk').textContent = novo === 'concluido' ? 'Feito ✓' : 'Marcar como feito';
+    el('exSv').textContent = 'salvo'; }
+  catch (e) { toast(e.message); }
 }
-
 async function fecharEx(){
-  clearTimeout(salvarTm);
-  await salvar();
-  if (quadro) { try { quadro.destruir(); } catch {} quadro = null; }
-  document.getElementById('full').classList.remove('on');
-  document.body.style.overflow = '';
+  clearTimeout(tmS); await salvar();
+  if (quadro){ try { quadro.destruir(); } catch {} quadro = null; }
+  el('full').classList.remove('on'); document.body.style.overflow = '';
   EX = null; PE = null; VAL = {};
-  render();
+  if (sel) abrirPasso(sel, false);
 }
 document.addEventListener('keydown', e => {
-  if (e.key === 'Escape' && document.getElementById('full').classList.contains('on')) fecharEx();
+  if (e.key !== 'Escape') return;
+  if (el('full').classList.contains('on')) fecharEx();
+  else if (el('pn').classList.contains('on')) fecharPn();
 });
 
-// ---------------------------------------------------------------- boot
 (async function(){
   if (!await NAVE.guard()) return;
-  if (!PID) { location.replace('/estrategia/'); return; }
+  if (!PID){ location.replace('/estrategia/'); return; }
   try { await carregar(); }
-  catch (e) { document.getElementById('passos').innerHTML = `<div class="vaz">${esc(e.message)}</div>`; }
+  catch (e) { toast(e.message); }
 })();
 </script>
 </body>
