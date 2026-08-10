@@ -220,9 +220,20 @@ function desenhaNos(){
         <h3>${esc(f.nave_phases.name)}</h3>
         <div class="bt"><span class="mini"><i style="width:${t.length ? ok / t.length * 100 : 0}%"></i></span>
           <span class="cnt">${t.length ? ok + '/' + t.length : '—'}</span></div>
+        ${exDoNo(f)}
       </button>`;
   }).join('');
   el('nos').innerHTML = nos + fl;
+}
+
+// quantos exercícios este passo tem na sessão, e quantos já estão preenchidos
+function exDoNo(f){
+  const exs = (D.exs[f.phase_id] || []).filter(roda);
+  if (!exs.length) return '';
+  const prontos = exs.filter(e => exFeito(e.id)).length;
+  const min = exs.reduce((a, e) => a + (e.duration_min || 0), 0);
+  return `<div class="ex ${prontos === exs.length ? 'todos' : ''}">
+    <b>${prontos}/${exs.length}</b> exercício${exs.length > 1 ? 's' : ''}${min ? ' · ' + hhmm(min) : ''}</div>`;
 }
 
 // ramos do nó selecionado
