@@ -53,6 +53,22 @@
   </div>
 </div>
 
+<div class="dlg" id="dlgDel">
+  <div class="bx2">
+    <h2>Excluir marca</h2>
+    <p style="color:var(--i50);font-size:14px;line-height:1.55;margin:0 0 22px">
+      Vou apagar <b id="delNome" style="color:var(--ink)"></b> e junto os 16 passos, as 135 tarefas,
+      os exercícios e tudo que você preencheu nela. <b style="color:var(--ink)">Não tem como desfazer.</b>
+    </p>
+    <div class="er" id="errDel"></div>
+    <div style="display:flex;gap:10px">
+      <button class="b b--ghost" onclick="fecharApagar()">Cancelar</button>
+      <button class="b" id="btnDel" style="background:var(--pink);color:var(--ink);margin-left:auto"
+        onclick="apagar()">Excluir para sempre</button>
+    </div>
+  </div>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -65,6 +81,26 @@ const dlg = el('dlg');
 function abrir(){ dlg.classList.add('on'); document.querySelector('[name=cliente]').focus(); }
 function fechar(){ dlg.classList.remove('on'); el('err').textContent = ''; }
 dlg.addEventListener('click', e => { if (e.target === dlg) fechar(); });
+el('dlgDel').addEventListener('click', e => { if (e.target === el('dlgDel')) fecharApagar(); });
+
+let alvoDel = null;
+function pedirApagar(id, nome){
+  alvoDel = id;
+  el('delNome').textContent = nome;
+  el('errDel').textContent = '';
+  el('dlgDel').classList.add('on');
+}
+function fecharApagar(){ el('dlgDel').classList.remove('on'); alvoDel = null; }
+async function apagar(){
+  if (!alvoDel) return;
+  const btn = el('btnDel');
+  btn.disabled = true; el('errDel').textContent = 'Apagando…';
+  try {
+    await NAVE.post('marca_del', { id: alvoDel });
+    fecharApagar(); btn.disabled = false;
+    await carregar();
+  } catch (e) { el('errDel').textContent = e.message || 'Não consegui apagar.'; btn.disabled = false; }
+}
 
 async function carregar(){
   const ms = await NAVE.get('projetos');
@@ -79,17 +115,19 @@ async function carregar(){
     const pr = p.progress || {}, total = pr.total || 16, feitas = pr.feitas || 0;
     const fluxo = Array.from({length: total}, (_, i) =>
       `<i class="${i < feitas ? 'd' : (i === feitas ? 'n' : '')}"></i>`).join('');
-    return `<a class="mk" href="/estrategia/marca.html?p=${p.id}">
-      <div>
+    return `<div class="mkw">
+      <a class="mk" href="/estrategia/marca.html?p=${p.id}">
         <h3>${esc(nome)}</h3>
         <div class="seg">${esc(seg)}</div>
         <div class="now">${feitas >= total
           ? '<b>Entregue.</b>'
-          : `<b>Passo ${feitas + 1} de ${total}</b> · ${esc(pr.passo || '')}`}${
-          pr.awaiting_approval ? ' · aguardando o cliente' : ''}</div>
-      </div>
-      <div class="fluxo">${fluxo}</div>
-    </a>`;
+          : `<b>Passo ${feitas + 1} de ${total}</b><span>${esc(pr.passo || '')}</span>`}${
+          pr.awaiting_approval ? '<span>· aguardando o cliente</span>' : ''}</div>
+        <div class="fluxo">${fluxo}</div>
+      </a>
+      <button class="apagar" title="Excluir marca"
+        onclick="pedirApagar('${p.id}', '${esc(nome).replace(/'/g, "\\'")}')">✕</button>
+    </div>`;
   }).join('');
 }
 

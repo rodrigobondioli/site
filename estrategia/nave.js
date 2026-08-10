@@ -150,6 +150,7 @@
         ord: t.ord,
         title: t.title,
         detail: t.detail ?? null,
+        link: t.link ?? null,
       }));
       if (rows.length) ok(await sb.from('nave_project_tasks').insert(rows));
 
@@ -213,6 +214,19 @@
           .update({ status: body.status }).eq('id', body.project_exercise_id));
       }
       return { ok: true, count: rows.length };
+    }
+
+    // Excluir marca: apaga o projeto (cascata leva fases, tarefas, exercícios e respostas)
+    // e o cliente junto, se ele não tiver outro projeto.
+    if (r === 'marca_del') {
+      if (!body.id) throw new Error('id é obrigatório.');
+      const proj = one(ok(await sb.from('nave_projects').select('client_id').eq('id', body.id)));
+      ok(await sb.from('nave_projects').delete().eq('id', body.id));
+      if (proj && proj.client_id) {
+        const restam = ok(await sb.from('nave_projects').select('id').eq('client_id', proj.client_id));
+        if (!restam.length) ok(await sb.from('nave_clients').delete().eq('id', proj.client_id));
+      }
+      return { ok: true };
     }
 
     if (r === 'insight') {

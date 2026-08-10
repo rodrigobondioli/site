@@ -169,8 +169,7 @@ function desenhaNos(){
     const cls = f.status === 'concluido' ? 'feito' : (k === ia ? 'agora' : (k >= D.trava ? 'trava' : 'futuro'));
     const flag = f.nave_phases.is_gate
       ? `<span class="fl" style="background:${f.gate === 'aprovado' ? '#101010' : 'var(--pink)'}"></span>` : '';
-    return `${k === ia ? `<div class="pulse" style="left:${f._x}px;top:${f._y}px;width:${W}px;height:${H}px"></div>` : ''}
-      <button class="nd ${cls} ${sel === f.id ? 'sel' : ''} ${fl && sel !== f.id ? 'apaga' : ''}" data-id="${f.id}"
+    return `<button class="nd ${cls} ${sel === f.id ? 'sel' : ''} ${fl && sel !== f.id ? 'apaga' : ''}" data-id="${f.id}"
         style="left:${f._x}px;top:${f._y}px;min-height:${H}px" onclick="abrirPasso('${f.id}')">
         <div class="tp"><span class="no">${String(k + 1).padStart(2,'0')}</span>${flag}</div>
         <h3>${esc(f.nave_phases.name)}</h3>
@@ -193,15 +192,15 @@ function filhos(){
     ? eixos.map(x => { const l = exs.filter(e => e.axis === x), on = l.filter(roda);
         return { t: BLOCO[x], s: `${on.length} de ${l.length} · ${hhmm(on.reduce((a,e)=>a+(e.duration_min||0),0))}`,
                  ok: l.every(e => D.sel[e.id] && D.sel[e.id].status === 'concluido'), off: !on.length, go: `eixo:${x}` }; })
-    : exs.slice(0, 6).map(e => ({ t: e.name.length > 26 ? e.name.slice(0,25) + '…' : e.name,
+    : exs.slice(0, 6).map(e => ({ t: e.name,
         s: (e.minimum ? 'ESSENCIAL' : 'OPCIONAL') + (e.duration_min ? ' · ' + e.duration_min + ' min' : ''),
         ok: D.sel[e.id] && D.sel[e.id].status === 'concluido', off: !roda(e), go: `ex:${e.id}` }));
 
   // os ramos ficam na faixa vazia ACIMA da linha de nós — não cobrem nenhum passo
-  const CW = 186, CH = 50, CG = 12;
+  const CW = 200, CH = 56, CG = 12;
   const total = itens.length * CW + (itens.length - 1) * CG;
   const bx = f._x + W / 2 - total / 2;
-  const by = f._y - 104;
+  const by = f._y - 112;
   let out = '', ln = '';
   const x1 = f._x + W / 2, y1 = f._y;
   itens.forEach((n, i) => {
