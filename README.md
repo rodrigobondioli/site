@@ -1,50 +1,76 @@
-# rodrigobondioli.com — Home (rebuild fora do Framer)
+# Rodrigo Bondioli - mapa do projeto
 
-Cópia fiel da Home do site Framer, em HTML/CSS/JS puro. Sem build, sem dependências — deploy direto na Vercel.
+Este repositorio concentra quatro frentes publicas/privadas do ecossistema:
 
-## Arquivos
-- `index.html` — o site inteiro (HTML + CSS + JS num arquivo só).
-- `design.md` — inventário do original (cores, fontes, textos, medidas).
-- `README.md` — este arquivo.
+## 1. Site principal
 
-## Rodar local
-Abra `index.html` no navegador, ou sirva a pasta:
-```
-npx serve .
-```
+- URL: https://www.rodrigobondioli.com/
+- Entrada: `index.html`
+- Apoio: `shared/`, `img/`, `docs/design.md`
+- Funcao: site pessoal/portfolio do Rodrigo Bondioli.
 
-## Deploy na Vercel (igual você fez no SUPERBAR)
+## 2. Landing oficial do curso low ticket
 
-**Opção A — GitHub → Vercel (recomendado):**
-1. `git init && git add . && git commit -m "home rebuild"` nesta pasta.
-2. Suba pro GitHub (repo novo, ex: `rodrigobondioli-site`).
-3. No Vercel: New Project → Import do repo. Framework preset: **Other** (site estático). Build command: vazio. Output: raiz.
-4. Deploy. Sai uma URL `*.vercel.app` — é a prévia real pra conferir fidelidade.
+- URL: https://www.rodrigobondioli.com/antipato
+- Pasta: `antipato/`
+- Funcao: pagina de vendas oficial do curso Anti Designer Pato / De Generico a Especialista.
+- Observacao: esta e a versao principal para copy, checkout, SEO e imagem social.
 
-**Opção B — CLI:**
-```
-npm i -g vercel
-vercel        # login + preview
-vercel --prod # produção
-```
+## 3. Landing antiga/secundaria do curso
 
-## Trocar o domínio do Framer pra Vercel
-O `rodrigobondioli.com` hoje aponta pro Framer. Passo a passo:
-1. No **Vercel** → projeto → Settings → **Domains** → adicionar `rodrigobondioli.com` e `www.rodrigobondioli.com`. O Vercel mostra os registros a configurar.
-2. No seu **registrador de domínio** (onde comprou o domínio), troque os registros DNS:
-   - `A` do apex `@` → `76.76.21.21` (IP da Vercel), **ou** aponte via `CNAME`/nameservers conforme o Vercel indicar.
-   - `CNAME` do `www` → `cname.vercel-dns.com`.
-   - **Remova** os registros antigos que apontavam pro Framer.
-3. Espere propagar (minutos a algumas horas). O Vercel emite o SSL sozinho.
-4. Só depois que estiver 100% no ar e conferido: **cancele/despublique o Framer**.
+- URL: https://www.rodrigobondioli.com/quak
+- Pasta: `quak/`
+- Funcao: versao secundaria/legada da landing do curso.
+- Observacao: manter enquanto a URL ainda for util, mas nao tratar como fonte principal.
 
-> Passos de conta e DNS são você quem executa (envolvem seus acessos). Eu te guio em cada tela se quiser.
+## 4. App do curso
 
-## Pendências de fidelidade (decidir)
-1. **Fonte dos títulos** — o original usa *Rooftop Mono* em versão **TRIAL** (risco de licença em produção). Aqui usei *Martian Mono* (livre, Google Fonts) como substituto próximo. Opções: manter a Martian, ou comprar a licença da Rooftop e eu ploto o arquivo.
-2. **Foto hero** — está puxando do CDN do Framer (`framerusercontent.com`). Funciona enquanto o projeto Framer existir. **Antes de deletar o Framer**, baixe a imagem e me passe — eu troco por um arquivo local em `/assets`.
-3. **Logos das marcas** (Nike, Coca-Cola, Vivo, L'Oréal, Harley, Unilever, Havaianas) — recriados em SVG/wordmark (os vetores originais são grandes e não exportáveis pelo canal). Se quiser 100% pixel, me passe os SVGs oficiais que eu troco.
-4. **Formulário** — v1 abre o WhatsApp já com os dados preenchidos (zero backend). Se quiser capturar e-mail de verdade, ligo num Formspree (grátis).
+- URL principal esperada: https://app.rodrigobondioli.com/
+- Frontend: `app/`
+- APIs serverless: `api/`
+- Banco e policies: `supabase/`
+- Funcao: plataforma do curso, no estilo comunidade/app fechado, com login, aulas, progresso, Canvas e IA.
 
-## Escopo
-Só a **Home**. A `/portfolio` (inglês) e as 11 páginas de projeto ficaram de fora por ora — dá pra fazer depois no mesmo esquema.
+## Rotas importantes do app
+
+- `/` em `app.rodrigobondioli.com`: login (`app/index.html`)
+- `/curso`: home do curso (`app/curso/home.html`)
+- `/curso/aula.html`: player/aula/exercicio
+- `/curso/canvas.html`: Canvas do aluno
+- `/curso/posicionamento.html`: geracao/refino do posicionamento com IA
+- `/admin`: painel interno de aulas e alunos
+
+O roteamento limpo do subdominio do app fica em `middleware.js`.
+
+## Pastas internas e descarte
+
+- `docs/`: documentacao operacional e referencias do projeto.
+- `tools/`: scripts internos de desenvolvimento/teste.
+- `Marketing/`: documentos internos de copy, criativos e estrategia. Nao publicar.
+- `Marketing/anti-pato/`: acervo interno organizado do produto Anti Pato, importado da pasta externa antiga.
+- `_to_delete/`: descarte local ignorado pelo Git.
+- `_to_delete_git_locks/`: residuos antigos de locks, ja marcado para sair do controle de versao.
+- `design-system/`: referencia visual/prototipos.
+
+## Arquivos que ficam na raiz
+
+- `index.html`: pagina inicial publica do dominio principal.
+- `politica-de-privacidade.html` e `termos.html`: paginas legais publicas com URLs diretas usadas pelas landings.
+- `middleware.js`: roteamento do subdominio do app na Vercel.
+- `vercel.json`: configuracao de headers/cache/deploy.
+- `README.md`: mapa do repositorio.
+
+## Deploy
+
+O projeto atual roda como site estatico + funcoes serverless na Vercel.
+
+- Configuracao: `vercel.json`
+- Variaveis esperadas no ambiente: Supabase, Resend, IA, Greenn e admins.
+- O app depende de Supabase para autenticacao, controle de acesso, progresso, Canvas e planos.
+
+## Cuidados antes de mexer
+
+- Nao mover `antipato/`, `quak/`, `app/`, `api/` ou `shared/` sem ajustar URLs absolutas e o deploy.
+- A landing oficial e `antipato/`; `quak/` e legado.
+- O app pago deve checar acesso do aluno nas APIs, nao so no frontend.
+- Chave anon/publishable do Supabase pode ficar no cliente; service role e chaves de IA/Resend nunca devem entrar no repositorio.

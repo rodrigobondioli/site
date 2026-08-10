@@ -1,7 +1,7 @@
 // Harness LOCAL do Escavador — prova endpoint/extração/retomada sem subir a UI.
-// Uso:  AI_API_KEY=suachave  node escavador-harness.mjs
+// Uso:  AI_API_KEY=suachave  node tools/dev/escavador-harness.mjs
 // (usa a mesma env do app; MODEL_FAST default = gemini-2.5-flash). Arquivo é só teste — pode deletar.
-import { escavadorTurn } from './api/ai/escavador.js';
+import { escavadorTurn } from '../../api/ai/escavador.js';
 
 // respostas simuladas do aluno, na ordem (a última é vazia = deixa o Escavador puxar/fechar)
 const RESPOSTAS = [
@@ -22,7 +22,7 @@ function log(t, r) {
 
 async function run() {
   if (!process.env.AI_API_KEY && !process.env.OPENAI_API_KEY) {
-    console.error('Falta AI_API_KEY no ambiente. Rode:  AI_API_KEY=suachave node escavador-harness.mjs');
+    console.error('Falta AI_API_KEY no ambiente. Rode:  AI_API_KEY=suachave node tools/dev/escavador-harness.mjs');
     process.exit(1);
   }
   let voce = {};

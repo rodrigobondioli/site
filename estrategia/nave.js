@@ -61,18 +61,26 @@
       if (!projects.length) return [];
       // progresso calculado aqui, sem view: view não herda RLS por padrão
       const fases = ok(await sb.from('nave_project_phases')
-        .select('project_id,status,gate')
+        .select('project_id,status,gate,nave_phases(ord,name)')
         .in('project_id', projects.map(p => p.id)));
       const agg = {};
       fases.forEach(f => {
-        const a = (agg[f.project_id] ||= { total: 0, feitas: 0, esperando: false });
+        const a = (agg[f.project_id] ||= { total: 0, feitas: 0, esperando: false, lista: [] });
         a.total++;
         if (f.status === 'concluido') a.feitas++;
         if (f.gate === 'enviado') a.esperando = true;
+        a.lista.push(f);
       });
       return projects.map(p => {
-        const a = agg[p.id] || { total: 0, feitas: 0, esperando: false };
-        return { ...p, progress: { pct: a.total ? a.feitas / a.total : 0, awaiting_approval: a.esperando } };
+        const a = agg[p.id] || { total: 0, feitas: 0, esperando: false, lista: [] };
+        a.lista.sort((x, y) => (x.nave_phases?.ord ?? 0) - (y.nave_phases?.ord ?? 0));
+        const atual = a.lista.find(f => f.status !== 'concluido');
+        return { ...p, progress: {
+          pct: a.total ? a.feitas / a.total : 0,
+          total: a.total, feitas: a.feitas,
+          passo: atual ? (atual.nave_phases?.name || '') : '',
+          awaiting_approval: a.esperando,
+        } };
       });
     }
 

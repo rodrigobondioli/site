@@ -1,4 +1,4 @@
-// ANTI DESIGNER PATO — interações
+// MATE O PATO — interações
 (function () {
   var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 

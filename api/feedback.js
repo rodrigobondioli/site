@@ -21,7 +21,7 @@ export default async function handler(req, res) {
       method: 'POST',
       headers: { Authorization: `Bearer ${process.env.RESEND_API_KEY}`, 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        from: 'Anti Designer Pato <acesso@send.rodrigobondioli.com>',
+        from: 'Mate o Pato <acesso@send.rodrigobondioli.com>',
         to: ['hello@rodrigobondioli.com'],
         reply_to: user?.email || undefined,
         subject,

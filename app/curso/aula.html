@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Escolher o seu nicho — anti designer pato</title>
+<title>Escolher o seu nicho — mate o pato</title>
 <link rel="icon" type="image/png" href="/shared/favicon-pato.png">
 <style>
 @font-face{font-family:Vinila;src:url(/shared/fonts/vinila-400-normal.woff2) format("woff2");font-weight:400;font-display:swap}
@@ -419,7 +419,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
     // sem vídeo ainda -> pôster "em breve"
     var num=(idx+1<10?'0':'')+(idx+1);
     return '<div class="video"><div class="poster">'
-      +'<div class="topline"><span>De Genérico a Especialista<br>c/ Rodrigo Bondioli</span><span>anti designer pato</span></div>'
+      +'<div class="topline"><span>De Genérico a Especialista<br>c/ Rodrigo Bondioli</span><span>mate o pato</span></div>'
       +'<div class="mid"><div class="pills"><span class="pill">Curso</span><span class="pill">Aula '+num+'</span></div>'
       +'<h2>'+esc(l.title)+'</h2>'
       +(l.tagline?'<p class="tag">'+esc(l.tagline)+'</p>':'')
@@ -729,7 +729,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
     var l=cur, total=LESSONS.length;
     var prev=idx>0?LESSONS[idx-1]:null, next=idx<total-1?LESSONS[idx+1]:null;
     var isDone=DONE.has(l.id);
-    document.title=(l.title||'Aula')+' — anti designer pato';
+    document.title=(l.title||'Aula')+' — mate o pato';
     var nav='<div class="nav">'
       +(prev?'<a href="aula.html?a='+prev.id+'" aria-label="Aula anterior">':'<a class="off" aria-label="Aula anterior">')+'<svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg></a>'
       +(next?'<a href="aula.html?a='+next.id+'" aria-label="Próxima aula">':'<a class="off" aria-label="Próxima aula">')+'<svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></a>'

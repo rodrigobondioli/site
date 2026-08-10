@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Marca · Estratégia</title>
+<link rel="icon" type="image/png" href="/shared/favicon.png">
+<link rel="stylesheet" href="/shared/shared.css">
+<link rel="stylesheet" href="/estrategia/ui.css">
+<link rel="stylesheet" href="/estrategia/fluxo.css">
+<style>
+/* tabela editável dentro do exercício */
+.tb{width:100%;border-collapse:collapse;font-size:13px;margin-top:4px}
+.tb th{text-align:left;font-size:10.5px;font-weight:600;letter-spacing:.9px;color:var(--ink-50);
+ padding:0 4px 6px;vertical-align:bottom;line-height:1.25}
+.tb td{padding:2px}
+.tb td input{width:100%;background:var(--bnd-bg);border:0;border-radius:7px;padding:8px 9px;
+ font:inherit;font-size:13px;color:inherit;outline:none}
+.tb td input:focus{box-shadow:inset 0 0 0 1px var(--bnd-ink)}
+.addr{background:none;border:0;color:var(--ink-50);font-size:12.5px;padding:8px 0;text-decoration:underline}
+.addr:hover{color:var(--bnd-ink)}
+.q .opt{display:flex;align-items:center;gap:9px;font-size:13.5px;padding:5px 0;font-weight:400}
+.q select{width:100%;background:var(--bnd-bg);border:0;border-radius:10px;padding:11px 12px;font:inherit;font-size:14px}
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="side">
+    <div class="brand">
+      <img src="/shared/logo.svg" alt="Bondioli" onerror="this.outerHTML='<b style=&quot;font-family:var(--bnd-display);font-weight:800;font-size:16px&quot;>BOND</b>'">
+      <span>estratégia</span>
+    </div>
+    <a class="navbtn" href="/estrategia/">Marcas</a>
+    <a class="navbtn" href="/estrategia/metodo/PLAYBOOK-NAVE.html">Método</a>
+    <div class="navsec">Conta</div>
+    <button class="navbtn" onclick="NAVE.logout()">Sair</button>
+  </aside>
+
+  <main class="main wrap">
+    <div class="crumb"><a href="/estrategia/">Marcas</a> ·&nbsp;<span id="cr">…</span></div>
+    <div class="hd">
+      <div>
+        <h1 id="nome">…</h1>
+        <div class="st" id="estado"></div>
+      </div>
+    </div>
+    <div class="passos" id="passos"></div>
+  </main>
+</div>
+
+<!-- tela cheia do exercício -->
+<div class="full" id="full">
+  <div class="fbar">
+    <button class="vb" onclick="fecharEx()">← Voltar</button>
+    <div>
+      <div class="ctx" id="exCtx"></div>
+      <div class="tit" id="exTit"></div>
+    </div>
+    <div class="dir">
+      <span class="sv" id="exSv"></span>
+      <button class="btn sm btn--line" id="exFeito" onclick="marcarFeito()">Marcar como feito</button>
+    </div>
+  </div>
+  <div class="fcorpo">
+    <div class="fperg" id="exPerg"></div>
+    <div class="fquadro" id="exQuadro"></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="/estrategia/config.js"></script>
+<script src="/estrategia/nave.js"></script>
+<script src="/estrategia/desenho.js"></script>
+<script>
+const PID = new URLSearchParams(location.search).get('p');
+const BLOCO = { N:'Negócio', A:'Audiência', V:'Valor', E:'Estória' };
+let D = null, CAT = null, aberto = null;
+
+function esc(s){ return String(s==null?'':s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+let tt;
+function toast(m){ const t = document.getElementById('toast'); t.textContent = m;
+  t.classList.add('on'); clearTimeout(tt); tt = setTimeout(() => t.classList.remove('on'), 4200); }
+
+// ---------------------------------------------------------------- carregar
+async function carregar(){
+  const [d, cat] = await Promise.all([NAVE.get('projeto', { id: PID }), NAVE.get('catalogo')]);
+  D = d; CAT = cat;
+  D.fases = d.phases.slice().sort((a,b) => (a.nave_phases?.ord ?? 0) - (b.nave_phases?.ord ?? 0));
+  D.porFase = {}; d.tasks.forEach(t => (D.porFase[t.project_phase_id] ||= []).push(t));
+  Object.values(D.porFase).forEach(l => l.sort((a,b) => a.ord - b.ord));
+  D.sel = {}; d.selection.forEach(s => D.sel[s.exercise_id] = s);
+  D.resp = {}; d.responses.forEach(r => (D.resp[r.project_exercise_id] ||= {})[r.field_key] = r.value);
+  D.exPorFase = {}; cat.exercises.forEach(e => (D.exPorFase[e.phase_id] ||= []).push(e));
+  D.campos = {}; cat.fields.forEach(f => (D.campos[f.exercise_id] ||= []).push(f));
+  Object.values(D.campos).forEach(l => l.sort((a,b) => a.ord - b.ord));
+  if (aberto == null) aberto = (D.fases.find(f => f.status !== 'concluido') || D.fases[0]).id;
+  render();
+}
+
+function atual(){ return D.fases.find(f => f.status !== 'concluido') || null; }
+
+function render(){
+  const nome = D.client ? D.client.name : D.project.name;
+  document.title = nome + ' · Estratégia';
+  document.getElementById('cr').textContent = nome;
+  document.getElementById('nome').textContent = nome;
+
+  const a = atual(), i = a ? D.fases.indexOf(a) + 1 : D.fases.length;
+  document.getElementById('estado').innerHTML = a
+    ? `Passo <b>${i} de ${D.fases.length}</b> · ${esc(a.nave_phases.name)}`
+    : `<b>Entregue.</b> Os ${D.fases.length} passos estão fechados.`;
+
+  document.getElementById('passos').innerHTML = D.fases.map((f, k) => {
+    if (f.id === aberto) return passoAberto(f, k);
+    const feito = f.status === 'concluido';
+    const fut = a && k > D.fases.indexOf(a);
+    const tarefas = D.porFase[f.id] || [];
+    const ok = tarefas.filter(t => t.status === 'concluido').length;
+    return `<button class="pp ${feito ? 'feito' : (fut ? 'futuro' : '')}" onclick="abrirPasso('${f.id}')">
+      <span class="n">${feito ? '✓' : k + 1}</span>
+      <span class="t">${esc(f.nave_phases.name)}</span>
+      <span class="r">${feito ? 'feito' : (tarefas.length ? ok + '/' + tarefas.length : '')}</span>
+    </button>`;
+  }).join('');
+}
+
+function passoAberto(f, k){
+  const tarefas = D.porFase[f.id] || [];
+  const ok = tarefas.filter(t => t.status === 'concluido').length;
+  const feito = f.status === 'concluido';
+  const eh = f.id === (atual() || {}).id;
+
+  const lista = tarefas.map(t => `<button class="t ${t.status === 'concluido' ? 'ok' : ''}"
+      onclick="tick('${t.id}')"><span class="b"></span><span>${esc(t.title)}</span></button>`).join('');
+
+  const exs = D.exPorFase[f.phase_id] || [];
+  let bloco = '';
+  if (exs.length){
+    const eixos = ['N','A','V','E'].filter(x => exs.some(e => e.axis === x));
+    if (eixos.length){
+      const soltos = exs.filter(e => !BLOCO[e.axis]);
+      bloco = `<div class="faz">Exercícios com o cliente</div><div class="blocos">` +
+        eixos.map(x => `<div class="bl"><h5>${BLOCO[x]}</h5>` +
+          exs.filter(e => e.axis === x).map(cardEx).join('') + `</div>`).join('') +
+        (soltos.length ? `<div class="bl"><h5>Também neste passo</h5>${soltos.map(cardEx).join('')}</div>` : '') +
+        `</div>`;
+    } else {
+      bloco = `<div class="faz">Instrumentos deste passo</div>
+        <div class="blocos"><div class="bl" style="grid-column:1/-1">` +
+        `<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:7px">` +
+        exs.map(cardEx).join('') + `</div></div></div>`;
+    }
+  }
+
+  let aprov = '';
+  if (f.nave_phases.is_gate){
+    const app = f.gate === 'aprovado';
+    aprov = `<div class="aprov ${app ? 'ok' : ''}">
+      <h4>${app ? 'Aprovado pelo cliente' : 'Precisa da aprovação do cliente'}</h4>
+      <p>${esc(f.nave_phases.gate_label || '')}. Sem isso registrado, o próximo passo não abre.</p>
+      ${app ? '' : `<button class="btn sm" onclick="aprovar('${f.id}')">Registrar aprovação</button>`}
+    </div>`;
+  }
+
+  return `<div class="pa">
+    <span class="agora">${feito ? 'FEITO' : (eh ? 'AGORA' : 'PASSO')} · PASSO ${k + 1}</span>
+    <h2>${esc(f.nave_phases.name)}</h2>
+    <p class="ob">${esc(f.nave_phases.objective || '')}</p>
+    ${tarefas.length ? `<div class="faz">Faça isso</div>${lista}` : ''}
+    ${bloco}
+    ${aprov}
+    <div class="fim">
+      ${feito
+        ? `<button class="btn btn--line sm" onclick="reabrir('${f.id}')">Reabrir passo</button>
+           <span class="msg">Passo fechado.</span>`
+        : `<button class="btn" onclick="concluir('${f.id}')">Concluir passo</button>
+           <span class="msg">${ok}/${tarefas.length} do que fazer aqui.</span>`}
+    </div>
+  </div>`;
+}
+
+function cardEx(e){
+  const s = D.sel[e.id];
+  const pronto = s && s.status === 'concluido';
+  const min = e.duration_min ? e.duration_min + ' min' : '';
+  return `<button class="ex ${e.minimum ? 'ess' : ''} ${pronto ? 'done' : ''}" onclick="abrirEx('${e.id}')">
+    <span class="nm">${esc(e.name)}</span>
+    <span class="mt">${e.minimum ? 'essencial' : 'opcional'}${min ? ' · ' + min : ''}</span>
+  </button>`;
+}
+
+// ---------------------------------------------------------------- ações
+function abrirPasso(id){ aberto = id; render(); window.scrollTo({ top: 0, behavior: 'smooth' }); }
+
+async function tick(id){
+  const t = D.tasks.find(x => x.id === id);
+  const novo = t.status === 'concluido' ? 'nao_iniciado' : 'concluido';
+  t.status = novo; render();
+  try { await NAVE.post('tarefa', { id, status: novo }); }
+  catch (e) { t.status = novo === 'concluido' ? 'nao_iniciado' : 'concluido'; render(); toast(e.message); }
+}
+
+async function concluir(id){
+  try {
+    await NAVE.post('fase', { id, status: 'concluido' });
+    const f = D.fases.find(x => x.id === id); f.status = 'concluido';
+    const prox = atual(); aberto = prox ? prox.id : id; render();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  } catch (e) { toast(e.message); }
+}
+
+async function reabrir(id){
+  try { await NAVE.post('fase', { id, status: 'em_andamento' });
+    D.fases.find(x => x.id === id).status = 'em_andamento'; render(); }
+  catch (e) { toast(e.message); }
+}
+
+async function aprovar(id){
+  try { await NAVE.post('fase', { id, gate: 'aprovado' });
+    D.fases.find(x => x.id === id).gate = 'aprovado'; render(); toast('Aprovação registrada.'); }
+  catch (e) { toast(e.message); }
+}
+
+// ---------------------------------------------------------------- exercício
+let EX = null, PE = null, VAL = {}, quadro = null, salvarTm = null;
+
+async function abrirEx(exId){
+  EX = CAT.exercises.find(e => e.id === exId);
+  document.getElementById('exCtx').textContent =
+    (BLOCO[EX.axis] || 'Instrumento') + (EX.duration_min ? ' · ' + EX.duration_min + ' min' : '');
+  document.getElementById('exTit').textContent = EX.name;
+  document.getElementById('exSv').textContent = '';
+  document.getElementById('full').classList.add('on');
+  document.body.style.overflow = 'hidden';
+
+  try {
+    if (!D.sel[exId]){
+      const r = await NAVE.post('selecao', { project_id: PID, items: [{ exercise_id: exId, selected: true }] });
+      D.sel[exId] = r.items[0];
+    }
+  } catch (e) { toast(e.message); }
+  PE = D.sel[exId];
+  VAL = PE ? Object.assign({}, D.resp[PE.id] || {}) : {};
+  document.getElementById('exFeito').textContent =
+    PE && PE.status === 'concluido' ? 'Feito ✓' : 'Marcar como feito';
+
+  perguntas();
+  montarQuadro();
+}
+
+function perguntas(){
+  const campos = (D.campos[EX.id] || []).filter(f => f.type !== 'draw' && f.key !== 'quadro');
+  const el = document.getElementById('exPerg');
+  el.innerHTML = (EX.intro ? `<p class="intro">${esc(EX.intro)}</p>` : '') +
+    campos.map(campo).join('') ||
+    (EX.intro ? '' : '<p class="intro">Sem perguntas fixas. Use o quadro ao lado.</p>');
+  el.querySelectorAll('[data-k]').forEach(i => {
+    i.addEventListener('input', () => { colher(); agendar(); });
+    i.addEventListener('change', () => { colher(); agendar(); });
+  });
+  el.querySelectorAll('.addr').forEach(b => b.addEventListener('click', () => {
+    const k = b.dataset.add, f = campos.find(x => x.key === k);
+    const cols = (f.config && f.config.columns) || [];
+    const rows = Array.isArray(VAL[k]) ? VAL[k] : [];
+    rows.push(cols.map(() => '')); VAL[k] = rows; perguntas(); agendar();
+  }));
+}
+
+function campo(f){
+  const k = f.key, v = VAL[k], cfg = f.config || {};
+  const cab = `<label>${esc(f.label)}</label>${f.hint ? `<div class="h">${esc(f.hint)}</div>` : ''}`;
+  let corpo = '';
+
+  if (f.type === 'table' || f.type === 'matrix'){
+    const cols = cfg.columns || ['Item'];
+    let rows = Array.isArray(v) ? v : [];
+    const min = Math.max(cfg.min_rows || 0, (cfg.rows || []).length, 3);
+    while (rows.length < min) rows.push(cols.map(() => ''));
+    if (!Array.isArray(v)) VAL[k] = rows;
+    corpo = `<table class="tb"><thead><tr>${cols.map(c => `<th>${esc(c)}</th>`).join('')}</tr></thead><tbody>` +
+      rows.map((r, ri) => `<tr>${cols.map((c, ci) => {
+        const fixa = (cfg.rows || [])[ri] && ci === 0;
+        return fixa
+          ? `<td><input data-k="${k}" data-r="${ri}" data-c="${ci}" value="${esc(cfg.rows[ri])}" readonly
+               style="background:transparent;font-weight:600"></td>`
+          : `<td><input data-k="${k}" data-r="${ri}" data-c="${ci}" value="${esc(r[ci] || '')}"></td>`;
+      }).join('')}</tr>`).join('') +
+      `</tbody></table><button type="button" class="addr" data-add="${k}">+ linha</button>`;
+  }
+  else if (f.type === 'list'){
+    corpo = `<textarea data-k="${k}" data-t="list" rows="4"
+      placeholder="um por linha">${esc(Array.isArray(v) ? v.join('\n') : (v || ''))}</textarea>`;
+  }
+  else if (f.type === 'select'){
+    const o = cfg.options || [];
+    corpo = `<select data-k="${k}"><option value="">—</option>` +
+      o.map(x => `<option ${v === x ? 'selected' : ''}>${esc(x)}</option>`).join('') + `</select>`;
+  }
+  else if (f.type === 'multiselect'){
+    const o = cfg.options || [], sel = Array.isArray(v) ? v : [];
+    corpo = o.map(x => `<label class="opt"><input type="checkbox" data-k="${k}" data-t="ms"
+      value="${esc(x)}" ${sel.includes(x) ? 'checked' : ''}> ${esc(x)}</label>`).join('');
+  }
+  else if (f.type === 'longtext'){
+    corpo = `<textarea data-k="${k}" rows="3">${esc(v || '')}</textarea>`;
+  }
+  else {
+    corpo = `<input data-k="${k}" type="${f.type === 'number' ? 'number' : 'text'}" value="${esc(v || '')}">`;
+  }
+  return `<div class="q">${cab}${corpo}</div>`;
+}
+
+function colher(){
+  const el = document.getElementById('exPerg');
+  const ms = {};
+  el.querySelectorAll('[data-k]').forEach(i => {
+    const k = i.dataset.k;
+    if (i.dataset.t === 'ms'){ (ms[k] ||= []); if (i.checked) ms[k].push(i.value); return; }
+    if (i.dataset.r !== undefined){
+      const r = +i.dataset.r, c = +i.dataset.c;
+      const rows = Array.isArray(VAL[k]) ? VAL[k] : (VAL[k] = []);
+      (rows[r] ||= []); rows[r][c] = i.value; return;
+    }
+    if (i.dataset.t === 'list'){
+      VAL[k] = i.value.split('\n').map(s => s.trim()).filter(Boolean); return;
+    }
+    VAL[k] = i.value;
+  });
+  Object.assign(VAL, ms);
+}
+
+function agendar(){
+  document.getElementById('exSv').textContent = 'salvando…';
+  clearTimeout(salvarTm);
+  salvarTm = setTimeout(salvar, 800);
+}
+
+async function salvar(){
+  if (!PE) return;
+  try {
+    await NAVE.post('resposta', { project_exercise_id: PE.id, values: VAL });
+    D.resp[PE.id] = Object.assign({}, VAL);
+    document.getElementById('exSv').textContent = 'salvo';
+  } catch (e) { document.getElementById('exSv').textContent = ''; toast(e.message); }
+}
+
+async function montarQuadro(){
+  const el = document.getElementById('exQuadro');
+  if (quadro) { try { quadro.destruir(); } catch {} quadro = null; }
+  el.innerHTML = '';
+  quadro = await window.NAVE_DESENHO.montar(el, VAL.quadro || null, v => { VAL.quadro = v; agendar(); });
+}
+
+async function marcarFeito(){
+  if (!PE) return;
+  const novo = PE.status === 'concluido' ? 'em_andamento' : 'concluido';
+  try {
+    await NAVE.post('resposta', { project_exercise_id: PE.id, values: VAL, status: novo });
+    PE.status = novo; D.sel[EX.id].status = novo;
+    document.getElementById('exFeito').textContent = novo === 'concluido' ? 'Feito ✓' : 'Marcar como feito';
+    document.getElementById('exSv').textContent = 'salvo';
+  } catch (e) { toast(e.message); }
+}
+
+async function fecharEx(){
+  clearTimeout(salvarTm);
+  await salvar();
+  if (quadro) { try { quadro.destruir(); } catch {} quadro = null; }
+  document.getElementById('full').classList.remove('on');
+  document.body.style.overflow = '';
+  EX = null; PE = null; VAL = {};
+  render();
+}
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape' && document.getElementById('full').classList.contains('on')) fecharEx();
+});
+
+// ---------------------------------------------------------------- boot
+(async function(){
+  if (!await NAVE.guard()) return;
+  if (!PID) { location.replace('/estrategia/'); return; }
+  try { await carregar(); }
+  catch (e) { document.getElementById('passos').innerHTML = `<div class="vaz">${esc(e.message)}</div>`; }
+})();
+</script>
+</body>
+</html>

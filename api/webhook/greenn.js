@@ -21,7 +21,7 @@ async function alertAdmin(subject, lines) {
       method: 'POST',
       headers: { Authorization: `Bearer ${key}`, 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        from: 'Anti Designer Pato <acesso@send.rodrigobondioli.com>',
+        from: 'Mate o Pato <acesso@send.rodrigobondioli.com>',
         to: ['hello@rodrigobondioli.com'],
         subject,
         html: '<div style="font-family:Arial,sans-serif;font-size:15px;line-height:1.6;color:#111">'
@@ -60,7 +60,7 @@ async function sendBuyerWelcome(email, name, magicLink) {
       method: 'POST',
       headers: { Authorization: `Bearer ${key}`, 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        from: 'Anti Designer Pato <acesso@send.rodrigobondioli.com>',
+        from: 'Mate o Pato <acesso@send.rodrigobondioli.com>',
         to: [email],
         subject: 'Teu acesso tá liberado — De Genérico a Especialista',
         html: '<div style="font-family:Arial,Helvetica,sans-serif;font-size:15px;line-height:1.6;color:#111;max-width:520px">'
