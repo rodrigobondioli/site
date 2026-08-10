@@ -62,9 +62,17 @@
   async function get(r, params = {}) {
     if (r === 'catalogo') return catalogo();
 
+    if (r === 'lixeira') {
+      return ok(await sb.from('nave_projects')
+        .select('id,name,deleted_at, nave_clients(name,segment)')
+        .not('deleted_at', 'is', null)
+        .order('deleted_at', { ascending: false }));
+    }
+
     if (r === 'projetos') {
       const projects = ok(await sb.from('nave_projects')
         .select('*, nave_clients(name,segment)')
+        .is('deleted_at', null)
         .order('created_at', { ascending: false }));
       if (!projects.length) return [];
       // progresso calculado aqui, sem view: view não herda RLS por padrão
@@ -97,6 +105,7 @@
       if (!id) throw new Error('id é obrigatório.');
       const project = one(ok(await sb.from('nave_projects').select('*').eq('id', id)));
       if (!project) throw new Error('Projeto não encontrado.');
+      if (project.deleted_at) throw new Error('Esta marca está na lixeira.');
       const [client, phases, selection] = await Promise.all([
         sb.from('nave_clients').select('*').eq('id', project.client_id).then(ok).then(one),
         sb.from('nave_project_phases').select('*, nave_phases(*)').eq('project_id', id).then(ok),
@@ -226,13 +235,27 @@
       return { ok: true, count: rows.length };
     }
 
-    // Excluir marca: apaga o projeto (cascata leva fases, tarefas, exercícios e respostas)
-    // e o cliente junto, se ele não tiver outro projeto.
+    // Excluir vai para a lixeira. Nada some do banco até você mandar apagar de vez.
     if (r === 'marca_del') {
       if (!body.id) throw new Error('id é obrigatório.');
-      const proj = one(ok(await sb.from('nave_projects').select('client_id').eq('id', body.id)));
+      return one(ok(await sb.from('nave_projects')
+        .update({ deleted_at: new Date().toISOString() }).eq('id', body.id).select()));
+    }
+
+    if (r === 'marca_restaurar') {
+      if (!body.id) throw new Error('id é obrigatório.');
+      return one(ok(await sb.from('nave_projects')
+        .update({ deleted_at: null }).eq('id', body.id).select()));
+    }
+
+    // Aqui sim é irreversível: cascata leva fases, tarefas, exercícios e respostas.
+    if (r === 'marca_apagar') {
+      if (!body.id) throw new Error('id é obrigatório.');
+      const proj = one(ok(await sb.from('nave_projects').select('client_id,deleted_at').eq('id', body.id)));
+      if (!proj) throw new Error('Marca não encontrada.');
+      if (!proj.deleted_at) throw new Error('Só dá para apagar de vez o que já está na lixeira.');
       ok(await sb.from('nave_projects').delete().eq('id', body.id));
-      if (proj && proj.client_id) {
+      if (proj.client_id) {
         const restam = ok(await sb.from('nave_projects').select('id').eq('client_id', proj.client_id));
         if (!restam.length) ok(await sb.from('nave_clients').delete().eq('id', proj.client_id));
       }

@@ -22,7 +22,8 @@
     </div>
   </div>
   <div id="lista"><p style="color:var(--i28)">Carregando…</p></div>
-  <p style="margin-top:40px"><button class="b b--ghost sm" onclick="NAVE.logout()">Sair</button></p>
+  <div id="lixeira"></div>
+  <p style="margin-top:44px"><button class="b b--ghost sm" onclick="NAVE.logout()">Sair</button></p>
 </div>
 
 <div class="dlg" id="dlg">
@@ -55,16 +56,36 @@
 
 <div class="dlg" id="dlgDel">
   <div class="bx2">
-    <h2>Excluir marca</h2>
-    <p style="color:var(--i50);font-size:14px;line-height:1.55;margin:0 0 22px">
-      Vou apagar <b id="delNome" style="color:var(--ink)"></b> e junto os 16 passos, as 135 tarefas,
-      os exercícios e tudo que você preencheu nela. <b style="color:var(--ink)">Não tem como desfazer.</b>
+    <h2>Mandar para a lixeira</h2>
+    <p class="txt">
+      <b id="delNome"></b> sai da sua lista, mas <b>nada é apagado</b>: os 16 passos, as tarefas,
+      os exercícios e tudo que você preencheu continuam no banco. Dá para restaurar quando quiser.
     </p>
     <div class="er" id="errDel"></div>
     <div style="display:flex;gap:10px">
       <button class="b b--ghost" onclick="fecharApagar()">Cancelar</button>
-      <button class="b" id="btnDel" style="background:var(--pink);color:var(--ink);margin-left:auto"
-        onclick="apagar()">Excluir para sempre</button>
+      <button class="b" id="btnDel" style="margin-left:auto" onclick="apagar()">Mandar para a lixeira</button>
+    </div>
+  </div>
+</div>
+
+<div class="dlg" id="dlgPurga">
+  <div class="bx2">
+    <h2>Apagar de vez</h2>
+    <p class="txt">
+      Isso apaga <b id="purgaNome"></b> e junto os 16 passos, as 135 tarefas, os exercícios,
+      as respostas e os quadros. <b>Não tem como desfazer.</b>
+    </p>
+    <div class="f">
+      <label>Digite o nome da marca para confirmar</label>
+      <input id="purgaInput" autocomplete="off" placeholder="">
+    </div>
+    <div class="er" id="errPurga"></div>
+    <div style="display:flex;gap:10px">
+      <button class="b b--ghost" onclick="fecharPurga()">Cancelar</button>
+      <button class="b" id="btnPurga" disabled
+        style="background:var(--pink);color:var(--ink);margin-left:auto"
+        onclick="apagarDeVez()">Apagar para sempre</button>
     </div>
   </div>
 </div>
@@ -82,6 +103,7 @@ function abrir(){ dlg.classList.add('on'); document.querySelector('[name=cliente
 function fechar(){ dlg.classList.remove('on'); el('err').textContent = ''; }
 dlg.addEventListener('click', e => { if (e.target === dlg) fechar(); });
 el('dlgDel').addEventListener('click', e => { if (e.target === el('dlgDel')) fecharApagar(); });
+el('dlgPurga').addEventListener('click', e => { if (e.target === el('dlgPurga')) fecharPurga(); });
 
 let alvoDel = null;
 function pedirApagar(id, nome){
@@ -94,12 +116,59 @@ function fecharApagar(){ el('dlgDel').classList.remove('on'); alvoDel = null; }
 async function apagar(){
   if (!alvoDel) return;
   const btn = el('btnDel');
-  btn.disabled = true; el('errDel').textContent = 'Apagando…';
+  btn.disabled = true; el('errDel').textContent = 'Movendo…';
   try {
     await NAVE.post('marca_del', { id: alvoDel });
     fecharApagar(); btn.disabled = false;
     await carregar();
-  } catch (e) { el('errDel').textContent = e.message || 'Não consegui apagar.'; btn.disabled = false; }
+  } catch (e) { el('errDel').textContent = e.message || 'Não consegui mover.'; btn.disabled = false; }
+}
+
+// --- lixeira: restaurar e apagar de vez -----------------------------------
+let alvoPurga = null, nomePurga = '';
+function pedirPurga(id, nome){
+  alvoPurga = id; nomePurga = nome;
+  el('purgaNome').textContent = nome;
+  el('purgaInput').value = ''; el('purgaInput').placeholder = nome;
+  el('errPurga').textContent = ''; el('btnPurga').disabled = true;
+  el('dlgPurga').classList.add('on');
+  setTimeout(() => el('purgaInput').focus(), 40);
+}
+function fecharPurga(){ el('dlgPurga').classList.remove('on'); alvoPurga = null; }
+el('purgaInput').addEventListener('input', () => {
+  el('btnPurga').disabled =
+    el('purgaInput').value.trim().toLowerCase() !== nomePurga.trim().toLowerCase();
+});
+async function apagarDeVez(){
+  if (!alvoPurga) return;
+  const btn = el('btnPurga');
+  btn.disabled = true; el('errPurga').textContent = 'Apagando…';
+  try { await NAVE.post('marca_apagar', { id: alvoPurga }); fecharPurga(); await carregar(); }
+  catch (e) { el('errPurga').textContent = e.message || 'Não consegui apagar.'; btn.disabled = false; }
+}
+async function restaurar(id){
+  try { await NAVE.post('marca_restaurar', { id }); await carregar(); }
+  catch (e) { alert(e.message); }
+}
+
+async function carregarLixeira(){
+  let itens = [];
+  try { itens = await NAVE.get('lixeira'); } catch { return; }
+  if (!itens.length){ el('lixeira').innerHTML = ''; return; }
+  el('lixeira').innerHTML = `<div class="lix">
+    <div class="cap">Lixeira · ${itens.length}</div>
+    <p class="obs">Nada aqui foi apagado. Fica guardado até você mandar apagar de vez.</p>
+    ${itens.map(p => {
+      const nome = p.nave_clients ? p.nave_clients.name : p.name;
+      const d = new Date(p.deleted_at);
+      return `<div class="lin">
+        <span class="n">${esc(nome)}</span>
+        <span class="q">na lixeira desde ${d.toLocaleDateString('pt-BR')}</span>
+        <button class="volta" onclick="restaurar('${p.id}')">Restaurar</button>
+        <button class="mata" onclick="pedirPurga('${p.id}', '${esc(nome).replace(/'/g, "\\'")}')">Apagar de vez</button>
+      </div>`;
+    }).join('')}
+  </div>`;
 }
 
 async function carregar(){
@@ -107,6 +176,7 @@ async function carregar(){
   if (!ms.length){
     el('lista').innerHTML = `<div class="empty"><h3>Nenhuma marca ainda</h3>
       <p>Crie a primeira. O fluxo inteiro do método aparece montado — e você começa pelo passo 1.</p></div>`;
+    await carregarLixeira();
     return;
   }
   el('lista').innerHTML = ms.map(p => {
@@ -125,10 +195,11 @@ async function carregar(){
           pr.awaiting_approval ? '<span>· aguardando o cliente</span>' : ''}</div>
         <div class="fluxo">${fluxo}</div>
       </a>
-      <button class="apagar" title="Excluir marca"
+      <button class="apagar" title="Mandar para a lixeira"
         onclick="pedirApagar('${p.id}', '${esc(nome).replace(/'/g, "\\'")}')">✕</button>
     </div>`;
   }).join('');
+  await carregarLixeira();
 }
 
 el('form').addEventListener('submit', async e => {

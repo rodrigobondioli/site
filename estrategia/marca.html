@@ -99,11 +99,7 @@ async function carregar(){
   D.campos = {}; cat.fields.forEach(f => (D.campos[f.exercise_id] ||= []).push(f));
   Object.values(D.campos).forEach(l => l.sort((a,b) => a.ord - b.ord));
 
-  // trava a partir do primeiro portão não aprovado
-  D.trava = Infinity;
-  D.fases.forEach((f, k) => {
-    if (k < D.trava && f.nave_phases.is_gate && f.gate !== 'aprovado' && f.status !== 'concluido') D.trava = k + 1;
-  });
+  recalcularTrava();
 
   pos();
   desenhaLinks();
@@ -113,16 +109,39 @@ async function carregar(){
   ajustar();
   centrar(agora());
 }
+// guarda QUAL passo está travando, não só a partir de onde
+function recalcularTrava(){
+  D.trava = Infinity; D.travaFase = null;
+  D.fases.forEach((f, k) => {
+    if (k < D.trava && f.nave_phases.is_gate && f.gate !== 'aprovado' && f.status !== 'concluido') {
+      D.trava = k + 1; D.travaFase = f;
+    }
+  });
+}
 const agora = () => D.fases.find(f => f.status !== 'concluido') || D.fases[D.fases.length - 1];
 const idx = f => D.fases.indexOf(f);
 const roda = e => D.sel[e.id] ? D.sel[e.id].selected : !!e.minimum;
 
 // ---- exercício preenchido = exercício feito -------------------------------
+const MIN_TEXTO = 3;   // uma letra não é resposta
 function temValor(v){
   if (v == null || v === '') return false;
   if (Array.isArray(v)) return v.some(x => Array.isArray(x) ? x.some(y => String(y||'').trim()) : String(x||'').trim());
   if (typeof v === 'object') return Object.keys(v).length > 0;
   return String(v).trim().length > 0;
+}
+// régua de "campo respondido", por tipo
+function campoOk(f, v){
+  if (f.type === 'table' || f.type === 'matrix'){
+    const cols = ((f.config || {}).columns || []).length || 1;
+    // pelo menos UMA linha inteira preenchida, não uma célula solta
+    return Array.isArray(v) && v.some(r => Array.isArray(r) &&
+      r.slice(0, cols).filter(c => String(c || '').trim()).length === cols);
+  }
+  if (f.type === 'list' || f.type === 'multiselect') return Array.isArray(v) && v.length > 0;
+  if (f.type === 'select') return !!String(v || '').trim();
+  if (f.type === 'number') return String(v ?? '').trim() !== '';
+  return String(v || '').trim().length >= MIN_TEXTO;
 }
 function respostasDe(code){ const pe = D.sel[code]; return pe ? (D.resp[pe.id] || null) : null; }
 function completo(code, valores){
@@ -130,8 +149,10 @@ function completo(code, valores){
   if (!cps.length) return false;
   const r = valores || respostasDe(code);
   if (!r) return false;
-  return cps.every(f => temValor(r[f.key]));
+  return cps.every(f => campoOk(f, r[f.key]));
 }
+// o que o app marcou sozinho — só isso ele tem o direito de desmarcar
+const autoEx = new Set(), autoTar = new Set();
 const exFeito = code => { const pe = D.sel[code]; return !!pe && pe.status === 'concluido'; };
 
 // Tarefa que aponta para exercício se marca sozinha quando o grupo inteiro está feito.
@@ -146,7 +167,7 @@ async function sincronizar(){
       else if (t.link.startsWith('eixo:')) grupo = exs.filter(e => e.axis === t.link.slice(5) && roda(e));
       else if (t.link === 'fase') grupo = exs.filter(roda);
       if (!grupo || !grupo.length) return;
-      if (grupo.every(e => exFeito(e.id))) { t.status = 'concluido'; mudou.push(t); }
+      if (grupo.every(e => exFeito(e.id))) { t.status = 'concluido'; autoTar.add(t.id); mudou.push(t); }
     });
   });
   if (!mudou.length) return false;
@@ -224,7 +245,7 @@ function desenhaNos(){
       + (k >= D.trava ? ' trava' : '');
     const flag = f.nave_phases.is_gate
       ? `<span class="fl ${f.gate === 'aprovado' ? 'ok' : ''}">${f.gate === 'aprovado' ? 'aprovado ✓' : 'aprovação'}</span>`
-      : '';
+      : (k >= D.trava ? `<span class="fl trv">travado</span>` : '');
     return `<button class="nd ${cls} ${sel === f.id ? 'sel' : ''}" data-id="${f.id}"
         style="left:${f._x}px;top:${f._y}px;min-height:${H}px" onclick="abrirPasso('${f.id}')">
         <div class="tp"><span class="no">${String(k + 1).padStart(2,'0')}</span>${flag}</div>
@@ -352,10 +373,13 @@ function abrirPasso(id, foca = true){
       <p>${esc(f.nave_phases.gate_label || '')}. Sem isso, os passos seguintes ficam travados no fluxo.</p>
       ${app ? '' : `<button class="b" onclick="aprovar('${f.id}')">Registrar aprovação</button>`}</div>`;
   }
-  el('pnB').innerHTML = b;
-
   const falta = t.length - ok;
-  el('pnF').innerHTML = feito
+  const tf = D.travaFase;
+  el('pnF').innerHTML = (!feito && trav && tf)
+    ? `<span class="hint">Travado até o cliente aprovar o <b>${esc(tf.nave_phases.name)}</b>
+       (passo ${idx(tf) + 1}). Você pode adiantar o trabalho, mas o passo não fecha antes disso.</span>
+       <button class="b" onclick="abrirPasso('${tf.id}')">Ir ao passo ${idx(tf) + 1} →</button>`
+    : feito
     ? `<span class="hint">${ok < t.length ? `Ficou <b>${t.length - ok}</b> item em aberto — reabra para resolver.` : 'Passo fechado.'}</span>
        <button class="b b--ghost" onclick="reabrir('${f.id}')">Reabrir passo</button>`
     : falta > 0
@@ -364,6 +388,15 @@ function abrirPasso(id, foca = true){
          <button class="b" disabled title="Resolva todos os itens antes de fechar">Concluir passo ${k + 1} →</button>`
       : `<span class="hint">Tudo resolvido.</span>
          <button class="b" onclick="concluir('${f.id}')">Concluir passo ${k + 1} →</button>`;
+
+  if (!feito && trav && tf) b = `<div class="travado">
+      <h4>Este passo não fecha ainda</h4>
+      <p>O método exige a aprovação do cliente no <b>${esc(tf.nave_phases.name)}</b> antes de seguir.
+      Sem isso registrado, o banco recusa concluir daqui pra frente — você pode adiantar o trabalho,
+      só não dá para dar o passo por encerrado.</p>
+      <button class="b sm" onclick="abrirPasso('${tf.id}')">Registrar a aprovação →</button>
+    </div>` + b;
+  el('pnB').innerHTML = b;
 
   el('pn').classList.add('on');
   if (foca) centrar(f);
@@ -448,8 +481,7 @@ async function concluir(id){
   try {
     await NAVE.post('fase', { id, status: 'concluido' });
     D.fases.find(x => x.id === id).status = 'concluido';
-    D.trava = Infinity;
-    D.fases.forEach((f, k) => { if (k < D.trava && f.nave_phases.is_gate && f.gate !== 'aprovado' && f.status !== 'concluido') D.trava = k + 1; });
+    recalcularTrava();
     desenhaLinks(); topo(); abrirPasso(agora().id);
   } catch (e) { toast(e.message); }
 }
@@ -461,8 +493,7 @@ async function reabrir(id){
 async function aprovar(id){
   try { await NAVE.post('fase', { id, gate: 'aprovado' });
     D.fases.find(x => x.id === id).gate = 'aprovado';
-    D.trava = Infinity;
-    D.fases.forEach((f, k) => { if (k < D.trava && f.nave_phases.is_gate && f.gate !== 'aprovado' && f.status !== 'concluido') D.trava = k + 1; });
+    recalcularTrava(); desenhaNos();
     abrirPasso(id, false); toast('Aprovação registrada. Fluxo destravado.'); }
   catch (e) { toast(e.message); }
 }
@@ -586,22 +617,55 @@ function colher(){
   });
   Object.assign(VAL, ms);
 }
-function agenda(){ el('exSv').textContent = 'salvando…'; clearTimeout(tmS); tmS = setTimeout(salvar, 800); }
-async function salvar(){
-  if (!PE) return;
-  const auto = completo(EX.id, VAL) && PE.status !== 'concluido';
+function agenda(){ el('exSv').textContent = 'salvando…'; clearTimeout(tmS);
+  tmS = setTimeout(() => { tmS = null; salvar(false); }, 800); }
+// podeMarcar = true só quando você termina o exercício (fecha a folha).
+// Enquanto digita, o app salva e não conclui nada.
+async function salvar(podeMarcar = false){
+  if (!PE || !EX) return;
+  const cheio = completo(EX.id, VAL);
+  let novo;
+  if (podeMarcar){
+    if (cheio && PE.status !== 'concluido') novo = 'concluido';
+    // desmarca só o que ele mesmo marcou: se você marcou à mão, fica marcado
+    else if (!cheio && PE.status === 'concluido' && autoEx.has(EX.id)) novo = 'em_andamento';
+  }
   try {
-    await NAVE.post('resposta', {
-      project_exercise_id: PE.id, values: VAL, status: auto ? 'concluido' : undefined });
+    await NAVE.post('resposta', { project_exercise_id: PE.id, values: VAL, status: novo });
     D.resp[PE.id] = Object.assign({}, VAL);
     el('exSv').textContent = 'salvo';
-    if (auto) {
-      PE.status = 'concluido'; D.sel[EX.id].status = 'concluido';
+    if (novo === 'concluido'){
+      PE.status = 'concluido'; D.sel[EX.id].status = 'concluido'; autoEx.add(EX.id);
       el('exOk').textContent = 'Feito ✓';
       await sincronizar();
-      desenhaNos();
+    } else if (novo === 'em_andamento'){
+      PE.status = 'em_andamento'; D.sel[EX.id].status = 'em_andamento'; autoEx.delete(EX.id);
+      el('exOk').textContent = 'Marcar como feito';
+      await dessincronizar();
     }
+    if (novo) desenhaNos();
   } catch (e) { el('exSv').textContent = ''; toast(e.message); }
+}
+
+// desfaz o check automático das tarefas cujo grupo deixou de estar completo
+async function dessincronizar(){
+  const mudou = [];
+  D.fases.forEach(f => {
+    const exs = D.exs[f.phase_id] || [];
+    (D.tarefas[f.id] || []).forEach(t => {
+      if (!t.link || !autoTar.has(t.id) || t.status !== 'concluido') return;
+      let grupo = null;
+      if (t.link.startsWith('ex:')) grupo = exs.filter(e => e.id === t.link.slice(3));
+      else if (t.link.startsWith('eixo:')) grupo = exs.filter(e => e.axis === t.link.slice(5) && roda(e));
+      else if (t.link === 'fase') grupo = exs.filter(roda);
+      if (!grupo || !grupo.length) return;
+      if (!grupo.every(e => exFeito(e.id))) { t.status = 'nao_iniciado'; autoTar.delete(t.id); mudou.push(t); }
+    });
+  });
+  if (!mudou.length) return;
+  try { await Promise.all(mudou.map(t => NAVE.post('tarefa', { id: t.id, status: 'nao_iniciado' }))); }
+  catch (e) { toast(e.message); }
+  toast(`Desmarquei ${mudou.length} item${mudou.length > 1 ? 's' : ''}: o exercício voltou a ficar incompleto.`);
 }
 async function desenhar(){
   const d = el('exD');
@@ -619,6 +683,7 @@ async function marcarFeito(){
   const novo = PE.status === 'concluido' ? 'em_andamento' : 'concluido';
   try { await NAVE.post('resposta', { project_exercise_id: PE.id, values: VAL, status: novo });
     PE.status = novo; D.sel[EX.id].status = novo;
+    autoEx.delete(EX.id);   // decisão sua, o app não mexe mais
     el('exOk').textContent = novo === 'concluido' ? 'Feito ✓' : 'Marcar como feito';
     el('exSv').textContent = 'salvo';
     if (novo === 'concluido') await sincronizar();
@@ -626,7 +691,7 @@ async function marcarFeito(){
   catch (e) { toast(e.message); }
 }
 async function fecharEx(){
-  clearTimeout(tmS); await salvar();
+  clearTimeout(tmS); tmS = null; await salvar(true);
   if (quadro){ try { quadro.destruir(); } catch {} quadro = null; }
   el('full').classList.remove('on'); el('veu').classList.remove('on');
   EX = null; PE = null; VAL = {};
