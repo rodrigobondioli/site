@@ -5,7 +5,7 @@
     "phase": "F3",
     "name": "Alinhamento de Objetivos",
     "minimum": true,
-    "duration": 45,
+    "duration": 40,
     "source": "M05 A05 (transcrição)",
     "intro": "Primeiro exercício do workshop inteiro. Duas partes: a abertura solta, e depois passado, presente e futuro. Sozinho já dá clareza tremenda — se você só tem 30 minutos com o cliente, faça este.",
     "fields": [
@@ -87,7 +87,11 @@
     ],
     "tier": "espinha",
     "sessao": "workshop",
-    "porque": "Enquadra o projeto inteiro. O próprio material diz: se você só tem 30 minutos, faça este."
+    "porque": "Enquadra o projeto inteiro. O próprio material diz: se você só tem 30 minutos, faça este.",
+    "ficha": false,
+    "blocos": 6,
+    "min_bloco": 5,
+    "tempo_fonte": "M05 A05 · \"5 minutos, 2 minutos, 3 minutos\" — abertura tem 5 a 10"
   },
   {
     "code": "N2",
@@ -95,7 +99,7 @@
     "phase": "F3",
     "name": "Ponto A e Ponto B",
     "minimum": false,
-    "duration": 30,
+    "duration": 10,
     "source": "M05 A05",
     "intro": "Sair de onde, ir para onde. 10 minutos por camada. Uma empresa precisa de alinhamento entre negócio, marca e comunicação para construir valor no longo prazo.",
     "fields": [
@@ -117,7 +121,11 @@
     ],
     "tier": "sinal",
     "sessao": "workshop",
-    "porque": "O cliente não consegue dizer onde quer chegar, só onde está."
+    "porque": "O cliente não consegue dizer onde quer chegar, só onde está.",
+    "ficha": false,
+    "blocos": 1,
+    "min_bloco": 10,
+    "tempo_fonte": "M05 A05 · \"uns 10 minutos pra cada: negócio, marca, comunicação\""
   },
   {
     "code": "N3",
@@ -150,7 +158,11 @@
     ],
     "tier": "sinal",
     "sessao": "workshop",
-    "porque": "Falta leitura de contexto e de mercado no discurso do cliente."
+    "porque": "Falta leitura de contexto e de mercado no discurso do cliente.",
+    "ficha": false,
+    "blocos": 3,
+    "min_bloco": 5,
+    "tempo_fonte": "M05 A05 · \"5, 10 minutinhos no máximo\""
   },
   {
     "code": "N4",
@@ -201,7 +213,11 @@
     ],
     "tier": "espinha",
     "sessao": "workshop",
-    "porque": "Traz a pergunta matadora — qual problema este projeto precisa resolver — e alimenta o bloco 4 do relatório."
+    "porque": "Traz a pergunta matadora — qual problema este projeto precisa resolver — e alimenta o bloco 4 do relatório.",
+    "ficha": false,
+    "blocos": 6,
+    "min_bloco": 5,
+    "tempo_fonte": "padrão do método: 5 min por bloco"
   },
   {
     "code": "N5",
@@ -274,7 +290,11 @@
     ],
     "tier": "sinal",
     "sessao": "workshop",
-    "porque": "Modelo de negócio bagunçado: não sabem de onde vem o dinheiro nem qual é a vaca leiteira."
+    "porque": "Modelo de negócio bagunçado: não sabem de onde vem o dinheiro nem qual é a vaca leiteira.",
+    "ficha": false,
+    "blocos": 9,
+    "min_bloco": 10,
+    "tempo_fonte": "M05 A05 · \"ele leva tempo\" — sem número; 10 por bloco é inferência minha"
   },
   {
     "code": "N6",
@@ -282,7 +302,7 @@
     "phase": "F3",
     "name": "O Mapa (Sprint) + notas Como Poderíamos",
     "minimum": false,
-    "duration": 60,
+    "duration": 50,
     "source": "M05 A05",
     "intro": "Técnica do livro Sprint, do Google. Personagens à esquerda, final feliz à direita, o fluxo no meio. Na prática é quase uma jornada do cliente.",
     "fields": [
@@ -319,7 +339,11 @@
     ],
     "tier": "sinal",
     "sessao": "workshop",
-    "porque": "Processo ou jornada do cliente confusa, com gargalos que ninguém mapeou."
+    "porque": "Processo ou jornada do cliente confusa, com gargalos que ninguém mapeou.",
+    "ficha": false,
+    "blocos": 5,
+    "min_bloco": 10,
+    "tempo_fonte": "inferência: mapa desenhado leva mais que listagem"
   },
   {
     "code": "N7",
@@ -327,7 +351,7 @@
     "phase": "F3",
     "name": "Objetivo Principal Definido",
     "minimum": true,
-    "duration": 20,
+    "duration": 10,
     "source": "M05 A05",
     "intro": "Sempre fazer. Definido junto com o cliente e colado na parede — retomado na abertura de toda etapa nova até o fim do projeto.",
     "fields": [
@@ -340,7 +364,11 @@
     ],
     "tier": "espinha",
     "sessao": "workshop",
-    "porque": "O parágrafo que fica na parede. Retomado na abertura de toda fase até a entrega."
+    "porque": "O parágrafo que fica na parede. Retomado na abertura de toda fase até a entrega.",
+    "ficha": false,
+    "blocos": 1,
+    "min_bloco": 10,
+    "tempo_fonte": "inferência: parágrafo escrito junto com o cliente e colado na parede"
   },
   {
     "code": "A1",
@@ -348,7 +376,7 @@
     "phase": "F3",
     "name": "Tipo de Público e Segmento",
     "minimum": true,
-    "duration": 25,
+    "duration": 30,
     "source": "M05 A07",
     "fields": [
       {
@@ -392,7 +420,11 @@
     ],
     "tier": "espinha",
     "sessao": "workshop",
-    "porque": "Sem recorte de público não existe posicionamento nem plataforma (elemento 3)."
+    "porque": "Sem recorte de público não existe posicionamento nem plataforma (elemento 3).",
+    "ficha": false,
+    "blocos": 6,
+    "min_bloco": 5,
+    "tempo_fonte": "padrão do método: 5 min por bloco"
   },
   {
     "code": "A2",
@@ -400,7 +432,7 @@
     "phase": "F3",
     "name": "Público-alvo do Maior para o Menor",
     "minimum": false,
-    "duration": 20,
+    "duration": 5,
     "source": "M05 A07",
     "intro": "Funil. Ir direto para a persona vira chute.",
     "fields": [
@@ -422,7 +454,11 @@
     ],
     "tier": "sinal",
     "sessao": "workshop",
-    "porque": "Público amplo demais, resistência a nichar."
+    "porque": "Público amplo demais, resistência a nichar.",
+    "ficha": false,
+    "blocos": 1,
+    "min_bloco": 5,
+    "tempo_fonte": "padrão do método: 5 min por bloco"
   },
   {
     "code": "A3",
@@ -430,7 +466,7 @@
     "phase": "F3",
     "name": "Roteiro de Persona",
     "minimum": true,
-    "duration": 45,
+    "duration": 15,
     "source": "M05 A07",
     "intro": "13 campos. Faça como conversa. O ouro está da psicografia para baixo.",
     "fields": [
@@ -515,7 +551,11 @@
     ],
     "tier": "espinha",
     "sessao": "workshop",
-    "porque": "A persona é pré-requisito declarado do V9. Sem ela, o ponto A/B do consumidor vira chute."
+    "porque": "A persona é pré-requisito declarado do V9. Sem ela, o ponto A/B do consumidor vira chute.",
+    "ficha": true,
+    "blocos": 1,
+    "min_bloco": 15,
+    "tempo_fonte": "inferência: ficha de persona é preenchida de uma vez, não em rodadas cronometradas"
   },
   {
     "code": "A4",
@@ -566,7 +606,11 @@
     ],
     "tier": "sinal",
     "sessao": "workshop",
-    "porque": "A equipe diverge sobre quem é o público — o mapa alinha todo mundo visualmente."
+    "porque": "A equipe diverge sobre quem é o público — o mapa alinha todo mundo visualmente.",
+    "ficha": true,
+    "blocos": 6,
+    "min_bloco": 5,
+    "tempo_fonte": "padrão do método: 5 min por bloco"
   },
   {
     "code": "A5",
@@ -574,7 +618,7 @@
     "phase": "F3",
     "name": "Necessidades Emergentes, Relação Pretendida e Referências",
     "minimum": false,
-    "duration": 20,
+    "duration": 15,
     "source": "M05 A07",
     "fields": [
       {
@@ -597,7 +641,11 @@
     ],
     "tier": "sinal",
     "sessao": "workshop",
-    "porque": "Mercado em movimento e a marca não acompanhou."
+    "porque": "Mercado em movimento e a marca não acompanhou.",
+    "ficha": false,
+    "blocos": 3,
+    "min_bloco": 5,
+    "tempo_fonte": "padrão do método: 5 min por bloco"
   },
   {
     "code": "V1",
@@ -635,7 +683,11 @@
     ],
     "tier": "espinha",
     "sessao": "workshop",
-    "porque": "Abre o bloco de valor e produz a matéria-prima da promessa."
+    "porque": "Abre o bloco de valor e produz a matéria-prima da promessa.",
+    "ficha": false,
+    "blocos": 4,
+    "min_bloco": 5,
+    "tempo_fonte": "padrão do método: 5 min por bloco"
   },
   {
     "code": "V2",
@@ -643,7 +695,7 @@
     "phase": "F3",
     "name": "As 5 Perguntas da Promessa",
     "minimum": false,
-    "duration": 30,
+    "duration": 25,
     "source": "M05 A09 (só no PDF — não aparece na transcrição da aula)",
     "intro": "ATENÇÃO — divergência de fonte. Este exercício está no PDF da aula 09 mas não é falado no vídeo; no vídeo o primeiro exercício é o 3+1 do Brand Gap (V1). Use como complemento, não como substituto. Se você não responde claramente a cada uma, há problema no posicionamento.",
     "fields": [
@@ -678,7 +730,11 @@
     ],
     "tier": "extra",
     "sessao": "workshop",
-    "porque": "Divergência de fonte: está no PDF, não na aula. Use como complemento do V1, nunca no lugar dele."
+    "porque": "Divergência de fonte: está no PDF, não na aula. Use como complemento do V1, nunca no lugar dele.",
+    "ficha": false,
+    "blocos": 5,
+    "min_bloco": 5,
+    "tempo_fonte": "padrão do método: 5 min por bloco"
   },
   {
     "code": "V3",
@@ -686,7 +742,7 @@
     "phase": "F3",
     "name": "Diagrama de Percepção: Passado, Presente e Futuro",
     "minimum": false,
-    "duration": 25,
+    "duration": 20,
     "source": "M05 A09",
     "intro": "Só se aplica a marca que já existe — marca nova pula direto para o V4. Os donos sabem muito bem o passado: \"ano passado a gente estava bem\". Se o passado foi diferente do presente, já nasce uma conversa dentro da equipe sobre por que isso aconteceu.",
     "condition": "marca_existente",
@@ -717,7 +773,11 @@
     ],
     "tier": "sinal",
     "sessao": "workshop",
-    "porque": "Só marca existente. A percepção caiu e ninguém sabe explicar quando."
+    "porque": "Só marca existente. A percepção caiu e ninguém sabe explicar quando.",
+    "ficha": false,
+    "blocos": 4,
+    "min_bloco": 5,
+    "tempo_fonte": "padrão do método: 5 min por bloco"
   },
   {
     "code": "V4",
@@ -725,7 +785,7 @@
     "phase": "F3",
     "name": "Percepção: Categoria, Comunidade e Impacto",
     "minimum": false,
-    "duration": 25,
+    "duration": 15,
     "source": "M05 A09 (transcrição — o PDF troca o 3º bloco por 'Promessa')",
     "intro": "Complementa o V3, ou substitui se a marca for nova. Exercício de post-it — deixe as pessoas responderem. Se acharem redundante, diga na cara: \"a gente investiga o mesmo lugar por ângulos diferentes para ter certeza\".",
     "fields": [
@@ -766,7 +826,11 @@
     ],
     "tier": "sinal",
     "sessao": "workshop",
-    "porque": "Não está claro o que a marca faz e, principalmente, o que ela NÃO faz."
+    "porque": "Não está claro o que a marca faz e, principalmente, o que ela NÃO faz.",
+    "ficha": false,
+    "blocos": 3,
+    "min_bloco": 5,
+    "tempo_fonte": "padrão do método: 5 min por bloco"
   },
   {
     "code": "V5",
@@ -797,7 +861,11 @@
     ],
     "tier": "sinal",
     "sessao": "workshop",
-    "porque": "Faltam fatos: o cliente fala por impressão."
+    "porque": "Faltam fatos: o cliente fala por impressão.",
+    "ficha": false,
+    "blocos": 3,
+    "min_bloco": 5,
+    "tempo_fonte": "M05 A09 · \"você coloca cinco minutos, não precisa pensar muito\""
   },
   {
     "code": "V6",
@@ -845,7 +913,11 @@
     ],
     "tier": "sinal",
     "sessao": "workshop",
-    "porque": "Discurso ≠ prática. O bloco de conflitos filosóficos existe para expor isso."
+    "porque": "Discurso ≠ prática. O bloco de conflitos filosóficos existe para expor isso.",
+    "ficha": false,
+    "blocos": 6,
+    "min_bloco": 5,
+    "tempo_fonte": "padrão do método: 5 min por bloco"
   },
   {
     "code": "V7",
@@ -853,7 +925,7 @@
     "phase": "F3",
     "name": "Radar dos Principais Players",
     "minimum": false,
-    "duration": 25,
+    "duration": 5,
     "source": "M05 A09 (transcrição — ausente do PDF)",
     "intro": "Desenhe um alvo. O logo do cliente no centro. Ele cola os concorrentes em post-it: quanto mais perto do centro, mais parecida a proposta — ou mais clientes eles estão tirando dele. Os de fora têm proposta similar mas não são considerados concorrentes diretos. É a partir daqui que o workshop para de olhar para dentro e começa a olhar para os outros.",
     "fields": [
@@ -872,7 +944,11 @@
     ],
     "tier": "sinal",
     "sessao": "workshop",
-    "porque": "Concorrência mal mapeada ou negada."
+    "porque": "Concorrência mal mapeada ou negada.",
+    "ficha": false,
+    "blocos": 1,
+    "min_bloco": 5,
+    "tempo_fonte": "padrão do método: 5 min por bloco"
   },
   {
     "code": "V8",
@@ -880,7 +956,7 @@
     "phase": "F3",
     "name": "Fã e Hater — a marca e os concorrentes",
     "minimum": true,
-    "duration": 40,
+    "duration": 15,
     "source": "M05 A09 (transcrição — o PDF omite a rodada sobre a própria marca)",
     "intro": "\"Branding é o que dizem sobre você quando você não está na sala\" — virou exercício. Duas rodadas: primeiro sobre a MARCA DO CLIENTE, depois sobre cada concorrente. Vale para marca que ainda não existe: imagine o que um fã diria. 5 minutos no relógio por rodada.",
     "fields": [
@@ -910,7 +986,11 @@
     ],
     "tier": "espinha",
     "sessao": "workshop",
-    "porque": "Listado no próprio material como um dos três a fazer quando o tempo é curto. Devolve o diferencial percebido."
+    "porque": "Listado no próprio material como um dos três a fazer quando o tempo é curto. Devolve o diferencial percebido.",
+    "ficha": false,
+    "blocos": 3,
+    "min_bloco": 5,
+    "tempo_fonte": "M05 A09 · \"bota cinco minutos no relógio\""
   },
   {
     "code": "V9",
@@ -918,7 +998,7 @@
     "phase": "F3",
     "name": "Transformação (Ponto A e B do cliente)",
     "minimum": true,
-    "duration": 25,
+    "duration": 15,
     "source": "M05 A09",
     "intro": "É o ponto A/B aplicado ao consumidor, não à empresa. Só funciona depois da persona e do mapa de empatia.",
     "fields": [
@@ -940,7 +1020,11 @@
     ],
     "tier": "espinha",
     "sessao": "workshop",
-    "porque": "Também nos três do material. É a promessa/transformação — bloco 1 do relatório."
+    "porque": "Também nos três do material. É a promessa/transformação — bloco 1 do relatório.",
+    "ficha": false,
+    "blocos": 3,
+    "min_bloco": 5,
+    "tempo_fonte": "padrão do método: 5 min por bloco"
   },
   {
     "code": "V10",
@@ -948,7 +1032,7 @@
     "phase": "F3",
     "name": "Jobs to be Done",
     "minimum": false,
-    "duration": 30,
+    "duration": 25,
     "source": "M05 A09",
     "intro": "Serve para descobrir concorrentes que o cliente não sabia que tinha. Em vez de partir das empresas, parte das dores. Faz você pesquisar coisas que não pesquisaria. Use quando houver dificuldade em definir os players. Ex.: o TikTok Shop virou concorrente de plataforma de e-commerce — e já era falado havia anos.",
     "fields": [
@@ -985,7 +1069,11 @@
     ],
     "tier": "sinal",
     "sessao": "workshop",
-    "porque": "Dificuldade de definir quem são os players de verdade."
+    "porque": "Dificuldade de definir quem são os players de verdade.",
+    "ficha": false,
+    "blocos": 5,
+    "min_bloco": 5,
+    "tempo_fonte": "padrão do método: 5 min por bloco"
   },
   {
     "code": "V11",
@@ -993,7 +1081,7 @@
     "phase": "F3",
     "name": "Equação da Proposta de Valor",
     "minimum": false,
-    "duration": 40,
+    "duration": 35,
     "source": "M05 A09 parte 2 (transcrição — ausente do PDF)",
     "intro": "Benefícios − custos = valor. Toda oferta tem lado positivo e lado negativo; o projeto de marca costuma cuidar só dos benefícios. Se você quer vender um serviço de 100 mil, precisa gerar mais de 100 mil nessa conta. Facilitação: aqui Lona prefere ir escrevendo e puxando debate, em vez de post-it.",
     "fields": [
@@ -1041,7 +1129,11 @@
     ],
     "tier": "sinal",
     "sessao": "workshop",
-    "porque": "Percepção de caro, guerra de preço, ou produto com custo psicológico."
+    "porque": "Percepção de caro, guerra de preço, ou produto com custo psicológico.",
+    "ficha": false,
+    "blocos": 7,
+    "min_bloco": 5,
+    "tempo_fonte": "padrão do método: 5 min por bloco"
   },
   {
     "code": "V12",
@@ -1049,7 +1141,7 @@
     "phase": "F3",
     "name": "Escada da Marca",
     "minimum": false,
-    "duration": 35,
+    "duration": 20,
     "source": "M05 A09 parte 2 (transcrição — ausente do PDF)",
     "intro": "Sobe do mais fácil ao mais difícil, e cada degrau se constrói a partir do anterior — sempre volte à resposta de baixo. Exemplo Dove: 1/4 de creme hidratante → pele macia e confortável ao toque → sinto minha beleza valorizada → mereço ter minha autoestima elevada. Um sabonete conectado ao sistema de crenças mais íntimo da consumidora. Faça com post-it e escracho; a poesia vem depois, com a equipe.",
     "fields": [
@@ -1080,7 +1172,11 @@
     ],
     "tier": "sinal",
     "sessao": "workshop",
-    "porque": "O produto não conecta com nada maior — falta a ponte do atributo até o propósito."
+    "porque": "O produto não conecta com nada maior — falta a ponte do atributo até o propósito.",
+    "ficha": false,
+    "blocos": 4,
+    "min_bloco": 5,
+    "tempo_fonte": "padrão do método: 5 min por bloco"
   },
   {
     "code": "V13",
@@ -1088,7 +1184,7 @@
     "phase": "F3",
     "name": "Diferenciais Estratégicos",
     "minimum": false,
-    "duration": 45,
+    "duration": 25,
     "source": "M05 A09 parte 2 (transcrição — ausente do PDF)",
     "intro": "Quatro partes em sequência. As duas últimas só funcionam bem porque vêm depois de todo o resto — se você perguntasse no começo, as respostas viriam horríveis.",
     "fields": [
@@ -1136,7 +1232,11 @@
     ],
     "tier": "espinha",
     "sessao": "workshop",
-    "porque": "Entrega diferencial único, lembrança e mensagem central: blocos 5 e 6 do relatório, praticamente prontos."
+    "porque": "Entrega diferencial único, lembrança e mensagem central: blocos 5 e 6 do relatório, praticamente prontos.",
+    "ficha": false,
+    "blocos": 5,
+    "min_bloco": 5,
+    "tempo_fonte": "padrão do método: 5 min por bloco"
   },
   {
     "code": "V14",
@@ -1144,7 +1244,7 @@
     "phase": "F5",
     "name": "Auditoria da Concorrência (verbal, presença e visual)",
     "minimum": true,
-    "duration": 240,
+    "duration": 300,
     "source": "M05 A09 parte 2 (transcrição — ausente do PDF)",
     "intro": "ÚNICO exercício do bloco que NÃO é feito com o cliente — é feito por você e sua equipe depois do workshop. Entre no site, nas mídias sociais, nos grupos de WhatsApp, e tente comprar um produto para ver como tratam na venda. Objetivo: mapear as palavras, mensagens e territórios visuais já ocupados, para achar o espaço vazio.",
     "fields": [
@@ -1191,7 +1291,11 @@
     ],
     "tier": "espinha",
     "sessao": "solo",
-    "porque": "Sem a auditoria você não sabe qual espaço de posicionamento está livre. Feita por você, depois."
+    "porque": "Sem a auditoria você não sabe qual espaço de posicionamento está livre. Feita por você, depois.",
+    "ficha": false,
+    "blocos": 5,
+    "min_bloco": 60,
+    "tempo_fonte": "inferência: auditoria é trabalho seu, fora da sessão"
   },
   {
     "code": "E1",
@@ -1199,7 +1303,7 @@
     "phase": "F3",
     "name": "História de Criação",
     "minimum": true,
-    "duration": 40,
+    "duration": 0,
     "source": "M05 A11",
     "intro": "Pode ir como lição de casa ANTES da imersão — é assim que Lona costuma passar. Alguns fundadores voltam com seis páginas escritas sozinhos; outros só produzem se você extrair em conversa. Teste as duas formas. O que importa é chegar na origem, nos valores, na fagulha do começo.",
     "homework": true,
@@ -1225,7 +1329,11 @@
     ],
     "tier": "espinha",
     "sessao": "casa",
-    "porque": "Alimenta propósito, valores e narrativa — e vai como lição de casa, então não custa tempo de sala."
+    "porque": "Alimenta propósito, valores e narrativa — e vai como lição de casa, então não custa tempo de sala.",
+    "ficha": false,
+    "blocos": 3,
+    "min_bloco": 0,
+    "tempo_fonte": "lição de casa — não consome tempo de sala"
   },
   {
     "code": "E2",
@@ -1260,7 +1368,11 @@
     ],
     "tier": "sinal",
     "sessao": "workshop",
-    "porque": "O fundador trava quando o assunto é legado e propósito."
+    "porque": "O fundador trava quando o assunto é legado e propósito.",
+    "ficha": false,
+    "blocos": 4,
+    "min_bloco": 5,
+    "tempo_fonte": "padrão do método: 5 min por bloco"
   },
   {
     "code": "E3",
@@ -1268,7 +1380,7 @@
     "phase": "F3",
     "name": "Pontos de Virada, Lições e Identidade",
     "minimum": false,
-    "duration": 30,
+    "duration": 15,
     "source": "M05 A11 (transcrição — ausente do PDF)",
     "intro": "Rodada dinâmica de post-it que vem LOGO DEPOIS da História de Criação (E1) — o fundador olha o próprio texto e fica muito mais fácil responder. Três degraus encadeados. Se alguém questionar que isso é sobre o dono e não sobre a marca: \"não existe marca, existem as pessoas que constroem a empresa; a marca é o resultado, é a reputação\".",
     "fields": [
@@ -1292,7 +1404,11 @@
     ],
     "tier": "sinal",
     "sessao": "workshop",
-    "porque": "A história de criação voltou rasa. Este destrava."
+    "porque": "A história de criação voltou rasa. Este destrava.",
+    "ficha": false,
+    "blocos": 3,
+    "min_bloco": 5,
+    "tempo_fonte": "padrão do método: 5 min por bloco"
   },
   {
     "code": "E4",
@@ -1327,7 +1443,11 @@
     ],
     "tier": "sinal",
     "sessao": "workshop",
-    "porque": "Valores genéricos: honestidade, transparência, qualidade. A negativa quebra isso."
+    "porque": "Valores genéricos: honestidade, transparência, qualidade. A negativa quebra isso.",
+    "ficha": false,
+    "blocos": 4,
+    "min_bloco": 5,
+    "tempo_fonte": "padrão do método: 5 min por bloco"
   },
   {
     "code": "E5",
@@ -1335,7 +1455,7 @@
     "phase": "F3",
     "name": "Visão de Mundo e Missões",
     "minimum": true,
-    "duration": 30,
+    "duration": 10,
     "source": "M05 A11",
     "intro": "Segunda parte do bloco de crenças — a razão de existência. NÃO explique a pirâmide para o cliente: você se enrola, ele fica confuso e trava. Faça as perguntas e organize depois. Depois é discussão · post-it · discussão · post-it.",
     "fields": [
@@ -1354,7 +1474,11 @@
     ],
     "tier": "espinha",
     "sessao": "workshop",
-    "porque": "Visão e missões — sem isso a plataforma não fecha e o propósito fica solto."
+    "porque": "Visão e missões — sem isso a plataforma não fecha e o propósito fica solto.",
+    "ficha": false,
+    "blocos": 2,
+    "min_bloco": 5,
+    "tempo_fonte": "padrão do método: 5 min por bloco"
   },
   {
     "code": "E6",
@@ -1397,7 +1521,11 @@
     ],
     "tier": "sinal",
     "sessao": "workshop",
-    "porque": "Precisa de valores com sinal vermelho — com quem a marca NÃO se relaciona (bloco 3)."
+    "porque": "Precisa de valores com sinal vermelho — com quem a marca NÃO se relaciona (bloco 3).",
+    "ficha": false,
+    "blocos": 5,
+    "min_bloco": 5,
+    "tempo_fonte": "padrão do método: 5 min por bloco"
   },
   {
     "code": "E7",
@@ -1405,7 +1533,7 @@
     "phase": "F3",
     "name": "Propósito — Ikigai adaptado (com negativos)",
     "minimum": true,
-    "duration": 50,
+    "duration": 35,
     "source": "M05 A11 (transcrição — o PDF omite os negativos e a etapa dos 4 parágrafos)",
     "intro": "Existe para fugir do caráter abstrato do propósito — \"não é salvar as baleias e a mata atlântica\". Quatro áreas de observação, e CADA UMA tem um lado positivo e um negativo. Depois: agrupar os post-its em quatro colunas, escrever UM PARÁGRAFO por bloco, e só então gerar as declarações (com IA, a partir dos quatro textos). O propósito está na interseção — a zona azul do Ikigai.",
     "fields": [
@@ -1487,7 +1615,11 @@
     ],
     "tier": "espinha",
     "sessao": "workshop",
-    "porque": "Propósito é o elemento 1 da plataforma. Nenhum outro instrumento produz."
+    "porque": "Propósito é o elemento 1 da plataforma. Nenhum outro instrumento produz.",
+    "ficha": false,
+    "blocos": 7,
+    "min_bloco": 5,
+    "tempo_fonte": "padrão do método: 5 min por bloco"
   },
   {
     "code": "E8",
@@ -1495,7 +1627,7 @@
     "phase": "F3",
     "name": "Atributos de Personalidade",
     "minimum": true,
-    "duration": 30,
+    "duration": 20,
     "source": "M05 A11",
     "intro": "A identidade visual E a verbal partem daqui. Tenha uma biblioteca de atributos pronta — baralho de mercado ou lista gerada por IA funciona igual. Cuidado com baralhos em que cada carta é um universo inteiro: cinco cartas viram cinco universos e você trava na hora de criar. Leve exemplos de marca por atributo (animada: Porsche, Absolut, Red Bull · competência: Amex, IBM, Toyota — e mostre como 'confiável' se quebra em cuidadoso, sóbrio, trabalhador). A mecânica é simples: a gente é / a gente não é.",
     "fields": [
@@ -1528,7 +1660,11 @@
     ],
     "tier": "espinha",
     "sessao": "workshop",
-    "porque": "A identidade visual E a verbal partem daqui. É o gargalo do módulo 7 inteiro."
+    "porque": "A identidade visual E a verbal partem daqui. É o gargalo do módulo 7 inteiro.",
+    "ficha": false,
+    "blocos": 4,
+    "min_bloco": 5,
+    "tempo_fonte": "padrão do método: 5 min por bloco"
   },
   {
     "code": "E9",
@@ -1536,7 +1672,7 @@
     "phase": "F3",
     "name": "Prova Real da Personalidade",
     "minimum": true,
-    "duration": 40,
+    "duration": 10,
     "source": "M05 A11",
     "intro": "Escolher atributo numa lista é fácil demais — \"ah, a gente é honesto e transparente\". Então tá bom, vamos ver. Seis atributos. Aqui você coloca o cliente contra ele mesmo.",
     "fields": [
@@ -1563,7 +1699,11 @@
     ],
     "tier": "espinha",
     "sessao": "workshop",
-    "porque": "Sem a prova real, atributo escolhido em lista é desejo, não diretriz. Vira o bloco 2 do relatório."
+    "porque": "Sem a prova real, atributo escolhido em lista é desejo, não diretriz. Vira o bloco 2 do relatório.",
+    "ficha": false,
+    "blocos": 2,
+    "min_bloco": 5,
+    "tempo_fonte": "padrão do método: 5 min por bloco"
   },
   {
     "code": "E10",
@@ -1571,7 +1711,7 @@
     "phase": "F3",
     "name": "História da Marca (Donald Miller)",
     "minimum": false,
-    "duration": 30,
+    "duration": 35,
     "source": "M05 A11",
     "intro": "O herói nunca é a marca. O herói é o cliente; a marca é o guia. Serve para todo cliente — e vale treinar com marcas que você admira antes de aplicar.",
     "fields": [
@@ -1619,7 +1759,11 @@
     ],
     "tier": "sinal",
     "sessao": "workshop",
-    "porque": "A comunicação não tem narrativa: a marca se põe como herói em vez de guia."
+    "porque": "A comunicação não tem narrativa: a marca se põe como herói em vez de guia.",
+    "ficha": false,
+    "blocos": 7,
+    "min_bloco": 5,
+    "tempo_fonte": "padrão do método: 5 min por bloco"
   },
   {
     "code": "E11",
@@ -1627,7 +1771,7 @@
     "phase": "F3",
     "name": "Universo da Marca (David Aaker)",
     "minimum": false,
-    "duration": 35,
+    "duration": 20,
     "source": "M05 A11",
     "intro": "O mais difícil do bloco, e feito no FIM: junte TODAS as palavras e termos que apareceram durante a imersão, o workshop e o relatório de estratégia, e distribua nos três arcos. É a origem do sistema de keywords.",
     "fields": [
@@ -1657,7 +1801,11 @@
     ],
     "tier": "sinal",
     "sessao": "workshop",
-    "porque": "Vai entrar em identidade e precisa da hierarquia de palavras. Feito no fim."
+    "porque": "Vai entrar em identidade e precisa da hierarquia de palavras. Feito no fim.",
+    "ficha": false,
+    "blocos": 4,
+    "min_bloco": 5,
+    "tempo_fonte": "padrão do método: 5 min por bloco"
   },
   {
     "code": "PD1",
@@ -1665,7 +1813,7 @@
     "phase": "F2",
     "name": "Roteiro de Entrevista Individual",
     "minimum": true,
-    "duration": 60,
+    "duration": 80,
     "source": "M05 A03",
     "intro": "Individual, fora do ambiente da empresa, com confidencialidade declarada. Anote à mão e grave.",
     "repeatable_per": "pessoa",
@@ -1753,7 +1901,11 @@
     ],
     "tier": "fase",
     "sessao": "fase",
-    "porque": ""
+    "porque": "",
+    "ficha": false,
+    "blocos": 16,
+    "min_bloco": 5,
+    "tempo_fonte": "padrão do método: 5 min por bloco"
   },
   {
     "code": "PD2",
@@ -1761,7 +1913,7 @@
     "phase": "F4",
     "name": "Descompressão do Estrategista",
     "minimum": true,
-    "duration": 45,
+    "duration": 15,
     "source": "M06 A02",
     "intro": "No dia seguinte à imersão, grave 30–60 min contando suas percepções para alguém que NÃO participou.",
     "fields": [
@@ -1783,7 +1935,11 @@
     ],
     "tier": "fase",
     "sessao": "fase",
-    "porque": ""
+    "porque": "",
+    "ficha": false,
+    "blocos": 3,
+    "min_bloco": 5,
+    "tempo_fonte": "padrão do método: 5 min por bloco"
   },
   {
     "code": "DG1",
@@ -1791,7 +1947,7 @@
     "phase": "F6",
     "name": "As 5 Validações Críticas",
     "minimum": true,
-    "duration": 90,
+    "duration": 30,
     "source": "M06 A01",
     "intro": "Passe todo o material coletado por estes cinco filtros antes de escrever o laudo.",
     "fields": [
@@ -1834,7 +1990,11 @@
     ],
     "tier": "fase",
     "sessao": "fase",
-    "porque": ""
+    "porque": "",
+    "ficha": false,
+    "blocos": 6,
+    "min_bloco": 5,
+    "tempo_fonte": "padrão do método: 5 min por bloco"
   },
   {
     "code": "DG2",
@@ -1842,7 +2002,7 @@
     "phase": "F5",
     "name": "Matriz de Concorrentes",
     "minimum": true,
-    "duration": 120,
+    "duration": 15,
     "source": "M06 A03",
     "fields": [
       {
@@ -1875,7 +2035,11 @@
     ],
     "tier": "fase",
     "sessao": "fase",
-    "porque": ""
+    "porque": "",
+    "ficha": false,
+    "blocos": 3,
+    "min_bloco": 5,
+    "tempo_fonte": "padrão do método: 5 min por bloco"
   },
   {
     "code": "DG3",
@@ -1883,7 +2047,7 @@
     "phase": "F5",
     "name": "Auditoria de Percepção Externa",
     "minimum": false,
-    "duration": 120,
+    "duration": 25,
     "source": "M06 A03",
     "condition": "marca_existente",
     "fields": [
@@ -1922,7 +2086,11 @@
     ],
     "tier": "fase",
     "sessao": "fase",
-    "porque": ""
+    "porque": "",
+    "ficha": false,
+    "blocos": 5,
+    "min_bloco": 5,
+    "tempo_fonte": "padrão do método: 5 min por bloco"
   },
   {
     "code": "DG4",
@@ -1930,7 +2098,7 @@
     "phase": "F6",
     "name": "Mapa de Insights",
     "minimum": true,
-    "duration": 90,
+    "duration": 5,
     "source": "M06 A06",
     "intro": "A ponte entre diagnóstico e estratégia. Uma linha por insight.",
     "fields": [
@@ -1953,7 +2121,11 @@
     ],
     "tier": "fase",
     "sessao": "fase",
-    "porque": ""
+    "porque": "",
+    "ficha": false,
+    "blocos": 1,
+    "min_bloco": 5,
+    "tempo_fonte": "padrão do método: 5 min por bloco"
   },
   {
     "code": "ES1",
@@ -1961,7 +2133,7 @@
     "phase": "F7",
     "name": "Os 6 Blocos do Relatório de Estratégia",
     "minimum": true,
-    "duration": 240,
+    "duration": 40,
     "source": "M06 A05",
     "intro": "Cada diretriz diz o que fazer, o que não fazer e por quê. O porquê vem todo do diagnóstico.",
     "fields": [
@@ -2032,7 +2204,11 @@
     ],
     "tier": "fase",
     "sessao": "fase",
-    "porque": ""
+    "porque": "",
+    "ficha": false,
+    "blocos": 8,
+    "min_bloco": 5,
+    "tempo_fonte": "padrão do método: 5 min por bloco"
   },
   {
     "code": "ES2",
@@ -2040,7 +2216,7 @@
     "phase": "F8",
     "name": "Os 3 Testes do Posicionamento",
     "minimum": true,
-    "duration": 30,
+    "duration": 35,
     "source": "M06 A08",
     "intro": "Prova real. Reprovou em qualquer um: reescrever, não maquiar.",
     "fields": [
@@ -2094,7 +2270,11 @@
     ],
     "tier": "fase",
     "sessao": "fase",
-    "porque": ""
+    "porque": "",
+    "ficha": false,
+    "blocos": 7,
+    "min_bloco": 5,
+    "tempo_fonte": "padrão do método: 5 min por bloco"
   },
   {
     "code": "ES3",
@@ -2102,7 +2282,7 @@
     "phase": "F8",
     "name": "Plataforma de Marca",
     "minimum": false,
-    "duration": 60,
+    "duration": 35,
     "source": "M06 A09",
     "intro": "Síntese em 7 elementos. Poucas palavras, mas dizendo algo específico. Passe cada campo pelos testes 1 e 2.",
     "fields": [
@@ -2151,7 +2331,11 @@
     ],
     "tier": "fase",
     "sessao": "fase",
-    "porque": ""
+    "porque": "",
+    "ficha": false,
+    "blocos": 7,
+    "min_bloco": 5,
+    "tempo_fonte": "padrão do método: 5 min por bloco"
   },
   {
     "code": "NM1",
@@ -2159,7 +2343,7 @@
     "phase": "F10",
     "name": "Mapeamento de Naming (6 etapas)",
     "minimum": true,
-    "duration": 120,
+    "duration": 35,
     "source": "M07 A02",
     "fields": [
       {
@@ -2216,7 +2400,11 @@
     ],
     "tier": "fase",
     "sessao": "fase",
-    "porque": ""
+    "porque": "",
+    "ficha": false,
+    "blocos": 7,
+    "min_bloco": 5,
+    "tempo_fonte": "padrão do método: 5 min por bloco"
   },
   {
     "code": "NM2",
@@ -2224,7 +2412,7 @@
     "phase": "F10",
     "name": "Ideação de Nomes",
     "minimum": true,
-    "duration": 480,
+    "duration": 15,
     "source": "M07 A03",
     "intro": "2 a 3 dias, dormindo entre as sessões. Não faça sozinho. Anote a origem de cada nome.",
     "fields": [
@@ -2254,7 +2442,11 @@
     ],
     "tier": "fase",
     "sessao": "fase",
-    "porque": ""
+    "porque": "",
+    "ficha": false,
+    "blocos": 3,
+    "min_bloco": 5,
+    "tempo_fonte": "padrão do método: 5 min por bloco"
   },
   {
     "code": "NM3",
@@ -2262,7 +2454,7 @@
     "phase": "F10",
     "name": "Os 12 Filtros de Validação",
     "minimum": true,
-    "duration": 480,
+    "duration": 25,
     "source": "M07 A04",
     "intro": "Entusiasmo sem apego. Tenha 20 a 40 nomes alinhados — eles caem em cada etapa.",
     "fields": [
@@ -2317,7 +2509,11 @@
     ],
     "tier": "fase",
     "sessao": "fase",
-    "porque": ""
+    "porque": "",
+    "ficha": false,
+    "blocos": 5,
+    "min_bloco": 5,
+    "tempo_fonte": "padrão do método: 5 min por bloco"
   },
   {
     "code": "VB1",
@@ -2325,7 +2521,7 @@
     "phase": "F11",
     "name": "Mensagens e Narrativa",
     "minimum": true,
-    "duration": 180,
+    "duration": 15,
     "source": "M07 A06",
     "intro": "Começa aqui, obrigatoriamente. É a fundação da identidade verbal.",
     "fields": [
@@ -2379,7 +2575,11 @@
     ],
     "tier": "fase",
     "sessao": "fase",
-    "porque": ""
+    "porque": "",
+    "ficha": false,
+    "blocos": 3,
+    "min_bloco": 5,
+    "tempo_fonte": "padrão do método: 5 min por bloco"
   },
   {
     "code": "VB2",
@@ -2387,7 +2587,7 @@
     "phase": "F11",
     "name": "Voz e Tons de Voz",
     "minimum": true,
-    "duration": 150,
+    "duration": 25,
     "source": "M07 A07",
     "intro": "Voz é estável (SER). Tom é mutável (ESTAR). Máximo 3 vozes; 2 a 4 tons por voz.",
     "fields": [
@@ -2436,7 +2636,11 @@
     ],
     "tier": "fase",
     "sessao": "fase",
-    "porque": ""
+    "porque": "",
+    "ficha": false,
+    "blocos": 5,
+    "min_bloco": 5,
+    "tempo_fonte": "padrão do método: 5 min por bloco"
   },
   {
     "code": "VB3",
@@ -2444,7 +2648,7 @@
     "phase": "F11",
     "name": "Dicionário da Marca",
     "minimum": true,
-    "duration": 90,
+    "duration": 10,
     "source": "M07 A08",
     "intro": "Teste de cada palavra: coloque na boca do concorrente. Se ficar estranho, é sua.",
     "fields": [
@@ -2473,7 +2677,11 @@
     ],
     "tier": "fase",
     "sessao": "fase",
-    "porque": ""
+    "porque": "",
+    "ficha": false,
+    "blocos": 2,
+    "min_bloco": 5,
+    "tempo_fonte": "padrão do método: 5 min por bloco"
   },
   {
     "code": "VB4",
@@ -2481,7 +2689,7 @@
     "phase": "F11",
     "name": "Guia de Estilo",
     "minimum": true,
-    "duration": 90,
+    "duration": 30,
     "source": "M07 A09",
     "fields": [
       {
@@ -2537,7 +2745,11 @@
     ],
     "tier": "fase",
     "sessao": "fase",
-    "porque": ""
+    "porque": "",
+    "ficha": false,
+    "blocos": 6,
+    "min_bloco": 5,
+    "tempo_fonte": "padrão do método: 5 min por bloco"
   },
   {
     "code": "VB5",
@@ -2545,7 +2757,7 @@
     "phase": "F11",
     "name": "Manifesto",
     "minimum": false,
-    "duration": 120,
+    "duration": 25,
     "source": "M07 A10",
     "intro": "Nem toda marca precisa. Só faz sentido com convicção forte, inimigo claro, público que compartilha e capacidade de agir.",
     "fields": [
@@ -2581,7 +2793,11 @@
     ],
     "tier": "fase",
     "sessao": "fase",
-    "porque": ""
+    "porque": "",
+    "ficha": false,
+    "blocos": 5,
+    "min_bloco": 5,
+    "tempo_fonte": "padrão do método: 5 min por bloco"
   },
   {
     "code": "VB6",
@@ -2589,7 +2805,7 @@
     "phase": "F11",
     "name": "Tagline e Slogan",
     "minimum": false,
-    "duration": 90,
+    "duration": 15,
     "source": "M07 A11",
     "intro": "Máximo 6–7 palavras. Melhor não ter do que ter uma ruim.",
     "fields": [
@@ -2626,7 +2842,11 @@
     ],
     "tier": "fase",
     "sessao": "fase",
-    "porque": ""
+    "porque": "",
+    "ficha": false,
+    "blocos": 3,
+    "min_bloco": 5,
+    "tempo_fonte": "padrão do método: 5 min por bloco"
   },
   {
     "code": "VB7",
@@ -2634,7 +2854,7 @@
     "phase": "F12",
     "name": "Textos de Apresentação (Key Word)",
     "minimum": true,
-    "duration": 120,
+    "duration": 25,
     "source": "M07 A12",
     "fields": [
       {
@@ -2675,7 +2895,11 @@
     ],
     "tier": "fase",
     "sessao": "fase",
-    "porque": ""
+    "porque": "",
+    "ficha": false,
+    "blocos": 5,
+    "min_bloco": 5,
+    "tempo_fonte": "padrão do método: 5 min por bloco"
   },
   {
     "code": "VS1",
@@ -2683,7 +2907,7 @@
     "phase": "F13",
     "name": "Conceitos Criativos e Moodboard",
     "minimum": true,
-    "duration": 240,
+    "duration": 30,
     "source": "M07 A14 (transcrição)",
     "intro": "A ordem é fixa e a aula é explícita: estratégia → conceitos criativos → moodboards (se necessário) → Key Visual → identidade visual final. Só abra depois de estratégia, posicionamento, verbal e Key Word aprovados — \"o designer que não entende de processo está tentando resolver o problema com 20% das informações\". Durante o processo todo as ideias visuais aparecem: guarde num bloco de notas e NÃO execute antes da hora. AVISO DA AULA: moodboard não é piquenique. Não use para o cliente fazer o seu trabalho — ele não sabe o que quer, o especialista é você. Você apresenta num momento definido e pergunta o que ele acha; isso é diferente de ficar trocando figurinha o tempo todo e entregar o volante. E não suma: no máximo duas semanas entre uma validação e outra.",
     "fields": [
@@ -2749,7 +2973,11 @@
     ],
     "tier": "fase",
     "sessao": "fase",
-    "porque": ""
+    "porque": "",
+    "ficha": false,
+    "blocos": 6,
+    "min_bloco": 5,
+    "tempo_fonte": "padrão do método: 5 min por bloco"
   },
   {
     "code": "VS2",
@@ -2757,7 +2985,7 @@
     "phase": "F14",
     "name": "Sistema de Identidade (ativos de marca)",
     "minimum": true,
-    "duration": 600,
+    "duration": 35,
     "source": "M07 A13 (transcrição)",
     "intro": "Ativos de marca, não checklist de logo/tipografia/cor. Um elemento vira ativo quando gera reconhecimento sozinho: cor, assinatura gráfica, símbolo, frase, expressão, som, nome, forma, gesto. A provocação da aula: \"quando você tira o logo, o que resta é a identidade da marca\". REGRA QUE MANDA EM TUDO: o sistema segue o cliente. A complexidade tem que partir da CAPACIDADE E DOS RECURSOS dele — não adianta entregar família de motion para quem não tem ninguém no social media. Se o cliente não sabe o que fazer com a entrega, a culpa é sua: entrega acadêmica copiada do guia do Google ou da Uber não serve. Ativo só é ativo se estiver sendo usado; se não é usado, não constrói valor.",
     "fields": [
@@ -2814,7 +3042,11 @@
     ],
     "tier": "fase",
     "sessao": "fase",
-    "porque": ""
+    "porque": "",
+    "ficha": false,
+    "blocos": 7,
+    "min_bloco": 5,
+    "tempo_fonte": "padrão do método: 5 min por bloco"
   },
   {
     "code": "VS3",
@@ -2822,7 +3054,7 @@
     "phase": "F13",
     "name": "Key Visual (o cenário)",
     "minimum": true,
-    "duration": 300,
+    "duration": 50,
     "source": "M07 A15 (transcrição — o PDF descreve outra coisa)",
     "intro": "ATENÇÃO — o PDF define Key Visual como um elemento gráfico proprietário. A aula define outra coisa: o KV é o DOCUMENTO que apresenta a proposta de linguagem visual num estágio inicial, montando um cenário de como a marca vai se parecer funcionando. Formato Style Scape (Chris Do): antes eram 3 folhas A3 na horizontal impressas; hoje são 3 slides. \"Não tem nada refinado. O logo não está certo, o kerning não está resolvido.\" É uma fachada — e é isso mesmo. Existe para o cliente conseguir dar feedback informado sem entrar no seu Figma, e para ancorar o projeto antes do refino: ir da estratégia direto para a identidade acabada \"vai dar merda\". Uma opção só — o moodboard é o que dispensa fazer duas. Prazo: uma semana ou menos.",
     "fields": [
@@ -2884,7 +3116,11 @@
     ],
     "tier": "fase",
     "sessao": "fase",
-    "porque": ""
+    "porque": "",
+    "ficha": false,
+    "blocos": 10,
+    "min_bloco": 5,
+    "tempo_fonte": "padrão do método: 5 min por bloco"
   },
   {
     "code": "GM1",
@@ -2892,7 +3128,7 @@
     "phase": "F15",
     "name": "Guia de Marca (Fix / Flex / Free)",
     "minimum": true,
-    "duration": 600,
+    "duration": 25,
     "source": "M07 A16",
     "intro": "Ordem sempre: estratégia → posicionamento → verbal → visual. É do cliente, não seu.",
     "fields": [
@@ -2940,7 +3176,11 @@
     ],
     "tier": "fase",
     "sessao": "fase",
-    "porque": ""
+    "porque": "",
+    "ficha": false,
+    "blocos": 5,
+    "min_bloco": 5,
+    "tempo_fonte": "padrão do método: 5 min por bloco"
   },
   {
     "code": "C1",
@@ -2948,7 +3188,7 @@
     "phase": "F0",
     "name": "As 7 Perguntas da Primeira Call",
     "minimum": true,
-    "duration": 60,
+    "duration": 65,
     "source": "Aula 18",
     "intro": "Não prescreva, diagnostique. Entre uma pergunta e outra: escute, simplifique, devolva, confirme.",
     "fields": [
@@ -3033,6 +3273,10 @@
     ],
     "tier": "fase",
     "sessao": "fase",
-    "porque": ""
+    "porque": "",
+    "ficha": false,
+    "blocos": 13,
+    "min_bloco": 5,
+    "tempo_fonte": "padrão do método: 5 min por bloco"
   }
 ]

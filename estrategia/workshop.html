@@ -204,6 +204,12 @@ body.apresentando .palco{grid-template-columns:1fr .7fr}
     <p class="mini">Atalhos: <span class="kbd">⌘↵</span> avança · <span class="kbd">espaço</span> pausa o cronômetro ·
     <span class="kbd">P</span> modo apresentação · <span class="kbd">Esc</span> volta para a agenda.
     Tudo salva sozinho — não existe botão de salvar aqui de propósito.</p>
+    <p class="mini" style="margin-top:14px"><b>Sobre os tempos.</b> A unidade é o bloco, não o instrumento:
+    o material manda <b>5, 2, 3 minutos</b> e avisa que dar 10 ou 15 <b>"não é eficiente"</b> — o tempo existe
+    para puxar a pessoa a responder rápido. Onde a aula cravou um número, é o número da aula; onde não cravou,
+    é 5 minutos por bloco. Passe o mouse no cronômetro para ver a fonte de cada um.
+    E use post-it: <b>"a pessoa fica rendida a ter que resumir a informação a um bloco"</b> — de ponta grossa,
+    para a letra sair grande e ela não conseguir escrever pequenininho.</p>
   </div>
 </div>
 
@@ -347,13 +353,20 @@ function soma(){
 
 // O método cronometra POR BLOCO, não por pergunta: "5 minutos pro passado, vai".
 // Então campos com o mesmo prefixo antes do "·" viram uma tela só.
-function bloco(label){
-  const m = label.split(' · ');
-  return m.length > 1 ? m[0].trim() : null;
+// TEM QUE SER IDÊNTICA à função grupo() do catalog.py
+function bloco(label, ficha){
+  const l = (label||'').trim();
+  if (ficha && /^\d+[.)]\s/.test(l)) return '#ficha';
+  if (l.includes(' · ')) return l.split(' · ')[0].trim();
+  if (l.includes(' — ')) return l.split(' — ')[0].trim();
+  const l2 = l.replace(/\s*[+\u2212-]\s*$/, '');
+  if (l2 !== l) return l2.trim();
+  return null;
 }
 function curta(label){
-  const m = label.split(' · ');
-  return m.length > 1 ? m.slice(1).join(' · ').trim() : label;
+  const l = (label||'').trim();
+  if (l.includes(' · ')) return l.split(' · ').slice(1).join(' · ').trim();
+  return l;
 }
 
 function montaFila(){
@@ -362,17 +375,17 @@ function montaFila(){
     const campos = CAMPOS[e.id] || [];
     const passos = [];
     campos.forEach(f => {
-      const b = bloco(f.label);
+      const b = bloco(f.label, e.ficha);
       const ult = passos[passos.length-1];
       if (b && ult && ult.bloco === b) ult.campos.push(f);
       else passos.push({ bloco:b, campos:[f] });
     });
-    const total = campos.length || 1;
     passos.forEach((p, idx) => {
       FILA.push({
         ex: e, campos: p.campos, bloco: p.bloco, idx, total: passos.length,
-        titulo: p.bloco ? p.bloco : p.campos[0].label,
-        dur: Math.max(2, Math.round((e.duration_min || 20) * p.campos.length / total))
+        titulo: (p.bloco && p.bloco !== '#ficha') ? p.bloco
+                : (p.campos.length > 1 ? e.name : p.campos[0].label),
+        dur: e.min_bloco || 5
       });
     });
   });
@@ -392,7 +405,8 @@ function montaFila(){
 // ---------------------------------------------------------------- cronômetro
 function zeraCrono(min){
   acc = 0; t0 = Date.now(); rodando = true;
-  $('cPrev').innerHTML = 'previsto<br>' + min + ' min';
+  $('cPrev').innerHTML = 'bloco<br>' + min + ' min';
+  $('cPrev').title = (FILA[i] && FILA[i].ex.tempo_fonte) || '';
   $('crono').dataset.min = min;
   desenhaCrono();
 }
@@ -487,7 +501,7 @@ function umCampo(p, f, el, n){
     el.innerHTML = itens.map((x,k)=>`<div class="pill"><span>${esc(x)}</span>
       <button class="x" data-k="${k}">×</button></div>`).join('') +
       `<div class="addrow"><input type="text" id="novo_${uid}" placeholder="escreva e dê enter"></div>` +
-      (n == null ? `<div class="mini" style="margin-top:8px">um post-it por linha</div>` : '');
+      (n == null ? `<div class="mini" style="margin-top:8px">um post-it por linha — frase curta, não parágrafo</div>` : '');
     const inp = document.getElementById('novo_'+uid);
     inp.addEventListener('focus', foca);
     inp.addEventListener('keydown', e => {

@@ -78,6 +78,10 @@ create table if not exists nave_exercise_fields (
 alter table nave_exercises add column if not exists tier   text;
 alter table nave_exercises add column if not exists sessao text;
 alter table nave_exercises add column if not exists porque text;
+alter table nave_exercises add column if not exists blocos      int;
+alter table nave_exercises add column if not exists min_bloco   int;
+alter table nave_exercises add column if not exists tempo_fonte text;
+alter table nave_exercises add column if not exists ficha       boolean;
 
 -- Critérios de decisão (matrizes da Parte 7)
 create table if not exists nave_decision_criteria (
