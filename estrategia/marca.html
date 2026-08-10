@@ -198,10 +198,10 @@ function filhos(){
         ok: D.sel[e.id] && D.sel[e.id].status === 'concluido', off: !roda(e), go: `ex:${e.id}` }));
 
   // os ramos ficam na faixa vazia ACIMA da linha de nós — não cobrem nenhum passo
-  const CW = 158, CH = 44, CG = 12;
+  const CW = 186, CH = 50, CG = 12;
   const total = itens.length * CW + (itens.length - 1) * CG;
   const bx = f._x + W / 2 - total / 2;
-  const by = f._y - 96;
+  const by = f._y - 104;
   let out = '', ln = '';
   const x1 = f._x + W / 2, y1 = f._y;
   itens.forEach((n, i) => {
@@ -283,10 +283,15 @@ function abrirPasso(id, foca = true){
   }
   el('pnB').innerHTML = b;
 
+  const falta = t.length - ok;
   el('pnF').innerHTML = feito
     ? `<button class="b b--ghost" onclick="reabrir('${f.id}')">Reabrir passo</button><span class="hint">Passo fechado.</span>`
-    : `<button class="b" onclick="concluir('${f.id}')">Concluir passo ${k + 1} →</button>
-       <span class="hint">${t.length - ok > 0 ? `Faltam ${t.length - ok} itens` : 'Tudo marcado'}</span>`;
+    : falta > 0
+      ? `<button class="b" disabled title="Marque tudo antes de fechar">Concluir passo ${k + 1} →</button>
+         <span class="hint">Faltam <b>${falta}</b> ${falta === 1 ? 'item' : 'itens'}.
+         <button class="mesmo" onclick="concluir('${f.id}')">não se aplica, fechar assim mesmo</button></span>`
+      : `<button class="b" onclick="concluir('${f.id}')">Concluir passo ${k + 1} →</button>
+         <span class="hint">Tudo marcado.</span>`;
 
   el('pn').classList.add('on');
   if (foca) centrar(f);
