@@ -212,7 +212,8 @@ function desenhaNos(){
     const cls = (k === ia ? 'agora' : (f.status === 'concluido' || ok > 0 ? 'cheio' : 'vazio'))
       + (k >= D.trava ? ' trava' : '');
     const flag = f.nave_phases.is_gate
-      ? `<span class="fl" style="background:${f.gate === 'aprovado' ? '#101010' : 'var(--pink)'}"></span>` : '';
+      ? `<span class="fl ${f.gate === 'aprovado' ? 'ok' : ''}">${f.gate === 'aprovado' ? 'aprovado ✓' : 'aprovação'}</span>`
+      : '';
     return `<button class="nd ${cls} ${sel === f.id ? 'sel' : ''}" data-id="${f.id}"
         style="left:${f._x}px;top:${f._y}px;min-height:${H}px" onclick="abrirPasso('${f.id}')">
         <div class="tp"><span class="no">${String(k + 1).padStart(2,'0')}</span>${flag}</div>

@@ -57,11 +57,14 @@ a{color:inherit;text-decoration:none}
 
 /* nó — três estados: lima (agora), branco (tem coisa), contorno (vazio). Sem sombra. */
 .nd{position:absolute;width:212px;border-radius:18px;background:transparent;padding:17px 19px 16px;
- text-align:left;box-shadow:inset 0 0 0 1.5px var(--i12);transition:background .16s, box-shadow .16s}
-.nd:hover{box-shadow:inset 0 0 0 1.5px var(--ink)}
+ text-align:left;box-shadow:inset 0 0 0 1.5px var(--i12);transform-origin:center;
+ transition:background .16s, box-shadow .16s, transform .16s}
+.nd:hover{box-shadow:inset 0 0 0 1.5px var(--i28);transform:scale(1.025)}
 .nd .tp{display:flex;align-items:center;gap:8px;margin-bottom:11px}
 .nd .no{font-family:var(--disp);font-weight:800;font-size:11px;letter-spacing:.5px;color:var(--i28)}
-.nd .fl{margin-left:auto;width:8px;height:8px;border-radius:50%}
+.nd .fl{margin-left:auto;font-size:8.5px;font-weight:700;letter-spacing:.9px;text-transform:uppercase;
+ background:var(--pink);color:var(--ink);padding:3px 7px;border-radius:99px;white-space:nowrap}
+.nd .fl.ok{background:var(--ink);color:var(--lime)}
 .nd h3{font-size:15.5px;line-height:1.2;color:var(--i50)}
 .nd .bt{display:flex;align-items:center;gap:9px;margin-top:15px}
 .nd .mini{flex:1;height:3px;border-radius:99px;background:var(--i12);overflow:hidden}
@@ -70,17 +73,18 @@ a{color:inherit;text-decoration:none}
 
 .nd.cheio{background:var(--white);box-shadow:none}
 .nd.cheio h3{color:var(--ink)}
-.nd.cheio:hover{box-shadow:inset 0 0 0 1.5px var(--ink)}
+.nd.cheio:hover{box-shadow:none;transform:scale(1.025)}
 
 .nd.agora{background:var(--lime);box-shadow:none}
 .nd.agora h3{color:var(--ink)}
 .nd.agora .no{color:rgba(16,16,16,.45)}
 .nd.agora .mini{background:rgba(16,16,16,.16)}
 .nd.agora .cnt{color:rgba(16,16,16,.5)}
-.nd.agora:hover{box-shadow:inset 0 0 0 1.5px var(--ink)}
+.nd.agora:hover{box-shadow:none;transform:scale(1.025)}
 
 .nd.trava{box-shadow:inset 0 0 0 1.5px var(--i12)}
-.nd.sel{box-shadow:inset 0 0 0 2px var(--ink)}
+.nd.sel{transform:scale(1.045)}
+.nd.sel:hover{transform:scale(1.045)}
 
 /* nós-filho (blocos / exercícios) */
 .ch{position:absolute;border-radius:12px;background:var(--white);padding:10px 14px;text-align:left;
