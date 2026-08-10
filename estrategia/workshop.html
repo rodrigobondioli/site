@@ -6,235 +6,106 @@
 <title>Workshop · N.A.V.E.</title>
 <link rel="icon" type="image/png" href="/shared/favicon.png">
 <link rel="stylesheet" href="/shared/shared.css">
+<link rel="stylesheet" href="/estrategia/ui.css">
 <style>
-:root{
-  --bnd-ink:#101010; --bnd-bg:#f1f1f1; --bnd-white:#fff;
-  --bnd-lime:#e7f99a; --bnd-cyan:#00fff6; --bnd-pink:#ff00d7;
-  --bnd-display:"Vinila","Inter",-apple-system,BlinkMacSystemFont,sans-serif;
-  --bnd-body:"Vinila","Inter",-apple-system,BlinkMacSystemFont,sans-serif;
-  --bnd-radius:16px;
-  --ink-50:rgba(16,16,16,.5); --ink-25:rgba(16,16,16,.25);
-  --ink-10:rgba(16,16,16,.1); --ink-5:rgba(16,16,16,.05);
-}
-*{box-sizing:border-box}
-html,body{height:100%}
-body{margin:0;background:var(--bnd-bg);color:var(--bnd-ink);font-family:var(--bnd-body);
- font-size:16px;line-height:1.35;-webkit-font-smoothing:antialiased;overflow:hidden}
-h1,h2,h3{margin:0;font-family:var(--bnd-display);font-weight:800;line-height:1.15}
-button{font:inherit;font-family:var(--bnd-body);cursor:pointer}
-a{color:inherit}
+body{overflow-x:hidden}
+/* ---------- linha do tempo ---------- */
+.tl{display:flex;gap:3px;margin:18px 0 40px}
+.tl i{flex:1;height:5px;border-radius:99px;background:var(--ink-10);position:relative}
+.tl i.ok{background:var(--bnd-ink)}
+.tl i.aqui{background:var(--bnd-pink)}
+.tl i[data-l]::after{content:attr(data-l);position:absolute;top:-17px;left:0;font-size:9.5px;
+ letter-spacing:.6px;color:var(--ink-25);white-space:nowrap}
+.tl i.aqui[data-l]::after{color:var(--bnd-ink)}
 
-/* ---------- barra de topo: o painel de voo ---------- */
-.bar{height:60px;display:flex;align-items:center;gap:18px;padding:0 22px;
- border-bottom:1px dashed var(--ink-25);background:var(--bnd-white)}
-.bar .cli{font-size:12px;color:var(--ink-50);white-space:nowrap}
-.bar .cli b{display:block;color:var(--bnd-ink);font-size:14px;font-weight:600}
-.trilha{flex:1;display:flex;gap:6px;align-items:center;min-width:0}
-.tg{flex:1;min-width:10px;position:relative;display:flex;gap:2px}
-.tp{flex:1;height:6px;border-radius:99px;background:var(--ink-10);min-width:2px}
-.tp.feito{background:var(--bnd-ink)}
-.tp.atual{background:var(--bnd-pink)}
-.tg::before{content:attr(data-cod);position:absolute;top:-13px;left:0;font-size:9px;
- font-family:ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--ink-25);letter-spacing:.3px}
-.tg.aqui::before{color:var(--bnd-ink)}
-.tp:hover::after{content:attr(data-nm);position:absolute;top:14px;left:0;white-space:nowrap;
- background:var(--bnd-ink);color:#fff;font-size:11px;padding:4px 8px;border-radius:6px;z-index:9}
+/* ---------- pilares e cards ---------- */
+.pilar{margin:0 0 40px}
+.pilar h2{font-family:var(--bnd-display);font-weight:800;font-size:20px;letter-spacing:-.3px;margin:0 0 4px}
+.pilar p{font-size:13.5px;color:var(--ink-50);margin:0 0 16px;max-width:70ch;line-height:1.45}
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+@media(max-width:1100px){.cards{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:700px){.cards{grid-template-columns:1fr}}
+.card{background:var(--bnd-white);border:0;border-radius:var(--bnd-radius);padding:20px;
+ text-align:left;font:inherit;cursor:pointer;display:flex;flex-direction:column;gap:8px;min-height:132px}
+.card:hover{outline:1px solid var(--ink-25)}
+.card.ess{background:var(--bnd-lime)}
+.card .cod{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:10.5px;
+ letter-spacing:.4px;color:var(--ink-50)}
+.card .nm{font-family:var(--bnd-display);font-weight:800;font-size:16.5px;line-height:1.2;flex:1}
+.card .pe{font-size:12px;color:var(--ink-50);display:flex;gap:10px;align-items:center}
+.card .feito{color:var(--bnd-ink);font-weight:600}
 
-/* cronômetro */
-.crono{display:flex;align-items:center;gap:10px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
-.crono .t{font-size:26px;font-weight:700;letter-spacing:-.5px;min-width:96px;text-align:right}
-.crono.estourou .t{color:var(--bnd-pink)}
-.crono .prev{font-size:11px;color:var(--ink-50);line-height:1.2}
-.icb{width:34px;height:34px;border-radius:99px;border:1px dashed var(--ink-25);background:none;
- display:grid;place-items:center;font-size:14px;padding:0}
-.icb:hover{border-style:solid}
-.icb.on{background:var(--bnd-ink);color:#fff;border-color:var(--bnd-ink)}
-
-/* ---------- palco ---------- */
-.palco{height:calc(100% - 60px);display:grid;grid-template-columns:1.15fr .85fr}
-@media(max-width:1000px){.palco{grid-template-columns:1fr;grid-template-rows:auto 1fr}}
-.esq{padding:40px clamp(24px,3.5vw,56px);overflow:auto;display:flex;flex-direction:column}
-.dir{border-left:1px dashed var(--ink-25);padding:28px clamp(20px,2.4vw,34px);overflow:auto;background:var(--bnd-white)}
-
-.eyebrow{font-size:12px;letter-spacing:1.1px;color:var(--ink-50);margin-bottom:14px}
-.eyebrow b{color:var(--bnd-ink)}
-.pergunta{font-family:var(--bnd-display);font-weight:800;font-size:clamp(26px,3.1vw,42px);
- line-height:1.12;letter-spacing:-.5px;margin:0 0 20px}
-.dica{background:var(--bnd-lime);border-radius:var(--bnd-radius);padding:18px 20px;font-size:15px;
- line-height:1.45;margin-bottom:18px}
-.dica .lbl{font-size:11px;letter-spacing:1.1px;color:rgba(16,16,16,.55);margin-bottom:6px}
-.intro{font-size:14.5px;color:var(--ink-50);line-height:1.5;border-left:2px solid var(--ink-10);
- padding-left:14px;margin-bottom:18px}
-.cresce{flex:1}
-.subs{margin:0 0 18px;padding:0;list-style:none}
-.subs li{font-size:clamp(16px,1.45vw,20px);line-height:1.35;padding:9px 0 9px 20px;position:relative;
- color:rgba(16,16,16,.78);border-top:1px dashed var(--ink-10)}
-.subs li:first-child{border-top:0}
-.subs li::before{content:'';position:absolute;left:2px;top:18px;width:8px;height:8px;
- border-radius:99px;background:var(--ink-25)}
-.subs li.foco{color:var(--bnd-ink);font-weight:600}
-.subs li.foco::before{background:var(--bnd-pink)}
-.bl{margin-bottom:20px}
-.bl label{display:block;font-size:12.5px;color:var(--ink-50);margin-bottom:7px;line-height:1.35}
-.bl .h{font-size:11.5px;color:var(--ink-25);margin-top:5px;line-height:1.4}
-
-/* captura */
-.dir h3{font-size:13px;letter-spacing:1.1px;color:var(--ink-50);font-family:var(--bnd-body);
- font-weight:600;margin-bottom:14px}
-textarea,input[type=text],input[type=number],select{width:100%;padding:14px 16px;border:1px solid var(--ink-10);
- border-radius:12px;background:var(--bnd-bg);font:inherit;color:inherit;outline:none;resize:vertical}
-textarea:focus,input:focus,select:focus{border-color:var(--bnd-ink)}
-textarea{min-height:220px;line-height:1.5}
-.pill{display:flex;align-items:center;gap:8px;background:var(--bnd-bg);border-radius:10px;
- padding:10px 12px;margin-bottom:7px;font-size:15px}
-.pill .x{margin-left:auto;border:0;background:none;color:var(--ink-25);font-size:16px;padding:2px 4px}
-.pill .x:hover{color:var(--bnd-pink)}
-.addrow{display:flex;gap:8px}
-.addrow input{flex:1}
-.mini{font-size:12px;color:var(--ink-50)}
-.tabela{width:100%;border-collapse:collapse;margin-bottom:8px}
-.tabela th{font-size:11px;letter-spacing:.8px;color:var(--ink-50);text-align:left;
- font-weight:600;padding:0 6px 6px}
-.tabela td{padding:0 3px 6px;vertical-align:top}
-.tabela textarea{min-height:44px;padding:9px 11px;font-size:14px}
-.opt{display:inline-flex;align-items:center;gap:7px;border:1px dashed var(--ink-25);border-radius:99px;
- padding:8px 14px;margin:0 6px 7px 0;font-size:14px;background:none}
-.opt.on{background:var(--bnd-ink);color:#fff;border-color:var(--bnd-ink)}
-.dw-palco{height:min(62vh,560px);border:1px solid var(--ink-10);border-radius:12px;overflow:hidden}
-.dw-carregando,.dw-falhou{padding:22px;border:1px dashed var(--ink-25);border-radius:12px;
- font-size:14px;color:var(--ink-50);line-height:1.5}
+/* ---------- exercício aberto ---------- */
+.aberto{position:fixed;inset:0;background:var(--bnd-bg);z-index:60;display:none;
+ grid-template-rows:auto 1fr}
+.aberto.on{display:grid}
+.barra{display:flex;align-items:center;gap:18px;padding:14px 22px;background:var(--bnd-white);
+ border-bottom:var(--bnd-rule-soft);flex-wrap:wrap}
+.barra .tit{font-family:var(--bnd-display);font-weight:800;font-size:17px;flex:1;min-width:180px}
+.barra .tit span{display:block;font-family:var(--bnd-body);font-weight:400;font-size:12px;color:var(--ink-50)}
+.crono{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:24px;font-weight:700;
+ letter-spacing:-.5px;min-width:88px;text-align:right}
+.crono.estourou{color:var(--bnd-pink)}
+.prev{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11px;color:var(--ink-50);line-height:1.2}
+.quadro{position:relative}
+.quadro .dw-palco{position:absolute;inset:0}
+.perg{position:absolute;left:16px;top:16px;z-index:5;background:var(--bnd-white);
+ border-radius:12px;padding:16px 18px;max-width:min(400px,42vw);max-height:calc(100% - 32px);overflow:auto}
+.perg ol{margin:0;padding-left:18px}
+.perg li{font-size:13.5px;line-height:1.4;padding:4px 0;color:rgba(16,16,16,.8)}
+.perg .dica{margin-top:12px;padding-top:12px;border-top:var(--bnd-rule-soft);font-size:12.5px;
+ color:var(--ink-50);line-height:1.45}
+.perg .fecha{position:absolute;right:10px;top:8px;border:0;background:none;color:var(--ink-25);font-size:16px}
+.mostrar{position:absolute;left:16px;top:16px;z-index:5}
+.dw-palco{height:100%;background:var(--bnd-white)}
+.dw-carregando,.dw-falhou{padding:26px;font-size:14px;color:var(--ink-50);line-height:1.5}
 .dw-falhou b{display:block;color:var(--bnd-ink);margin-bottom:6px}
 .dw-link{width:100%;margin-top:12px;padding:11px 13px;border:1px solid var(--ink-10);
  border-radius:10px;background:var(--bnd-bg);font:inherit;outline:none}
-body.desenhando .dir{grid-column:1/-1}
-.palco.quadro{grid-template-columns:1fr}
-.palco.quadro .esq{max-height:34vh}
-
-/* rodapé */
-.rodape{display:flex;align-items:center;gap:10px;margin-top:24px;flex-wrap:wrap}
-.btn{display:inline-flex;align-items:center;gap:8px;background:var(--bnd-ink);color:#fff;border:0;
- border-radius:99px;padding:13px 24px;font-weight:600;font-size:15px}
-.btn--line{background:none;color:var(--bnd-ink);border:1px dashed var(--ink-25)}
-.btn--line:hover{border-style:solid}
-.btn:disabled{opacity:.3;cursor:default}
-.salvo{font-size:12px;color:var(--ink-50);margin-left:auto}
-.kbd{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11px;color:var(--ink-25)}
-
-/* agenda / fim */
-.tela{position:absolute;inset:60px 0 0;background:var(--bnd-bg);overflow:auto;
- padding:44px clamp(24px,5vw,80px);display:none}
-.tela.on{display:block}
-.wrap{max-width:840px}
-.lin{display:flex;align-items:center;gap:14px;background:var(--bnd-white);border-radius:14px;
- padding:16px 20px;margin-bottom:8px;width:100%;text-align:left;border:0;font:inherit}
-button.lin{cursor:pointer}
-.lin.fora{opacity:.4}
-.mk{width:20px;height:20px;border-radius:6px;border:1px dashed var(--ink-25);flex:0 0 20px;
- display:grid;place-items:center;font-size:12px;color:transparent}
-.lin:not(.fora) .mk{background:var(--bnd-ink);border-color:var(--bnd-ink);color:#fff}
-.aviso{background:var(--bnd-lime);border-radius:var(--bnd-radius);padding:16px 20px;
- font-size:14.5px;line-height:1.45;margin-bottom:20px}
-.lin .cod{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11.5px;color:var(--ink-50);min-width:34px}
-.lin .nm{flex:1;font-weight:600}
-.lin .ax{font-size:11.5px;color:var(--ink-50)}
-.lin .dur{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13px;color:var(--ink-50)}
-.tag{font-size:11px;letter-spacing:.6px;background:var(--bnd-lime);border-radius:99px;padding:4px 10px}
-.tag--line{background:none;border:1px dashed var(--ink-25)}
-.grupo{margin:30px 0 12px}
-.grupo h2{font-size:19px;letter-spacing:-.3px;margin-bottom:5px}
-.grupo p{font-size:13.5px;color:var(--ink-50);line-height:1.45;margin:0;max-width:70ch}
-.lin .pq{display:block;font-size:12px;color:var(--ink-50);font-weight:400;margin-top:3px;line-height:1.4}
-.grande{font-size:clamp(30px,4vw,46px);letter-spacing:-1px;margin-bottom:10px}
-.sub{color:var(--ink-50);font-size:16px;line-height:1.5;margin-bottom:28px;max-width:60ch}
-.sep{height:1px;border-top:1px dashed var(--ink-25);margin:28px 0}
-
-/* modo apresentação: some tudo que é meu, fica o que é do cliente */
-body.apresentando .dica,
-body.apresentando .intro,
-body.apresentando .bar .cli,
-body.apresentando .eyebrow,
-body.apresentando .salvo,
-body.apresentando .mini{display:none !important}
-body.apresentando .dir h3{opacity:0}
-body.apresentando .pergunta{font-size:clamp(34px,4.4vw,58px)}
-body.apresentando .palco{grid-template-columns:1fr .7fr}
+.mini{font-size:12px;color:var(--ink-50)}
+.toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%);background:var(--bnd-ink);
+ color:var(--bnd-white);padding:11px 18px;border-radius:99px;font-size:13.5px;opacity:0;
+ pointer-events:none;transition:opacity .2s;z-index:99}
+.toast.on{opacity:1}
 </style>
 </head>
 <body>
+<div class="app">
+  <aside class="side">
+    <div class="brand">
+      <img src="/shared/logo.svg" alt="Bondioli" onerror="this.outerHTML='<b style=&quot;font-family:var(--bnd-display);font-weight:800;font-size:16px&quot;>BOND</b>'">
+      <span>estratégia</span>
+    </div>
+    <div class="navsec">Trabalho</div>
+    <a class="navbtn" href="/estrategia/">Projetos</a>
+    <a class="navbtn" id="lkProj" href="#">Este projeto</a>
+    <a class="navbtn on" href="#">Workshop</a>
+    <div class="navsec">Consulta</div>
+    <a class="navbtn" href="/estrategia/metodo/PLAYBOOK-NAVE.html">Playbook N.A.V.E.</a>
+    <div class="navsec">Conta</div>
+    <button class="navbtn" onclick="NAVE.logout()">Sair</button>
+  </aside>
 
-<div class="bar">
-  <div class="cli"><b id="bCliente">…</b><span id="bFase"></span></div>
-  <div class="trilha" id="trilha"></div>
-  <div class="crono" id="crono">
-    <div class="prev" id="cPrev"></div>
-    <div class="t" id="cTempo">00:00</div>
-  </div>
-  <button class="icb" id="bPausa" title="Pausar (espaço)">❚❚</button>
-  <button class="icb" id="bApres" title="Modo apresentação — esconde as minhas notas (P)">👁</button>
-  <button class="icb" id="bAgenda" title="Agenda da sessão (Esc)">☰</button>
+  <main class="main">
+    <div class="kicker" id="cliente">…</div>
+    <h1>Workshop</h1>
+    <div class="tl" id="tl"></div>
+    <div id="pilares"></div>
+  </main>
 </div>
 
-<!-- palco -->
-<div class="palco" id="palco" style="display:none">
-  <div class="esq">
-    <div class="eyebrow" id="eyebrow"></div>
-    <h1 class="pergunta" id="pergunta"></h1>
-    <ul class="subs" id="subs"></ul>
-    <div class="intro" id="intro"></div>
-    <div class="dica" id="dica"></div>
-    <div class="cresce"></div>
-    <div class="rodape">
-      <button class="btn btn--line" id="bAnt">← anterior</button>
-      <button class="btn" id="bProx">próxima <span class="kbd" style="color:rgba(255,255,255,.5)">⌘↵</span></button>
-      <span class="salvo" id="salvo"></span>
-    </div>
+<div class="aberto" id="aberto">
+  <div class="barra">
+    <button class="btn btn--line" onclick="fechar()">← voltar</button>
+    <div class="tit" id="exTit">&nbsp;<span id="exSub"></span></div>
+    <div class="prev" id="exPrev"></div>
+    <div class="crono" id="exCrono">00:00</div>
+    <button class="btn btn--line" onclick="pausa()" id="btPausa">pausar</button>
+    <button class="btn" onclick="salvar(true)">salvar</button>
   </div>
-  <div class="dir">
-    <h3>captura</h3>
-    <div id="campo"></div>
-    <div class="rodape" style="margin-top:18px">
-      <button class="btn btn--line" id="bCopiar">copiar para o Miro</button>
-    </div>
-  </div>
+  <div class="quadro" id="quadro"></div>
 </div>
-
-<!-- agenda -->
-<div class="tela on" id="telaAgenda">
-  <div class="wrap">
-    <div class="eyebrow" id="aCliente">…</div>
-    <h1 class="grande">Agenda da sessão</h1>
-    <p class="sub" id="aResumo"></p>
-    <div id="aLista"></div>
-    <div class="rodape">
-      <button class="btn" id="bComecar">começar o workshop</button>
-      <a class="btn btn--line" id="aVoltar" href="#">voltar ao projeto</a>
-    </div>
-    <div class="sep"></div>
-    <p class="mini">Atalhos: <span class="kbd">⌘↵</span> avança · <span class="kbd">espaço</span> pausa o cronômetro ·
-    <span class="kbd">P</span> modo apresentação · <span class="kbd">Esc</span> volta para a agenda.
-    Tudo salva sozinho — não existe botão de salvar aqui de propósito.</p>
-    <p class="mini" style="margin-top:14px"><b>Sobre os tempos.</b> A unidade é o bloco, não o instrumento:
-    o material manda <b>5, 2, 3 minutos</b> e avisa que dar 10 ou 15 <b>"não é eficiente"</b> — o tempo existe
-    para puxar a pessoa a responder rápido. Onde a aula cravou um número, é o número da aula; onde não cravou,
-    é 5 minutos por bloco. Passe o mouse no cronômetro para ver a fonte de cada um.
-    E use post-it: <b>"a pessoa fica rendida a ter que resumir a informação a um bloco"</b> — de ponta grossa,
-    para a letra sair grande e ela não conseguir escrever pequenininho.</p>
-  </div>
-</div>
-
-<!-- fim -->
-<div class="tela" id="telaFim">
-  <div class="wrap">
-    <div class="eyebrow">sessão encerrada</div>
-    <h1 class="grande">Fechou.</h1>
-    <p class="sub" id="fResumo"></p>
-    <div id="fLista"></div>
-    <div class="rodape">
-      <button class="btn" id="bExportar">exportar tudo em markdown</button>
-      <a class="btn btn--line" id="fVoltar" href="#">voltar ao projeto</a>
-    </div>
-  </div>
-</div>
+<div class="toast" id="toast"></div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="/estrategia/config.js"></script>
@@ -242,441 +113,162 @@ body.apresentando .palco{grid-template-columns:1fr .7fr}
 <script src="/estrategia/desenho.js"></script>
 <script>
 const PROJ = new URLSearchParams(location.search).get('p');
-const AXIS = {N:'negócio', A:'audiência', V:'valor', E:'estória'};
-
-let D=null, CAT=null, FILA=[], i=0, PE={}, VAL={};
-let INSTS=[], CAMPOS={}, DENTRO=new Set();
-let t0=null, acc=0, rodando=false, tick=null;
+const PILAR = [
+  ['N','Negócio','Entender a configuração do negócio, os objetivos e as vantagens. Entender o negócio, jamais desenvolvê-lo.'],
+  ['A','Audiência','Quem a marca atende, quem ela quer atender e o que essas pessoas precisam.'],
+  ['V','Valor','A proposta de valor da marca e a dos players que prometem a mesma coisa.'],
+  ['E','Estória','A verdade da marca: origem, crenças, propósito e personalidade.'],
+];
+let D=null, CAT=null, CAMPOS={}, PE={}, VAL={}, atual=null, quadro=null;
+let t0=null, acc=0, rodando=false;
 
 const $ = id => document.getElementById(id);
 const esc = s => String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-const mmss = ms => {
-  const s = Math.max(0, Math.floor(ms/1000));
-  return String(Math.floor(s/60)).padStart(2,'0') + ':' + String(s%60).padStart(2,'0');
-};
+let tt; function toast(m){ const t=$('toast'); t.textContent=m; t.classList.add('on');
+  clearTimeout(tt); tt=setTimeout(()=>t.classList.remove('on'),3000); }
+const mmss = ms => { const s=Math.max(0,Math.floor(ms/1000));
+  return String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0'); };
 
-// ---------------------------------------------------------------- boot
+// ------------------------------------------------------------------ boot
 (async function(){
   if (!await NAVE.guard()) return;
   if (!PROJ) { location.replace('/estrategia/'); return; }
   const [proj, cat] = await Promise.all([ NAVE.get('projeto',{id:PROJ}), NAVE.catalogo() ]);
   D = proj; CAT = cat;
-
-  $('aVoltar').href = $('fVoltar').href = '/estrategia/projeto.html?p=' + PROJ;
-  $('bCliente').textContent = proj.client ? proj.client.name : 'Projeto';
-  $('aCliente').textContent = (proj.client ? proj.client.name + ' · ' : '') + proj.project.name;
-
-  // campos por instrumento
-  const campos = {};
-  cat.fields.forEach(f => (campos[f.exercise_id] ||= []).push(f));
-  Object.values(campos).forEach(a => a.sort((x,y)=>x.ord-y.ord));
-
-  // a fila é a seleção do projeto; sem seleção, os mínimos dos 4 eixos
-  const escolhidos = proj.selection.filter(s => s.selected).map(s => s.exercise_id);
-  const doWorkshop = e => ['N','A','V','E'].includes(e.axis) && e.phase_id === 'F3';
-  // a lista sempre mostra todos os instrumentos de workshop; o que muda é o que vem ligado
-  let insts = cat.exercises.filter(e => doWorkshop(e) || e.sessao === 'casa' || e.sessao === 'solo');
-
-  const ordem = {N:0, A:1, V:2, E:3};
-  insts.sort((a,b) => (ordem[a.axis] ?? 9) - (ordem[b.axis] ?? 9)
-    || a.id.localeCompare(b.id, 'pt', {numeric:true}));
-
+  cat.fields.forEach(f => (CAMPOS[f.exercise_id] ||= []).push(f));
+  Object.values(CAMPOS).forEach(a => a.sort((x,y)=>x.ord-y.ord));
   proj.selection.forEach(s => PE[s.exercise_id] = s.id);
   const porPe = {};
   proj.responses.forEach(r => (porPe[r.project_exercise_id] ||= {})[r.field_key] = r.value);
   proj.selection.forEach(s => { if (porPe[s.id]) VAL[s.exercise_id] = porPe[s.id]; });
 
-  INSTS = insts; CAMPOS = campos;
-  // se o catálogo ainda não trouxer a curadoria, cai no mínimo viável do próprio material
-  let base = insts.filter(e => e.tier === 'espinha').map(e => e.id);
-  if (!base.length) base = insts.filter(e => e.minimum).map(e => e.id);
-  const ligar = escolhidos.length ? escolhidos : base;
-  ligar.forEach(id => DENTRO.add(id));
-  agenda(escolhidos.length > 0);
+  $('cliente').textContent = (proj.client ? proj.client.name + ' · ' : '') + proj.project.name;
+  $('lkProj').href = '/estrategia/projeto.html?p=' + PROJ;
+  linhaDoTempo();
+  grade();
 })();
 
-// A sessão não é o projeto inteiro. O método roda em blocos — ligue e desligue
-// aqui o que entra NESTA sessão, e o tempo vai somando ao lado.
-const GRUPOS = [
-  {tier:'espinha', t:'Espinha — não negocia',
-   d:'Sem estes, algum campo do relatório de estratégia ou da plataforma de marca fica sem resposta. Vêm ligados.'},
-  {tier:'sinal', t:'Por sinal — só se apareceu nas entrevistas',
-   d:'Cada um resolve um problema específico. Ligue o que bate com o que você ouviu, não o que parece bonito.'},
-  {tier:'extra', t:'Ângulo extra',
-   d:'Cobre por outro caminho o que a espinha já resolve. Redundância é proposital no método, mas custa tempo.'}
-];
-
-function linha(e){
-  const pq = e.porque ? `<span class="pq">${esc(e.porque)}</span>` : '';
-  return `<button class="lin ${DENTRO.has(e.id)?'':'fora'}" id="lin_${e.id}" onclick="alterna('${e.id}')">
-      <span class="mk">✓</span>
-      <span class="cod">${e.id}</span>
-      <span class="nm">${esc(e.name)}
-        <span class="ax" style="display:block">eixo ${AXIS[e.axis]||'—'} · ${(CAMPOS[e.id]||[]).length} perguntas</span>
-        ${pq}</span>
-      ${e.sessao === 'casa' ? '<span class="tag tag--line">lição de casa</span>' : ''}
-      ${e.sessao === 'solo' ? '<span class="tag tag--line">você, depois</span>' : ''}
-      <span class="dur">${e.sessao === 'workshop' ? (e.duration_min||'—')+' min' : '—'}</span>
-    </button>`;
+function linhaDoTempo(){
+  const fases = D.phases.map(pp => ({pp, f: pp.nave_phases||{}}))
+                        .sort((a,b)=>(a.f.ord??0)-(b.f.ord??0));
+  const atualF = fases.find(x => x.pp.status !== 'concluido') || fases[fases.length-1];
+  let macro = null;
+  $('tl').innerHTML = fases.map(x => {
+    const novo = x.f.macro !== macro; if (novo) macro = x.f.macro;
+    const l = novo ? ` data-l="${(x.f.macro||'').toLowerCase()}"` : '';
+    return `<i class="${x.pp.status==='concluido'?'ok':''} ${x===atualF?'aqui':''}"${l}
+      title="${esc(x.f.id+' · '+x.f.name)}"></i>`;
+  }).join('');
 }
 
-function agenda(temSelecao){
-  $('aLista').innerHTML = GRUPOS.map(g => {
-    const itens = INSTS.filter(e => (e.tier||'extra') === g.tier);
-    if (!itens.length) return '';
-    return `<div class="grupo"><h2>${g.t}</h2><p>${g.d}</p></div>` + itens.map(linha).join('');
-  }).join('') || '<div class="lin">Nada disponível.</div>';
-  $('aResumo').dataset.tem = temSelecao ? '1' : '';
-  soma();
+// ------------------------------------------------------------------ grade
+function grade(){
+  $('pilares').innerHTML = PILAR.map(([eixo, nome, desc]) => {
+    const lista = CAT.exercises
+      .filter(e => e.axis === eixo && e.phase_id === 'F3')
+      .sort((a,b)=>a.id.localeCompare(b.id,'pt',{numeric:true}));
+    if (!lista.length) return '';
+    return `<section class="pilar">
+      <h2>${nome}</h2><p>${desc}</p>
+      <div class="cards">${lista.map(cardHtml).join('')}</div>
+    </section>`;
+  }).join('');
 }
 
-function alterna(id){
-  DENTRO.has(id) ? DENTRO.delete(id) : DENTRO.add(id);
-  $('lin_'+id).classList.toggle('fora', !DENTRO.has(id));
-  soma();
-}
-window.alterna = alterna;
-
-function soma(){
-  const dentro = INSTS.filter(e => DENTRO.has(e.id) && e.sessao !== 'casa' && e.sessao !== 'solo');
-  const min = dentro.reduce((s,e)=> s + (e.duration_min||0), 0);
-  const perg = dentro.reduce((s,e)=> s + (CAMPOS[e.id]||[]).length, 0);
-  const h = Math.floor(min/60), m = min%60;
-  const tempo = (h ? h+'h' : '') + (m ? (h?' ':'')+m+'min' : (h?'':'0min'));
-
-  const origem = $('aResumo').dataset.tem
-    ? 'Esta é a seleção que você fez para este cliente.'
-    : 'Liguei a <b>espinha</b> — o conjunto sem o qual os entregáveis não fecham. O resto está abaixo, desligado.';
-
-  let alerta = '';
-  if (min > 240) alerta = `<div class="aviso"><b>${tempo} não cabe num bloco só.</b>
-    Uma sessão rende 3 a 4 horas antes de todo mundo cansar. A imersão do método (F3) prevê
-    <b>2 dias</b> — então divida em dois blocos, ou desligue instrumentos aqui.
-    O que ficar de fora continua no projeto, esperando.</div>`;
-  else if (min > 0) alerta = `<div class="aviso"><b>${tempo} de sessão.</b>
-    Cabe num bloco. O que você desligar continua no projeto para outra sessão.</div>`;
-
-  $('aResumo').innerHTML = origem +
-    ` <b>${dentro.length} instrumentos · ${perg} perguntas · ${tempo}.</b>` + alerta;
-  $('bComecar').disabled = dentro.length === 0;
+function cardHtml(e){
+  const resp = VAL[e.id] || {};
+  const feito = Object.values(resp).some(v => v != null && (Array.isArray(v) ? v.length : String(v).length));
+  const ess = e.tier === 'espinha' || (!e.tier && e.minimum);
+  return `<button class="card ${ess?'ess':''}" onclick="abrir('${e.id}')">
+    <span class="cod">${e.id}${ess ? ' · essencial' : ''}</span>
+    <span class="nm">${esc(e.name)}</span>
+    <span class="pe">
+      <span>${e.duration_min || '—'} min</span>
+      <span>${(CAMPOS[e.id]||[]).length} perguntas</span>
+      ${feito ? '<span class="feito">✓ preenchido</span>' : ''}
+    </span></button>`;
 }
 
-// O método cronometra POR BLOCO, não por pergunta: "5 minutos pro passado, vai".
-// Então campos com o mesmo prefixo antes do "·" viram uma tela só.
-// TEM QUE SER IDÊNTICA à função grupo() do catalog.py
-function bloco(label, ficha){
-  const l = (label||'').trim();
-  if (ficha && /^\d+[.)]\s/.test(l)) return '#ficha';
-  if (l.includes(' · ')) return l.split(' · ')[0].trim();
-  if (l.includes(' — ')) return l.split(' — ')[0].trim();
-  const l2 = l.replace(/\s*[+\u2212-]\s*$/, '');
-  if (l2 !== l) return l2.trim();
-  return null;
-}
-function curta(label){
-  const l = (label||'').trim();
-  if (l.includes(' · ')) return l.split(' · ').slice(1).join(' · ').trim();
-  return l;
-}
+// ------------------------------------------------------------------ abrir
+async function abrir(code){
+  const e = CAT.exercises.find(x => x.id === code); if (!e) return;
+  atual = e;
+  $('aberto').classList.add('on');
+  $('exTit').innerHTML = esc(e.name) + `<span>${e.id} · ${(CAMPOS[code]||[]).length} perguntas</span>`;
+  $('exPrev').innerHTML = 'previsto<br>' + (e.duration_min || '—') + ' min';
+  zera(e.duration_min || 0);
 
-function montaFila(){
-  FILA = [];
-  INSTS.filter(e => DENTRO.has(e.id) && e.sessao !== 'casa' && e.sessao !== 'solo').forEach(e => {
-    const campos = CAMPOS[e.id] || [];
-    const passos = [];
-    campos.forEach(f => {
-      const b = bloco(f.label, e.ficha);
-      const ult = passos[passos.length-1];
-      if (b && ult && ult.bloco === b) ult.campos.push(f);
-      else passos.push({ bloco:b, campos:[f] });
-    });
-    passos.forEach((p, idx) => {
-      FILA.push({
-        ex: e, campos: p.campos, bloco: p.bloco, idx, total: passos.length,
-        titulo: (p.bloco && p.bloco !== '#ficha') ? p.bloco
-                : (p.campos.length > 1 ? e.name : p.campos[0].label),
-        dur: e.min_bloco || 5
-      });
-    });
+  const campos = CAMPOS[code] || [];
+  const dicas = [...new Set(campos.map(f => f.hint).filter(Boolean))];
+  $('quadro').innerHTML = `
+    <div class="perg" id="perg">
+      <button class="fecha" onclick="document.getElementById('perg').style.display='none';document.getElementById('mostrar').style.display='block'">×</button>
+      ${e.intro ? `<p class="mini" style="margin:0 0 10px">${esc(e.intro)}</p>` : ''}
+      <ol>${campos.map(f => `<li>${esc(f.label)}</li>`).join('')}</ol>
+      ${dicas.length ? `<div class="dica">${dicas.map(esc).join('<br>')}</div>` : ''}
+    </div>
+    <button class="btn btn--line mostrar" id="mostrar" style="display:none"
+      onclick="document.getElementById('perg').style.display='block';this.style.display='none'">perguntas</button>
+    <div id="palco" style="height:100%"></div>`;
+
+  const salvo = (VAL[code] || {}).quadro || null;
+  quadro = await NAVE_DESENHO.montar($('palco'), salvo, val => {
+    (VAL[code] ||= {}).quadro = val;
+    salvar(false);
   });
-  // trilha agrupada por instrumento: 14 grupos legíveis, não 79 tracinhos
-  const grupos = [];
-  FILA.forEach((p,n) => {
-    let g = grupos[grupos.length-1];
-    if (!g || g.cod !== p.ex.id) { g = {cod:p.ex.id, itens:[]}; grupos.push(g); }
-    g.itens.push(n);
-  });
-  $('trilha').innerHTML = grupos.map(g =>
-    `<div class="tg" data-cod="${g.cod}">` +
-    g.itens.map(n => `<div class="tp" data-n="${n}" title="${esc(FILA[n].titulo)}" onclick="irPara(${n})"></div>`).join('') +
-    `</div>`).join('');
 }
 
-// ---------------------------------------------------------------- cronômetro
-function zeraCrono(min){
-  acc = 0; t0 = Date.now(); rodando = true;
-  $('cPrev').innerHTML = 'bloco<br>' + min + ' min';
-  $('cPrev').title = (FILA[i] && FILA[i].ex.tempo_fonte) || '';
-  $('crono').dataset.min = min;
-  desenhaCrono();
+function fechar(){
+  salvar(false);
+  if (quadro) { quadro.destruir(); quadro = null; }
+  rodando = false;
+  $('aberto').classList.remove('on');
+  grade();
 }
-function desenhaCrono(){
+
+// ------------------------------------------------------------------ tempo
+function zera(min){ acc=0; t0=Date.now(); rodando=true; $('exCrono').dataset.min=min; pinta(); }
+function pinta(){
   const ms = acc + (rodando ? Date.now()-t0 : 0);
-  $('cTempo').textContent = mmss(ms);
-  const lim = (+$('crono').dataset.min || 0) * 60000;
-  $('crono').classList.toggle('estourou', lim > 0 && ms > lim);
+  $('exCrono').textContent = mmss(ms);
+  const lim = (+$('exCrono').dataset.min||0)*60000;
+  $('exCrono').classList.toggle('estourou', lim>0 && ms>lim);
 }
-tick = setInterval(desenhaCrono, 500);
+setInterval(() => { if ($('aberto').classList.contains('on')) pinta(); }, 500);
 function pausa(){
-  if (rodando) { acc += Date.now()-t0; rodando=false; } else { t0=Date.now(); rodando=true; }
-  $('bPausa').classList.toggle('on', !rodando);
-  $('bPausa').textContent = rodando ? '❚❚' : '▶';
+  if (rodando){ acc += Date.now()-t0; rodando=false; $('btPausa').textContent='retomar'; }
+  else { t0=Date.now(); rodando=true; $('btPausa').textContent='pausar'; }
 }
 
-// ---------------------------------------------------------------- passo
-function irPara(n){
-  if (n < 0 || n >= FILA.length) return;
-  salvar();
-  i = n;
-  render();
+// ------------------------------------------------------------------ salvar
+let tsave=null, salvando=false;
+function salvar(agora){
+  clearTimeout(tsave);
+  if (agora) return gravar();
+  tsave = setTimeout(gravar, 1200);
 }
-window.irPara = irPara;
-
-function render(){
-  const p = FILA[i];
-  $('telaAgenda').classList.remove('on');
-  $('telaFim').classList.remove('on');
-  $('palco').style.display = 'grid';
-
-  const varios = p.campos.length > 1;
-  $('bFase').textContent = 'imersão · eixo ' + (AXIS[p.ex.axis] || '—');
-  $('eyebrow').innerHTML = `<b>${p.ex.id} · ${esc(p.ex.name)}</b> &nbsp;·&nbsp; ` +
-    `bloco ${p.idx+1} de ${p.total} &nbsp;·&nbsp; ${i+1} de ${FILA.length} na sessão`;
-  $('pergunta').textContent = p.titulo;
-
-  // quando o bloco tem várias perguntas, elas aparecem em lista — é o roteiro falado
-  $('subs').innerHTML = varios
-    ? p.campos.map((f,n) => `<li id="sub_${n}">${esc(curta(f.label))}</li>`).join('') : '';
-  $('subs').style.display = varios ? 'block' : 'none';
-
-  // o enunciado do instrumento só no primeiro bloco dele
-  $('intro').style.display = (p.idx === 0 && p.ex.intro) ? 'block' : 'none';
-  $('intro').textContent = p.ex.intro || '';
-
-  const hints = [...new Set(p.campos.map(f => f.hint).filter(Boolean))];
-  if (hints.length) { $('dica').style.display='block';
-    $('dica').innerHTML = '<div class="lbl">como conduzir</div>' +
-      (hints.length === 1 ? esc(hints[0])
-        : '<ul style="margin:0;padding-left:18px">' + hints.map(h=>`<li>${esc(h)}</li>`).join('') + '</ul>'); }
-  else $('dica').style.display = 'none';
-
-  document.querySelectorAll('.tp').forEach(el => {
-    const n = +el.dataset.n;
-    el.classList.toggle('feito', n < i);
-    el.classList.toggle('atual', n === i);
-  });
-  document.querySelectorAll('.tg').forEach(g =>
-    g.classList.toggle('aqui', !!g.querySelector('.tp.atual')));
-
-  $('bAnt').disabled = i === 0;
-  $('bProx').innerHTML = (i === FILA.length-1)
-    ? 'encerrar sessão' : 'próxima <span class="kbd" style="color:rgba(255,255,255,.5)">⌘↵</span>';
-
-  renderCampo(p);
-  zeraCrono(p.dur);
-}
-
-// ---------------------------------------------------------------- captura
-function valor(p, f){ return (VAL[p.ex.id] || {})[(f || p.campos[0]).key]; }
-
-function renderCampo(p){
-  const el = $('campo');
-  document.getElementById('palco').classList.remove('quadro');
-  if (p.campos.length === 1) { umCampo(p, p.campos[0], el); return; }
-  el.innerHTML = p.campos.map((f,n) =>
-    `<div class="bl"><label>${esc(curta(f.label))}</label><div id="bl_${n}"></div>` +
-    (f.hint ? `<div class="h">${esc(f.hint)}</div>` : '') + `</div>`).join('');
-  p.campos.forEach((f,n) => umCampo(p, f, document.getElementById('bl_'+n), n));
-}
-
-function umCampo(p, f, el, n){
-  const v = valor(p, f);
-  const cols = f.config?.columns || [];
-  const opts = f.config?.options || [];
-  const uid = 'c' + (n == null ? 0 : n);
-  const foca = () => { const el2 = document.getElementById('sub_'+n); if (el2) {
-      document.querySelectorAll('.subs li').forEach(x=>x.classList.remove('foco')); el2.classList.add('foco'); } };
-
-  if (f.type === 'draw') {
-    // o quadro ocupa a tela: exercício espacial não cabe em coluna estreita
-    document.getElementById('palco').classList.add('quadro');
-    NAVE_DESENHO.montar(el, v, val => grava(f, val));
-    return;
-  }
-  if (f.type === 'list') {
-    const itens = Array.isArray(v) ? v : [];
-    el.innerHTML = itens.map((x,k)=>`<div class="pill"><span>${esc(x)}</span>
-      <button class="x" data-k="${k}">×</button></div>`).join('') +
-      `<div class="addrow"><input type="text" id="novo_${uid}" placeholder="escreva e dê enter"></div>` +
-      (n == null ? `<div class="mini" style="margin-top:8px">um post-it por linha — frase curta, não parágrafo</div>` : '');
-    const inp = document.getElementById('novo_'+uid);
-    inp.addEventListener('focus', foca);
-    inp.addEventListener('keydown', e => {
-      if (e.key === 'Enter' && e.target.value.trim()) {
-        const a = Array.isArray(valor(p,f)) ? [...valor(p,f)] : [];
-        a.push(e.target.value.trim()); grava(f, a); renderCampo(p);
-        const i2 = document.getElementById('novo_'+uid); if (i2) i2.focus();
-      }
-    });
-    el.querySelectorAll('.pill .x').forEach(b => b.onclick = () => {
-      const a=[...(valor(p,f)||[])]; a.splice(+b.dataset.k,1); grava(f, a); renderCampo(p); });
-    if (n == null || n === 0) inp.focus();
-  }
-  else if (f.type === 'table') {
-    const linhas = Array.isArray(v) && v.length ? v : [cols.map(()=> '')];
-    el.innerHTML = `<table class="tabela"><tr>${cols.map(c=>`<th>${esc(c)}</th>`).join('')}</tr>` +
-      linhas.map((r,ri)=>`<tr>${cols.map((_,ci)=>
-        `<td><textarea data-r="${ri}" data-c="${ci}">${esc(r[ci]||'')}</textarea></td>`).join('')}</tr>`).join('') +
-      `</table><button class="btn btn--line" data-add="1">+ linha</button>`;
-    el.querySelectorAll('textarea').forEach(t => {
-      t.addEventListener('focus', foca);
-      t.addEventListener('input', () => {
-        const m = linhas.map(r=>[...r]);
-        el.querySelectorAll('textarea').forEach(x => m[+x.dataset.r][+x.dataset.c] = x.value);
-        grava(f, m);
-      });
-    });
-    el.querySelector('[data-add]').onclick = () => { grava(f, [...linhas, cols.map(()=> '')]); renderCampo(p); };
-  }
-  else if (f.type === 'select' || f.type === 'multiselect') {
-    const sel = f.type === 'multiselect' ? (Array.isArray(v)?v:[]) : [v];
-    el.innerHTML = opts.map((o,k)=>`<button class="opt ${sel.includes(o)?'on':''}" data-o="${k}">${esc(o)}</button>`).join('');
-    el.querySelectorAll('[data-o]').forEach(b => b.onclick = () => {
-      const o = opts[+b.dataset.o];
-      foca();
-      if (f.type === 'multiselect') {
-        const a = Array.isArray(valor(p,f)) ? [...valor(p,f)] : [];
-        const k = a.indexOf(o); k>=0 ? a.splice(k,1) : a.push(o); grava(f, a);
-      } else grava(f, valor(p,f) === o ? null : o);
-      renderCampo(p);
-    });
-  }
-  else {
-    const multi = f.type === 'longtext';
-    const alt = n == null ? '' : 'style="min-height:110px"';
-    el.innerHTML = multi
-      ? `<textarea id="txt_${uid}" ${alt} placeholder="anote aqui — cru mesmo, organiza depois"></textarea>`
-      : `<input type="text" id="txt_${uid}">`;
-    const t = document.getElementById('txt_'+uid);
-    t.value = v == null ? '' : v;
-    t.addEventListener('focus', foca);
-    t.addEventListener('input', e => grava(f, e.target.value));
-    if (n == null || n === 0) t.focus();
-  }
-}
-
-// ---------------------------------------------------------------- gravação
-let fila = null, timer = null, pend = {};
-function grava(f, v){
-  const p = FILA[i];
-  (VAL[p.ex.id] ||= {})[f.key] = v;
-  pend[f.key] = v;
-  fila = p;
-  $('salvo').textContent = '…';
-  clearTimeout(timer);
-  timer = setTimeout(salvar, 900);
-}
-async function salvar(){
-  if (!fila) return;
-  const p = fila; fila = null; clearTimeout(timer);
+async function gravar(){
+  if (!atual || salvando) return;
+  const code = atual.id, val = (VAL[code]||{}).quadro;
+  if (val === undefined) return;
+  salvando = true;
   try {
-    let pe = PE[p.ex.id];
+    let pe = PE[code];
     if (!pe) {
       const r = await NAVE.post('selecao', { project_id: PROJ,
-        items: [{ exercise_id: p.ex.id, selected: true, rationale: 'rodado no workshop' }] });
-      pe = r.items[0].id; PE[p.ex.id] = pe;
+        items:[{exercise_id: code, selected:true, rationale:'rodado no workshop'}] });
+      pe = r.items[0].id; PE[code] = pe;
     }
-    const values = pend; pend = {};
-    await NAVE.post('resposta', { project_exercise_id: pe, status:'em_andamento', values });
-    $('salvo').textContent = 'salvo ' + new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
-  } catch (e) {
-    $('salvo').textContent = 'sem conexão — guardado aqui';
-    try { localStorage.setItem('nave:ws:'+PROJ, JSON.stringify(VAL)); } catch {}
-  }
+    await NAVE.post('resposta', { project_exercise_id: pe, status:'em_andamento', values:{ quadro: val } });
+    toast('Salvo.');
+  } catch (e) { toast('Sem conexão — o desenho continua aqui.'); }
+  finally { salvando = false; }
 }
 
-// ---------------------------------------------------------------- ações
-$('bComecar').onclick = () => { montaFila(); if (FILA.length) { i = 0; render(); } };
-$('bAnt').onclick = () => irPara(i-1);
-$('bProx').onclick = () => {
-  if (i === FILA.length-1) encerrar(); else irPara(i+1);
-};
-$('bPausa').onclick = pausa;
-$('bAgenda').onclick = () => { salvar(); $('palco').style.display='none';
-  $('telaFim').classList.remove('on'); $('telaAgenda').classList.add('on'); };
-$('bApres').onclick = () => {
-  document.body.classList.toggle('apresentando');
-  $('bApres').classList.toggle('on', document.body.classList.contains('apresentando'));
-};
-$('bCopiar').onclick = () => {
-  navigator.clipboard.writeText(textoDoPasso(FILA[i]));
-  $('bCopiar').textContent = 'copiado'; setTimeout(()=>$('bCopiar').textContent='copiar para o Miro', 1400);
-};
-
-function textoDoCampo(p, f){
-  const v = valor(p, f);
-  if (Array.isArray(v) && Array.isArray(v[0])) return v.map(r=>r.join('\t')).join('\n');
-  if (Array.isArray(v)) return v.join('\n');
-  return v == null ? '' : String(v);
-}
-function textoDoPasso(p){
-  return p.campos.map(f => {
-    const t = textoDoCampo(p, f);
-    return t ? (p.campos.length > 1 ? curta(f.label) + '\n' + t : t) : '';
-  }).filter(Boolean).join('\n\n');
-}
-
-function encerrar(){
-  salvar();
-  rodando = false;
-  $('palco').style.display = 'none';
-  $('telaFim').classList.add('on');
-  const feitos = {};
-  FILA.forEach(p => p.campos.forEach(f => { const v = valor(p, f);
-    if (v != null && String(v).length && !(Array.isArray(v) && !v.length))
-      (feitos[p.ex.id] ||= {ex:p.ex, n:0}).n++; }));
-  const lista = Object.values(feitos);
-  $('fResumo').innerHTML = `<b>${lista.length} instrumentos com resposta.</b> ` +
-    `Tudo já está no projeto. O próximo passo do método é a descompressão: passar a limpo enquanto está fresco.`;
-  $('fLista').innerHTML = lista.map(x=>`
-    <div class="lin"><span class="cod">${x.ex.id}</span>
-      <span class="nm">${esc(x.ex.name)}</span>
-      <span class="dur">${x.n} respostas</span></div>`).join('');
-}
-
-$('bExportar').onclick = () => {
-  let md = `# ${D.client ? D.client.name : ''} · workshop\n\n`;
-  let atual = null;
-  FILA.forEach(p => p.campos.forEach(f => {
-    const t = textoDoCampo(p, f);
-    if (!t) return;
-    if (atual !== p.ex.id) { atual = p.ex.id; md += `\n## ${p.ex.id} · ${p.ex.name}\n\n`; }
-    md += `**${f.label}**\n\n${t}\n\n`;
-  }));
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(new Blob([md], {type:'text/markdown'}));
-  a.download = 'workshop.md'; a.click();
-};
-
-// ---------------------------------------------------------------- teclado
 document.addEventListener('keydown', e => {
-  const digitando = /INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName);
-  if ((e.metaKey||e.ctrlKey) && e.key === 'Enter') { e.preventDefault(); $('bProx').click(); }
-  else if (e.key === 'Escape') $('bAgenda').click();
-  else if (!digitando && e.key === ' ') { e.preventDefault(); pausa(); }
-  else if (!digitando && e.key.toLowerCase() === 'p') $('bApres').click();
+  if (e.key === 'Escape' && $('aberto').classList.contains('on')) fechar();
 });
-window.addEventListener('beforeunload', salvar);
+window.addEventListener('beforeunload', gravar);
 </script>
 </body>
 </html>

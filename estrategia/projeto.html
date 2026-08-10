@@ -8,91 +8,62 @@
 <link rel="stylesheet" href="/shared/shared.css">
 <link rel="stylesheet" href="/estrategia/ui.css">
 <style>
-/* ---------- navegação: onde estou ---------- */
-.crumb{font-size:12.5px;color:var(--ink-50);margin-bottom:10px}
-.crumb a{text-decoration:none}
-.crumb a:hover{text-decoration:underline}
-.abas{display:flex;gap:2px;border-bottom:var(--bnd-rule-soft);margin:26px 0 30px}
-.aba{background:none;border:0;padding:12px 18px;font-size:14.5px;color:var(--ink-50);
- border-bottom:2px solid transparent;margin-bottom:-1px}
-.aba:hover{color:var(--bnd-ink)}
-.aba.on{color:var(--bnd-ink);font-weight:600;border-bottom-color:var(--bnd-ink)}
-.painel{display:none} .painel.on{display:block}
+/* Menos superfícies. Fundo cinza, separador tracejado, nada de cartão sobre cartão. */
+.topo{margin-bottom:34px}
+.crumb{font-size:12.5px;color:var(--ink-50);margin-bottom:8px}
+.crumb a{text-decoration:none} .crumb a:hover{text-decoration:underline}
+.linha{font-size:14px;color:var(--ink-50);margin-top:10px}
+.linha b{color:var(--bnd-ink);font-weight:600}
 
-/* ---------- agora: a resposta em um segundo ---------- */
+/* o único bloco com peso na tela */
 .agora{background:var(--bnd-ink);color:var(--bnd-white);border-radius:var(--bnd-radius);
- padding:30px 32px;margin-bottom:14px}
-.agora .k{font-size:11.2px;letter-spacing:1.12px;color:rgba(255,255,255,.5);margin-bottom:12px}
-.agora h2{font-family:var(--bnd-display);font-weight:800;font-size:clamp(23px,2.5vw,32px);
- line-height:1.15;letter-spacing:-.5px;margin:0 0 10px}
-.agora p{color:rgba(255,255,255,.65);font-size:15px;line-height:1.5;margin:0 0 22px;max-width:62ch}
+ padding:30px 32px;margin-bottom:44px}
+.agora .k{font-size:11.2px;letter-spacing:1.12px;color:rgba(255,255,255,.45);margin-bottom:12px}
+.agora h2{font-family:var(--bnd-display);font-weight:800;font-size:clamp(22px,2.4vw,31px);
+ line-height:1.15;letter-spacing:-.5px;margin:0 0 8px}
+.agora p{color:rgba(255,255,255,.6);font-size:14.5px;line-height:1.5;margin:0 0 22px;max-width:60ch}
 .agora .btn{background:var(--bnd-lime);color:var(--bnd-ink);border:0}
-.agora .btn--ghost{background:none;color:var(--bnd-white);border:1px dashed rgba(255,255,255,.35)}
+.agora .btn--g{background:none;color:var(--bnd-white);border:1px dashed rgba(255,255,255,.3)}
 .agora.travado{background:var(--bnd-lime);color:var(--bnd-ink)}
-.agora.travado .k{color:rgba(16,16,16,.5)}
-.agora.travado p{color:rgba(16,16,16,.65)}
+.agora.travado .k{color:rgba(16,16,16,.45)}
+.agora.travado p{color:rgba(16,16,16,.6)}
 .agora.travado .btn{background:var(--bnd-ink);color:var(--bnd-white)}
 
-/* ---------- linha do tempo ---------- */
-.tl{background:var(--bnd-white);border-radius:var(--bnd-radius);padding:24px 28px 20px;margin-bottom:14px}
-.tl .macros{display:flex;gap:4px;margin-bottom:6px}
-.tl .mac{flex:1;font-size:10.5px;letter-spacing:1px;color:var(--ink-25);padding-bottom:6px}
-.tl .mac.aqui{color:var(--bnd-ink);font-weight:600}
-.tl .barra{display:flex;gap:3px;align-items:flex-end}
-.tl .f{flex:1;height:26px;border-radius:5px;background:var(--ink-10);position:relative;
- border:0;padding:0;min-width:6px;cursor:pointer}
-.tl .f.feita{background:var(--bnd-ink)}
-.tl .f.agora{background:var(--bnd-pink)}
-.tl .f.anc{height:38px}
-.tl .f.anc::after{content:'';position:absolute;left:50%;top:-9px;transform:translateX(-50%);
- width:7px;height:7px;border-radius:99px;border:1.5px solid var(--bnd-ink);background:var(--bnd-bg)}
-.tl .f.anc.ok::after{background:var(--bnd-ink)}
-.tl .f:hover{outline:1px solid var(--ink-25)}
-.tl .leg{display:flex;gap:18px;margin-top:14px;font-size:11.5px;color:var(--ink-50);flex-wrap:wrap}
-
-/* ---------- cartões de estado ---------- */
-.linha3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:14px}
-@media(max-width:860px){.linha3{grid-template-columns:1fr}}
-.cx{background:var(--bnd-white);border-radius:var(--bnd-radius);padding:22px 24px}
-.cx .k{font-size:11.2px;letter-spacing:1.12px;color:var(--ink-50);margin-bottom:12px}
-.cx .n{font-family:var(--bnd-display);font-weight:800;font-size:34px;line-height:1;letter-spacing:-1px}
-.cx .d{font-size:13.5px;color:var(--ink-50);margin-top:8px;line-height:1.45}
-.cx ul{margin:10px 0 0;padding:0;list-style:none}
-.cx li{font-size:14px;padding:7px 0;border-top:1px dashed var(--ink-10);line-height:1.4}
-.cx li:first-child{border-top:0}
-
-/* ---------- objetivo ---------- */
-.obj{background:var(--bnd-lime);border-radius:var(--bnd-radius);padding:24px 26px;margin-bottom:14px}
-.obj textarea{width:100%;border:0;background:transparent;font:inherit;font-family:var(--bnd-display);
- font-weight:800;font-size:19px;line-height:1.35;resize:vertical;min-height:52px;outline:none;letter-spacing:-.2px}
-.obj textarea::placeholder{font-weight:400;color:rgba(16,16,16,.4)}
-
-/* ---------- fases ---------- */
-.fase{background:var(--bnd-white);border-radius:var(--bnd-radius);margin-bottom:8px;overflow:hidden}
-.fase.anc{outline:1px solid var(--bnd-ink)}
-.fase>summary{list-style:none;cursor:pointer;padding:17px 22px;display:flex;align-items:center;gap:14px}
+/* a lista de fases É a linha do tempo */
+.grupo{font-size:11.2px;letter-spacing:1.12px;color:var(--ink-25);margin:32px 0 4px}
+.grupo:first-of-type{margin-top:0}
+.fase{border-bottom:var(--bnd-rule-soft)}
+.fase>summary{list-style:none;cursor:pointer;padding:16px 4px;display:flex;align-items:baseline;gap:16px}
 .fase>summary::-webkit-details-marker{display:none}
+.fase>summary:hover .nm{text-decoration:underline;text-underline-offset:3px}
 .fase .code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11.5px;
- color:var(--ink-50);min-width:28px}
-.fase .nm{font-family:var(--bnd-display);font-weight:800;font-size:15.5px;flex:1}
-.fase .ob{display:block;font-family:var(--bnd-body);font-weight:400;font-size:13px;
- color:var(--ink-50);margin-top:3px}
-.fase .body{padding:2px 22px 22px;border-top:var(--bnd-rule-soft)}
-.tk{display:flex;align-items:flex-start;gap:11px;padding:8px 0;font-size:14.5px}
-.tk input{margin-top:3px;accent-color:var(--bnd-ink);width:16px;height:16px}
-.tk.done span{color:var(--ink-25);text-decoration:line-through}
-.gatebox{margin-top:18px;padding:18px 20px;border-radius:12px;background:var(--bnd-lime)}
-.gatebox .t{font-size:11.2px;letter-spacing:1.12px;margin-bottom:8px;font-weight:600}
-.gatebox textarea{width:100%;padding:10px 12px;border:1px solid var(--ink-10);border-radius:10px;
- background:var(--bnd-white);font:inherit;min-height:60px;outline:none;margin-bottom:10px}
-.exgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:9px;margin-top:10px}
-.exc{display:block;background:var(--bnd-bg);border-radius:11px;padding:13px 15px;
- text-decoration:none;font-size:14px;line-height:1.3}
-.exc:hover{outline:1px solid var(--ink-25)}
-.exc b{display:block;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
- font-size:10.5px;color:var(--ink-50);margin-bottom:5px;letter-spacing:.3px}
+ color:var(--ink-25);min-width:26px}
+.fase .nm{flex:1;font-size:15.5px}
+.fase.feita .nm,.fase.feita .code{color:var(--ink-25)}
+.fase.aqui .nm{font-family:var(--bnd-display);font-weight:800;font-size:17px}
+.fase .cnt{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;color:var(--ink-25)}
+.fase .anc{font-size:11.5px;color:var(--ink-50)}
+.fase .body{padding:2px 4px 26px 42px}
+.tk{display:flex;align-items:flex-start;gap:11px;padding:7px 0;font-size:14.5px}
+.tk input{margin-top:3px;accent-color:var(--bnd-ink);width:15px;height:15px}
+.tk.done span{color:var(--ink-25)}
+.ex{display:inline-block;background:var(--bnd-white);border-radius:9px;padding:8px 12px;
+ margin:0 6px 6px 0;font-size:13.5px;text-decoration:none}
+.ex:hover{outline:1px solid var(--ink-25)}
+.ex b{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:10.5px;color:var(--ink-50);margin-right:7px}
+.rot{font-size:11.2px;letter-spacing:1.12px;color:var(--ink-25);margin:20px 0 8px}
+.ancora{margin-top:20px;padding:18px 20px;border-radius:12px;background:var(--bnd-lime)}
+.ancora .t{font-size:11.2px;letter-spacing:1.12px;font-weight:600;margin-bottom:8px}
+.ancora textarea{width:100%;padding:10px 12px;border:1px solid var(--ink-10);border-radius:10px;
+ background:var(--bnd-white);font:inherit;min-height:58px;outline:none;margin-bottom:10px}
+.acoes{display:flex;gap:8px;flex-wrap:wrap;margin-top:18px}
 .mini{font-size:12px;color:var(--ink-50)}
-.vazio{padding:46px 24px;text-align:center;color:var(--ink-50);font-size:14.5px;line-height:1.5}
+.objlink{display:inline-block;margin-top:12px;font-size:13.5px;color:var(--ink-50);
+ border-bottom:1px dashed var(--ink-25);text-decoration:none;cursor:pointer}
+.obj{background:var(--bnd-lime);border-radius:var(--bnd-radius);padding:22px 24px;margin-bottom:44px}
+.obj textarea{width:100%;border:0;background:transparent;font:inherit;font-family:var(--bnd-display);
+ font-weight:800;font-size:18px;line-height:1.35;resize:vertical;min-height:46px;outline:none}
+.obj textarea::placeholder{font-weight:400;color:rgba(16,16,16,.4)}
 .toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%);background:var(--bnd-ink);
  color:var(--bnd-white);padding:11px 18px;border-radius:99px;font-size:13.5px;opacity:0;
  pointer-events:none;transition:opacity .2s;z-index:50;max-width:80vw}
@@ -108,12 +79,10 @@
       <img src="/shared/logo.svg" alt="Bondioli" onerror="this.outerHTML='<b style=&quot;font-family:var(--bnd-display);font-weight:800;font-size:16px&quot;>BOND</b>'">
       <span>estratégia</span>
     </div>
-    <div class="navsec">Clientes</div>
-    <a class="navbtn" href="/estrategia/">Todos os projetos</a>
-    <div class="navsec" id="navCli">Projeto</div>
-    <button class="navbtn nav-aba on" data-aba="hoje" onclick="aba('hoje')">Hoje</button>
-    <button class="navbtn nav-aba" data-aba="fases" onclick="aba('fases')">Fases</button>
-    <button class="navbtn nav-aba" data-aba="material" onclick="aba('material')">Material</button>
+    <div class="navsec">Trabalho</div>
+    <a class="navbtn" href="/estrategia/">Projetos</a>
+    <a class="navbtn on" id="lkProj" href="#">Este projeto</a>
+    <a class="navbtn" id="lkWs" href="#">Conduzir workshop</a>
     <div class="navsec">Consulta</div>
     <a class="navbtn" href="/estrategia/metodo/PLAYBOOK-NAVE.html">Playbook N.A.V.E.</a>
     <a class="navbtn" href="/estrategia/exercicio.html">Catálogo de exercícios</a>
@@ -122,20 +91,14 @@
   </aside>
 
   <main class="main">
-    <div class="crumb" id="crumb"><a href="/estrategia/">Projetos</a></div>
-    <h1 id="titulo">&nbsp;</h1>
-
-    <div class="abas">
-      <button class="aba on" id="ab_hoje"     onclick="aba('hoje')">Hoje</button>
-      <button class="aba"    id="ab_fases"    onclick="aba('fases')">Fases</button>
-      <button class="aba"    id="ab_material" onclick="aba('material')">Material</button>
+    <div class="topo">
+      <div class="crumb" id="crumb"><a href="/estrategia/">Projetos</a></div>
+      <h1 id="titulo">&nbsp;</h1>
+      <div class="linha" id="linha"></div>
     </div>
-
-    <section class="painel on" id="pn_hoje">
-      <div class="skel" style="width:60%"></div><div class="skel" style="width:40%"></div>
-    </section>
-    <section class="painel" id="pn_fases"></section>
-    <section class="painel" id="pn_material"></section>
+    <div id="conteudo">
+      <div class="skel" style="width:55%"></div><div class="skel" style="width:35%"></div>
+    </div>
   </main>
 </div>
 <div class="toast" id="toast"></div>
@@ -148,289 +111,161 @@ const PROJ = new URLSearchParams(location.search).get('p');
 const MACRO = { PRE:'pré', COLETANDO:'coletando', EXPLORANDO:'explorando',
                 CRIANDO:'criando', DEFININDO:'definindo', POS:'pós' };
 let D=null, EX=[];
-
 const $ = id => document.getElementById(id);
 const esc = s => String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 let tt; function toast(m){ const t=$('toast'); t.textContent=m; t.classList.add('on');
   clearTimeout(tt); tt=setTimeout(()=>t.classList.remove('on'),3400); }
 
-function aba(qual){
-  ['hoje','fases','material'].forEach(k => {
-    $('pn_'+k).classList.toggle('on', k===qual);
-    $('ab_'+k).classList.toggle('on', k===qual);
-  });
-  document.querySelectorAll('.nav-aba').forEach(b => b.classList.toggle('on', b.dataset.aba===qual));
-  history.replaceState(null,'',`?p=${PROJ}&t=${qual}`);
-}
-
-// ---------------------------------------------------------------- estado
-// Toda a inteligência da tela sai daqui: qual fase, o que trava, o que vem depois.
 function estado(){
   const fases = D.phases.map(pp => ({ pp, f: pp.nave_phases || {} }));
   const atual = fases.find(x => x.pp.status !== 'concluido') || fases[fases.length-1];
-  const idx = fases.indexOf(atual);
-  // âncora anterior não aprovada: o banco vai recusar avançar
   const trava = fases.find(x => x.f.is_gate && x.f.ord < atual.f.ord && x.pp.gate !== 'aprovado');
   const tarefas = D.tasks.filter(t => t.project_phase_id === atual.pp.id);
-  const proxima = tarefas.find(t => t.status !== 'concluido');
-  const esperando = fases.filter(x => x.f.is_gate && x.pp.gate === 'enviado');
-  return {
-    fases, atual, idx, trava, tarefas, proxima, esperando,
-    feitas: fases.filter(x => x.pp.status === 'concluido').length,
-    tarefasFeitas: D.tasks.filter(t => t.status === 'concluido').length,
-    ancoras: fases.filter(x => x.f.is_gate)
-  };
+  return { fases, atual, trava, tarefas, proxima: tarefas.find(t => t.status !== 'concluido'),
+           feitas: fases.filter(x => x.pp.status === 'concluido').length,
+           tarefasFeitas: D.tasks.filter(t => t.status === 'concluido').length };
 }
 
-// ---------------------------------------------------------------- HOJE
-function verHoje(){
+function render(){
   const e = estado(), f = e.atual.f, pp = e.atual.pp;
-  const exsFase = EX.filter(x => x.phase_id === f.id);
+  const espera = e.fases.filter(x => x.f.is_gate && x.pp.gate === 'enviado');
 
-  let cabeca;
+  // uma linha resolve o que três cartões não resolviam
+  $('linha').innerHTML =
+    `${esc(D.client ? D.client.name : '')} · fase <b>${e.feitas+1} de ${e.fases.length}</b>` +
+    ` · ${e.tarefasFeitas} de ${D.tasks.length} tarefas` +
+    (D.project.target_end ? ` · entrega ${new Date(D.project.target_end+'T12:00').toLocaleDateString('pt-BR')}` : '') +
+    (espera.length ? ` · <b>${espera.length} entrega com o cliente</b>` : '');
+
+  let html;
   if (e.trava) {
-    cabeca = `<div class="agora travado">
-      <div class="k">o projeto está travado</div>
+    html = `<div class="agora travado">
+      <div class="k">travado</div>
       <h2>${esc(e.trava.f.gate_label || 'Âncora pendente')}</h2>
-      <p>Enquanto o cliente não aprovar a entrega da fase ${e.trava.f.id}, as seguintes não avançam.
-      Não é regra de tela: o banco recusa. Projeto ancorado não afunda.</p>
-      <div style="display:flex;gap:10px;flex-wrap:wrap">
-        <button class="btn" onclick="aba('fases');abrirFase('${e.trava.pp.id}')">registrar a aprovação</button>
-      </div></div>`;
+      <p>Sem a aprovação da fase ${e.trava.f.id} o projeto não avança. Não é regra de tela: o banco recusa.</p>
+      <div class="acoes" style="margin:0"><button class="btn" onclick="irFase('${e.trava.pp.id}')">registrar a aprovação</button></div>
+    </div>`;
   } else {
-    const acao = e.proxima
-      ? `<h2>${esc(e.proxima.title)}</h2><p>Fase ${f.id} · ${esc(f.name)}. ${esc(f.objective||'')}</p>`
-      : `<h2>Fase ${f.id} sem tarefa pendente</h2><p>${esc(f.name)} — tudo marcado. ${
-          f.is_gate ? 'Falta registrar a aprovação do cliente.' : 'Dá para concluir a fase e seguir.'}</p>`;
-    cabeca = `<div class="agora">
-      <div class="k">agora · ${MACRO[f.macro]||''}</div>
-      ${acao}
-      <div style="display:flex;gap:10px;flex-wrap:wrap">
+    html = `<div class="agora">
+      <div class="k">agora</div>
+      <h2>${e.proxima ? esc(e.proxima.title) : 'Fase ' + f.id + ' sem tarefa pendente'}</h2>
+      <p>${f.id} · ${esc(f.name)}. ${esc(f.objective || '')}</p>
+      <div class="acoes" style="margin:0">
         ${e.proxima ? `<button class="btn" onclick="feito('${e.proxima.id}')">marcar como feita</button>` : ''}
-        ${f.id==='F3' ? `<a class="btn btn--ghost" href="/estrategia/workshop.html?p=${PROJ}">conduzir o workshop</a>` : ''}
-        ${f.id==='F0' ? `<a class="btn btn--ghost" href="/estrategia/exercicio.html?ex=C1&p=${PROJ}">abrir as 7 perguntas</a>` : ''}
+        ${f.id==='F3' ? `<a class="btn btn--g" href="/estrategia/workshop.html?p=${PROJ}">conduzir o workshop</a>` : ''}
+        ${f.id==='F0' ? `<a class="btn btn--g" href="/estrategia/exercicio.html?ex=C1&p=${PROJ}">abrir as 7 perguntas</a>` : ''}
         ${!e.proxima && pp.status!=='concluido' && !f.is_gate
-          ? `<button class="btn btn--ghost" onclick="mudarFase('${pp.id}','concluido')">concluir a fase</button>` : ''}
-        <button class="btn btn--ghost" onclick="aba('fases');abrirFase('${pp.id}')">ver a fase inteira</button>
+          ? `<button class="btn btn--g" onclick="mudarFase('${pp.id}','concluido')">concluir a fase</button>` : ''}
       </div></div>`;
   }
 
-  const pctT = e.tarefas.length
-    ? Math.round(e.tarefas.filter(t=>t.status==='concluido').length / e.tarefas.length * 100) : 0;
+  // o objetivo só ocupa espaço quando existe
+  const obj = D.project.main_objective;
+  html += obj
+    ? `<div class="obj"><div class="mini" style="margin-bottom:8px">objetivo principal · N7</div>
+       <textarea id="obj">${esc(obj)}</textarea></div>`
+    : `<a class="objlink" onclick="pedeObjetivo()">definir o objetivo principal do projeto · exercício N7</a>
+       <div style="height:34px"></div>`;
 
-  $('pn_hoje').innerHTML = cabeca + linhaDoTempo(e) + `
-    <div class="linha3">
-      <div class="cx">
-        <div class="k">esta fase</div>
-        <div class="n">${pctT}<span style="font-size:18px">%</span></div>
-        <div class="d">${e.tarefas.filter(t=>t.status==='concluido').length} de ${e.tarefas.length} tarefas de ${esc(f.name)}.</div>
-      </div>
-      <div class="cx">
-        <div class="k">esperando o cliente</div>
-        ${e.esperando.length
-          ? `<ul>${e.esperando.map(x=>`<li>${esc(x.f.gate_label||x.f.name)}<span class="mini" style="display:block">enviado, sem resposta</span></li>`).join('')}</ul>`
-          : `<div class="n">0</div><div class="d">Nada na mão do cliente. A bola está com você.</div>`}
-      </div>
-      <div class="cx">
-        <div class="k">projeto</div>
-        <div class="n">${e.feitas}<span style="font-size:18px">/${e.fases.length}</span></div>
-        <div class="d">fases concluídas · ${e.tarefasFeitas} de ${D.tasks.length} tarefas${
-          D.project.target_end ? ' · entrega prevista ' + new Date(D.project.target_end+'T12:00').toLocaleDateString('pt-BR') : ''}</div>
-      </div>
-    </div>
-
-    <div class="obj">
-      <div class="k" style="font-size:11.2px;letter-spacing:1.12px;color:rgba(16,16,16,.5);margin-bottom:10px">objetivo principal · exercício N7</div>
-      <textarea id="obj" placeholder="Um parágrafo com todos os problemas a resolver e o estado almejado. Fica na parede até o fim.">${esc(D.project.main_objective||'')}</textarea>
-      <div class="mini">Salva ao sair do campo. O método manda retomar isto na abertura de toda fase.</div>
-    </div>
-
-    ${exsFase.length ? `<div class="cx">
-      <div class="k">exercícios desta fase</div>
-      <div class="exgrid">${exsFase.map(cardEx).join('')}</div></div>` : ''}`;
-
-  const obj = $('obj');
-  obj.addEventListener('blur', async () => {
-    if (obj.value === (D.project.main_objective||'')) return;
-    try { await NAVE.post('projeto_upd', {id:PROJ, main_objective:obj.value});
-      D.project.main_objective = obj.value; toast('Objetivo salvo.'); }
-    catch (err) { toast(err.message); }
-  });
-}
-
-function linhaDoTempo(e){
-  let macro = null; const macros = [];
+  let macro = null;
   e.fases.forEach(x => {
-    if (x.f.macro !== macro) { macro = x.f.macro; macros.push({m:macro, n:0}); }
-    macros[macros.length-1].n++;
-  });
-  return `<div class="tl">
-    <div class="macros">${macros.map(g =>
-      `<div class="mac ${g.m===e.atual.f.macro?'aqui':''}" style="flex:${g.n}">${MACRO[g.m]||g.m}</div>`).join('')}</div>
-    <div class="barra">${e.fases.map((x,n) => {
-      const cls = [ x.pp.status==='concluido' ? 'feita':'', n===e.idx ? 'agora':'',
-                    x.f.is_gate ? 'anc':'', x.f.is_gate && x.pp.gate==='aprovado' ? 'ok':'' ]
-                  .filter(Boolean).join(' ');
-      return `<button class="f ${cls}" title="${esc(x.f.id+' · '+x.f.name)}"
-        onclick="aba('fases');abrirFase('${x.pp.id}')"></button>`;
-    }).join('')}</div>
-    <div class="leg">
-      <span>● âncora solta</span><span>○ âncora pendente</span>
-      <span style="color:var(--bnd-pink)">▮ você está aqui</span>
-      <span>${e.ancoras.filter(a=>a.pp.gate==='aprovado').length} de ${e.ancoras.length} âncoras soltas</span>
-    </div></div>`;
-}
-
-const cardEx = x => `<a class="exc" href="/estrategia/exercicio.html?ex=${x.id}&p=${PROJ}">
-  <b>${x.id}${x.tier==='espinha' ? ' · espinha' : ''}</b>${esc(x.name)}</a>`;
-
-// ---------------------------------------------------------------- FASES
-function verFases(){
-  const e = estado();
-  let macro = null, html = '';
-  e.fases.forEach(x => {
-    const f = x.f, pp = x.pp;
-    if (f.macro !== macro) { macro = f.macro;
-      html += `<div class="navsec" style="padding:24px 0 8px">${MACRO[macro]||macro}</div>`; }
-    const tarefas = D.tasks.filter(t => t.project_phase_id === pp.id);
-    const feitas = tarefas.filter(t => t.status==='concluido').length;
-    const exs = EX.filter(y => y.phase_id === f.id);
+    const ff = x.f, p = x.pp;
+    if (ff.macro !== macro) { macro = ff.macro; html += `<div class="grupo">${MACRO[macro]||macro}</div>`; }
+    const tks = D.tasks.filter(t => t.project_phase_id === p.id);
+    const ok = tks.filter(t => t.status==='concluido').length;
+    const exs = EX.filter(y => y.phase_id === ff.id);
+    const cls = [ p.status==='concluido'?'feita':'', x===e.atual?'aqui':'' ].filter(Boolean).join(' ');
     html += `
-    <details class="fase ${f.is_gate?'anc':''}" id="fase_${pp.id}" ${x===e.atual?'open':''}>
+    <details class="fase ${cls}" id="fase_${p.id}" ${x===e.atual?'open':''}>
       <summary>
-        <span class="code">${f.id}</span>
-        <span class="nm">${esc(f.name)}<span class="ob">${esc(f.objective||'')}</span></span>
-        <span class="mini">${feitas}/${tarefas.length}</span>
-        ${tarja(pp,f)}
+        <span class="code">${ff.id}</span>
+        <span class="nm">${esc(ff.name)}</span>
+        ${ff.is_gate ? `<span class="anc">${p.gate==='aprovado'?'● âncora solta':(p.gate==='enviado'?'○ com o cliente':'○ âncora')}</span>` : ''}
+        <span class="cnt">${ok}/${tks.length}</span>
       </summary>
       <div class="body">
-        ${tarefas.map(t => `<label class="tk ${t.status==='concluido'?'done':''}">
-            <input type="checkbox" ${t.status==='concluido'?'checked':''}
-              onchange="feito('${t.id}', this)"><span>${esc(t.title)}</span></label>`).join('')
-          || '<div class="mini" style="padding:10px 0">Sem tarefas nesta fase.</div>'}
-        ${exs.length ? `<div class="k" style="margin:18px 0 4px;font-size:11.2px;letter-spacing:1.12px;color:var(--ink-50)">exercícios</div>
-          <div class="exgrid">${exs.map(cardEx).join('')}</div>` : ''}
-        <div style="display:flex;gap:8px;margin-top:18px;flex-wrap:wrap">
-          ${pp.status!=='em_andamento' ? `<button class="btn btn--line" onclick="mudarFase('${pp.id}','em_andamento')">iniciar</button>`:''}
-          ${pp.status!=='concluido' ? `<button class="btn btn--line" onclick="mudarFase('${pp.id}','concluido')">concluir</button>`:''}
-          ${f.id==='F3' ? `<a class="btn btn--line" href="/estrategia/workshop.html?p=${PROJ}">conduzir workshop</a>`:''}
+        <p class="mini" style="margin:0 0 14px">${esc(ff.objective||'')}</p>
+        ${tks.map(t => `<label class="tk ${t.status==='concluido'?'done':''}">
+          <input type="checkbox" ${t.status==='concluido'?'checked':''} onchange="feito('${t.id}', this)">
+          <span>${esc(t.title)}</span></label>`).join('')}
+        ${exs.length ? `<div class="rot">exercícios</div>${exs.map(y =>
+          `<a class="ex" href="/estrategia/exercicio.html?ex=${y.id}&p=${PROJ}"><b>${y.id}</b>${esc(y.name)}</a>`).join('')}` : ''}
+        <div class="acoes">
+          ${p.status!=='em_andamento' ? `<button class="btn btn--line" onclick="mudarFase('${p.id}','em_andamento')">iniciar</button>`:''}
+          ${p.status!=='concluido' ? `<button class="btn btn--line" onclick="mudarFase('${p.id}','concluido')">concluir</button>`:''}
+          ${ff.id==='F3' ? `<a class="btn btn--line" href="/estrategia/workshop.html?p=${PROJ}">conduzir workshop</a>`:''}
         </div>
-        ${f.is_gate ? caixaAncora(pp,f) : ''}
-      </div>
-    </details>`;
+        ${ff.is_gate ? ancora(p, ff) : ''}
+      </div></details>`;
   });
-  $('pn_fases').innerHTML = html;
+
+  $('conteudo').innerHTML = html;
+  const t = $('obj');
+  if (t) t.addEventListener('blur', () => salvarObjetivo(t.value));
 }
 
-function tarja(pp,f){
-  if (f.is_gate && pp.gate==='aprovado') return '<span class="tarja">âncora solta</span>';
-  if (f.is_gate && pp.gate==='enviado')  return '<span class="tarja tarja--cyan">com o cliente</span>';
-  if (pp.status==='concluido')    return '<span class="tarja">concluída</span>';
-  if (pp.status==='em_andamento') return '<span class="tarja tarja--cyan">em andamento</span>';
-  return '<span class="tarja tarja--line">a fazer</span>';
-}
-
-function caixaAncora(pp,f){
-  if (pp.gate==='aprovado') return `<div class="gatebox"><div class="t">${esc(f.gate_label||'Âncora')}</div>
-    <div class="mini">Aprovada${pp.approved_at ? ' em '+new Date(pp.approved_at).toLocaleDateString('pt-BR'):''}. ${esc(pp.gate_note||'')}</div></div>`;
-  return `<div class="gatebox">
+function ancora(p, f){
+  if (p.gate === 'aprovado')
+    return `<div class="ancora"><div class="t">${esc(f.gate_label||'Âncora')}</div>
+      <div class="mini">Aprovada${p.approved_at?' em '+new Date(p.approved_at).toLocaleDateString('pt-BR'):''}. ${esc(p.gate_note||'')}</div></div>`;
+  return `<div class="ancora">
     <div class="t">${esc(f.gate_label||'Âncora')}</div>
-    <div class="mini" style="margin-bottom:10px">Enquanto esta âncora não for aprovada, as fases seguintes ficam travadas — o banco recusa.</div>
-    <textarea id="gn_${pp.id}" placeholder="Como o cliente aprovou? Em reunião, por e-mail, com quais ajustes?">${esc(pp.gate_note||'')}</textarea>
+    <textarea id="gn_${p.id}" placeholder="Como o cliente aprovou? Em reunião, por e-mail, com quais ajustes?">${esc(p.gate_note||'')}</textarea>
     <div style="display:flex;gap:8px;flex-wrap:wrap">
-      <button class="btn" onclick="mudarGate('${pp.id}','aprovado')">registrar aprovação</button>
-      <button class="btn btn--line" onclick="mudarGate('${pp.id}','enviado')">enviado ao cliente</button>
-      <button class="btn btn--line" onclick="mudarGate('${pp.id}','ajustes_pedidos')">pediu ajustes</button>
+      <button class="btn" onclick="mudarGate('${p.id}','aprovado')">registrar aprovação</button>
+      <button class="btn btn--line" onclick="mudarGate('${p.id}','enviado')">enviado ao cliente</button>
+      <button class="btn btn--line" onclick="mudarGate('${p.id}','ajustes_pedidos')">pediu ajustes</button>
     </div></div>`;
 }
 
-// ---------------------------------------------------------------- MATERIAL
-function verMaterial(){
-  const preenchidos = {};
-  D.responses.forEach(r => {
-    const pe = D.selection.find(s => s.id === r.project_exercise_id);
-    if (!pe) return;
-    const v = r.value;
-    if (v == null || !String(v).length || (Array.isArray(v) && !v.length)) return;
-    preenchidos[pe.exercise_id] = (preenchidos[pe.exercise_id] || 0) + 1;
-  });
-  const codigos = Object.keys(preenchidos);
-  if (!codigos.length) {
-    $('pn_material').innerHTML = `<div class="cx"><div class="vazio">
-      Nada capturado ainda.<br>
-      <span class="mini">O material aparece aqui conforme você preenche exercícios.</span><br><br>
-      <a class="btn" href="/estrategia/workshop.html?p=${PROJ}">conduzir o workshop</a></div></div>`;
-    return;
-  }
-  const nome = {N:'negócio', A:'audiência', V:'valor', E:'estória', X:'diagnóstico, estratégia e identidade'};
-  const porEixo = {N:[],A:[],V:[],E:[],X:[]};
-  codigos.forEach(c => {
-    const x = EX.find(y => y.id === c); if (!x) return;
-    porEixo[['N','A','V','E'].includes(x.axis) ? x.axis : 'X'].push({x, n:preenchidos[c]});
-  });
-  $('pn_material').innerHTML = `
-    <div class="cx" style="margin-bottom:14px">
-      <div class="k">o que já foi capturado</div>
-      <div class="n">${codigos.length}</div>
-      <div class="d">exercícios com resposta · ${Object.values(preenchidos).reduce((a,b)=>a+b,0)} campos preenchidos.
-      É daqui que sai o relatório de diagnóstico.</div>
-    </div>` +
-    ['N','A','V','E','X'].filter(k => porEixo[k].length).map(k => `
-      <div class="cx" style="margin-bottom:14px">
-        <div class="k">${k==='X' ? nome.X : 'eixo '+k+' — '+nome[k]}</div>
-        <div class="exgrid">${porEixo[k].map(o =>
-          `<a class="exc" href="/estrategia/exercicio.html?ex=${o.x.id}&p=${PROJ}">
-            <b>${o.x.id} · ${o.n} respostas</b>${esc(o.x.name)}</a>`).join('')}</div>
-      </div>`).join('');
+async function salvarObjetivo(v){
+  if (v === (D.project.main_objective||'')) return;
+  try { await NAVE.post('projeto_upd', {id:PROJ, main_objective:v});
+    D.project.main_objective = v; toast('Objetivo salvo.'); }
+  catch (e) { toast(e.message); }
 }
-
-// ---------------------------------------------------------------- ações
+function pedeObjetivo(){
+  D.project.main_objective = ' '; render();
+  const t = $('obj'); if (t) { t.value=''; t.focus(); }
+}
 async function feito(id, el){
   const t = D.tasks.find(x => x.id === id);
   const novo = el ? el.checked : true;
-  try {
-    await NAVE.post('tarefa', {id, status: novo ? 'concluido' : 'nao_iniciado'});
-    if (t) t.status = novo ? 'concluido' : 'nao_iniciado';
-    pinta();
-  } catch (e) { if (el) el.checked = !novo; toast(e.message); }
+  try { await NAVE.post('tarefa', {id, status: novo?'concluido':'nao_iniciado'});
+    if (t) t.status = novo?'concluido':'nao_iniciado'; render(); }
+  catch (e) { if (el) el.checked = !novo; toast(e.message); }
 }
 async function mudarFase(id, status){
-  try { await NAVE.post('fase',{id,status}); await carregar(); toast('Fase atualizada.'); }
-  catch (e) { toast(e.message); }        // recado do trigger de âncora aparece aqui
-}
-async function mudarGate(id, gate){
-  const nota = ($('gn_'+id)||{}).value || null;
-  try { await NAVE.post('fase',{id,gate,gate_note:nota}); await carregar(); toast('Âncora atualizada.'); }
+  try { await NAVE.post('fase',{id,status}); await carregar(); }
   catch (e) { toast(e.message); }
 }
-function abrirFase(id){
-  const d = $('fase_'+id);
-  if (d) { d.open = true; d.scrollIntoView({block:'start', behavior:'smooth'}); }
+async function mudarGate(id, gate){
+  const n = ($('gn_'+id)||{}).value || null;
+  try { await NAVE.post('fase',{id,gate,gate_note:n}); await carregar(); }
+  catch (e) { toast(e.message); }
 }
-
-// ---------------------------------------------------------------- boot
-function pinta(){ verHoje(); verFases(); verMaterial(); }
+function irFase(id){
+  const d = $('fase_'+id);
+  if (d) { d.open = true; d.scrollIntoView({block:'center', behavior:'smooth'}); }
+}
 
 async function carregar(){
   const [proj, cat] = await Promise.all([ NAVE.get('projeto',{id:PROJ}), NAVE.catalogo() ]);
   D = proj; EX = cat.exercises;
   const cli = proj.client ? proj.client.name : 'Cliente';
-  $('crumb').innerHTML = `<a href="/estrategia/">Projetos</a> · ${esc(cli)}`;
-  $('navCli').textContent = cli;
+  $('crumb').innerHTML = `<a href="/estrategia/">Projetos</a>`;
   $('titulo').textContent = proj.project.name;
+  $('lkProj').href = '/estrategia/projeto.html?p=' + PROJ;
+  $('lkWs').href = '/estrategia/workshop.html?p=' + PROJ;
   document.title = cli + ' · ' + proj.project.name;
-  pinta();
+  render();
 }
 
 (async function(){
   if (!await NAVE.guard()) return;
   if (!PROJ) { location.replace('/estrategia/'); return; }
-  try {
-    await carregar();
-    aba(new URLSearchParams(location.search).get('t') || 'hoje');
-  } catch (e) {
-    $('pn_hoje').innerHTML = `<div class="cx"><div class="vazio">${esc(e.message)}</div></div>`;
-  }
+  try { await carregar(); }
+  catch (e) { $('conteudo').innerHTML = `<p class="mini">${esc(e.message)}</p>`; }
 })();
 </script>
 </body>
