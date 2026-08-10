@@ -239,8 +239,10 @@ function abrirPasso(id, foca = true){
 
   const ant = D.fases[k - 1], dep = D.fases[k + 1];
   el('pnH').innerHTML = `<div class="rw">
-      <span class="tag ${feito ? 'd' : (eh ? '' : 'm')}">
-        <span class="cap">${feito ? 'Concluído' : (eh ? 'Você está aqui' : (trav ? 'Travado' : 'Ainda não começou'))}</span></span>
+      <span class="tag ${feito ? (ok === t.length ? 'd' : 'p') : (eh ? '' : 'm')}">
+        <span class="cap">${feito
+          ? (ok === t.length ? 'Concluído' : `Fechado com ${t.length - ok} pendente${t.length - ok > 1 ? 's' : ''}`)
+          : (eh ? 'Você está aqui' : (trav ? 'Travado' : 'Ainda não começou'))}</span></span>
       <button class="x" onclick="fecharPn()">✕</button>
     </div>
     <div class="nav">
@@ -285,13 +287,14 @@ function abrirPasso(id, foca = true){
 
   const falta = t.length - ok;
   el('pnF').innerHTML = feito
-    ? `<button class="b b--ghost" onclick="reabrir('${f.id}')">Reabrir passo</button><span class="hint">Passo fechado.</span>`
+    ? `<span class="hint">Passo fechado${ok < t.length ? ` com ${t.length - ok} item${t.length - ok > 1 ? 's' : ''} sem marcar` : ''}.</span>
+       <button class="b b--ghost" onclick="reabrir('${f.id}')">Reabrir passo</button>`
     : falta > 0
-      ? `<button class="b" disabled title="Marque tudo antes de fechar">Concluir passo ${k + 1} →</button>
-         <span class="hint">Faltam <b>${falta}</b> ${falta === 1 ? 'item' : 'itens'}.
-         <button class="mesmo" onclick="concluir('${f.id}')">não se aplica, fechar assim mesmo</button></span>`
-      : `<button class="b" onclick="concluir('${f.id}')">Concluir passo ${k + 1} →</button>
-         <span class="hint">Tudo marcado.</span>`;
+      ? `<span class="hint">Faltam <b>${falta}</b> ${falta === 1 ? 'item' : 'itens'}.
+         <button class="mesmo" onclick="concluir('${f.id}')">não se aplica, fechar assim mesmo</button></span>
+         <button class="b" disabled title="Marque tudo antes de fechar">Concluir passo ${k + 1} →</button>`
+      : `<span class="hint">Tudo marcado.</span>
+         <button class="b" onclick="concluir('${f.id}')">Concluir passo ${k + 1} →</button>`;
 
   el('pn').classList.add('on');
   if (foca) centrar(f);
@@ -307,12 +310,12 @@ function alvo(x, f){
   }
   if (x.link.startsWith('ex:')){
     const e = CAT.exercises.find(y => y.id === x.link.slice(3));
-    return e ? { tipo:'ex', label:`Abrir: ${e.name} →`, go:`ex:${e.id}` } : null;
+    return e ? { tipo:'ex', label:`${e.name} →`, go:`ex:${e.id}` } : null;
   }
   const exs = D.exs[f.phase_id] || [];
   const lista = x.link.startsWith('eixo:') ? exs.filter(e => e.axis === x.link.slice(5)) : exs;
   if (!lista.length) return null;
-  if (lista.length === 1) return { tipo:'ex', label:`Abrir: ${lista[0].name} →`, go:`ex:${lista[0].id}` };
+  if (lista.length === 1) return { tipo:'ex', label:`${lista[0].name} →`, go:`ex:${lista[0].id}` };
   const on = lista.filter(roda);
   return { tipo:'grupo', label:`${on.length} de ${lista.length} exercícios · ${hhmm(on.reduce((a,e)=>a+(e.duration_min||0),0))} →`,
            go: x.link.startsWith('eixo:') ? `eixo:${x.link.slice(5)}` : 'todos' };
