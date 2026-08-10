@@ -14,6 +14,10 @@
   <a class="home" href="/estrategia/">← Marcas</a>
   <span class="sep"></span>
   <div><h1 id="bNome">…</h1><div class="seg" id="bSeg"></div></div>
+  <div class="tabs">
+    <button class="tb on" id="tabF" onclick="verFluxo()">Fluxo</button>
+    <button class="tb" id="tabM" onclick="verMapa()">Mapa</button>
+  </div>
   <div class="mid">
     <div class="pg"><span class="ln"><i id="bLn" style="width:0"></i></span><span id="bTx"></span></div>
     <button class="b sm" id="bIr" onclick="irAgora()">Onde eu parei →</button>
@@ -25,6 +29,19 @@
     <svg id="links"></svg>
     <div id="labs"></div>
     <div id="nos"></div>
+  </div>
+</div>
+
+<div class="mapa" id="mapa">
+  <div class="stage" id="mstage"><svg id="mlinks"></svg><div id="mnos"></div></div>
+  <aside class="noar" id="noar"></aside>
+  <div class="legenda">
+    <span><i style="width:11px;height:11px;background:#fff"></i>entrega</span>
+    <span><i style="width:11px;height:11px;background:#e7f99a"></i>conclusão escrita</span>
+    <span><i style="width:11px;height:11px;background:transparent;box-shadow:inset 0 0 0 2px #ff00d7"></i>escrita sem lastro</span>
+    <span><i style="width:7px;height:7px;margin-left:2px;background:#fff"></i>exercício feito</span>
+    <span><i style="width:7px;height:7px;margin-left:2px;background:rgba(255,255,255,.24)"></i>ainda não rodado</span>
+    <span><i style="width:14px;height:0;border-radius:0;border-top:1px dashed rgba(231,249,154,.7)"></i>ligação inferida</span>
   </div>
 </div>
 
@@ -42,9 +59,10 @@
   <div class="pf" id="pnF"></div>
 </aside>
 
+<div class="veu" id="veu" onclick="fecharEx()"></div>
 <div class="full" id="full">
   <div class="fbar">
-    <button class="x" onclick="fecharEx()">← Voltar ao passo</button>
+    <button class="x" onclick="fecharEx()">← Voltar</button>
     <div><div class="cap cx" id="exCx"></div><div class="tt" id="exTt"></div></div>
     <div class="rt">
       <span class="sv" id="exSv"></span>
@@ -60,6 +78,7 @@
 <script src="/estrategia/config.js"></script>
 <script src="/estrategia/nave.js"></script>
 <script src="/estrategia/desenho.js"></script>
+<script src="/estrategia/grafo.js"></script>
 <script>
 const PID = new URLSearchParams(location.search).get('p');
 const BLOCO = { N:'Negócio', A:'Audiência', V:'Valor', E:'Estória' };
@@ -216,13 +235,7 @@ function filhos(){
   return ln + out;
 }
 
-function ramo(go){
-  if (go.startsWith('ex:')) return abrirEx(go.slice(3));
-  const eixo = go.slice(5);
-  el('pn').classList.add('on');
-  const alvo = el('pnB').querySelector(`[data-eixo="${eixo}"]`);
-  if (alvo) alvo.scrollIntoView({ behavior: 'smooth', block: 'start' });
-}
+function ramo(go){ el('pn').classList.add('on'); irAlvo(go); }
 
 function topo(){
   el('bNome').textContent = D.client ? D.client.name : D.project.name;
@@ -252,15 +265,13 @@ function abrirPasso(id, foca = true){
       <div class="rw"><p>${esc(prox.title)}</p><button class="b sm" onclick="tick('${prox.id}')">Feito ✓</button></div></div>`;
 
   if (t.length) b += `<section class="sec"><div class="hh"><span class="cap">Faça isso, nesta ordem</span>
-      <span class="r">${ok}/${t.length}</span></div></section>` +
-      t.map(x => `<button class="it ${x.status === 'concluido' ? 'ok' : ''}" onclick="tick('${x.id}')">
-        <span class="bx"></span><span class="tx">${esc(x.title)}</span></button>`).join('');
+      <span class="r">${ok}/${t.length}</span></div></section>` + t.map(x => linhaTarefa(x, f)).join('');
 
   const exs = D.exs[f.phase_id] || [];
   if (exs.length){
     const eixos = ['N','A','V','E'].filter(x => exs.some(e => e.axis === x));
     const on = exs.filter(roda), mins = on.reduce((s,e) => s + (e.duration_min||0), 0);
-    b += `<section class="sec"><div class="hh"><span class="cap">Exercícios</span>
+    b += `<section class="sec" id="exercicios"><div class="hh"><span class="cap">Exercícios</span>
       <span class="r">${on.length} na sessão${mins ? ' · ' + hhmm(mins) : ''}</span></div></section>`;
     if (eixos.length){
       eixos.forEach(x => {
@@ -288,7 +299,49 @@ function abrirPasso(id, foca = true){
   el('pn').classList.add('on');
   if (foca) centrar(f);
 }
+function refazMapa(){ if (MAPA) { MAPA = null; if (vista === 'mapa') montarMapa(); } }
 function fecharPn(){ el('pn').classList.remove('on'); sel = null; desenhaNos(); }
+
+// alvo de uma tarefa: nenhum, 1 exercício, um grupo, ou outro passo
+function alvo(x, f){
+  if (!x.link) return null;
+  if (x.link.startsWith('passo:')){
+    const g = D.fases.find(y => y.phase_id === x.link.slice(6));
+    return g ? { tipo:'passo', label:`Ir para o passo ${idx(g) + 1} →`, go:`passo:${g.id}` } : null;
+  }
+  if (x.link.startsWith('ex:')){
+    const e = CAT.exercises.find(y => y.id === x.link.slice(3));
+    return e ? { tipo:'ex', label:`Abrir: ${e.name} →`, go:`ex:${e.id}` } : null;
+  }
+  const exs = D.exs[f.phase_id] || [];
+  const lista = x.link.startsWith('eixo:') ? exs.filter(e => e.axis === x.link.slice(5)) : exs;
+  if (!lista.length) return null;
+  if (lista.length === 1) return { tipo:'ex', label:`Abrir: ${lista[0].name} →`, go:`ex:${lista[0].id}` };
+  const on = lista.filter(roda);
+  return { tipo:'grupo', label:`${on.length} de ${lista.length} exercícios · ${hhmm(on.reduce((a,e)=>a+(e.duration_min||0),0))} →`,
+           go: x.link.startsWith('eixo:') ? `eixo:${x.link.slice(5)}` : 'todos' };
+}
+
+function linhaTarefa(x, f){
+  const a = alvo(x, f), feito = x.status === 'concluido';
+  return `<div class="it ${feito ? 'ok' : ''} ${a ? 'tem' : ''}">
+    <button class="hit" onclick="tick('${x.id}')">
+      <span class="bx"></span>
+      <span class="col"><span class="tx">${esc(x.title)}</span>
+      ${x.detail ? `<span class="dt">${esc(x.detail)}</span>` : ''}</span>
+    </button>
+    ${a ? `<button class="lk ${a.tipo}" onclick="irAlvo('${a.go}')">${esc(a.label)}</button>` : ''}
+  </div>`;
+}
+
+function irAlvo(go){
+  if (go.startsWith('ex:')) return abrirEx(go.slice(3));
+  if (go.startsWith('passo:')) return abrirPasso(go.slice(6));
+  const q = go === 'todos' ? '#exercicios' : `[data-eixo="${go.slice(5)}"]`;
+  const alvo2 = el('pnB').querySelector(q);
+  if (alvo2){ alvo2.scrollIntoView({ behavior:'smooth', block:'start' });
+    alvo2.classList.add('flash'); setTimeout(() => alvo2.classList.remove('flash'), 1400); }
+}
 
 function linhaEx(e){
   const s = D.sel[e.id], pronto = s && s.status === 'concluido', on = roda(e);
@@ -343,6 +396,7 @@ function aplica(){
   el('zPct').textContent = Math.round(V.z * 100) + '%';
 }
 function ajustar(){
+  if (vista === 'mapa') return ajustarMapa();
   const c = el('canvas').getBoundingClientRect();
   const pad = 80, pn = el('pn').classList.contains('on') ? Math.min(456, c.width * .42) : 0;
   const z = Math.min((c.width - pn - pad * 2) / D.wid, (c.height - pad * 2) / (D.hei + 40), 1.05);
@@ -358,6 +412,12 @@ function centrar(f){
   aplica();
 }
 function zoom(d){
+  if (vista === 'mapa'){
+    const c = el('mapa').getBoundingClientRect();
+    const cx = (c.width/2 - Vm.x)/Vm.z, cy = (c.height/2 - Vm.y)/Vm.z;
+    Vm.z = Math.min(2.2, Math.max(.15, Vm.z * (d > 0 ? 1.18 : 1/1.18)));
+    Vm.x = c.width/2 - cx*Vm.z; Vm.y = c.height/2 - cy*Vm.z; return aplicaM();
+  }
   const c = el('canvas').getBoundingClientRect();
   const cx = (c.width / 2 - V.x) / V.z, cy = (c.height / 2 - V.y) / V.z;
   V.z = Math.min(1.8, Math.max(.3, V.z * (d > 0 ? 1.18 : 1 / 1.18)));
@@ -382,13 +442,284 @@ function zoom(d){
 })();
 window.addEventListener('resize', () => { if (D) aplica(); });
 
+
+// ================================================================ MAPA
+// Grafo de sustentação: exercício → conclusão → entrega.
+// Responde "essa decisão está apoiada em quê" e "o que eu decidi sem lastro".
+let MAPA = null, foco = null, Vm = { x:0, y:0, z:1 };
+
+function respostasDe(exCode){
+  const pe = D.sel[exCode]; if (!pe) return null;
+  return D.resp[pe.id] || null;
+}
+function temValor(v){
+  if (v == null || v === '') return false;
+  if (Array.isArray(v)) return v.some(x => Array.isArray(x) ? x.some(y => (y||'').trim()) : String(x||'').trim());
+  if (typeof v === 'object') return Object.keys(v).length > 0;
+  return String(v).trim().length > 0;
+}
+function exCheio(code){
+  const pe = D.sel[code];
+  if (pe && pe.status === 'concluido') return true;
+  const r = respostasDe(code);
+  return !!r && Object.values(r).some(temValor);
+}
+function conCheia(c){
+  const r = respostasDe(c.fonte.ex);
+  if (!r) return false;
+  if (c.fonte.campo) return temValor(r[c.fonte.campo]);
+  return Object.values(r).some(temValor);
+}
+function entCheia(e){
+  const f = D.fases.find(x => x.phase_id === e.fase);
+  return !!f && (f.status === 'concluido' || f.gate === 'aprovado');
+}
+
+function montarMapa(){
+  const G = window.NAVE_GRAFO;
+  const nos = [], lig = [], byId = {};
+  const add = n => { nos.push(n); byId[n.id] = n; return n; };
+
+  G.entregas.forEach((e, i) => add({ id:'#'+e.id, tipo:'ent', nome:e.nome, ring:165, r:24,
+    cheio:entCheia(e), ir:() => { const f = D.fases.find(x => x.phase_id === e.fase); if (f) { verFluxo(); abrirPasso(f.id); } } }));
+
+  G.conclusoes.forEach(c => add({ id:'@'+c.id, tipo:'con', nome:c.nome, ring:415, r:16,
+    cheio:conCheia(c), min:G.minimo[c.id] || 2, apoios:0, faltam:[],
+    ir:() => abrirEx(c.fonte.ex) }));
+
+  CAT.exercises.forEach(e => add({ id:e.id, tipo:'ex', nome:e.name, ring:715,
+    r: e.minimum ? 9 : 6.5, ess:!!e.minimum, cheio:exCheio(e.id), ir:() => abrirEx(e.id) }));
+
+  const liga = (destino, lista) => lista.forEach(raw => {
+    const inf = raw.endsWith('?'), ref = raw.replace(/\?$/, '');
+    const origem = ref[0] === '@' || ref[0] === '#' ? ref : ref;
+    if (!byId[origem]) return;
+    lig.push({ s:origem, t:destino, inf });
+  });
+  G.conclusoes.forEach(c => liga('@'+c.id, c.de));
+  G.entregas.forEach(e => liga('#'+e.id, e.de));
+
+  // quanto de cada conclusão já está apoiado em coisa feita
+  G.conclusoes.forEach(c => {
+    const n = byId['@'+c.id];
+    c.de.forEach(raw => {
+      const ref = raw.replace(/\?$/, '');
+      const o = byId[ref];
+      if (!o) return;
+      if (o.cheio) n.apoios++;
+      else n.faltam.push(o.nome);
+    });
+    n.r = 14 + Math.min(10, n.apoios * 1.6);
+  });
+
+  simular(nos, lig);
+  MAPA = { nos, lig, byId };
+  desenhaMapa();
+  noAr();
+  ajustarMapa();
+}
+
+// Layout: anéis concêntricos (entrega no centro, conclusão no meio, exercício fora),
+// com o ângulo de cada nó puxado para perto do que ele alimenta. Depois uma força leve
+// só para descolar o que ficou em cima do outro.
+function espalhar(lista, ang){
+  if (!lista.length) return;
+  const ord = lista.slice().sort((a,b) => ang[a.id] - ang[b.id]);
+  const base = ang[ord[0].id];
+  ord.forEach((n,i) => ang[n.id] = base + i / ord.length * Math.PI * 2);
+}
+
+function simular(nos, lig, ticks = 150){
+  const ang = {};
+  const alvo = {};
+  lig.forEach(l => (alvo[l.s] ||= []).push(l.t));
+  const media = ids => {
+    let sx = 0, sy = 0, c = 0;
+    (ids||[]).forEach(id => { if (ang[id] == null) return; sx += Math.sin(ang[id]); sy += Math.cos(ang[id]); c++; });
+    return c ? Math.atan2(sx, sy) : null;
+  };
+  const ents = nos.filter(n => n.tipo === 'ent');
+  ents.forEach((n,i) => ang[n.id] = -Math.PI/2 + i / ents.length * Math.PI * 2);
+
+  const cons = nos.filter(n => n.tipo === 'con');
+  cons.forEach((n,i) => ang[n.id] = media(alvo[n.id]) ?? (i / cons.length * Math.PI * 2));
+  cons.forEach(n => { const a = media(alvo[n.id]); if (a != null) ang[n.id] = a; });
+  espalhar(cons, ang);
+
+  const exs = nos.filter(n => n.tipo === 'ex');
+  exs.forEach((n,i) => ang[n.id] = media(alvo[n.id]) ?? (i / exs.length * Math.PI * 2));
+  espalhar(exs, ang);
+
+  nos.forEach(n => { n.x = Math.cos(ang[n.id]) * n.ring; n.y = Math.sin(ang[n.id]) * n.ring; });
+
+  const at = Object.fromEntries(nos.map((n,i) => [n.id, i]));
+  for (let t = 0; t < ticks; t++){
+    const k = 1 - t / ticks;
+    for (let i = 0; i < nos.length; i++) for (let j = i + 1; j < nos.length; j++){
+      const a = nos[i], b = nos[j];
+      let dx = b.x - a.x, dy = b.y - a.y, d2 = dx*dx + dy*dy || .01;
+      if (d2 > 40000) continue;
+      const d = Math.sqrt(d2), f = (a.r + b.r + 46) * 34 / d2;
+      dx /= d; dy /= d;
+      a.x -= dx*f*k; a.y -= dy*f*k; b.x += dx*f*k; b.y += dy*f*k;
+    }
+    nos.forEach(n => {                      // segura o nó no anel dele
+      const d = Math.hypot(n.x, n.y) || .01, f = (d - n.ring) * .5;
+      n.x -= n.x/d*f; n.y -= n.y/d*f;
+    });
+  }
+  const xs = nos.map(n => n.x), ys = nos.map(n => n.y);
+  const ox = Math.min(...xs) - 170, oy = Math.min(...ys) - 150;
+  nos.forEach(n => { n.x -= ox; n.y -= oy; });
+  MAPADIM = { w: Math.max(...xs) - Math.min(...xs) + 340, h: Math.max(...ys) - Math.min(...ys) + 300 };
+}
+
+let MAPADIM = { w:1400, h:1000 };
+
+function vizinhos(id){
+  const s = new Set([id]);
+  MAPA.lig.forEach(l => { if (l.s === id) s.add(l.t); if (l.t === id) s.add(l.s); });
+  return s;
+}
+
+function desenhaMapa(){
+  const { nos, lig, byId } = MAPA;
+  const viz = foco ? vizinhos(foco) : null;
+  const sv = el('mlinks');
+  sv.setAttribute('width', MAPADIM.w); sv.setAttribute('height', MAPADIM.h);
+  sv.innerHTML = lig.map(l => {
+    const a = byId[l.s], b = byId[l.t];
+    if (!a || !b) return '';
+    const on = !viz || (viz.has(l.s) && viz.has(l.t));
+    const forte = a.cheio && b.cheio;
+    const cor = !on ? 'rgba(255,255,255,.04)'
+      : forte ? (l.inf ? 'rgba(231,249,154,.42)' : 'rgba(231,249,154,.75)')
+      : 'rgba(255,255,255,.16)';
+    return `<line x1="${a.x}" y1="${a.y}" x2="${b.x}" y2="${b.y}" stroke="${cor}"
+      stroke-width="${forte ? 1.5 : 1}" ${l.inf ? 'stroke-dasharray="3 5"' : ''}/>`;
+  }).join('');
+
+  el('mnos').innerHTML = nos.map(n => {
+    const on = !viz || viz.has(n.id);
+    const falta = n.tipo === 'con' && n.cheio && n.apoios < n.min;
+    return `<button class="gn ${n.tipo} ${n.cheio ? 'cheio' : 'oco'} ${n.ess ? 'ess' : ''}
+      ${falta ? 'alerta' : ''} ${on ? (viz ? 'viz' : '') : 'apaga'} ${foco === n.id ? 'foco' : ''}"
+      style="left:${n.x}px;top:${n.y}px;--s:${n.r * 2}px"
+      onclick="tocarNo('${n.id}')" ondblclick="MAPA.byId['${n.id}'].ir()">
+      <i></i><span>${esc(n.nome)}</span></button>`;
+  }).join('');
+}
+
+function tocarNo(id){
+  foco = foco === id ? null : id;
+  desenhaMapa();
+  if (foco){
+    const n = MAPA.byId[id];
+    const c = el('mapa').getBoundingClientRect();
+    Vm.x = (c.width - 380) / 2 - n.x * Vm.z; Vm.y = c.height / 2 - n.y * Vm.z; aplicaM();
+    detalheNo(n);
+  } else noAr();
+}
+
+function detalheNo(n){
+  const G = window.NAVE_GRAFO;
+  const c = G.conclusoes.find(x => '@' + x.id === n.id);
+  const e = G.entregas.find(x => '#' + x.id === n.id);
+  const fontes = MAPA.lig.filter(l => l.t === n.id).map(l => ({ ...MAPA.byId[l.s], inf:l.inf })).filter(Boolean);
+  const usa   = MAPA.lig.filter(l => l.s === n.id).map(l => MAPA.byId[l.t]).filter(Boolean);
+  el('noar').innerHTML = `
+    <button class="volta" onclick="foco=null;desenhaMapa();noAr()">← o que está no ar</button>
+    <div class="cap tp">${n.tipo === 'ent' ? 'Entrega' : n.tipo === 'con' ? 'Conclusão' : 'Exercício'}</div>
+    <h3>${esc(n.nome)}</h3>
+    ${c ? `<p class="st2">${n.cheio ? 'Escrito' : 'Ainda em branco'} · apoiado em
+      <b>${n.apoios} de ${c.de.length}</b> fontes · o método pede pelo menos ${n.min}</p>` : ''}
+    ${e ? `<p class="st2">${n.cheio ? 'Entregue e aprovado' : 'Ainda não aprovado'}</p>` : ''}
+    ${!c && !e ? `<p class="st2">${n.cheio ? 'Preenchido' : 'Ainda não rodado'}</p>` : ''}
+    ${fontes.length ? `<div class="cap sec2">Sustentado por</div>` +
+      fontes.map(f => `<button class="lin ${f.cheio ? 'ok' : ''}" onclick="tocarNo('${f.id}')">
+        <i></i><span>${esc(f.nome)}${f.inf ? ' <em>inferido</em>' : ''}</span></button>`).join('') : ''}
+    ${usa.length ? `<div class="cap sec2">Alimenta</div>` +
+      usa.map(u => `<button class="lin ${u.cheio ? 'ok' : ''}" onclick="tocarNo('${u.id}')">
+        <i></i><span>${esc(u.nome)}</span></button>`).join('') : ''}
+    <button class="b b--lime abrir" onclick="MAPA.byId['${n.id}'].ir()">Abrir →</button>`;
+}
+
+function noAr(){
+  const G = window.NAVE_GRAFO;
+  const todas = G.conclusoes.map(c => MAPA.byId['@' + c.id]);
+  const risco = todas.filter(n => n.cheio && n.apoios < n.min)
+                     .sort((a,b) => (a.apoios/a.min) - (b.apoios/b.min));
+  const branco = todas.filter(n => !n.cheio)
+                     .sort((a,b) => (b.apoios/b.min) - (a.apoios/a.min));
+  const item = (n, cor) => `<button class="buraco ${cor}" onclick="tocarNo('${n.id}')">
+      <span class="nm">${esc(n.nome)}</span>
+      <span class="bar"><i style="width:${Math.min(100, n.apoios / n.min * 100)}%"></i></span>
+      <span class="qt">${n.apoios}/${n.min}</span>
+      ${n.faltam.length ? `<span class="fl2">falta rodar: ${n.faltam.slice(0,3).map(esc).join(', ')}${n.faltam.length > 3 ? ` +${n.faltam.length - 3}` : ''}</span>` : ''}
+    </button>`;
+  el('noar').innerHTML = `
+    <div class="cap tp">Sustentação</div>
+    <h3>${risco.length ? risco.length + ' decisões sem lastro' : 'Nada decidido no escuro'}</h3>
+    <p class="st2">${risco.length
+      ? 'Você já escreveu essas conclusões, mas com menos evidência do que o método pede. É o que o cliente vai furar na apresentação.'
+      : 'Toda conclusão escrita até aqui está apoiada no número de fontes que o método pede.'}</p>
+    ${risco.map(n => item(n,'r')).join('')}
+    <div class="cap sec2">Ainda em branco · ${branco.length}</div>
+    <p class="st2">Quanto mais cheia a barra, mais material você já tem para escrever.</p>
+    ${branco.map(n => item(n,'b')).join('')}`;
+}
+
+// --- pan/zoom do mapa ---
+function aplicaM(){ el('mstage').style.transform = `translate(${Vm.x}px,${Vm.y}px) scale(${Vm.z})`;
+  if (vista === 'mapa') el('zPct').textContent = Math.round(Vm.z * 100) + '%'; }
+function ajustarMapa(){
+  const c = el('mapa').getBoundingClientRect();
+  const z = Math.min((c.width - 400) / MAPADIM.w, (c.height - 80) / MAPADIM.h, 1);
+  Vm.z = Math.max(.18, z);
+  Vm.x = (c.width - 380 - MAPADIM.w * Vm.z) / 2; Vm.y = (c.height - MAPADIM.h * Vm.z) / 2;
+  aplicaM();
+}
+(function panM(){
+  const c = el('mapa');
+  let dr = false, sx = 0, sy = 0, ox = 0, oy = 0;
+  c.addEventListener('mousedown', e => { if (e.target.closest('.gn,.noar')) return;
+    dr = true; sx = e.clientX; sy = e.clientY; ox = Vm.x; oy = Vm.y; c.classList.add('drag'); });
+  window.addEventListener('mousemove', e => { if (!dr) return; Vm.x = ox + e.clientX - sx; Vm.y = oy + e.clientY - sy; aplicaM(); });
+  window.addEventListener('mouseup', () => { dr = false; c.classList.remove('drag'); });
+  c.addEventListener('wheel', e => {
+    e.preventDefault();
+    const r = c.getBoundingClientRect(), mx = e.clientX - r.left, my = e.clientY - r.top;
+    const px = (mx - Vm.x) / Vm.z, py = (my - Vm.y) / Vm.z;
+    Vm.z = Math.min(2.2, Math.max(.15, Vm.z * (e.deltaY < 0 ? 1.09 : 1/1.09)));
+    Vm.x = mx - px * Vm.z; Vm.y = my - py * Vm.z; aplicaM();
+  }, { passive:false });
+})();
+
+// --- troca de vista ---
+let vista = 'fluxo';
+function verFluxo(){
+  vista = 'fluxo';
+  document.body.classList.remove('escuro');
+  el('mapa').classList.remove('on'); el('canvas').classList.add('on');
+  el('tabF').classList.add('on'); el('tabM').classList.remove('on');
+  aplica();
+}
+function verMapa(){
+  vista = 'mapa';
+  document.body.classList.add('escuro');
+  el('pn').classList.remove('on');
+  el('canvas').classList.remove('on'); el('mapa').classList.add('on');
+  el('tabM').classList.add('on'); el('tabF').classList.remove('on');
+  if (!MAPA) montarMapa(); else { desenhaMapa(); noAr(); aplicaM(); }
+}
+
 // ---------------------------------------------------------------- exercício
 let EX = null, PE = null, VAL = {}, quadro = null, tmS = null;
 async function abrirEx(exId){
   EX = CAT.exercises.find(e => e.id === exId);
   el('exCx').textContent = (BLOCO[EX.axis] || 'Instrumento') + (EX.duration_min ? ' · ' + EX.duration_min + ' min' : '');
   el('exTt').textContent = EX.name; el('exSv').textContent = '';
-  el('full').classList.add('on'); document.body.style.overflow = 'hidden';
+  el('full').classList.add('on'); el('veu').classList.add('on');
   try {
     if (!D.sel[exId]){
       const r = await NAVE.post('selecao', { project_id: PID, items: [{ exercise_id: exId, selected: true }] });
@@ -478,9 +809,10 @@ async function marcarFeito(){
 async function fecharEx(){
   clearTimeout(tmS); await salvar();
   if (quadro){ try { quadro.destruir(); } catch {} quadro = null; }
-  el('full').classList.remove('on'); document.body.style.overflow = '';
+  el('full').classList.remove('on'); el('veu').classList.remove('on');
   EX = null; PE = null; VAL = {};
-  if (sel) abrirPasso(sel, false);
+  refazMapa();
+  if (vista === 'fluxo' && sel) abrirPasso(sel, false);
 }
 document.addEventListener('keydown', e => {
   if (e.key !== 'Escape') return;
