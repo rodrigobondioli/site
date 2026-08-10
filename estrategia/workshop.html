@@ -66,6 +66,17 @@ a{color:inherit}
 .intro{font-size:14.5px;color:var(--ink-50);line-height:1.5;border-left:2px solid var(--ink-10);
  padding-left:14px;margin-bottom:18px}
 .cresce{flex:1}
+.subs{margin:0 0 18px;padding:0;list-style:none}
+.subs li{font-size:clamp(16px,1.45vw,20px);line-height:1.35;padding:9px 0 9px 20px;position:relative;
+ color:rgba(16,16,16,.78);border-top:1px dashed var(--ink-10)}
+.subs li:first-child{border-top:0}
+.subs li::before{content:'';position:absolute;left:2px;top:18px;width:8px;height:8px;
+ border-radius:99px;background:var(--ink-25)}
+.subs li.foco{color:var(--bnd-ink);font-weight:600}
+.subs li.foco::before{background:var(--bnd-pink)}
+.bl{margin-bottom:20px}
+.bl label{display:block;font-size:12.5px;color:var(--ink-50);margin-bottom:7px;line-height:1.35}
+.bl .h{font-size:11.5px;color:var(--ink-25);margin-top:5px;line-height:1.4}
 
 /* captura */
 .dir h3{font-size:13px;letter-spacing:1.1px;color:var(--ink-50);font-family:var(--bnd-body);
@@ -159,6 +170,7 @@ body.apresentando .palco{grid-template-columns:1fr .7fr}
   <div class="esq">
     <div class="eyebrow" id="eyebrow"></div>
     <h1 class="pergunta" id="pergunta"></h1>
+    <ul class="subs" id="subs"></ul>
     <div class="intro" id="intro"></div>
     <div class="dica" id="dica"></div>
     <div class="cresce"></div>
@@ -259,7 +271,10 @@ const mmss = ms => {
   proj.selection.forEach(s => { if (porPe[s.id]) VAL[s.exercise_id] = porPe[s.id]; });
 
   INSTS = insts; CAMPOS = campos;
-  const ligar = escolhidos.length ? escolhidos : insts.filter(e => e.tier === 'espinha').map(e => e.id);
+  // se o catálogo ainda não trouxer a curadoria, cai no mínimo viável do próprio material
+  let base = insts.filter(e => e.tier === 'espinha').map(e => e.id);
+  if (!base.length) base = insts.filter(e => e.minimum).map(e => e.id);
+  const ligar = escolhidos.length ? escolhidos : base;
   ligar.forEach(id => DENTRO.add(id));
   agenda(escolhidos.length > 0);
 })();
@@ -330,13 +345,37 @@ function soma(){
   $('bComecar').disabled = dentro.length === 0;
 }
 
+// O método cronometra POR BLOCO, não por pergunta: "5 minutos pro passado, vai".
+// Então campos com o mesmo prefixo antes do "·" viram uma tela só.
+function bloco(label){
+  const m = label.split(' · ');
+  return m.length > 1 ? m[0].trim() : null;
+}
+function curta(label){
+  const m = label.split(' · ');
+  return m.length > 1 ? m.slice(1).join(' · ').trim() : label;
+}
+
 function montaFila(){
   FILA = [];
-  INSTS.filter(e => DENTRO.has(e.id) && e.sessao !== 'casa' && e.sessao !== 'solo')
-       .forEach(e => (CAMPOS[e.id]||[]).forEach((f, idx, arr) => {
-    FILA.push({ ex:e, campo:f, idx, total:arr.length,
-                dur: Math.max(2, Math.round((e.duration_min || 20) / arr.length)) });
-  }));
+  INSTS.filter(e => DENTRO.has(e.id) && e.sessao !== 'casa' && e.sessao !== 'solo').forEach(e => {
+    const campos = CAMPOS[e.id] || [];
+    const passos = [];
+    campos.forEach(f => {
+      const b = bloco(f.label);
+      const ult = passos[passos.length-1];
+      if (b && ult && ult.bloco === b) ult.campos.push(f);
+      else passos.push({ bloco:b, campos:[f] });
+    });
+    const total = campos.length || 1;
+    passos.forEach((p, idx) => {
+      FILA.push({
+        ex: e, campos: p.campos, bloco: p.bloco, idx, total: passos.length,
+        titulo: p.bloco ? p.bloco : p.campos[0].label,
+        dur: Math.max(2, Math.round((e.duration_min || 20) * p.campos.length / total))
+      });
+    });
+  });
   // trilha agrupada por instrumento: 14 grupos legíveis, não 79 tracinhos
   const grupos = [];
   FILA.forEach((p,n) => {
@@ -346,7 +385,7 @@ function montaFila(){
   });
   $('trilha').innerHTML = grupos.map(g =>
     `<div class="tg" data-cod="${g.cod}">` +
-    g.itens.map(n => `<div class="tp" data-n="${n}" title="${esc(FILA[n].campo.label)}" onclick="irPara(${n})"></div>`).join('') +
+    g.itens.map(n => `<div class="tp" data-n="${n}" title="${esc(FILA[n].titulo)}" onclick="irPara(${n})"></div>`).join('') +
     `</div>`).join('');
 }
 
@@ -385,17 +424,26 @@ function render(){
   $('telaFim').classList.remove('on');
   $('palco').style.display = 'grid';
 
+  const varios = p.campos.length > 1;
   $('bFase').textContent = 'imersão · eixo ' + (AXIS[p.ex.axis] || '—');
   $('eyebrow').innerHTML = `<b>${p.ex.id} · ${esc(p.ex.name)}</b> &nbsp;·&nbsp; ` +
-    `pergunta ${p.idx+1} de ${p.total} &nbsp;·&nbsp; ${i+1} de ${FILA.length} na sessão`;
-  $('pergunta').textContent = p.campo.label;
+    `bloco ${p.idx+1} de ${p.total} &nbsp;·&nbsp; ${i+1} de ${FILA.length} na sessão`;
+  $('pergunta').textContent = p.titulo;
 
-  // o enunciado do instrumento só na primeira pergunta dele
+  // quando o bloco tem várias perguntas, elas aparecem em lista — é o roteiro falado
+  $('subs').innerHTML = varios
+    ? p.campos.map((f,n) => `<li id="sub_${n}">${esc(curta(f.label))}</li>`).join('') : '';
+  $('subs').style.display = varios ? 'block' : 'none';
+
+  // o enunciado do instrumento só no primeiro bloco dele
   $('intro').style.display = (p.idx === 0 && p.ex.intro) ? 'block' : 'none';
   $('intro').textContent = p.ex.intro || '';
 
-  if (p.campo.hint) { $('dica').style.display='block';
-    $('dica').innerHTML = '<div class="lbl">como conduzir</div>' + esc(p.campo.hint); }
+  const hints = [...new Set(p.campos.map(f => f.hint).filter(Boolean))];
+  if (hints.length) { $('dica').style.display='block';
+    $('dica').innerHTML = '<div class="lbl">como conduzir</div>' +
+      (hints.length === 1 ? esc(hints[0])
+        : '<ul style="margin:0;padding-left:18px">' + hints.map(h=>`<li>${esc(h)}</li>`).join('') + '</ul>'); }
   else $('dica').style.display = 'none';
 
   document.querySelectorAll('.tp').forEach(el => {
@@ -415,69 +463,93 @@ function render(){
 }
 
 // ---------------------------------------------------------------- captura
-function valor(p){ return (VAL[p.ex.id] || {})[p.campo.key]; }
+function valor(p, f){ return (VAL[p.ex.id] || {})[(f || p.campos[0]).key]; }
 
 function renderCampo(p){
-  const f = p.campo, v = valor(p), el = $('campo');
+  const el = $('campo');
+  if (p.campos.length === 1) { umCampo(p, p.campos[0], el); return; }
+  el.innerHTML = p.campos.map((f,n) =>
+    `<div class="bl"><label>${esc(curta(f.label))}</label><div id="bl_${n}"></div>` +
+    (f.hint ? `<div class="h">${esc(f.hint)}</div>` : '') + `</div>`).join('');
+  p.campos.forEach((f,n) => umCampo(p, f, document.getElementById('bl_'+n), n));
+}
+
+function umCampo(p, f, el, n){
+  const v = valor(p, f);
   const cols = f.config?.columns || [];
   const opts = f.config?.options || [];
+  const uid = 'c' + (n == null ? 0 : n);
+  const foca = () => { const el2 = document.getElementById('sub_'+n); if (el2) {
+      document.querySelectorAll('.subs li').forEach(x=>x.classList.remove('foco')); el2.classList.add('foco'); } };
 
   if (f.type === 'list') {
     const itens = Array.isArray(v) ? v : [];
-    el.innerHTML = itens.map((x,n)=>`<div class="pill"><span>${esc(x)}</span>
-      <button class="x" onclick="tiraItem(${n})">×</button></div>`).join('') +
-      `<div class="addrow"><input type="text" id="novo" placeholder="escreva e dê enter"></div>
-       <div class="mini" style="margin-top:8px">um post-it por linha</div>`;
-    $('novo').addEventListener('keydown', e => {
+    el.innerHTML = itens.map((x,k)=>`<div class="pill"><span>${esc(x)}</span>
+      <button class="x" data-k="${k}">×</button></div>`).join('') +
+      `<div class="addrow"><input type="text" id="novo_${uid}" placeholder="escreva e dê enter"></div>` +
+      (n == null ? `<div class="mini" style="margin-top:8px">um post-it por linha</div>` : '');
+    const inp = document.getElementById('novo_'+uid);
+    inp.addEventListener('focus', foca);
+    inp.addEventListener('keydown', e => {
       if (e.key === 'Enter' && e.target.value.trim()) {
-        const a = Array.isArray(valor(p)) ? [...valor(p)] : [];
-        a.push(e.target.value.trim()); grava(a); renderCampo(p); $('novo').focus();
+        const a = Array.isArray(valor(p,f)) ? [...valor(p,f)] : [];
+        a.push(e.target.value.trim()); grava(f, a); renderCampo(p);
+        const i2 = document.getElementById('novo_'+uid); if (i2) i2.focus();
       }
     });
-    $('novo').focus();
-    window.tiraItem = n => { const a=[...valor(p)]; a.splice(n,1); grava(a); renderCampo(p); };
+    el.querySelectorAll('.pill .x').forEach(b => b.onclick = () => {
+      const a=[...(valor(p,f)||[])]; a.splice(+b.dataset.k,1); grava(f, a); renderCampo(p); });
+    if (n == null || n === 0) inp.focus();
   }
   else if (f.type === 'table') {
     const linhas = Array.isArray(v) && v.length ? v : [cols.map(()=> '')];
     el.innerHTML = `<table class="tabela"><tr>${cols.map(c=>`<th>${esc(c)}</th>`).join('')}</tr>` +
       linhas.map((r,ri)=>`<tr>${cols.map((_,ci)=>
         `<td><textarea data-r="${ri}" data-c="${ci}">${esc(r[ci]||'')}</textarea></td>`).join('')}</tr>`).join('') +
-      `</table><button class="btn btn--line" onclick="maisLinha()">+ linha</button>`;
-    el.querySelectorAll('textarea').forEach(t => t.addEventListener('input', () => {
-      const m = linhas.map(r=>[...r]);
-      el.querySelectorAll('textarea').forEach(x => m[+x.dataset.r][+x.dataset.c] = x.value);
-      grava(m);
-    }));
-    window.maisLinha = () => { grava([...linhas, cols.map(()=> '')]); renderCampo(p); };
+      `</table><button class="btn btn--line" data-add="1">+ linha</button>`;
+    el.querySelectorAll('textarea').forEach(t => {
+      t.addEventListener('focus', foca);
+      t.addEventListener('input', () => {
+        const m = linhas.map(r=>[...r]);
+        el.querySelectorAll('textarea').forEach(x => m[+x.dataset.r][+x.dataset.c] = x.value);
+        grava(f, m);
+      });
+    });
+    el.querySelector('[data-add]').onclick = () => { grava(f, [...linhas, cols.map(()=> '')]); renderCampo(p); };
   }
   else if (f.type === 'select' || f.type === 'multiselect') {
     const sel = f.type === 'multiselect' ? (Array.isArray(v)?v:[]) : [v];
-    el.innerHTML = opts.map(o=>`<button class="opt ${sel.includes(o)?'on':''}"
-      onclick="marcaOpt('${esc(o).replace(/'/g,"\\'")}')">${esc(o)}</button>`).join('');
-    window.marcaOpt = o => {
+    el.innerHTML = opts.map((o,k)=>`<button class="opt ${sel.includes(o)?'on':''}" data-o="${k}">${esc(o)}</button>`).join('');
+    el.querySelectorAll('[data-o]').forEach(b => b.onclick = () => {
+      const o = opts[+b.dataset.o];
+      foca();
       if (f.type === 'multiselect') {
-        const a = Array.isArray(valor(p)) ? [...valor(p)] : [];
-        const k = a.indexOf(o); k>=0 ? a.splice(k,1) : a.push(o); grava(a);
-      } else grava(valor(p) === o ? null : o);
+        const a = Array.isArray(valor(p,f)) ? [...valor(p,f)] : [];
+        const k = a.indexOf(o); k>=0 ? a.splice(k,1) : a.push(o); grava(f, a);
+      } else grava(f, valor(p,f) === o ? null : o);
       renderCampo(p);
-    };
+    });
   }
   else {
     const multi = f.type === 'longtext';
+    const alt = n == null ? '' : 'style="min-height:110px"';
     el.innerHTML = multi
-      ? `<textarea id="txt" placeholder="anote aqui — cru mesmo, organiza depois"></textarea>`
-      : `<input type="text" id="txt">`;
-    $('txt').value = v == null ? '' : v;
-    $('txt').addEventListener('input', e => grava(e.target.value));
-    $('txt').focus();
+      ? `<textarea id="txt_${uid}" ${alt} placeholder="anote aqui — cru mesmo, organiza depois"></textarea>`
+      : `<input type="text" id="txt_${uid}">`;
+    const t = document.getElementById('txt_'+uid);
+    t.value = v == null ? '' : v;
+    t.addEventListener('focus', foca);
+    t.addEventListener('input', e => grava(f, e.target.value));
+    if (n == null || n === 0) t.focus();
   }
 }
 
 // ---------------------------------------------------------------- gravação
-let fila = null, timer = null;
-function grava(v){
+let fila = null, timer = null, pend = {};
+function grava(f, v){
   const p = FILA[i];
-  (VAL[p.ex.id] ||= {})[p.campo.key] = v;
+  (VAL[p.ex.id] ||= {})[f.key] = v;
+  pend[f.key] = v;
   fila = p;
   $('salvo').textContent = '…';
   clearTimeout(timer);
@@ -493,8 +565,8 @@ async function salvar(){
         items: [{ exercise_id: p.ex.id, selected: true, rationale: 'rodado no workshop' }] });
       pe = r.items[0].id; PE[p.ex.id] = pe;
     }
-    await NAVE.post('resposta', { project_exercise_id: pe, status:'em_andamento',
-      values: { [p.campo.key]: VAL[p.ex.id][p.campo.key] } });
+    const values = pend; pend = {};
+    await NAVE.post('resposta', { project_exercise_id: pe, status:'em_andamento', values });
     $('salvo').textContent = 'salvo ' + new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
   } catch (e) {
     $('salvo').textContent = 'sem conexão — guardado aqui';
@@ -520,11 +592,17 @@ $('bCopiar').onclick = () => {
   $('bCopiar').textContent = 'copiado'; setTimeout(()=>$('bCopiar').textContent='copiar para o Miro', 1400);
 };
 
-function textoDoPasso(p){
-  const v = valor(p);
+function textoDoCampo(p, f){
+  const v = valor(p, f);
   if (Array.isArray(v) && Array.isArray(v[0])) return v.map(r=>r.join('\t')).join('\n');
   if (Array.isArray(v)) return v.join('\n');
   return v == null ? '' : String(v);
+}
+function textoDoPasso(p){
+  return p.campos.map(f => {
+    const t = textoDoCampo(p, f);
+    return t ? (p.campos.length > 1 ? curta(f.label) + '\n' + t : t) : '';
+  }).filter(Boolean).join('\n\n');
 }
 
 function encerrar(){
@@ -533,9 +611,9 @@ function encerrar(){
   $('palco').style.display = 'none';
   $('telaFim').classList.add('on');
   const feitos = {};
-  FILA.forEach(p => { const v = valor(p);
+  FILA.forEach(p => p.campos.forEach(f => { const v = valor(p, f);
     if (v != null && String(v).length && !(Array.isArray(v) && !v.length))
-      (feitos[p.ex.id] ||= {ex:p.ex, n:0}).n++; });
+      (feitos[p.ex.id] ||= {ex:p.ex, n:0}).n++; }));
   const lista = Object.values(feitos);
   $('fResumo').innerHTML = `<b>${lista.length} instrumentos com resposta.</b> ` +
     `Tudo já está no projeto. O próximo passo do método é a descompressão: passar a limpo enquanto está fresco.`;
@@ -548,12 +626,12 @@ function encerrar(){
 $('bExportar').onclick = () => {
   let md = `# ${D.client ? D.client.name : ''} · workshop\n\n`;
   let atual = null;
-  FILA.forEach(p => {
-    const v = valor(p);
-    if (v == null || !String(v).length || (Array.isArray(v) && !v.length)) return;
+  FILA.forEach(p => p.campos.forEach(f => {
+    const t = textoDoCampo(p, f);
+    if (!t) return;
     if (atual !== p.ex.id) { atual = p.ex.id; md += `\n## ${p.ex.id} · ${p.ex.name}\n\n`; }
-    md += `**${p.campo.label}**\n\n${textoDoPasso(p)}\n\n`;
-  });
+    md += `**${f.label}**\n\n${t}\n\n`;
+  }));
   const a = document.createElement('a');
   a.href = URL.createObjectURL(new Blob([md], {type:'text/markdown'}));
   a.download = 'workshop.md'; a.click();
