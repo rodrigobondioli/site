@@ -55,6 +55,17 @@
   <div class="fbody"><div class="fdraw" id="exD"></div><div class="fq" id="exQ"></div></div>
 </div>
 
+<div class="morto" id="morto">
+  <div class="cx">
+    <h2 id="mortoT">Não consegui abrir esta marca</h2>
+    <p id="mortoP"></p>
+    <div class="bts">
+      <button class="b" onclick="location.reload()">Tentar de novo</button>
+      <a class="b b--ghost" href="/estrategia/">Voltar para Marcas</a>
+    </div>
+  </div>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -596,7 +607,12 @@ async function desenhar(){
   const d = el('exD');
   if (quadro){ try { quadro.destruir(); } catch {} quadro = null; }
   d.innerHTML = '';
-  quadro = await window.NAVE_DESENHO.montar(d, VAL.quadro || null, v => { VAL.quadro = v; agenda(); });
+  const antes = VAL.quadro || null;
+  quadro = await window.NAVE_DESENHO.montar(d, antes, v => {
+    // o fallback grava {link}; o quadro grava {elements}. Preserva o que já existia.
+    VAL.quadro = Object.assign({}, antes, v);
+    agenda();
+  });
 }
 async function marcarFeito(){
   if (!PE) return;
@@ -623,11 +639,27 @@ document.addEventListener('keydown', e => {
   else if (el('pn').classList.contains('on')) fecharPn();
 });
 
+function morreu(msg, titulo){
+  el('mortoT').textContent = titulo || 'Não consegui abrir esta marca';
+  el('mortoP').textContent = msg || 'Erro desconhecido.';
+  el('morto').classList.add('on');
+}
+
+// autosave é com atraso: não deixa fechar a aba com coisa por gravar
+window.addEventListener('beforeunload', e => {
+  if (tmS) { e.preventDefault(); e.returnValue = ''; }
+});
+
 (async function(){
   if (!await NAVE.guard()) return;
   if (!PID){ location.replace('/estrategia/'); return; }
   try { await carregar(); }
-  catch (e) { toast(e.message); }
+  catch (e) {
+    morreu(/não encontrado/i.test(e.message || '')
+      ? 'Essa marca não existe mais, ou não é sua. Se você acabou de apagá-la, é isso mesmo.'
+      : e.message,
+      /não encontrado/i.test(e.message || '') ? 'Marca não encontrada' : undefined);
+  }
 })();
 </script>
 </body>

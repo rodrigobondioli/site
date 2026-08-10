@@ -296,3 +296,11 @@ body.lista{overflow:auto}
 .it .na:hover{background:var(--ink);color:#fff}
 .it.na .na{opacity:1;color:var(--i28)}
 .pn .pf .hint i{font-style:normal;font-weight:600;color:var(--i50)}
+
+/* tela morta: erro de carga com saída */
+.morto{position:fixed;inset:0;z-index:95;background:var(--bg);display:none;place-items:center;padding:24px}
+.morto.on{display:grid}
+.morto .cx{max-width:460px;text-align:center}
+.morto h2{font-size:28px;margin-bottom:12px}
+.morto p{color:var(--i50);font-size:14.5px;line-height:1.55;margin:0 0 26px}
+.morto .bts{display:flex;gap:10px;justify-content:center}

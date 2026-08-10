@@ -45,7 +45,15 @@
   // supabase-js devolve {data, error}; aqui erro vira exceção com a mensagem do Postgres
   // (é assim que a recusa da âncora chega até o toast da tela).
   function ok(res) {
-    if (res.error) throw new Error(res.error.message || 'erro no banco');
+    if (res.error) {
+      const m = res.error.message || 'erro no banco';
+      // token expirado no meio do trabalho: manda pro login guardando onde estava
+      if (/JWT|token|not authenticated|expired/i.test(m) || res.error.code === 'PGRST301') {
+        const back = encodeURIComponent(location.pathname + location.search);
+        location.replace(base() + '/login.html?next=' + back + '&expirou=1');
+      }
+      throw new Error(m);
+    }
     return res.data;
   }
   const one = (rows) => (Array.isArray(rows) ? rows[0] : rows) || null;
@@ -186,13 +194,13 @@
     if (r === 'selecao') {
       const items = Array.isArray(body.items) ? body.items : [];
       if (!items.length) return { ok: true, count: 0, items: [] };
-      const rows = items.map(i => ({
-        project_id: body.project_id,
-        exercise_id: i.exercise_id,
-        selected: !!i.selected,
-        rationale: i.rationale ?? null,
-        instance_label: i.instance_label ?? null,
-      }));
+      // só manda o que veio: upsert sobrescreve toda coluna presente no payload
+      const rows = items.map(i => {
+        const row = { project_id: body.project_id, exercise_id: i.exercise_id, selected: !!i.selected };
+        if (i.rationale !== undefined) row.rationale = i.rationale;
+        if (i.instance_label !== undefined) row.instance_label = i.instance_label;
+        return row;
+      });
       const saved = ok(await sb.from('nave_project_exercises')
         .upsert(rows, { onConflict: 'project_id,exercise_id' }).select());
       return { ok: true, count: saved.length, items: saved };
@@ -206,9 +214,11 @@
         value: value ?? null,
         updated_at: new Date().toISOString(),
       }));
-      if (!rows.length) return { ok: true, count: 0 };
-      ok(await sb.from('nave_exercise_responses')
-        .upsert(rows, { onConflict: 'project_exercise_id,field_key' }));
+      if (rows.length) {
+        ok(await sb.from('nave_exercise_responses')
+          .upsert(rows, { onConflict: 'project_exercise_id,field_key' }));
+      }
+      // o status é independente das respostas: exercício só de quadro não tem campo nenhum
       if (body.status) {
         ok(await sb.from('nave_project_exercises')
           .update({ status: body.status }).eq('id', body.project_exercise_id));
@@ -241,8 +251,15 @@
 
   // O catálogo não muda por projeto — vale cachear na sessão do navegador.
   async function catalogo() {
-    const hit = sessionStorage.getItem('nave:catalogo');
-    if (hit) { try { return JSON.parse(hit); } catch {} }
+    const CHAVE = 'nave:catalogo:v2';
+    const hit = sessionStorage.getItem(CHAVE);
+    if (hit) {
+      try {
+        const c = JSON.parse(hit);
+        // 30 min: o catálogo muda quando eu rodo o seed, não durante o seu dia
+        if (c && c.data && Date.now() - c.t < 1800000) return c.data;
+      } catch {}
+    }
     const [phases, tasks, exercises, fields] = await Promise.all([
       sb.from('nave_phases').select('*').order('ord').then(ok),
       sb.from('nave_task_templates').select('*').order('phase_id').order('ord').then(ok),
@@ -250,7 +267,7 @@
       sb.from('nave_exercise_fields').select('*').order('exercise_id').order('ord').then(ok),
     ]);
     const data = { phases, tasks, exercises, fields };
-    try { sessionStorage.setItem('nave:catalogo', JSON.stringify(data)); } catch {}
+    try { sessionStorage.setItem(CHAVE, JSON.stringify({ t: Date.now(), data })); } catch {}
     return data;
   }
 
@@ -273,7 +290,7 @@
     async logout() {
       if (sb) await sb.auth.signOut();
       session = null;
-      sessionStorage.removeItem('nave:catalogo');
+      sessionStorage.removeItem('nave:catalogo:v2');
       location.replace(base() + '/login.html');
     },
   };

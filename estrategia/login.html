@@ -114,7 +114,12 @@ button.link{background:none;color:var(--ink-50);font-weight:400;font-size:13.5px
 <script>
 (function(){
   var msg  = document.getElementById('msg');
-  var next = new URLSearchParams(location.search).get('next') || '/estrategia/';
+  var qs = new URLSearchParams(location.search);
+  var next = qs.get('next') || '/estrategia/';
+  if (qs.get('expirou')) {
+    msg.textContent = 'Sua sessão expirou no meio do trabalho. Entre de novo — nada do que você salvou se perdeu.';
+    msg.className = 'msg on';
+  }
   var email = '';
 
   function say(t, cls){ msg.textContent = t; msg.className = 'msg on ' + (cls||''); }
@@ -129,6 +134,10 @@ button.link{background:none;color:var(--ink-50);font-weight:400;font-size:13.5px
   };
   window.entrar = function(){ location.replace(next); };
 
+  if (!NAVE.sb) {
+    say('Configuração do app não carregou (config.js). Recarregue a página; se persistir, é problema no deploy.', 'err');
+    document.getElementById('btnSenha').disabled = true;
+  }
   // já logado? entra direto.
   NAVE.getSession().then(function(s){ if (s) location.replace(next); });
 
