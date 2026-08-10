@@ -105,6 +105,47 @@ async function carregar(){
 const agora = () => D.fases.find(f => f.status !== 'concluido') || D.fases[D.fases.length - 1];
 const idx = f => D.fases.indexOf(f);
 const roda = e => D.sel[e.id] ? D.sel[e.id].selected : !!e.minimum;
+
+// ---- exercício preenchido = exercício feito -------------------------------
+function temValor(v){
+  if (v == null || v === '') return false;
+  if (Array.isArray(v)) return v.some(x => Array.isArray(x) ? x.some(y => String(y||'').trim()) : String(x||'').trim());
+  if (typeof v === 'object') return Object.keys(v).length > 0;
+  return String(v).trim().length > 0;
+}
+function respostasDe(code){ const pe = D.sel[code]; return pe ? (D.resp[pe.id] || null) : null; }
+function completo(code, valores){
+  const cps = (D.campos[code] || []).filter(f => f.type !== 'draw' && f.key !== 'quadro');
+  if (!cps.length) return false;
+  const r = valores || respostasDe(code);
+  if (!r) return false;
+  return cps.every(f => temValor(r[f.key]));
+}
+const exFeito = code => { const pe = D.sel[code]; return !!pe && pe.status === 'concluido'; };
+
+// Tarefa que aponta para exercício se marca sozinha quando o grupo inteiro está feito.
+async function sincronizar(){
+  const mudou = [];
+  D.fases.forEach(f => {
+    const exs = D.exs[f.phase_id] || [];
+    (D.tarefas[f.id] || []).forEach(t => {
+      if (!t.link || t.status === 'concluido' || t.status === 'pulado') return;
+      let grupo = null;
+      if (t.link.startsWith('ex:')) grupo = exs.filter(e => e.id === t.link.slice(3));
+      else if (t.link.startsWith('eixo:')) grupo = exs.filter(e => e.axis === t.link.slice(5) && roda(e));
+      else if (t.link === 'fase') grupo = exs.filter(roda);
+      if (!grupo || !grupo.length) return;
+      if (grupo.every(e => exFeito(e.id))) { t.status = 'concluido'; mudou.push(t); }
+    });
+  });
+  if (!mudou.length) return false;
+  try { await Promise.all(mudou.map(t => NAVE.post('tarefa', { id: t.id, status: 'concluido' }))); }
+  catch (e) { toast(e.message); }
+  toast(mudou.length === 1
+    ? `Marquei "${mudou[0].title}" — o exercício está preenchido.`
+    : `Marquei ${mudou.length} itens: os exercícios deles estão preenchidos.`);
+  return true;
+}
 const tarefas = f => D.tarefas[f.id] || [];
 const feitas    = f => tarefas(f).filter(t => t.status === 'concluido').length;
 const resolvidas = f => tarefas(f).filter(t => t.status === 'concluido' || t.status === 'pulado').length;
@@ -521,9 +562,19 @@ function colher(){
 function agenda(){ el('exSv').textContent = 'salvando…'; clearTimeout(tmS); tmS = setTimeout(salvar, 800); }
 async function salvar(){
   if (!PE) return;
-  try { await NAVE.post('resposta', { project_exercise_id: PE.id, values: VAL });
-    D.resp[PE.id] = Object.assign({}, VAL); el('exSv').textContent = 'salvo'; }
-  catch (e) { el('exSv').textContent = ''; toast(e.message); }
+  const auto = completo(EX.id, VAL) && PE.status !== 'concluido';
+  try {
+    await NAVE.post('resposta', {
+      project_exercise_id: PE.id, values: VAL, status: auto ? 'concluido' : undefined });
+    D.resp[PE.id] = Object.assign({}, VAL);
+    el('exSv').textContent = 'salvo';
+    if (auto) {
+      PE.status = 'concluido'; D.sel[EX.id].status = 'concluido';
+      el('exOk').textContent = 'Feito ✓';
+      await sincronizar();
+      desenhaNos();
+    }
+  } catch (e) { el('exSv').textContent = ''; toast(e.message); }
 }
 async function desenhar(){
   const d = el('exD');
@@ -537,7 +588,9 @@ async function marcarFeito(){
   try { await NAVE.post('resposta', { project_exercise_id: PE.id, values: VAL, status: novo });
     PE.status = novo; D.sel[EX.id].status = novo;
     el('exOk').textContent = novo === 'concluido' ? 'Feito ✓' : 'Marcar como feito';
-    el('exSv').textContent = 'salvo'; }
+    el('exSv').textContent = 'salvo';
+    if (novo === 'concluido') await sincronizar();
+    desenhaNos(); }
   catch (e) { toast(e.message); }
 }
 async function fecharEx(){
@@ -545,6 +598,7 @@ async function fecharEx(){
   if (quadro){ try { quadro.destruir(); } catch {} quadro = null; }
   el('full').classList.remove('on'); el('veu').classList.remove('on');
   EX = null; PE = null; VAL = {};
+  desenhaNos();
   if (sel) abrirPasso(sel, false);
 }
 document.addEventListener('keydown', e => {
