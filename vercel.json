@@ -132,19 +132,5 @@
       "destination": "/mateopato",
       "permanent": true
     }
-  ],
-  "rewrites": [
-    {
-      "source": "/portfolio",
-      "destination": "https://bondioli-portfolio.vercel.app/portfolio"
-    },
-    {
-      "source": "/portfolio/",
-      "destination": "https://bondioli-portfolio.vercel.app/portfolio"
-    },
-    {
-      "source": "/portfolio/:path*",
-      "destination": "https://bondioli-portfolio.vercel.app/portfolio/:path*"
-    }
   ]
 }
