@@ -136,22 +136,24 @@ export default function WorkPage() {
                 <span className="overline">Get inspired. Get inked.</span>
               </div>
 
-              <p className="body">
-                Go Ink is a marketplace where tattoo artists only sell the work
-                they actually want to do, each piece already priced, sized and
-                placed on the body. No client and no brief: I built it alone,
-                out of something I watched happen for years while I ran a tattoo
-                studio.
-              </p>
+              <div className={s.introBottom}>
+                <p className="body">
+                  Go Ink is a marketplace where tattoo artists only sell the
+                  work they actually want to do, each piece already priced,
+                  sized and placed on the body. No client and no brief: I built
+                  it alone, out of something I watched happen for years while I
+                  ran a tattoo studio.
+                </p>
 
-              <ul className={s.tags}>
-                {TAGS.map((t) => (
-                  <li className={`pill pill-sm overline ${s.tag}`} key={t}>
-                    <span className={s.tagDot} aria-hidden="true" />
-                    {t}
-                  </li>
-                ))}
-              </ul>
+                <ul className={s.tags}>
+                  {TAGS.map((t) => (
+                    <li className={`pill pill-sm overline ${s.tag}`} key={t}>
+                      <span className={s.tagDot} aria-hidden="true" />
+                      {t}
+                    </li>
+                  ))}
+                </ul>
+              </div>
             </div>
 
             <div className={s.case}>

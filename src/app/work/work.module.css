@@ -140,7 +140,18 @@
   gap: var(--s7);
 }
 
-.intro { display: flex; flex-direction: column; gap: var(--s4); }
+/* O bloco de introdução tem a altura da imagem ao lado (mesma proporção,
+   mesma largura de coluna). A régua fica no topo e grudada; a descrição
+   espera lá embaixo. É isso que faz a régua subir, travar e só depois o
+   texto chegar — no Framer são 788px de espera, não uma animação. */
+.intro {
+  aspect-ratio: 767 / 910;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.introBottom { display: flex; flex-direction: column; gap: var(--s4); }
 
 /* Sem z-index o irmão seguinte pinta por cima: a régua grudava e o texto
    passava POR CIMA dela em vez de por baixo. */
@@ -177,6 +188,9 @@
   .featuredImageCol { height: auto; }
   .featuredImage { position: static; aspect-ratio: 4 / 5; }
   .featuredContent { padding-inline: var(--gutter); }
+  /* no celular a coluna vira empilhada: a espera de 788px viraria um
+     buraco branco */
+  .intro { aspect-ratio: auto; gap: var(--s4); }
   .metaRow { position: static; }
 }
 
