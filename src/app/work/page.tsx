@@ -9,6 +9,7 @@ import Marquee from "@/components/Marquee"
 import ProjectCard from "@/components/ProjectCard"
 import ContactForm from "@/components/ContactForm"
 import Brands from "@/components/Brands"
+import ScrollReveal from "@/components/ScrollReveal"
 import { orderedProjects, asset } from "@/lib/projects"
 import order from "@/content/order.json"
 import s from "./work.module.css"
@@ -114,10 +115,12 @@ export default function WorkPage() {
           </div>
 
           <div className={s.featuredBody}>
-            <figure className={s.featuredImage}>
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/site/work-5.png" alt="Go Ink — Get inspired, get inked" />
-            </figure>
+            <div className={s.featuredImageCol}>
+              <ScrollReveal className={s.featuredImage}>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src="/site/work-5.png" alt="Go Ink — Get inspired, get inked" />
+              </ScrollReveal>
+            </div>
 
             <div className={s.featuredContent}>
               <div className={s.intro}>

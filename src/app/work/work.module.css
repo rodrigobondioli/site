@@ -117,14 +117,19 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: var(--s5);
-  align-items: start;
+  /* sem align-items: a coluna da imagem precisa ter a altura da linha
+     inteira, senão o sticky lá dentro não tem por onde grudar */
 }
+
+/* A coluna é só o trilho: quem gruda é a caixa da imagem, lá dentro. */
+.featuredImageCol { height: 100%; }
 
 .featuredImage {
   position: sticky;
   top: 0;
   aspect-ratio: 767 / 910;
   overflow: hidden;
+  transform-origin: center center;
 }
 .featuredImage img { width: 100%; height: 100%; object-fit: cover; }
 
@@ -166,6 +171,7 @@
 @media (max-width: 900px) {
   .featured { padding-right: 0; }
   .featuredBody { grid-template-columns: 1fr; gap: var(--s5); }
+  .featuredImageCol { height: auto; }
   .featuredImage { position: static; aspect-ratio: 4 / 5; }
   .featuredContent { padding-inline: var(--gutter); }
   .metaRow { position: static; }
