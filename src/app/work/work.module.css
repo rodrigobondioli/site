@@ -351,13 +351,16 @@
 
 /* ---------- YouTube ---------- */
 
-/* O vão entre o "about" e este vídeo dava 352: 176 de baixo do about mais
-   176 de cima daqui. Era o maior buraco da página e ninguém escolheu esse
-   número — as duas seções escolheram 176 cada uma, sem saber da outra. O
-   about já entrega o vão inteiro, então aqui o topo é zero. */
+/* NÃO zerar este padding-top.
+   Tentei, pra fechar o vão de 352 entre o "about" e este vídeo. Só que
+   aqui o padding não é só espaço: esta seção tem fundo próprio, e o topo
+   dela é a faixa amarela acima do rótulo. Zerando, o amarelo passa a
+   começar junto com o conteúdo e o "CONTENT CREATOR" fica grudado na
+   borda da cor. O vão de 352 é real, mas quem tem que ceder é o lado de
+   cima, que não tem cor nenhuma — não este. */
 .youtube {
   background: var(--accent);
-  padding-top: 0;
+  padding-top: var(--s7);
   padding-bottom: 0;
 }
 .youtubeInner {
