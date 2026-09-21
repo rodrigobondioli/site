@@ -1,27 +1,25 @@
-node_modules/
-.vercel/
-.DS_Store
-*.log
 
 # backups locais (o bundle do portfolio sozinho tem 46MB)
-_backups/
-
 # descarte local
+# docs internos de marketing (nao publicar)
+# experimentos de landing que nao fazem parte do deploy oficial
+# lixo local que nunca deve entrar no deploy
+# site novo (repo proprio)
+*.log
+.DS_Store
+.next/
+.vercel
+.vercel/
+DIAG.txt
+Marketing/
+New-LP/
+_backups/
+_originais/
+_site-v2-descarte/
 _to_delete/
 _to_delete_git_locks/
-
-# docs internos de marketing (nao publicar)
-Marketing/
-
-# experimentos de landing que nao fazem parte do deploy oficial
-New-LP/
-.vercel
-
-# site novo (repo proprio)
-site-v2/
-
-# lixo local que nunca deve entrar no deploy
-_site-v2-descarte/
-_originais/
+node_modules/
+out/
 site-v2.tar.gz
-DIAG.txt
+site-v2/
+tsconfig.tsbuildinfo
