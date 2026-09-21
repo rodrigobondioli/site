@@ -198,6 +198,13 @@
   grid-template-columns: 1fr 1fr;
   align-items: center;
 }
+/* Parágrafo + lista de marcas ocupam a coluna da direita. */
+.aboutText {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s5);
+}
+
 .aboutVideo {
   width: min(623px, 100%);
   aspect-ratio: 1;

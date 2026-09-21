@@ -3,12 +3,12 @@ import SiteNav from "@/components/SiteNav"
 import SmoothScroll from "@/components/SmoothScroll"
 import { SiteFooter } from "@/components/SiteFooter"
 import MeetingBar from "@/components/MeetingBar"
-import HeroLogos from "@/components/HeroLogos"
 import CountUpNumber from "@/components/CountUpNumber"
 import YouTube from "@/components/YouTube"
 import Marquee from "@/components/Marquee"
 import ProjectCard from "@/components/ProjectCard"
 import ContactForm from "@/components/ContactForm"
+import Brands from "@/components/Brands"
 import { orderedProjects, asset } from "@/lib/projects"
 import order from "@/content/order.json"
 import s from "./work.module.css"
@@ -49,7 +49,6 @@ export default function WorkPage() {
       <main>
         {/* ---------- Hero ---------- */}
         <section className={s.hero}>
-          <HeroLogos />
           <div className={`container ${s.heroInner}`}>
             <h1 className="h1">
               Rodrigo Bondioli brings design and AI together, with more than 20
@@ -258,19 +257,21 @@ export default function WorkPage() {
                 playsInline
                 preload="none"
               />
-              <p className="body">
+              <div className={s.aboutText}>
+                <p className="body">
                 Big projects rarely fail because of execution. They fail because
                 someone chose to build the wrong thing, and no one in the room
                 had the nerve to say so. I&rsquo;ve been in that room. I was
                 Head of Creative at Netshoes and Americanas.com, two of
                 Brazil&rsquo;s largest digital businesses. Before that, I spent
-                20 years at agencies including Wunderman Thompson and McCann,
-                working with Nike, Coca-Cola, Ita&uacute;, and Harley-Davidson.
+                20 years at agencies including Wunderman Thompson and McCann.
                 You&rsquo;re hiring my judgment. I join the conversation where
                 decisions are made, speak up before the wrong call becomes an
                 expensive problem, and stay through launch&mdash;until the
                 brand, product, and experience work as one.
-              </p>
+                </p>
+                <Brands label="Marcas que já trabalhei:" />
+              </div>
             </div>
 
             <ul className={s.credentials}>
