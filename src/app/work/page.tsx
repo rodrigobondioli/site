@@ -10,6 +10,7 @@ import ProjectCard from "@/components/ProjectCard"
 import ContactForm from "@/components/ContactForm"
 import Brands from "@/components/Brands"
 import ScrollReveal from "@/components/ScrollReveal"
+import MaskReveal from "@/components/MaskReveal"
 import { orderedProjects, asset } from "@/lib/projects"
 import order from "@/content/order.json"
 import s from "./work.module.css"
@@ -124,6 +125,7 @@ export default function WorkPage() {
 
             <div className={s.featuredContent}>
               <div className={s.intro}>
+              <div className={s.metaHolder}>
               <div className={s.metaRow}>
                 <a
                   className="overline"
@@ -134,6 +136,7 @@ export default function WorkPage() {
                   goink.com
                 </a>
                 <span className="overline">Get inspired. Get inked.</span>
+              </div>
               </div>
 
               <div className={s.introBottom}>
@@ -174,13 +177,15 @@ export default function WorkPage() {
                 </p>
               </div>
 
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                className={s.shot}
-                src="/site/work-6.png"
-                alt="Go Ink brand"
-                loading="lazy"
-              />
+              <MaskReveal className={s.shotWrap}>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  className={s.shot}
+                  src="/site/work-6.png"
+                  alt="Go Ink brand"
+                  loading="lazy"
+                />
+              </MaskReveal>
 
               <div className={s.block}>
                 <h3 className="h4">The solution</h3>
@@ -197,14 +202,10 @@ export default function WorkPage() {
 
               {["/site/work-2.png", "/site/work-3.png", "/site/work-4.png"].map(
                 (src) => (
-                  /* eslint-disable-next-line @next/next/no-img-element */
-                  <img
-                    className={s.shot}
-                    src={src}
-                    alt="Go Ink"
-                    key={src}
-                    loading="lazy"
-                  />
+                  <MaskReveal className={s.shotWrap} key={src}>
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img className={s.shot} src={src} alt="Go Ink" loading="lazy" />
+                  </MaskReveal>
                 )
               )}
             </div>

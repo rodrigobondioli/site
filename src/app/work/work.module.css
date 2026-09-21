@@ -148,8 +148,13 @@
   aspect-ratio: 767 / 910;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
 }
+
+/* O trilho da régua. É ele que limita até onde ela gruda: quando o fim
+   dele passa, a descrição empurra a régua pra cima — que é o que o Framer
+   faz. Se a régua ficasse solta dentro de .intro, ela grudaria até o fim
+   do bloco e o texto passaria por baixo dela em vez de empurrá-la. */
+.metaHolder { flex: 1 1 auto; }
 
 .introBottom { display: flex; flex-direction: column; gap: var(--s4); }
 
@@ -176,11 +181,13 @@
 .block { display: flex; flex-direction: column; gap: var(--s2); }
 /* O Framer não estica imagem além do tamanho original — quando a peça é
    menor que a coluna, ela fica centrada. */
-.shot {
+.shotWrap {
   width: 100%;
   max-width: max-content;
   margin-inline: auto;
+  overflow: hidden;
 }
+.shot { width: 100%; display: block; }
 
 @media (max-width: 900px) {
   .featured { padding-right: 0; }
@@ -191,6 +198,7 @@
   /* no celular a coluna vira empilhada: a espera de 788px viraria um
      buraco branco */
   .intro { aspect-ratio: auto; gap: var(--s4); }
+  .metaHolder { flex: 0 0 auto; }
   .metaRow { position: static; }
 }
 
