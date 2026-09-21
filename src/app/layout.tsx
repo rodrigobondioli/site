@@ -27,7 +27,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={`${display.variable} ${body.variable}`}>
-      <body>{children}</body>
+      {/* Extensões (ColorZilla, gramática, gerenciadores de senha) injetam
+          atributos no <body> antes do React montar. O aviso de hidratação
+          que sai disso não é do nosso código e não tem o que consertar. */}
+      <body suppressHydrationWarning>{children}</body>
     </html>
   )
 }

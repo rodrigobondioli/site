@@ -1,0 +1,63 @@
+/* Pílula padrão do site: 48 de altura, texto preto sobre o rosa.
+   No hover o rótulo dá uma cambalhota — duas faces de um cubo girando no
+   eixo X. A de cima sai, a de baixo entra, e as duas são o mesmo texto:
+   quem olha vê o botão "virar", não trocar de palavra. */
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 48px;
+  padding-inline: var(--s3);
+  border-radius: var(--r-pill);
+  background: var(--accent-pink);
+  color: var(--ink);
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 20px;
+  white-space: nowrap;
+  transition: filter var(--fast) var(--ease);
+}
+.pill:hover { filter: brightness(1.06); }
+
+/* A janela: mostra uma linha por vez. Sem ela as duas faces aparecem
+   juntas no meio do giro e a coisa vira texto dobrado, não cambalhota. */
+.mask {
+  display: inline-block;
+  height: 20px;
+  overflow: hidden;
+}
+
+.roll {
+  position: relative;
+  display: block;
+  transform-style: preserve-3d;
+  /* a perspectiva vai no próprio transform: com a janela no meio, ela não
+     desceria de um ancestral */
+  transform: perspective(280px) rotateX(0deg);
+  /* sai rápido, chega macia: cambalhota, não catraca */
+  transition: transform 560ms cubic-bezier(0.22, 1, 0.3, 1);
+}
+
+.face {
+  display: block;
+  backface-visibility: hidden;
+}
+
+/* metade da altura da linha (20px) — é o raio do cubo */
+.front { transform: translateZ(10px); }
+.back {
+  position: absolute;
+  inset: 0;
+  transform: rotateX(-90deg) translateZ(10px);
+}
+
+.pill:hover .roll,
+.pill:focus-visible .roll {
+  transform: perspective(280px) rotateX(90deg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .roll { transition: none; }
+  .pill:hover .roll { transform: perspective(280px) rotateX(0deg); }
+}

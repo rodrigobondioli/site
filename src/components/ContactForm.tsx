@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import styles from "./ContactForm.module.css"
+import PillButton from "./PillButton"
 
 /**
  * Formulário de contato. O site é estático — não há servidor pra receber
@@ -69,9 +70,9 @@ export default function ContactForm() {
         />
       </label>
 
-      <button type="submit" className={styles.submit}>
-        Start with the problem
-      </button>
+      <div className={styles.actions}>
+        <PillButton type="submit">Start with the problem</PillButton>
+      </div>
     </form>
   )
 }

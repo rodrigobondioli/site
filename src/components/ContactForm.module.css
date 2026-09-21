@@ -30,19 +30,4 @@
 
 .question { margin-top: var(--s2); }
 
-/* Mesma pílula do "Say hello": 48 de altura, texto preto sobre o rosa. */
-.submit {
-  align-self: flex-start;
-  display: inline-flex;
-  align-items: center;
-  height: 48px;
-  padding-inline: var(--s3);
-  border-radius: var(--r-pill);
-  background: var(--accent-pink);
-  color: var(--ink);
-  font-size: 15px;
-  font-weight: 500;
-  line-height: 20px;
-  transition: transform var(--fast) var(--ease), filter var(--fast) var(--ease);
-}
-.submit:hover { transform: translateY(-1px); filter: brightness(1.08); }
+.actions { display: flex; }

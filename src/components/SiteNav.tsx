@@ -1,4 +1,5 @@
 import Link from "next/link"
+import PillButton from "./PillButton"
 import styles from "./SiteNav.module.css"
 
 /**
@@ -13,9 +14,7 @@ export default function SiteNav({ dark = false }: { dark?: boolean }) {
         <span className={styles.dot}>·</span>
         <span className={styles.role}>Nexialist Designer</span>
       </Link>
-      <a href="#contact" className={styles.cta}>
-        Say hello
-      </a>
+      <PillButton href="#contact">Say hello</PillButton>
     </header>
   )
 }
