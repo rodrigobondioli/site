@@ -1,0 +1,228 @@
+/* =========================================================================
+   /work — a página do portfólio.
+   Tudo aqui usa os passos de espaçamento do globals.css. Nenhum número
+   solto: onde o Framer tinha 124px, 176px, 88px e 56px, aqui é --gutter,
+   --s7, --s6 e --s5, que encolhem sozinhos no celular.
+   ========================================================================= */
+
+/* ---------- Hero ---------- */
+
+.hero {
+  position: relative;
+  min-height: 100svh;
+  display: grid;
+  align-items: center;
+  padding-inline: var(--gutter);
+  overflow: hidden;
+}
+
+.heroInner {
+  position: relative;
+  z-index: 2;
+  padding-block: var(--s7) calc(var(--s7) + 64px);
+  pointer-events: none;
+}
+
+/* A faixa de números encosta no rodapé do hero, com um fio em cima */
+.stats {
+  position: absolute;
+  inset: auto 0 0 0;
+  z-index: 10;
+  padding-inline: var(--gutter);
+  border-top: var(--hairline) solid var(--rule);
+  background: rgba(242, 242, 242, 0.4);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.statsInner {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--s3);
+  padding-block: var(--s2);
+}
+
+.stat {
+  display: flex;
+  align-items: baseline;
+  gap: var(--s1);
+  justify-content: center;
+}
+.stat:first-child { justify-content: flex-start; }
+.stat:last-child  { justify-content: flex-end; }
+
+.statNumber {
+  font-family: var(--font-display), system-ui, sans-serif;
+  font-size: var(--t-h4);
+  line-height: 1;
+}
+.statLabel { font-size: var(--t-body-sm); color: var(--ink-60); }
+
+@media (max-width: 720px) {
+  .statsInner { grid-template-columns: 1fr; gap: var(--s1); padding-block: var(--s2); }
+  .stat, .stat:first-child, .stat:last-child { justify-content: flex-start; }
+  .heroInner { padding-block: var(--s7) calc(var(--s7) + 96px); }
+}
+
+/* ---------- Vídeo de abertura ---------- */
+
+.reel { padding-bottom: var(--s6); }
+.reelInner { display: flex; flex-direction: column; gap: var(--s1); align-items: center; }
+.reelInner > :global(.caption) { text-align: center; }
+
+/* ---------- Manifesto ---------- */
+
+.statement { padding-block: var(--s6) var(--s7); }
+.statementInner { display: flex; flex-direction: column; gap: var(--s6); }
+
+.statementText {
+  font-family: var(--font-display), system-ui, sans-serif;
+  font-size: var(--t-h2);
+  line-height: 1.1;
+  max-width: 22ch;
+  max-width: min(100%, 26ch);
+  text-wrap: balance;
+}
+@media (max-width: 900px) { .statementText { max-width: none; } }
+
+/* ---------- Projeto em destaque ---------- */
+
+.featured { padding-bottom: var(--s7); }
+.featuredHead { padding-bottom: var(--s6); }
+.dash { display: inline-block; margin-right: var(--s2); }
+
+/* Imagem à esquerda sangra até a borda da tela; o conteúdo respeita o gutter.
+   Era o que o Framer fazia com padding="0 124px 176px 0". */
+.featuredBody {
+  display: grid;
+  grid-template-columns: minmax(0, 44%) minmax(0, 1fr);
+  gap: var(--s5);
+  align-items: start;
+  padding-right: var(--gutter);
+}
+
+.featuredImage {
+  position: sticky;
+  top: 0;
+  height: 100svh;
+  overflow: hidden;
+}
+.featuredImage img { width: 100%; height: 100%; object-fit: cover; }
+
+.featuredContent {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s5);
+  padding-top: var(--s5);
+}
+
+.metaRow {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--s3);
+  padding-bottom: var(--s2);
+  border-bottom: var(--hairline) solid var(--rule);
+}
+.metaRow a:hover { text-decoration: underline; text-underline-offset: 3px; }
+
+.tags { display: flex; flex-wrap: wrap; gap: var(--s2); }
+.tag { color: var(--ink); }
+.tagDot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--accent-cyan);
+}
+.tag:nth-child(2n) .tagDot { background: var(--accent-pink); }
+
+.block { display: flex; flex-direction: column; gap: var(--s3); }
+.shot { width: 100%; border-radius: var(--r-control); }
+
+@media (max-width: 900px) {
+  .featuredBody {
+    grid-template-columns: 1fr;
+    padding-right: 0;
+    gap: var(--s5);
+  }
+  .featuredImage { position: static; height: auto; aspect-ratio: 4 / 5; }
+  .featuredContent { padding-inline: var(--gutter); padding-top: 0; }
+}
+
+/* ---------- Arquivo ---------- */
+
+.archive { padding-bottom: var(--s7); }
+.archive > :global(.container) {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s6);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: var(--s4) var(--s2);
+}
+
+/* ---------- Ticker ---------- */
+
+.ticker { padding-block: var(--s7); }
+
+/* ---------- Sobre ---------- */
+
+.about { padding-bottom: var(--s7); }
+.aboutInner { display: flex; flex-direction: column; gap: var(--s5); }
+
+.aboutBody {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--s6);
+  align-items: start;
+}
+.aboutVideo {
+  width: 100%;
+  border-radius: var(--r-control);
+  background: var(--ink-10);
+}
+
+.credentials {
+  display: flex;
+  flex-direction: column;
+  border-top: var(--hairline) solid var(--rule);
+}
+.credentials li {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--s3);
+  padding-block: var(--s2);
+  border-bottom: var(--hairline) solid var(--rule);
+}
+
+@media (max-width: 900px) {
+  .aboutBody { grid-template-columns: 1fr; gap: var(--s4); }
+  .credentials li { flex-direction: column; gap: var(--s1); }
+}
+
+/* ---------- YouTube ---------- */
+
+.youtube {
+  background: var(--accent);
+  padding-block: var(--s7) var(--s7);
+}
+.youtubeInner {
+  max-width: 1140px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--s4);
+}
+.youtube :global(.rule) { background: var(--ink-25); }
+
+/* ---------- Contato ---------- */
+
+/* O Framer termina o amarelo aqui com um tom mais lavado. Mesma cor, menos
+   saturação, feito com color-mix em vez de um segundo hex pra manter. */
+.closing {
+  background: color-mix(in srgb, var(--accent) 45%, var(--bg));
+  padding-block: var(--s7);
+}
+.closingInner { display: flex; flex-direction: column; gap: var(--s6); }
+.closingHead { display: flex; flex-direction: column; gap: var(--s4); }
+.closingTitle { font-size: var(--t-h1); }

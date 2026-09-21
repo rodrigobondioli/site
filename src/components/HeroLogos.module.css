@@ -1,0 +1,31 @@
+.field {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.bubble {
+  position: absolute;
+  translate: -50% -50%;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  border: 1px dashed var(--ink-25);
+  background: rgba(242, 242, 242, 0.4);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  will-change: transform;
+}
+.bubble img {
+  width: 46%;
+  height: auto;
+  opacity: 0.85;
+}
+
+/* No celular as bolhas viram ruído atrás do título — ficam poucas e menores */
+@media (max-width: 720px) {
+  .bubble { transform: none !important; }
+  .bubble:nth-child(n + 5) { display: none; }
+}
