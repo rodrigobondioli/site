@@ -1,0 +1,35 @@
+.closing {
+  background: linear-gradient(var(--accent) 0%, var(--bg) 100%);
+  padding-block: var(--s7);
+}
+
+.inner {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s6);
+  /* o título abaixo se mede por esta caixa, não pela viewport: 100vw conta
+     a barra de rolagem e o texto saía 1% maior que o do Framer */
+  container-type: inline-size;
+}
+
+.head { display: flex; flex-direction: column; gap: var(--s4); }
+
+/* O risco fica no meio da linha e com a espessura do próprio tipo. O
+   navegador põe `line-through` sozinho no <s>; o que se declara aqui é a
+   espessura, senão em corpo maior o risco fica um fio de cabelo. */
+.struck {
+  text-decoration-line: line-through;
+  text-decoration-thickness: from-font;
+}
+
+/* O Framer escala este título pra encher a linha (SVG de texto ajustado).
+   Aqui é a mesma conta: largura útil dividida pelo comprimento da frase. */
+.title {
+  font-size: calc(100cqw / 12.05);
+  line-height: 1.1;
+  text-transform: none;
+  text-wrap: nowrap;
+}
+@media (max-width: 700px) {
+  .title { font-size: var(--t-h1); text-wrap: balance; }
+}

@@ -305,32 +305,3 @@
   flex-direction: column;
   gap: var(--s4);
 }
-
-/* ---------- Contato ---------- */
-
-/* Gradiente do amarelo pro fundo da pagina — medido no Framer */
-.closing {
-  background: linear-gradient(var(--accent) 0%, var(--bg) 100%);
-  padding-block: var(--s7);
-}
-.closingInner {
-  display: flex;
-  flex-direction: column;
-  gap: var(--s6);
-  /* o título abaixo se mede por esta caixa, não pela viewport: 100vw conta
-     a barra de rolagem e o texto saía 1% maior que o do Framer */
-  container-type: inline-size;
-}
-.closingHead { display: flex; flex-direction: column; gap: var(--s4); }
-
-/* O Framer escala este título pra encher a linha (SVG de texto ajustado).
-   Aqui é a mesma conta: largura util dividida pelo comprimento da frase. */
-.closingTitle {
-  font-size: calc(100cqw / 12.05);
-  line-height: 1.1;
-  text-transform: none;
-  text-wrap: nowrap;
-}
-@media (max-width: 700px) {
-  .closingTitle { font-size: var(--t-h1); text-wrap: balance; }
-}

@@ -7,7 +7,7 @@ import CountUpNumber from "@/components/CountUpNumber"
 import YouTube from "@/components/YouTube"
 import Marquee from "@/components/Marquee"
 import ProjectCard from "@/components/ProjectCard"
-import ContactForm from "@/components/ContactForm"
+import ClosingSection from "@/components/ClosingSection"
 import Brands from "@/components/Brands"
 import ScrollReveal from "@/components/ScrollReveal"
 import MaskReveal from "@/components/MaskReveal"
@@ -348,17 +348,7 @@ export default function WorkPage() {
         </section>
 
         {/* ---------- Contato ---------- */}
-        <section className={`section ${s.closing}`} id="contact">
-          <div className={`container ${s.closingInner}`}>
-            <div className={s.closingHead}>
-              <p className="body-lg">
-                Enough about me. Let&rsquo;s talk about your next move.
-              </p>
-              <p className={`h1 ${s.closingTitle}`}>Your next decision.</p>
-            </div>
-            <ContactForm />
-          </div>
-        </section>
+        <ClosingSection />
       </main>
 
       <SiteFooter />

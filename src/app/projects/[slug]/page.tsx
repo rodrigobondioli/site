@@ -6,7 +6,7 @@ import MeetingBar from "@/components/MeetingBar"
 import MaskReveal from "@/components/MaskReveal"
 import ProjectVideo from "@/components/ProjectVideo"
 import ProjectPager from "@/components/ProjectPager"
-import ContactForm from "@/components/ContactForm"
+import ClosingSection from "@/components/ClosingSection"
 import {
   getProject,
   allSlugs,
@@ -251,17 +251,7 @@ export default async function ProjectPage({
       </main>
 
       {/* ---------- Contato: o mesmo fecho da /work ---------- */}
-      <section className={`section ${s.closing}`} id="contact">
-        <div className={`container ${s.closingInner}`}>
-          <div className={s.closingHead}>
-            <p className="body-lg">
-              Enough about me. Let&rsquo;s talk about your next move.
-            </p>
-            <p className={`h1 ${s.closingTitle}`}>Your next decision.</p>
-          </div>
-          <ContactForm />
-        </div>
-      </section>
+      <ClosingSection />
 
       <SiteFooter />
       <MeetingBar />
