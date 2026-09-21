@@ -11,6 +11,7 @@ export default function SiteNav({
   dark = false,
   ctaHref = "#contact",
   back = false,
+  brandHref = "/",
 }: {
   dark?: boolean
   /* nas páginas de projeto não existe âncora #contact: o formulário está
@@ -20,13 +21,16 @@ export default function SiteNav({
      esquerda e ação à direita, ela oferece a saída — "Back to portfolio",
      sublinhado, em 12.8px, antes da pílula */
   back?: boolean
+  /* o nome sobe um nível: da capa vai pra /work, e de dentro de um projeto
+     volta pro arquivo */
+  brandHref?: string
 }) {
   return (
     <header className={`${styles.nav} ${dark ? styles.dark : ""}`}>
-      {/* O nome leva pra home. Antes apontava pra /work, o mesmo destino do
-          "Back to portfolio": dois links pro mesmo lugar e nenhuma saída
-          pra capa. */}
-      <Link href="/" className={`no-underline ${styles.brand}`}>
+      {/* O nome sobe um nível. Na capa isso é a /work; dentro de um projeto
+          é o arquivo — e no celular, onde o "Back to portfolio" não aparece,
+          é a única volta que existe. */}
+      <Link href={brandHref} className={`no-underline ${styles.brand}`}>
         <strong>Rodrigo Bondioli</strong>
         <span className={styles.dot}>·</span>
         <span className={styles.role}>Nexialist Designer</span>

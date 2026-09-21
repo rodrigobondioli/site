@@ -87,6 +87,18 @@
    acompanhar o título sem disputa.
 
    As barras somem: entre linhas elas não separam nada, só sobram. */
+/* No celular a primeira foto sobe pra antes do "The challenge". A descrição
+   e o desafio são dois blocos de texto em sequência, e no desktop as duas
+   colunas do bloco já quebram esse ritmo — empilhadas, não quebram nada.
+   Com a foto no meio, o olho tem onde descansar.
+
+   Ela deixa de ser vizinha da galeria, então a margem que juntava as duas
+   sai junto. */
+@media (max-width: 640px) {
+  .primeira { order: -1; }
+  .primeira + .gallery { margin-top: 0; }
+}
+
 @media (max-width: 640px) {
   .titleRow { gap: var(--s3); }
   .name { margin-right: 0; }
@@ -153,6 +165,13 @@
   grid-template-columns: 1fr;
   gap: var(--s3);
 }
+
+/* A primeira foto é irmã da galeria, não filha — é o que permite ela subir
+   sozinha no celular. No desktop as duas têm que parecer uma galeria só: o
+   pai as separa com 88 (o intervalo do corpo) e esta margem devolve os 24
+   de dentro da galeria. Conta explícita justamente pra não virar número
+   solto se algum dos dois mudar. */
+.primeira + .gallery { margin-top: calc(var(--s3) - var(--s6)); }
 
 /* Os posts são quadrados de rede social: duas colunas, intervalo menor. */
 .posts {

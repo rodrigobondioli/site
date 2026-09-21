@@ -105,6 +105,12 @@ export default async function ProjectPage({
   const capa = asset(p.heroImage)
   const capaSize = imageSize(capa)
   const shots = galleryUrls(p.gallery)
+  /* A primeira foto sai da galeria e vira irmã dela. No desktop nada muda —
+     o CSS devolve o intervalo de 24 entre as duas. No celular ela sobe pra
+     antes do "The challenge": sem isso, a descrição e o desafio caem um
+     atrás do outro e são dois blocos de texto seguidos, que foi o que o
+     Rodrigo viu. */
+  const [primeiraFoto, ...demaisFotos] = shots
   const posts = galleryUrls(p.galleryPosts)
   const { prev, next } = around(slug)
   const temVideo = Boolean(p.videoYouTube || p.videoVimeo || p.videoUpload)
@@ -124,7 +130,7 @@ export default async function ProjectPage({
   return (
     <>
       <SmoothScroll />
-      <SiteNav dark back ctaHref="#contact" />
+      <SiteNav dark back ctaHref="#contact" brandHref="/work" />
 
       <main className={`on-dark ${s.page}`}>
         {/* ---------- Capa ---------- */}
@@ -197,14 +203,20 @@ export default async function ProjectPage({
               </div>
             ) : null}
 
-            {shots.length ? (
+            {primeiraFoto ? (
+              <div className={s.primeira}>
+                <Shot src={primeiraFoto} alt={`${name} — 1`} lag={0.04} />
+              </div>
+            ) : null}
+
+            {demaisFotos.length ? (
               <div className={s.gallery}>
-                {shots.map((src, i) => (
+                {demaisFotos.map((src, i) => (
                   <Shot
                     key={src}
                     src={src}
-                    alt={`${name} — ${i + 1}`}
-                    lag={0.04 + (i % 3) * 0.05}
+                    alt={`${name} — ${i + 2}`}
+                    lag={0.04 + ((i + 1) % 3) * 0.05}
                   />
                 ))}
               </div>
