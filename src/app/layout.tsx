@@ -1,4 +1,5 @@
 import type { Metadata } from "next"
+import Preloader from "@/components/Preloader"
 import { display, body } from "./fonts"
 import "@/styles/globals.css"
 
@@ -30,7 +31,15 @@ export default function RootLayout({
       {/* Extensões (ColorZilla, gramática, gerenciadores de senha) injetam
           atributos no <body> antes do React montar. O aviso de hidratação
           que sai disso não é do nosso código e não tem o que consertar. */}
-      <body suppressHydrationWarning>{children}</body>
+      <body suppressHydrationWarning>
+        {/* Sem JS a tela de carregamento nunca sairia — então sem JS ela
+            também não entra. O conteúdo está no HTML de qualquer jeito. */}
+        <noscript>
+          <style>{`[data-preloader]{display:none!important}`}</style>
+        </noscript>
+        <Preloader />
+        {children}
+      </body>
     </html>
   )
 }

@@ -1,0 +1,71 @@
+/* A tela cobre tudo. Fundo do site, não preto: a saída tem que parecer que
+   a página apareceu por trás, não que uma cortina preta subiu. */
+.screen {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: var(--bg);
+  opacity: 1;
+  transition: opacity 600ms var(--ease);
+}
+.leaving {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* A 88 do rodapé, atravessando de gutter a gutter: é onde corre a linha
+   acima dos números na capa. Quando a tela sai, a linha já está no lugar. */
+.track {
+  position: absolute;
+  left: var(--gutter);
+  right: var(--gutter);
+  bottom: 88px;
+  height: var(--hairline);
+  background: var(--rule);
+}
+
+/* O preenchimento: cresce da esquerda pra direita. `width` em vez de
+   `scaleX` de propósito — com escala o número teria que ser desescalado
+   pra não esticar junto. */
+.fill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: var(--p, 0%);
+  background: var(--ink);
+}
+
+/* O número anda com a ponta. `left` na mesma conta do preenchimento, e o
+   translate de -100% ancora ele pela direita, encostado na ponta da régua.
+   `max()` segura o número dentro da tela nos primeiros por cento, quando
+   ele ainda não teria onde caber. */
+.counter {
+  position: absolute;
+  bottom: var(--s3);
+  left: max(0px, var(--p, 0%));
+  transform: translateX(-100%);
+  display: flex;
+  align-items: baseline;
+  font-family: var(--font-display), system-ui, sans-serif;
+  font-size: var(--t-h1);
+  font-weight: 500;
+  line-height: 1;
+  white-space: nowrap;
+  /* sem isto o número escorrega um quadro atrás da régua em telas de 120Hz */
+  will-change: left;
+}
+
+.percent {
+  font-size: 0.32em;
+  padding-left: 0.4em;
+}
+
+@media (max-width: 640px) {
+  .track { bottom: 64px; }
+}
+
+/* Quem pediu menos movimento vê a tela só o tempo de carregar, sem a
+   contagem correndo na frente. */
+@media (prefers-reduced-motion: reduce) {
+  .screen { transition: none; }
+  .counter { transition: none; }
+}
