@@ -250,7 +250,7 @@ export default function WorkPage() {
             <div className={s.aboutBody}>
               <video
                 className={s.aboutVideo}
-                src="/site/work-1.mp4"
+                src="/video/eu-profile.mp4"
                 autoPlay
                 muted
                 loop
