@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useRef, useState } from "react"
+import { marcarCarregando, marcarPronto } from "@/lib/ready"
 import styles from "./Preloader.module.css"
 
 /**
@@ -23,6 +24,11 @@ import styles from "./Preloader.module.css"
 
 const PISO = 600
 const TETO = 6000
+
+/* Fora de qualquer efeito, de propósito: a marca tem que existir antes do
+   primeiro `useEffect` da página rodar, senão os efeitos que esperam por
+   ela acham que já podem começar. */
+marcarCarregando()
 
 export default function Preloader() {
   const [pct, setPct] = useState(0)
@@ -134,6 +140,8 @@ export default function Preloader() {
     const t = window.setTimeout(() => {
       setFora(true)
       window.scrollTo(0, 0)
+      // agora sim: quem estava esperando pra animar pode começar
+      marcarPronto()
     }, 620)
     return () => window.clearTimeout(t)
   }, [saindo])

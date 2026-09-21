@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useRef, useState, type CSSProperties } from "react"
+import { aoAparecer } from "@/lib/ready"
 
 /**
  * Um número que conta e desacelera até o valor final.
@@ -8,6 +9,10 @@ import { useEffect, useRef, useState, type CSSProperties } from "react"
  *
  * easeOutExpo: dispara rápido e rasteja até o número.
  * Dígitos tabulares para o label ao lado não tremer enquanto conta.
+ *
+ * Espera a tela de carregamento sair. A faixa de números fica no topo da
+ * página: ela já está intersectando a viewport atrás da cortina, e sem
+ * essa espera a contagem inteira acontecia antes de alguém ver.
  */
 
 interface CountUpNumberProps {
@@ -87,9 +92,10 @@ export default function CountUpNumber({
       { threshold: 0.35 }
     )
 
-    observer.observe(node)
+    const cancelarEspera = aoAparecer(() => observer.observe(node))
 
     return () => {
+      cancelarEspera()
       observer.disconnect()
       cancelAnimationFrame(frame)
     }
