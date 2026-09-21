@@ -153,6 +153,29 @@ input, textarea, select { font: inherit; color: inherit; }
 .body-sm { font-size: var(--t-body-sm); line-height: 1.3; }
 .caption { font-size: var(--t-body-sm); line-height: 1.3; color: var(--ink); }
 
+/* ---------- Quebra de linha ---------- *
+ *
+ * `balance` distribui as linhas pra que todas fiquem parecidas — é o que
+ * evita a segunda linha curtinha embaixo de uma cheia. O navegador só faz
+ * isso em blocos de até seis linhas; acima disso ele desiste e a regra não
+ * faz nada. Por isso os dois valores:
+ *
+ *   balance  — títulos, aberturas, legendas. Blocos curtos, onde o
+ *              desequilíbrio salta aos olhos.
+ *   pretty   — parágrafos longos. Não equilibra tudo, mas não deixa a
+ *              última linha virar uma palavra sozinha, e não tem o teto
+ *              de seis linhas.
+ *
+ * Navegador antigo ignora os dois e quebra do jeito de sempre.             */
+
+p, li, figcaption, blockquote, dd { text-wrap: pretty; }
+
+.body-lg,
+.body-sm,
+.caption,
+.overline,
+.lead { text-wrap: balance; }
+
 /* ---------- 4. Layout ---------- */
 
 /* Toda seção usa isto. Sem exceção — é a regra que a produção não cumpria. */
