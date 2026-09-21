@@ -69,6 +69,42 @@
   line-height: 1.1;
 }
 
+/* Abaixo de 600 as três células não cabem lado a lado: medido, "years in
+   the creative industry" vai de 2 para 3 linhas em 560 e chega a 4 em 430,
+   estourando a tela em 360. Então a faixa empilha.
+
+   Ela também deixa de ser absoluta e passa a ser a segunda linha da grade
+   do hero. É o que permite crescer: absoluta com altura automática ela
+   subiria por cima do título, e um padding fixo pra compensar só adiaria o
+   problema pro primeiro rótulo mais longo. Em fluxo, o título ocupa o que
+   sobra e a faixa ocupa o que precisa. */
+@media (max-width: 600px) {
+  .hero {
+    grid-template-rows: 1fr auto;
+    /* o gutter desce pros filhos: a faixa tem o seu próprio */
+    padding-inline: 0;
+  }
+  .heroInner {
+    padding-inline: var(--gutter);
+    /* o respiro existia pra escapar da faixa absoluta; agora ela não passa
+       mais por baixo */
+    padding-bottom: 0;
+  }
+  .stats {
+    position: static;
+    justify-self: stretch;
+    height: auto;
+    padding-block: var(--s3);
+  }
+  .statsInner {
+    grid-template-columns: 1fr;
+    gap: var(--s2);
+  }
+  /* empilhado, alinhar à esquerda: centrado, cada linha começaria num
+     lugar diferente e a coluna de números sumiria */
+  .stat { justify-content: flex-start; }
+}
+
 @media (max-width: 860px) {
   .stats { height: auto; padding-block: var(--s2); }
   .statsInner { flex-direction: column; align-items: flex-start; gap: var(--s1); }
