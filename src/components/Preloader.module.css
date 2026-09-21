@@ -13,12 +13,13 @@
   pointer-events: none;
 }
 
-/* A 88 do rodapé, atravessando de gutter a gutter: é onde corre a linha
-   acima dos números na capa. Quando a tela sai, a linha já está no lugar. */
+/* A 88 do rodapé, de borda a borda: a linha acima dos números na capa é
+   sangrada, não respeita o gutter. Com margem lateral aqui a linha saltava
+   de lugar quando a tela saía. */
 .track {
   position: absolute;
-  left: var(--gutter);
-  right: var(--gutter);
+  left: 0;
+  right: 0;
   bottom: 88px;
   height: var(--hairline);
   background: var(--rule);
@@ -36,12 +37,16 @@
 
 /* O número anda com a ponta. `left` na mesma conta do preenchimento, e o
    translate de -100% ancora ele pela direita, encostado na ponta da régua.
-   `max()` segura o número dentro da tela nos primeiros por cento, quando
-   ele ainda não teria onde caber. */
+
+   O piso de 3.6em é a largura de "100%" nesta fonte: sem ele, nos primeiros
+   por cento o número ficaria inteiro fora da tela, à esquerda do zero. E o
+   padding à direita entra na conta do translate, então é ele que impede o
+   número de encostar na borda quando a régua fecha em 100. */
 .counter {
   position: absolute;
   bottom: var(--s3);
-  left: max(0px, var(--p, 0%));
+  left: max(3.6em, var(--p, 0%));
+  padding-right: var(--s3);
   transform: translateX(-100%);
   display: flex;
   align-items: baseline;
