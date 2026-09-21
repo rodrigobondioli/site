@@ -1,16 +1,23 @@
 /* O degradê é o que fecha a página escura: ela escurece até o preto antes
    do contato claro começar. Sem ele o corte fica seco. */
 .pager {
+  /* o conteúdo acima termina colado; este respiro é o que dá ar à régua */
+  margin-top: var(--s6);
   background: linear-gradient(#101010 0%, #000 100%);
 }
 
 /* Os dois encostados à direita. Quando só existe um, ele fica no mesmo
-   lugar — o da direita — em vez de escorregar pro meio. */
+   lugar — o da direita — em vez de escorregar pro meio.
+
+   A régua no topo é o que separa isto do conteúdo: sem ela as thumbs
+   pareciam a continuação do texto acima. Ela vive na borda deste bloco, de
+   gutter a gutter, como todas as outras do site. */
 .inner {
   display: flex;
   justify-content: flex-end;
   gap: var(--s3);
-  padding-top: var(--s6);
+  border-top: var(--hairline) solid var(--rule-dark);
+  padding-top: var(--s5);
   padding-bottom: var(--s6);
   color: #fff;
 }
@@ -19,7 +26,8 @@
   display: flex;
   flex-direction: column;
   gap: var(--s2);
-  width: 240px;
+  /* 216: 10% menor que os 240 do primeiro corte */
+  width: 216px;
 }
 
 .media {
