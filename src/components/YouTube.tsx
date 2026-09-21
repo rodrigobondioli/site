@@ -59,11 +59,26 @@ export default function YouTube({
     return () => io.disconnect()
   }, [autoplay, mounted])
 
-  function command(func: "mute" | "unMute") {
+  function command(func: string, args: unknown[] = []) {
     frame.current?.contentWindow?.postMessage(
-      JSON.stringify({ event: "command", func, args: [] }),
+      JSON.stringify({ event: "command", func, args }),
       "*"
     )
+  }
+
+  /**
+   * Desliga a legenda de verdade.
+   *
+   * cc_load_policy=0 é só uma sugestão: se a pessoa tem legenda ligada por
+   * padrão na conta do YouTube, ou se o vídeo tem legenda automática, o
+   * player liga assim mesmo. O jeito que funciona é descarregar o módulo —
+   * "captions" no player antigo, "cc" no HTML5, e os dois nomes custam o
+   * mesmo. E repetir: o player recarrega o módulo quando o vídeo começa,
+   * então uma chamada só no load não segura.
+   */
+  function killCaptions() {
+    command("unloadModule", ["captions"])
+    command("unloadModule", ["cc"])
   }
 
   function toggleSound() {
@@ -88,6 +103,11 @@ export default function YouTube({
             title={title}
             allow="autoplay; encrypted-media; picture-in-picture"
             tabIndex={-1}
+            onLoad={() => {
+              ;[0, 300, 900, 2000, 4000].forEach((ms) =>
+                window.setTimeout(killCaptions, ms)
+              )
+            }}
           />
         ) : null}
         <button
