@@ -9,7 +9,11 @@
 
 /* ---------- Capa ---------- */
 
-.heroSection { padding-top: var(--s6); }
+/* A barra de cima é `position: absolute` — não ocupa espaço. Então este
+   respiro conta desde o topo da página, não desde o fim da barra: 176 no
+   Framer, que é o dobro do intervalo padrão. Com --s6 sozinho a foto
+   encostava no botão. */
+.heroSection { padding-top: calc(var(--s6) * 2); }
 
 /* A imagem não é cortada: o Framer usa `contain` dentro de uma caixa 16:9.
    Peça de interface esticada ou cortada perde o que ela tem pra mostrar. */

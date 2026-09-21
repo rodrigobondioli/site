@@ -21,6 +21,12 @@
 .brand strong { font-weight: 600; }
 .dot { opacity: 0.45; }
 .role { color: var(--ink-60); }
+
+/* A barra é `position: absolute`: ela flutua por cima da página e fica
+   FORA do <main class="on-dark">, então herdava a cor do body — preto.
+   Sobre o fundo escuro o nome sumia e o "Back to portfolio" ficava preto
+   no preto, invisível. A cor tem que ser declarada aqui. */
+.dark { color: #f2f2f2; }
 .dark .role { color: rgba(242, 242, 242, 0.6); }
 
 @media (max-width: 640px) {
