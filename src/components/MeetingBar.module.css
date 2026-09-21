@@ -56,4 +56,21 @@
   height: 44px;
   border-radius: 50%;
   background: var(--accent-pink);
+  color: var(--ink);
+}
+
+/* Uma volta inteira no hover. Termina onde começou, então não chama
+   atenção; o que dá o gosto é a curva — sai rápido e assenta devagar,
+   com um respiro de overshoot no fim. Linear pareceria motor de ventilador. */
+.arrow svg {
+  transition: transform 820ms cubic-bezier(0.34, 1.12, 0.32, 1);
+}
+.bar:hover .arrow svg,
+.bar:focus-visible .arrow svg {
+  transform: rotate(360deg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .arrow svg { transition: none; }
+  .bar:hover .arrow svg { transform: none; }
 }
