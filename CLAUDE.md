@@ -73,6 +73,29 @@ npm run build   # gera ./out
 - **`_site-v2-descarte/`, `site-v2/`, `quak/`, `antipato/`** e afins são entulho
   do repo antigo. Estão no `.gitignore` e fora do `tsconfig`. Não entram no build.
 
+## Animações — o que já deu errado
+
+- **`MaskReveal`** revela por `clip-path`, amarrado ao scroll (rAF + IO), não
+  por `transition`. Três coisas fazem ele falhar de forma intermitente, e as
+  três já aconteceram: `rootMargin` curto no IntersectionObserver (o loop
+  começa com progresso já em 1 e a peça aparece inteira); imagem sem
+  `width`/`height` intrínsecos (caixa de altura zero antes do load, progresso
+  calculado errado); e máscara aplicada no HTML de origem (reload no meio da
+  página faz a peça saltar de invisível pra inteira). Hoje: folga de uma
+  janela inteira, dimensões em toda `<img>` dentro dele, e o HTML nasce limpo
+  — quem põe a máscara é o efeito.
+- **`lag`** desencontra uma grade: a peça espera mais um tanto da janela antes
+  de largar. O valor vem de hash do índice, **nunca `Math.random`** — o
+  servidor e o navegador têm que chegar no mesmo número, senão é erro de
+  hidratação.
+- **Perspectiva aumenta o que está na frente.** No `PillButton`, a face em
+  `translateZ(10px)` com `perspective(280px)` renderiza 3,7% maior que a
+  caixa, e a última letra batia na janela do recorte. A folga lateral no
+  `.mask` (com margem negativa devolvendo a largura) é o que conserta — não
+  mexer nela achando que é sobra.
+- **`MeetingBar`** entra depois que o hero sai e sai de novo quando a seção
+  amarela (`.on-accent`, `#contact`) alcança a altura dela.
+
 ## Onde vai cada arquivo
 
 | o quê | pasta |
