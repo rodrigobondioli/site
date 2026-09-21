@@ -55,11 +55,53 @@ export default function MaskReveal({
     let frame = 0
     let running = false
 
+    /* A porta: 0 enquanto a imagem não tem pixels, 1 depois que ela pode
+       ser pintada. O que vai pra tela é o MENOR entre o progresso do
+       scroll e a porta.
+
+       É o conserto do "fica tudo branco e de repente a imagem aparece".
+       A caixa tem largura e altura declaradas, então ela existe antes da
+       imagem chegar — e a máscara abria sobre uma caixa vazia. A pessoa
+       via a revelação acontecer no nada, e quando os bytes chegavam a
+       imagem surgia inteira, de uma vez, com a máscara já terminada.
+       São 40MB de PNG no site; no 4G isso é um segundo ou dois.
+
+       Com a porta, a peça fica mascarada (não branca) até ter o que
+       mostrar, e aí a revelação acontece com pixels de verdade — que é o
+       ponto do efeito. */
+    const img = node.querySelector("img")
+    let porta = !img || img.complete ? 1 : 0
+    let abriuEm = 0
+
+    if (img && !img.complete) {
+      const liberar = () => {
+        if (porta === 1 || abriuEm) return
+        /* Se a imagem chegou depois da hora, a porta abre em 450ms e a
+           revelação acontece agora. Se chegou a tempo, o scroll manda
+           sozinho e nada disso se nota. */
+        abriuEm = performance.now()
+      }
+      img.addEventListener("load", liberar, { once: true })
+      // erro também libera: imagem quebrada não pode prender a caixa vazia
+      img.addEventListener("error", liberar, { once: true })
+    }
+
     const progress = () => {
       const r = node.getBoundingClientRect()
       const h = window.innerHeight
       return Math.min(1, Math.max(0, (h - r.top - h * lag) / (h * span)))
     }
+
+    /* O quanto a porta já abriu neste quadro. */
+    const portaAgora = () => {
+      if (porta === 1) return 1
+      if (!abriuEm) return 0
+      const t = (performance.now() - abriuEm) / 450
+      if (t >= 1) { porta = 1; return 1 }
+      return t
+    }
+
+    const valor = () => Math.min(progress(), portaAgora())
 
     // estado inicial: mascara quem ainda não começou a entrar
     const apply = (p: number) => {
@@ -71,10 +113,10 @@ export default function MaskReveal({
         )}px, 0)`
       }
     }
-    apply(progress())
+    apply(valor())
 
     const draw = () => {
-      apply(progress())
+      apply(valor())
       frame = requestAnimationFrame(draw)
     }
 
