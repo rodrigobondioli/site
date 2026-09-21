@@ -1,0 +1,89 @@
+/* O degradê é o que fecha a página escura: ela escurece até o preto antes
+   do contato claro começar. Sem ele o corte fica seco. */
+.pager {
+  background: linear-gradient(#101010 0%, #000 100%);
+}
+
+/* Os dois encostados à direita. Quando só existe um, ele fica no mesmo
+   lugar — o da direita — em vez de escorregar pro meio. */
+.inner {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--s3);
+  padding-top: var(--s6);
+  padding-bottom: var(--s6);
+  color: #fff;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s2);
+  width: 240px;
+}
+
+.media {
+  position: relative;
+  display: block;
+  aspect-ratio: 478 / 358;
+  overflow: hidden;
+  background: var(--rule-dark);
+}
+.media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /* mesma curva e mesma escala dos cards do arquivo: 6% em 1.1s na ida,
+     700ms na volta — sair de um card não precisa do peso de entrar nele */
+  transition: scale 700ms cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: scale;
+}
+.card:hover .media img,
+.card:focus-visible .media img {
+  scale: 1.06;
+  transition-duration: 1100ms;
+}
+
+/* A seta só existe no hover. Em repouso as duas thumbs são iguais; é o
+   mouse que revela pra que lado cada uma leva. */
+.arrow {
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--accent-pink);
+  color: var(--ink);
+  opacity: 0;
+  scale: 0.8;
+  transition:
+    opacity var(--fast) var(--ease),
+    scale 320ms cubic-bezier(0.22, 1, 0.3, 1);
+}
+.card:hover .arrow,
+.card:focus-visible .arrow {
+  opacity: 1;
+  scale: 1;
+}
+
+.name {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s1);
+  color: rgba(242, 242, 242, 0.6);
+}
+/* O nome do projeto em branco; "Previous"/"Next" acima dele, apagado. */
+.label { color: #fff; }
+
+@media (prefers-reduced-motion: reduce) {
+  .media img, .card:hover .media img { transition: none; scale: 1; }
+  .arrow { transition: none; }
+}
+
+@media (max-width: 640px) {
+  .inner { justify-content: stretch; gap: var(--s2); }
+  .card { width: auto; flex: 1 1 0; }
+}

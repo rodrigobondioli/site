@@ -1,11 +1,11 @@
 import type { Metadata } from "next"
-import Link from "next/link"
 import SiteNav from "@/components/SiteNav"
 import SmoothScroll from "@/components/SmoothScroll"
 import { SiteFooter } from "@/components/SiteFooter"
 import MeetingBar from "@/components/MeetingBar"
 import MaskReveal from "@/components/MaskReveal"
 import ProjectVideo from "@/components/ProjectVideo"
+import ProjectPager from "@/components/ProjectPager"
 import ContactForm from "@/components/ContactForm"
 import {
   getProject,
@@ -246,26 +246,8 @@ export default async function ProjectPage({
         </section>
 
         {/* ---------- Anterior e próximo ---------- */}
-        <nav className={s.pager} aria-label="Outros projetos">
-          <div className={`section ${s.pagerInner}`}>
-            {prev ? (
-              <Link className="overline" href={`/projects/${prev.slug}`}>
-                <span aria-hidden="true">‹ </span>
-                {prev.projectName ?? prev.slug}
-              </Link>
-            ) : (
-              <span />
-            )}
-            {next ? (
-              <Link className="overline" href={`/projects/${next.slug}`}>
-                {next.projectName ?? next.slug}
-                <span aria-hidden="true"> ›</span>
-              </Link>
-            ) : (
-              <span />
-            )}
-          </div>
-        </nav>
+        <ProjectPager prev={prev} next={next} />
+
       </main>
 
       {/* ---------- Contato: o mesmo fecho da /work ---------- */}

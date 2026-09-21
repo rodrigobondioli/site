@@ -134,24 +134,6 @@
 }
 .press a:hover { text-decoration: none; }
 
-/* ---------- Anterior e próximo ---------- */
-
-/* O degradê é o que fecha a página escura: ela escurece até o preto antes
-   do contato claro começar. Sem ele o corte fica seco. */
-.pager {
-  margin-top: var(--s6);
-  background: linear-gradient(#101010 0%, #000 100%);
-}
-.pagerInner {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding-top: var(--s5);
-  padding-bottom: var(--s5);
-  color: #fff;
-}
-.pagerInner a:hover { text-decoration: underline; text-underline-offset: 4px; }
-
 /* ---------- Contato ---------- */
 
 .closing {
