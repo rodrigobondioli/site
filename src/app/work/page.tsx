@@ -276,10 +276,9 @@ export default function WorkPage() {
         {/* ---------- Sobre ---------- */}
         <section className={`section ${s.about}`} id="about">
           <div className={`container ${s.aboutInner}`}>
-            <div className="head-row">
+            <div className={s.aboutHead}>
               <h2 className="h3">I&rsquo;m Rodrigo Bondioli</h2>
               <span className="rule rule-md" />
-              <p className="overline">Nexialist Designer</p>
             </div>
 
             <div className={s.aboutBody}>
@@ -293,6 +292,10 @@ export default function WorkPage() {
                 preload="none"
               />
               <div className={s.aboutText}>
+                {/* O cargo sai do cabeçalho e vem pra cá: encostado no topo
+                    do vídeo e na esquerda do texto. */}
+                <p className={`overline ${s.aboutRole}`}>Nexialist Designer</p>
+                <div className={s.aboutCopy}>
                 <p className="body">
                 Big projects rarely fail because of execution. They fail because
                 someone chose to build the wrong thing, and no one in the room
@@ -306,6 +309,7 @@ export default function WorkPage() {
                 brand, product, and experience work as one.
                 </p>
                 <Brands label="Marcas que já trabalhei" />
+                </div>
               </div>
             </div>
 

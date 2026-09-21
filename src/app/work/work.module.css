@@ -234,18 +234,39 @@
 .about { padding-bottom: var(--s7); }
 .aboutInner { display: flex; flex-direction: column; gap: var(--s5); }
 
-/* Duas colunas iguais, sem respiro entre elas, centradas uma na outra.
-   O vídeo é quadrado (623 no Framer) e encosta na esquerda da coluna. */
+/* Título e régua, sem nada empurrado pra direita — o cargo agora mora na
+   coluna de texto, não aqui. */
+.aboutHead {
+  display: flex;
+  align-items: center;
+  gap: var(--s3);
+}
+@media (max-width: 640px) {
+  .aboutHead { flex-wrap: wrap; gap: var(--s2); }
+  .aboutHead .rule { display: none; }
+}
+
+/* Duas colunas iguais, sem respiro entre elas. As duas ocupam a altura
+   inteira da linha: é o que permite o cargo encostar no topo do vídeo. */
 .aboutBody {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  align-items: center;
+  align-items: stretch;
 }
 /* Parágrafo + lista de marcas ocupam a coluna da direita. */
 .aboutText {
   display: flex;
   flex-direction: column;
   gap: var(--s5);
+}
+/* O cargo fica no topo; o resto do texto se centra na folga que sobrar,
+   que é como estava antes de ele entrar aqui. */
+.aboutRole { flex: 0 0 auto; }
+.aboutCopy {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s5);
+  margin-block: auto;
 }
 
 .aboutVideo {
