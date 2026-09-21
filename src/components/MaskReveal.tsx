@@ -72,15 +72,17 @@ export default function MaskReveal({
     const img = node.querySelector("img")
     let porta = !img || img.complete ? 1 : 0
     let abriuEm = 0
+    let prazo = 0
+
+    const liberar = () => {
+      if (porta === 1 || abriuEm) return
+      /* Se a imagem chegou depois da hora, a porta abre em 450ms e a
+         revelação acontece agora. Se chegou a tempo, o scroll manda
+         sozinho e nada disso se nota. */
+      abriuEm = performance.now()
+    }
 
     if (img && !img.complete) {
-      const liberar = () => {
-        if (porta === 1 || abriuEm) return
-        /* Se a imagem chegou depois da hora, a porta abre em 450ms e a
-           revelação acontece agora. Se chegou a tempo, o scroll manda
-           sozinho e nada disso se nota. */
-        abriuEm = performance.now()
-      }
       img.addEventListener("load", liberar, { once: true })
       // erro também libera: imagem quebrada não pode prender a caixa vazia
       img.addEventListener("error", liberar, { once: true })
@@ -115,14 +117,41 @@ export default function MaskReveal({
     }
     apply(valor())
 
+    let desenhou = false
     const draw = () => {
       apply(valor())
+      desenhou = true
       frame = requestAnimationFrame(draw)
     }
+
+    /* Rede de segurança. `apply` acima já escreveu a máscara no nó; se o
+       laço nunca rodar — observer que não disparou, aba que entrou em
+       segundo plano no momento errado, JS que morreu no meio — essa
+       máscara fica lá e a peça some. Sem animação é aceitável; invisível
+       pra sempre não é. */
+    const rede = window.setTimeout(() => {
+      if (desenhou) return
+      node.style.clipPath = "none"
+      if (inner) inner.style.transform = "none"
+    }, 2500)
 
     const start = () => {
       if (running) return
       running = true
+
+      /* A peça está a menos de uma janela daqui, mas a imagem é
+         `loading="lazy"` e quem decide a hora do fetch é o navegador — que
+         adia em aba de segundo plano, em conexão ruim, e às vezes só
+         adia. Como a porta abaixo espera essa imagem, esse adiamento
+         virava card invisível pra sempre. Aqui a gente para de esperar e
+         pede: trocar pra "eager" dispara o carregamento na hora. */
+      if (img && !img.complete) {
+        if (img.loading === "lazy") img.loading = "eager"
+        /* E, aconteça o que acontecer com a imagem, a porta abre em 1,2s.
+           Uma porta sem teto não é uma porta, é uma parede. */
+        if (!prazo) prazo = window.setTimeout(liberar, 1200)
+      }
+
       frame = requestAnimationFrame(draw)
     }
     const stop = () => {
@@ -143,6 +172,12 @@ export default function MaskReveal({
     return () => {
       io.disconnect()
       cancelAnimationFrame(frame)
+      clearTimeout(rede)
+      if (prazo) clearTimeout(prazo)
+      if (img) {
+        img.removeEventListener("load", liberar)
+        img.removeEventListener("error", liberar)
+      }
     }
   }, [span, shift, lag])
 

@@ -47,8 +47,29 @@ export default function SmoothScroll() {
 
     /* A segunda: depois de pousar, conferir onde o alvo está de verdade e
        corrigir a diferença. Duas tentativas no máximo — se ainda assim não
-       bater, a página está se mexendo sozinha e insistir viraria gangorra. */
+       bater, a página está se mexendo sozinha e insistir viraria gangorra.
+
+       O soluço: essa correção não perguntava de quem era o scroll. Quem
+       clicava na âncora e já saía rolando no dedo ou na roda recebia, um
+       segundo depois, um puxão de volta pro alvo — o `onComplete` disparava,
+       a conta dava um erro enorme (porque a pessoa tinha se mexido, não
+       porque a página cresceu) e o Lenis obedecia. Duas defesas: qualquer
+       gesto da pessoa cancela a viagem, e uma correção maior que uma janela
+       nunca é "a página cresceu", então é descartada. */
     const OFFSET = -56
+
+    let cancelada = true
+
+    const cancelar = () => {
+      cancelada = true
+    }
+
+    const escutarGesto = (ligar: boolean) => {
+      const m = ligar ? "addEventListener" : "removeEventListener"
+      window[m]("wheel", cancelar)
+      window[m]("touchstart", cancelar)
+      window[m]("keydown", cancelar)
+    }
 
     const irPara = (target: HTMLElement, tentativa = 0) => {
       const destino = () =>
@@ -57,11 +78,28 @@ export default function SmoothScroll() {
       lenis.scrollTo(destino(), {
         duration: tentativa === 0 ? 1.1 : 0.4,
         onComplete: () => {
-          if (tentativa >= 2) return
+          if (cancelada || tentativa >= 2) {
+            escutarGesto(false)
+            return
+          }
           const erro = destino() - window.scrollY
-          if (Math.abs(erro) > 2) irPara(target, tentativa + 1)
+          /* acima de 2px vale corrigir; acima de uma janela inteira não é
+             crescimento de página, é gente andando — e puxar de volta é
+             justamente o soluço */
+          if (Math.abs(erro) > 2 && Math.abs(erro) < window.innerHeight) {
+            irPara(target, tentativa + 1)
+          } else {
+            escutarGesto(false)
+          }
         },
       })
+    }
+
+    const iniciarViagem = (target: HTMLElement) => {
+      cancelada = false
+      escutarGesto(false)
+      escutarGesto(true)
+      irPara(target)
     }
 
     // Âncoras (#contact, #about) precisam passar pelo Lenis pra não dar pulo
@@ -73,12 +111,13 @@ export default function SmoothScroll() {
       const target = document.querySelector(id)
       if (!target) return
       e.preventDefault()
-      irPara(target as HTMLElement)
+      iniciarViagem(target as HTMLElement)
     }
     document.addEventListener("click", onClick)
 
     return () => {
       document.removeEventListener("click", onClick)
+      escutarGesto(false)
       ro.disconnect()
       cancelAnimationFrame(frame)
       lenis.destroy()
