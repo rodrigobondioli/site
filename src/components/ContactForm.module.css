@@ -25,7 +25,14 @@
 }
 .field textarea { min-height: 100px; }
 .field input::placeholder,
-.field textarea::placeholder { color: var(--ink-60); }
+.field textarea::placeholder {
+  color: var(--ink-60);
+  /* a frase de exemplo é curta e vira duas linhas tortas: uma cheia e uma
+     com duas palavras. balance distribui — e num campo de formulário o
+     texto do usuário é curto também, então vale pros dois */
+  text-wrap: balance;
+}
+.field textarea { text-wrap: balance; }
 
 /* Sem caixa de contorno. O foco se anuncia por dentro do campo: o fio
    passa de cinza fino a preto grosso e o texto de apoio escurece junto.

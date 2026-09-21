@@ -41,6 +41,13 @@
 
 /* Saída da página de projeto. Sublinhado porque é o único link de texto
    da barra — sem isso ele some ao lado da pílula. */
+/* No celular ela some: ao lado da pílula, num gutter de 16, a barra ficava
+   apertada e o link espremido. Lá a volta pro arquivo é pela faixa de
+   anterior/próximo no fim da página. */
+@media (max-width: 640px) {
+  .back { display: none; }
+}
+
 .back {
   margin-left: auto;
   margin-right: var(--s4);

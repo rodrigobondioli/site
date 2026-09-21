@@ -120,7 +120,6 @@ export default async function ProjectPage({
         {p.linkText ?? p.linkUrl.replace(/^https?:\/\//, "")}
       </a>
     )
-  if (p.year) meta.push(<span key="year">{p.year}</span>)
 
   return (
     <>
@@ -151,6 +150,10 @@ export default async function ProjectPage({
         <section className={`section ${s.titleSection}`}>
           <div className={`container ${s.titleRow}`}>
             <h1 className={`h3 ${s.name}`}>{name}</h1>
+            {/* O ano sai da ficha e vira irmão do nome: é curto, então
+                acompanha o título sem nunca disputar espaço com ele, por
+                mais longo que o nome seja. */}
+            {p.year ? <span className={`overline ${s.year}`}>{p.year}</span> : null}
             <p className={`overline ${s.meta}`}>
               {meta.map((n, i) => (
                 <span className={s.metaItem} key={i}>

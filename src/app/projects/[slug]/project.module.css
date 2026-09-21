@@ -35,17 +35,37 @@
 .titleRow {
   display: flex;
   align-items: center;
-  gap: var(--s5);
+  flex-wrap: wrap;
+  /* 16 é o intervalo entre as peças da ficha; os 56 que separam o nome
+     delas vivem na margem do próprio nome */
+  gap: var(--s2);
 }
 
-.name { color: #fff; }
+.name {
+  color: #fff;
+  margin-right: calc(var(--s5) - var(--s2));
+}
 
-/* As disciplinas e o ano andam juntos, separados por barras. */
+/* As disciplinas e o link andam juntos, separados por barras. */
 .meta {
   display: flex;
   align-items: center;
   gap: var(--s2);
   color: rgb(128, 128, 128);
+  order: 2;
+}
+
+.year {
+  color: rgb(128, 128, 128);
+  /* no desktop o ano fecha a linha, depois das disciplinas — é a ordem
+     que o Framer usa. No HTML ele vem antes, colado ao nome, porque é
+     essa a ordem que importa pra quem lê por leitor de tela. */
+  order: 3;
+}
+.year::before {
+  content: "/";
+  padding-right: var(--s2);
+  opacity: 0.6;
 }
 
 /* A barra é desenhada entre dois itens, nunca digitada. Quatro projetos não
@@ -58,8 +78,31 @@
 }
 .metaItem a:hover { text-decoration: underline; text-underline-offset: 3px; }
 
-@media (max-width: 860px) {
-  .titleRow { flex-direction: column; align-items: flex-start; gap: var(--s3); }
+/* No celular o ano sobe pra linha do nome, encostado à direita, e a ficha
+   desce inteira pra baixo, um item por linha.
+
+   Em linha a ficha dependia do nome ser curto: com "Charlotte de Witte" ou
+   um link longo, disciplinas, link e ano viravam uma mancha só quebrando
+   em lugares arbitrários. O ano é a única peça curta o bastante pra
+   acompanhar o título sem disputa.
+
+   As barras somem: entre linhas elas não separam nada, só sobram. */
+@media (max-width: 640px) {
+  .titleRow { gap: var(--s3); }
+  .name { margin-right: 0; }
+  .year {
+    order: 0;
+    margin-left: auto;
+  }
+  .year::before { content: none; padding-right: 0; }
+  .meta {
+    order: 1;
+    flex: 1 0 100%;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--s1);
+  }
+  .metaItem + .metaItem::before { content: none; padding-right: 0; }
 }
 
 /* ---------- Abertura e régua ---------- */
