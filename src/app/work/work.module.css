@@ -289,7 +289,16 @@
 
 /* ---------- Sobre ---------- */
 
-.about { padding-bottom: var(--s7); }
+/* O fundo daqui é o mesmo --s5 que o `.aboutInner` usa entre a régua e o
+   vídeo e entre o vídeo e as credenciais: a seção fecha com o mesmo
+   respiro que tem por dentro, em vez de abrir um --s7 que ninguém pediu.
+
+   Este era o lado que tinha que ceder no vão de 352 entre o "about" e o
+   bloco do YouTube. O outro lado não podia: lá o padding é a faixa
+   amarela em cima do rótulo, não espaço. Aqui não tem cor nenhuma — é
+   cinza de página dos dois lados da conta. O vão cai de 352 pra 232, e os
+   176 que sobram são todos amarelos. */
+.about { padding-bottom: var(--s5); }
 .aboutInner { display: flex; flex-direction: column; gap: var(--s5); }
 
 /* Título e régua, sem nada empurrado pra direita — o cargo agora mora na
