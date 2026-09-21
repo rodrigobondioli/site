@@ -1,0 +1,163 @@
+/* Página de projeto. Fundo escuro, ao contrário do resto do site: aqui o
+   trabalho é que tem que brilhar, e imagem de tela clara some no branco.
+
+   O sistema é o mesmo da /work — mesmos sete passos de espaçamento, mesmas
+   réguas de largura fixa, nada arredondado. A única coisa nova é `--tint`,
+   a cor do próprio projeto, que entra em doses pequenas: a linha da capa e
+   a seta do próximo. Usada em área grande ela brigaria com as imagens. */
+
+.page { padding-bottom: var(--s7); }
+
+/* ---------- Capa ---------- */
+
+.hero { padding-top: var(--s6); }
+.heroInner {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s5);
+}
+
+.heroText {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s3);
+  padding-bottom: var(--s4);
+  border-bottom: var(--hairline) solid var(--tint, var(--rule));
+}
+
+/* O separador é desenhado, não digitado: se `what` faltar, não sobra um
+   ponto órfão depois do ano. */
+.sep { padding-inline: 0.5em; opacity: 0.5; }
+
+.title { text-wrap: balance; }
+
+.heroImage { width: 100%; }
+.heroImage img { width: 100%; height: auto; }
+
+/* ---------- Ficha e descrição ---------- */
+
+.intro { padding-top: var(--s6); }
+.introInner {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s5);
+}
+
+.metaRow {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--s3);
+  padding-bottom: var(--s2);
+  border-bottom: var(--hairline) solid var(--rule);
+}
+.metaRow a:hover { text-decoration: underline; text-underline-offset: 3px; }
+
+/* A linha de abertura não atravessa a tela inteira: passando de ~70
+   caracteres o olho perde o começo da linha seguinte. */
+.lead { max-width: 62ch; }
+
+/* ---------- Vídeo ---------- */
+
+.videoSection { padding-top: var(--s6); }
+
+/* ---------- Problema e resposta ---------- */
+
+.case { padding-top: var(--s7); }
+.caseInner {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s5);
+}
+
+.block {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s3);
+  max-width: 62ch;
+}
+
+/* Imagem menor que a coluna fica centrada, não esticada — ampliar peça de
+   interface além do tamanho original borra o texto dentro dela. */
+.shot {
+  width: 100%;
+  max-width: max-content;
+  margin-inline: auto;
+  overflow: hidden;
+}
+.shot img { width: 100%; height: auto; }
+
+/* ---------- Posts ---------- */
+
+.posts { padding-top: var(--s7); }
+.postsInner {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s5);
+}
+.postsGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--s2);
+}
+@media (max-width: 900px) { .postsGrid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 600px) { .postsGrid { grid-template-columns: 1fr; } }
+
+/* ---------- Resultado ---------- */
+
+.outcome { padding-top: var(--s7); }
+.outcomeInner {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s3);
+  padding-top: var(--s4);
+  border-top: var(--hairline) solid var(--rule);
+}
+.outcomeText { max-width: 20ch; text-wrap: balance; }
+
+.press { display: flex; flex-direction: column; gap: var(--s2); }
+.press p:empty { display: none; }
+.press a {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-thickness: from-font;
+}
+.press a:hover { color: var(--tint, inherit); }
+
+/* ---------- Próximo ---------- */
+
+.next { padding-top: var(--s7); }
+.nextInner {
+  display: flex;
+  align-items: center;
+  gap: var(--s3);
+  padding-block: var(--s5);
+  border-top: var(--hairline) solid var(--rule);
+  border-bottom: var(--hairline) solid var(--rule);
+}
+.nextName {
+  margin-left: auto;
+  text-align: right;
+}
+.nextArrow {
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--tint, var(--accent-pink));
+  color: var(--ink);
+  transition: transform var(--fast) var(--ease);
+}
+.nextInner:hover .nextArrow { transform: translateX(4px); }
+.nextInner:hover .nextName { text-decoration: underline; text-underline-offset: 6px; }
+
+@media (max-width: 640px) {
+  .nextInner { flex-wrap: wrap; }
+  .nextName { margin-left: 0; text-align: left; width: 100%; }
+}
+
+/* ---------- Voltar ---------- */
+
+.back { padding-top: var(--s6); }
+.backInner { display: flex; }

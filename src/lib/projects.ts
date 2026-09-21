@@ -48,6 +48,9 @@ export function allSlugs(): string[] {
  * só que servindo do Framer. É o modo degradado, não o esperado.            */
 
 import assetMap from "@/content/assets.json"
+import orderData from "@/content/order.json"
+
+const ORDER = orderData as string[]
 
 const ASSETS = assetMap as Record<string, string>
 
@@ -80,4 +83,23 @@ export function orderedProjects(order: string[]): Project[] {
   return [...publishedProjects].sort(
     (a, b) => (rank.get(a.slug) ?? 999) - (rank.get(b.slug) ?? 999)
   )
+}
+
+/* ---------- Ajudantes de conteúdo ---------- */
+
+/** O campo `press` vem preenchido em todos os 16, mas 15 deles guardam um
+ *  parágrafo vazio (`<p><br></p>`) — o que o editor do Framer deixava pra
+ *  trás quando alguém abria o campo e não escrevia nada. Sem esta checagem
+ *  a página abriria uma seção "Outcome" vazia em quinze projetos. */
+export function hasText(html?: string | null): boolean {
+  if (!html) return false
+  return html.replace(/<[^>]+>/g, "").replace(/&nbsp;/g, "").trim() !== ""
+}
+
+/** O projeto seguinte na ordem do arquivo; do último volta pro primeiro. */
+export function neighbour(slug: string): Project | null {
+  const lista = orderedProjects(ORDER)
+  const i = lista.findIndex((p) => p.slug === slug)
+  if (i < 0 || lista.length < 2) return null
+  return lista[(i + 1) % lista.length]
 }
