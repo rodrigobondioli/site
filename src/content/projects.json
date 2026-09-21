@@ -1,1114 +1,840 @@
 [
-  {
-    "id": "FyAgVoB63",
-    "slug": "flashbang",
-    "draft": false,
-    "projectName": "Flashbang",
-    "linkText": "flashbang.com.br",
-    "linkUrl": "https://flashbang.com.br",
-    "color": "rgb(239, 88, 145)",
-    "isTemplate": false,
-    "year": "2025",
-    "type": "Brand • Interface • Framer Development",
-    "what": "Website",
-    "description": "Flashbang is a creative production company that works like a collective: designers, photographers, musicians, and filmmakers taking ideas from set to screen. Its old site showed none of that—dated identity, weak copy, none of the energy the team brings to a shoot. They wanted something modern, built with the same level of craft they bring to the work.",
-    "challenge": "A production company is judged on taste before anything else, and Flashbang’s was invisible online. The category made it worse: everyone had converged on the same restrained, elegant, forgettable look. Building a site as pretty as everyone else’s would have been the safest way to stay invisible.",
-    "solution": "I reviewed more than forty direct competitors before drawing a single screen. The pattern held across all of them, which told me exactly what not to do. So the site goes in the opposite direction: tall typography, high-contrast color, constant movement, and navigation that stays out of the way so the work can fill the screen.\n\nI designed and built it in Framer on a CMS robust enough for the way Flashbang actually works: services split across photo, video, and events, with each project carrying its own raw footage and stills. The team can publish an entire shoot without calling a designer.",
-    "thumb": "https://framerusercontent.com/images/F5H6s53nkUP2iyD4PFr4cEcA.jpg",
-    "heroImage": "https://framerusercontent.com/images/ilkTxlE3dfP8Xj7Oy3y6dKlNM.png",
-    "gallery": [
-      {
-        "id": "d823X7SVO",
-        "fieldData": {
-          "EXFrlMu4f": {
-            "type": "image",
-            "value": "https://framerusercontent.com/images/ilsjB78mZEgb2pQ2Uz4J06RPc5Y.png"
-          }
-        }
-      },
-      {
-        "id": "SWZeCg4U8",
-        "fieldData": {
-          "EXFrlMu4f": {
-            "type": "image",
-            "value": "https://framerusercontent.com/images/WIwVH7gRu0YF5wPmkJjXiw94uU.png"
-          }
-        }
-      },
-      {
-        "id": "cwNGTZJ9X",
-        "fieldData": {
-          "EXFrlMu4f": {
-            "type": "image",
-            "value": "https://framerusercontent.com/images/oMeAf18M8YfxBAhbFeh89Lm41I.png"
-          }
-        }
-      },
-      {
-        "id": "dS6x8yEeh",
-        "fieldData": {
-          "EXFrlMu4f": {
-            "type": "image",
-            "value": "https://framerusercontent.com/images/6V8Uj7bldyuAFh6F26xFQsxvlY.png"
-          }
-        }
-      },
-      {
-        "id": "tiebOuOEL",
-        "fieldData": {
-          "EXFrlMu4f": {
-            "type": "image",
-            "value": "https://framerusercontent.com/images/cuMJy2Y9PA8GAk6TMISNRbkvvI.png"
-          }
-        }
-      }
-    ],
-    "galleryPosts": [],
-    "videoYouTube": null,
-    "videoUpload": null,
-    "videoVimeo": "https://vimeo.com/1166752442?fl=pl&fe=ti",
-    "outcome": "Approved in the first round and live ever since.",
-    "press": "<p dir=\"auto\"><br class=\"trailing-break\"></p>"
-  },
-  {
-    "id": "UbmLu6P91",
-    "slug": "tilt-tech",
-    "draft": false,
-    "projectName": "Tilt Tech",
-    "linkText": "tilt.technology",
-    "linkUrl": "https://tilt.technology",
-    "color": "rgb(93, 45, 230)",
-    "isTemplate": false,
-    "year": "2025",
-    "type": "Product Strategy • Interface • Framer Development • Design Leadership",
-    "what": "Website · Design leadership (9 months)",
-    "description": "TILT turns idle devices—phones, TVs, even cars—into a distributed computing network, helping companies process data faster and at lower cost without building more infrastructure. Brazilian founders, operating from the US, selling complex infrastructure to technical buyers.",
-    "challenge": "They sold four products and the site showed a blur. What they had looked nothing like the technology behind it, and worse: everything sat there as one undifferentiated block, with no product structure at all. Visitors couldn't see where one thing ended and the next began, which meant they couldn't understand what they were buying, in a high-ticket category with a buyer who is skeptical by nature.",
-    "solution": "I gave the offering a clear architecture: four products across three layers. Hardware at the base (TiltGrid and TiltEdge), a data mesh above it (TiltData), and intelligence on top (TiltMaxx). That structure did not exist before, and it made the whole offer understandable in a single scroll.\n\nThen came the site: dark and spatial, with layered 3D scenes where every point of light represents another device joining the network. I designed the interface in Figma and built it in Framer.\n\nThe site led to a nine-month role as head of design. I carried the same structure into every buyer touchpoint, from sales decks for a highly technical, high-ticket product to the rest of the prospect journey. Not just the front door—the whole path.",
-    "thumb": "https://framerusercontent.com/images/0oMeB8he8g6TuX29KnDcZlEN6U.png",
-    "heroImage": "https://framerusercontent.com/images/Nb9BKoRMofMwtn4nPjrbFHAsM.png",
-    "gallery": [
-      {
-        "id": "M70c4YEan",
-        "fieldData": {
-          "EXFrlMu4f": {
-            "type": "image",
-            "value": "https://framerusercontent.com/images/adk30eGHJLUQj4cFiuDYA5V2wKo.png"
-          }
-        }
-      },
-      {
-        "id": "PjP5NnjFF",
-        "fieldData": {
-          "EXFrlMu4f": {
-            "type": "image",
-            "value": "https://framerusercontent.com/images/kXLHhM0BknUaM1lzBgjess1enY.png"
-          }
-        }
-      },
-      {
-        "id": "vFlH0ohyJ",
-        "fieldData": {
-          "EXFrlMu4f": {
-            "type": "image",
-            "value": "https://framerusercontent.com/images/gYmZ1rWpVyMDgi8zSE8elrsXGE.png"
-          }
-        }
-      },
-      {
-        "id": "uQF761NhB",
-        "fieldData": {
-          "EXFrlMu4f": {
-            "type": "image",
-            "value": "https://framerusercontent.com/images/mI1INZsca1hL6jTdlebt6H1NJhU.png"
-          }
-        }
-      },
-      {
-        "id": "GzGzAQT6j",
-        "fieldData": {
-          "EXFrlMu4f": {
-            "type": "image",
-            "value": "https://framerusercontent.com/images/OSkOiOEaZ4m8veb6w41Yof2HSNQ.png"
-          }
-        }
-      }
-    ],
-    "galleryPosts": [],
-    "videoYouTube": null,
-    "videoUpload": "https://framerusercontent.com/assets/IHL4DYgoKry6OHx2Or9tgVg8z8.mp4",
-    "videoVimeo": null,
-    "outcome": "One website turned into nine months as their head of design.",
-    "press": "<p dir=\"auto\"><br class=\"trailing-break\"></p>"
-  },
-  {
-    "id": "rEwtJaoJV",
-    "slug": "tattoaria",
-    "draft": false,
-    "projectName": "Tattoaria",
-    "linkText": "",
-    "linkUrl": null,
-    "color": "rgb(255, 255, 255)",
-    "isTemplate": false,
-    "year": "2015 — 2020",
-    "type": "Positioning • Brand • Growth",
-    "what": "Own business · Physical operation",
-    "description": "It started as a blog. Two years later, Tattoaria was one of Brazil’s three biggest tattoo studios and the official tattoo studio at Lollapalooza. There were no resident artists. The lineup changed every week inside a warehouse with a bar, a barbershop, and a pool table.",
-    "challenge": "Every tattoo studio sells the same thing: a fixed lineup of artists and a chair. The good ones compete on who's on the wall, the rest compete on price, and the whole category is interchangeable. I didn't want a better studio. I wanted one that couldn't be compared to a studio at all, which meant the studio itself had to become the product, not the artists inside it.",
-    "solution": "Tattoaria became the first rotating tattoo studio in the world: no resident artists, new ones from Brazil and abroad every week. That single move rewrote the economics of the business. Artists wanted in because it was a stage, clients came back because the lineup was never the same, and the business stopped depending on any one name. I built all of it: concept, brand, positioning, growth and marketing. From the 2015 platform, which made artists want in before there was a studio to work in, to the warehouse that opened in March 2016 with a barbershop, bar and pool table around it, to the tattoo truck touring the country. Harley-Davidson, Jack Daniel's, Nickelodeon and Vans all ran projects with us.",
-    "thumb": "https://framerusercontent.com/images/jKgetsTeJnXlmR7GIfgj7svM4nQ.png",
-    "heroImage": "https://framerusercontent.com/images/DtdQtD33UikF7z6OM2S644SRDQ.png",
-    "gallery": [
-      {
-        "id": "bNs0KRduT",
-        "fieldData": {
-          "EXFrlMu4f": {
-            "type": "image",
-            "value": "https://framerusercontent.com/images/TdiSeBsASTSGnCaeBZPMDkzIhA.png"
-          }
-        }
-      },
-      {
-        "id": "a7CtRhMcp",
-        "fieldData": {
-          "EXFrlMu4f": {
-            "type": "image",
-            "value": "https://framerusercontent.com/images/mZ1ACPlAYmxLmrtxWmBQNiqVz0.png"
-          }
-        }
-      },
-      {
-        "id": "EX0QuVIqj",
-        "fieldData": {
-          "EXFrlMu4f": {
-            "type": "image",
-            "value": "https://framerusercontent.com/images/8dBsHREDoGzXJKDCmRljY3Uprw.png"
-          }
-        }
-      },
-      {
-        "id": "nhlGbztWu",
-        "fieldData": {
-          "EXFrlMu4f": {
-            "type": "image",
-            "value": "https://framerusercontent.com/images/EgQ11jclF84p4kL8FaceHEr7fY.png"
-          }
-        }
-      },
-      {
-        "id": "ydLA0G7Lo",
-        "fieldData": {
-          "EXFrlMu4f": {
-            "type": "image",
-            "value": "https://framerusercontent.com/images/A98p8G1Ipvv5nsBvS0ITl8TOZIY.png"
-          }
-        }
-      }
-    ],
-    "galleryPosts": [
-      {
-        "id": "UvGVQZ30I",
-        "fieldData": {
-          "XvHArp0_t": {
-            "type": "image",
-            "value": "https://framerusercontent.com/images/Y9C1gcxTJKZ5LiEcUPcOZN57l4.png"
-          }
-        }
-      },
-      {
-        "id": "fVSNqE_Pf",
-        "fieldData": {
-          "XvHArp0_t": {
-            "type": "image",
-            "value": "https://framerusercontent.com/images/XVkpTKeWgC8HwcAJ3ul2SlIcdk.png"
-          }
-        }
-      },
-      {
-        "id": "DwrG1QfKY",
-        "fieldData": {
-          "XvHArp0_t": {
-            "type": "image",
-            "value": "https://framerusercontent.com/images/XWJ5dZGTOTYwEx3jsaJnuFkPiA.png"
-          }
-        }
-      },
-      {
-        "id": "Q91AiXjC3",
-        "fieldData": {
-          "XvHArp0_t": {
-            "type": "image",
-            "value": "https://framerusercontent.com/images/AuU0Bjf6PiDhB67v70kHiLY06J8.png"
-          }
-        }
-      }
-    ],
-    "videoYouTube": "https://www.youtube.com/watch?v=9_4p9i0kPaw",
-    "videoUpload": null,
-    "videoVimeo": null,
-    "outcome": "Top 3 tattoo studios in Brazil in under two years · official studio of Lollapalooza Brasil three years running, alongside Chevrolet · peak above R$300k a month · closed during the pandemic.",
-    "press": "<p dir=\"auto\"><a href=\"https://vejasp.abril.com.br/cidades/tattoaria-house-tatuagem-estudio-moema/\"><strong>Veja São Paulo</strong></a> · New studio hosts sought-after tattoo artists on a rotating system</p><p dir=\"auto\"><a href=\"https://revistapegn.globo.com/Banco-de-ideias/Estetica-e-bem-estar/noticia/2019/06/empreendedor-fatura-alto-com-tattoo-truck.html\"><strong>Pequenas Empresas &amp; Grandes Negócios</strong></a> · Entrepreneur earns big with a tattoo truck</p><p dir=\"auto\"><a href=\"https://catracalivre.com.br/criatividade/tattoaria-e-a-primeira-plataforma-de-referencia-para-tatuagem-no-brasil/\"><strong>Catraca Livre</strong></a> · The first reference platform for tattooing in Brazil</p><p dir=\"auto\"><a href=\"https://followthecolours.com.br/tattoo-friday/tattoaria-house-em-sao-paulo/\"><strong>Follow the Colours</strong></a> · The world's first rotating tattoo studio</p>"
-  },
-  {
-    "id": "UJ5oUBf6Q",
-    "slug": "filmboss",
-    "draft": false,
-    "projectName": "Filmboss",
-    "linkText": "filmboss.com.br",
-    "linkUrl": null,
-    "color": "rgb(219, 0, 60)",
-    "isTemplate": false,
-    "year": "2025",
-    "type": "Interface • Framer Development",
-    "what": "Website · Product launch",
-    "description": "Filmboss does not teach filmmaking as art. It teaches filmmakers how to make videos that win clients—and get paid for them. The course covers fundamentals, AI, and the psychology of the sale. It is taught by Rick, who has shot for Adobe, iFood, and Mercado Pago and has more than 2,000 students. He was preparing to launch a new version.",
-    "challenge": "The market was a wall of identical sales pages: same layout, same stock-photo energy, same promises stacked one after another. This launch also had to justify a high price in a category where everyone claims the same transformation. A page built from the usual formula would look like just another course before anyone read a word. The product was not the problem. The format the category had settled on was.",
-    "solution": "So it stopped being a sales page and became a brand experience. An original layout with movement and hard hierarchy, 3D assets built in Spline to bring energy without weighing the page down, and an interface as direct and unapologetic as the course itself, aligned with the student he wants rather than the one the category expects. Designed in Figma and built by me in Framer, in time for the launch.",
-    "thumb": "https://framerusercontent.com/images/lWwEibXemZXvP0oHutUWMF8NZac.jpg",
-    "heroImage": "https://framerusercontent.com/images/W5qVUHKTzSPWw7oK9gPcIsqcNYc.png",
-    "gallery": [
-      {
-        "id": "LzCeOydfw",
-        "fieldData": {
-          "EXFrlMu4f": {
-            "type": "image",
-            "value": "https://framerusercontent.com/images/JszujGpbIJ1ObuVbWe8R3wFih0.png"
-          }
-        }
-      },
-      {
-        "id": "g6rDyWaNG",
-        "fieldData": {
-          "EXFrlMu4f": {
-            "type": "image",
-            "value": "https://framerusercontent.com/images/740yhSJWKgjcamXnzq9Ng53W7IA.png"
-          }
-        }
-      },
-      {
-        "id": "Qi_fiK_4w",
-        "fieldData": {
-          "EXFrlMu4f": {
-            "type": "image",
-            "value": "https://framerusercontent.com/images/yDWWqmwjRA7phnPld38gF8Oq6Q.png"
-          }
-        }
-      },
-      {
-        "id": "GOUYhpqwv",
-        "fieldData": {
-          "EXFrlMu4f": {
-            "type": "image",
-            "value": "https://framerusercontent.com/images/KaJv4ne4lkydGa0LUn0fn8GYW5Y.png"
-          }
-        }
-      }
-    ],
-    "galleryPosts": [],
-    "videoYouTube": null,
-    "videoUpload": null,
-    "videoVimeo": null,
-    "outcome": "",
-    "press": "<p dir=\"auto\"><br class=\"trailing-break\"></p>"
-  },
-  {
-    "id": "wA6L97Qjq",
-    "slug": "roadr",
-    "draft": false,
-    "projectName": "Roadr",
-    "linkText": "https://roadr.com/",
-    "linkUrl": "https://roadr.com/",
-    "color": "rgb(255, 255, 255)",
-    "isTemplate": false,
-    "year": "2024",
-    "type": "Product Strategy • Interface • Framer Development",
-    "what": "Website",
-    "description": "Roadr is a roadside assistance app for the worst moments on the road: a dead battery, a flat tire, a breakdown at five in the morning on the highway. The site was not driving enough downloads, and the brief was simple: make it look better.",
-    "challenge": "Nobody downloads a roadside assistance app while already stranded. The site did need the redesign they asked for, but on its own it was never going to move the numbers, because the bigger problem was timing: it was talking to a driver already stuck on the shoulder, stressed, phone at 12%, who is not browsing an app store. An emergency app is never bought during the emergency. It sells like insurance, on a day when nothing is wrong.",
-    "solution": "I repositioned Roadr from a rescue product to a prevention product and rebuilt the site around the day before the breakdown. The scroll moves through real scenarios with one clear action from start to finish: install it now, so it is already there when you need it.\n\nI designed the interface in Figma, built the site in Framer, and then designed the full app experience for the in-house team.",
-    "thumb": "https://framerusercontent.com/images/QqQdWNwPT6BLBu8Ju95s1PyocIY.jpg",
-    "heroImage": "https://framerusercontent.com/images/Pa8lVadGpSaCfQimNX2sg9CVs.png",
-    "gallery": [
-      {
-        "id": "qXRLy8Tjk",
-        "fieldData": {
-          "EXFrlMu4f": {
-            "type": "image",
-            "value": "https://framerusercontent.com/images/A0C6BMM4KgTmBbhLG7aQ3VaNQCE.png"
-          }
-        }
-      },
-      {
-        "id": "lVXRMaHm5",
-        "fieldData": {
-          "EXFrlMu4f": {
-            "type": "image",
-            "value": "https://framerusercontent.com/images/ltejRNtpAfQWUH1OTuY9oeo94.png"
-          }
-        }
-      },
-      {
-        "id": "Fo2sBIopX",
-        "fieldData": {
-          "EXFrlMu4f": {
-            "type": "image",
-            "value": "https://framerusercontent.com/images/OHhzGRmetkCHdyMzW7PMZ6axMcw.png"
-          }
-        }
-      }
-    ],
-    "galleryPosts": [],
-    "videoYouTube": null,
-    "videoUpload": null,
-    "videoVimeo": null,
-    "outcome": "Around a 60% increase in app downloads (client-reported).",
-    "press": "<p dir=\"auto\"><br class=\"trailing-break\"></p>"
-  },
-  {
-    "id": "SlHrn0EXR",
-    "slug": "charlotte-de-witte",
-    "draft": false,
-    "projectName": "Charlotte de Witte",
-    "linkText": "charlottedewitte.com",
-    "linkUrl": "https://charlottedewitte.framer.ai",
-    "color": "rgb(255, 3, 94)",
-    "isTemplate": false,
-    "year": "2024",
-    "type": "Art Direction • Interface • Framer Development",
-    "what": "Pitch project · Website and campaign",
-    "description": "Charlotte de Witte is one of the biggest names in techno: #9 in DJ Mag’s Top 100, a festival headliner, and the founder of her own label, KNTXT. Raw, hypnotic sets and an audience that follows the sound, not the singles.",
-    "challenge": "Her site looked like a press kit. Static layout, safe hierarchy, the same template every touring artist uses, the exact opposite of what she does on stage. And a screen has no volume: you can't borrow the intensity of the music. It has to be built with typography, contrast and rhythm, or it simply isn't there.",
-    "solution": "I treated the site as an extension of the set, not a page about it. Brutalist typography takes over the screen and sets the tone above the fold, while a dark, high-contrast palette comes straight from the floors she plays.\n\nThe experience comes alive through movement. I built it in Framer with scroll-driven animation, microinteractions that build tension, and transitions that never break the flow. The navigation is almost invisible on purpose: the goal is immersion, not structure. The same visual language carried into the key art and campaign posts. The project came through a US agency that regularly sent work my way.",
-    "thumb": "https://framerusercontent.com/images/MMbjLpkAUv0A9OPUyHJBfJ3Zp8.jpg",
-    "heroImage": "https://framerusercontent.com/images/S3MUdybLqO1h96Mgoyvf9hSuc38.png",
-    "gallery": [
-      {
-        "id": "Hj90tzIYf",
-        "fieldData": {
-          "EXFrlMu4f": {
-            "type": "image",
-            "value": "https://framerusercontent.com/images/70KPKA1MdYfCLQWf3hlgaE5lvmA.png"
-          }
-        }
-      },
-      {
-        "id": "THLmFONWM",
-        "fieldData": {
-          "EXFrlMu4f": {
-            "type": "image",
-            "value": "https://framerusercontent.com/images/aAiUp3l3ALL4uoo9YFvyrlmv0o.png"
-          }
-        }
-      },
-      {
-        "id": "x_rXVQkqR",
-        "fieldData": {
-          "EXFrlMu4f": {
-            "type": "image",
-            "value": "https://framerusercontent.com/images/01T003LS0WJncAl8YmWtUHdEwTY.png"
-          }
-        }
-      },
-      {
-        "id": "FHQJiUU1j",
-        "fieldData": {
-          "EXFrlMu4f": {
-            "type": "image",
-            "value": "https://framerusercontent.com/images/xFqhxzNAdh3RZATBbGGcWyivvi0.png"
-          }
-        }
-      },
-      {
-        "id": "VNQtZgF_l",
-        "fieldData": {
-          "EXFrlMu4f": {
-            "type": "image",
-            "value": "https://framerusercontent.com/images/AEGeWUqw1qXPUwasJ7Wq0RuGGg.png"
-          }
-        }
-      },
-      {
-        "id": "rRPVLguA3",
-        "fieldData": {
-          "EXFrlMu4f": {
-            "type": "image",
-            "value": "https://framerusercontent.com/images/UnhUx4ZLt8bzfcUvzcFyYivUU.png"
-          }
-        }
-      },
-      {
-        "id": "uE0Pi6HnN",
-        "fieldData": {
-          "EXFrlMu4f": {
-            "type": "image",
-            "value": "https://framerusercontent.com/images/LT3KHW2fN9KhAlW2jya4qrOY0.png"
-          }
-        }
-      },
-      {
-        "id": "ehz5fLkYu",
-        "fieldData": {
-          "EXFrlMu4f": {
-            "type": "image",
-            "value": "https://framerusercontent.com/images/zhGTwOBRcbv3nKtljQNF7QzamsA.png"
-          }
-        }
-      },
-      {
-        "id": "wsrmmomcF",
-        "fieldData": {
-          "EXFrlMu4f": {
-            "type": "image",
-            "value": "https://framerusercontent.com/images/KLYStvDPkymCItuw0ElyKXtw0ZA.png"
-          }
-        }
-      }
-    ],
-    "galleryPosts": [
-      {
-        "id": "JPh6Opa_L",
-        "fieldData": {
-          "XvHArp0_t": {
-            "type": "image",
-            "value": "https://framerusercontent.com/images/Rpootp0AKoT904Eg5Fk01vyiMn0.jpg"
-          }
-        }
-      },
-      {
-        "id": "X8j1olCUn",
-        "fieldData": {
-          "XvHArp0_t": {
-            "type": "image",
-            "value": "https://framerusercontent.com/images/Bbl8DQW1lEzOtZGKel9wDbj2i3U.jpg"
-          }
-        }
-      }
-    ],
-    "videoYouTube": null,
-    "videoUpload": null,
-    "videoVimeo": null,
-    "outcome": "",
-    "press": "<p dir=\"auto\"><br class=\"trailing-break\"></p>"
-  },
-  {
-    "id": "VQQ_qODoi",
-    "slug": "amor-de-cão",
-    "draft": false,
-    "projectName": "Amor de Cão",
-    "linkText": "amordecao.com.br",
-    "linkUrl": "https://amordecao.com.br/",
-    "color": "rgb(242, 232, 204)",
-    "isTemplate": false,
-    "year": "2025",
-    "type": "Product Strategy • Brand • Interface",
-    "what": "Brand · App · Website",
-    "description": "Life with a dog needs people. Amor de Cão is a community app for dog people: owners, adopters, professionals, rescuers, and those who don't have a dog but chose this life anyway. Four ways to care in one app: communities that welcome and answer, a Diary that keeps track of the dog's day, a weekly Circle that turns some attention back on the person doing the caring, and adoption happening inside the network instead of beside it.",
-    "challenge": "They hired me twice. First for the launch site, and months later, with the app already live and downloads far below target, to rebuild the screens. The screens were part of the problem, yes: amateurish, inconsistent, nothing that would earn a stranger's trust. But the audit turned up nine bottlenecks, and the worst ones weren't visual. The app opened on a swipe screen, so it read as a dating app before anyone understood what it was. One woman said her husband wouldn't let her use it, for exactly that reason. Onboarding demanded effort before delivering any value. The communities, which were the whole point, were empty. And the app had launched without a single metric in place, so every decision until then had been made on the founder's gut.",
-    "solution": "I ran a strategy sprint and delivered the product blueprint: a new ICP, market and competitor analysis, nine bottlenecks, one north-star metric with a clear trigger for when it changes, and seven decisions the team could stop reopening. The first was to remove matching for good and put communities at the center of the logged-in experience, with adoption as an open shelf rather than a closed funnel.\n\nFrom there, I rebuilt the foundation: positioning, narrative, brand, logo, and design system, plus 28 mapped screens and a handoff covering every state and edge case—enough for the dev team to build without having to guess what I meant.",
-    "thumb": "https://framerusercontent.com/images/JMpxWooYyeLcSdnZCac5TVEBFU.png",
-    "heroImage": "https://framerusercontent.com/images/izE2tTnnZJpIboG9PGDRKbXm1Wc.png",
-    "gallery": [
-      {
-        "id": "I9MIsAAgJ",
-        "fieldData": {
-          "EXFrlMu4f": {
-            "type": "image",
-            "value": "https://framerusercontent.com/images/d29At3SuIca9yZ4UgnNobMni6c.gif"
-          }
-        }
-      },
-      {
-        "id": "hLj9XgQPV",
-        "fieldData": {
-          "EXFrlMu4f": {
-            "type": "image",
-            "value": "https://framerusercontent.com/images/nSrUXikeHAmETAdHpwGU9YblWsk.jpg"
-          }
-        }
-      },
-      {
-        "id": "xMTXubTPr",
-        "fieldData": {
-          "EXFrlMu4f": {
-            "type": "image",
-            "value": "https://framerusercontent.com/images/SV7v1kFAbaFdVZ8MOsrpORHvAg.jpg"
-          }
-        }
-      },
-      {
-        "id": "v5AOmczWA",
-        "fieldData": {
-          "EXFrlMu4f": {
-            "type": "image",
-            "value": "https://framerusercontent.com/images/WZt7YcXDDWpZPViKU3By241OuQ.jpg"
-          }
-        }
-      },
-      {
-        "id": "suDF2L1Us",
-        "fieldData": {
-          "EXFrlMu4f": {
-            "type": "image",
-            "value": "https://framerusercontent.com/images/5oaWm21OUAgWveltgiyNWRFH4UI.jpg"
-          }
-        }
-      },
-      {
-        "id": "nf9IhJyJ8",
-        "fieldData": {
-          "EXFrlMu4f": {
-            "type": "image",
-            "value": "https://framerusercontent.com/images/SahCJ5Ra1Epd5nraptTcRQH5I4k.jpg"
-          }
-        }
-      },
-      {
-        "id": "famhCVBlm",
-        "fieldData": {
-          "EXFrlMu4f": {
-            "type": "image",
-            "value": "https://framerusercontent.com/images/EFBcPnzom8OGpnez9tBZ39BU0Zk.jpg"
-          }
-        }
-      }
-    ],
-    "galleryPosts": [
-      {
-        "id": "ePJxmNQd4",
-        "fieldData": {
-          "XvHArp0_t": {
-            "type": "image",
-            "value": "https://framerusercontent.com/images/xnLr5O6I34GfAiP6r2oRnf1NUw.png"
-          }
-        }
-      },
-      {
-        "id": "Q0b_eG9le",
-        "fieldData": {
-          "XvHArp0_t": {
-            "type": "image",
-            "value": "https://framerusercontent.com/images/lsEUWrfciNVlq3VeX3FgF4OLj8.png"
-          }
-        }
-      }
-    ],
-    "videoYouTube": null,
-    "videoUpload": null,
-    "videoVimeo": null,
-    "outcome": "Product repositioned and rebuilt end to end, relaunching now.",
-    "press": "<p dir=\"auto\"><br class=\"trailing-break\"></p>"
-  },
-  {
-    "id": "yy5o7ujlA",
-    "slug": "ccarbon",
-    "draft": false,
-    "projectName": "cCarbon",
-    "linkText": "ccarbon.com",
-    "linkUrl": null,
-    "color": "rgb(242, 78, 30)",
-    "isTemplate": false,
-    "year": "2022",
-    "type": "Art Direction • Interface",
-    "what": "Agency work · Website redesign",
-    "description": "cCarbon sells carbon market and climate finance analysis, the kind of data that moves money in a sector most people can't even describe. Their buyers are institutional, technical and skeptical by trade.",
-    "challenge": "Climate finance competes on credibility, and every site in the category looks like a PDF: long pages, no hierarchy, nothing to hold on to. The hard part was never making it look good. It was making dense, technical content readable without stripping out what makes it valuable, because this buyer distrusts anything that looks simplified.",
-    "solution": "I built two directions on the same principle: turn density into something the reader can get through. The first is light and clear, with 3D natural elements carrying transparency and renewal, for the audience buying clarity and environmental alignment. The second is dark and spatial, cCarbon as the firm that sees past the noise, navigating complexity like a satellite above the data, for the audience buying intellectual firepower. Same content, two arguments about who they are. I rebuilt the entire interface, through the US agency that had them as a client.",
-    "thumb": "https://framerusercontent.com/images/ACwtfY2ENIyUao5Z0THidFr5M.jpg",
-    "heroImage": "https://framerusercontent.com/images/ACJaGZmFwbQqjTHQdhlbH8YGJw.jpg",
-    "gallery": [
-      {
-        "id": "oCus19gBV",
-        "fieldData": {
-          "EXFrlMu4f": {
-            "type": "image",
-            "value": "https://framerusercontent.com/images/FZO3dvBHGziwwWxLG53RHH5DQ.png"
-          }
-        }
-      },
-      {
-        "id": "YFDxlQ9xl",
-        "fieldData": {
-          "EXFrlMu4f": {
-            "type": "image",
-            "value": "https://framerusercontent.com/images/szLPAneLVSFvCSagSj9UtPWmsU0.png"
-          }
-        }
-      },
-      {
-        "id": "d9UFi4oD3",
-        "fieldData": {
-          "EXFrlMu4f": {
-            "type": "image",
-            "value": "https://framerusercontent.com/images/iBGvdxHSrgphLBeodNPglc3uFtc.png"
-          }
-        }
-      },
-      {
-        "id": "TiaL2Xgxr",
-        "fieldData": {
-          "EXFrlMu4f": {
-            "type": "image",
-            "value": "https://framerusercontent.com/images/wZxo3vOPr1Tv8ZyNDXLIYu6Y5Fk.png"
-          }
-        }
-      },
-      {
-        "id": "cl1wNovhX",
-        "fieldData": {
-          "EXFrlMu4f": {
-            "type": "image",
-            "value": "https://framerusercontent.com/images/Uq0j9YQUQboz6n4gh7nK4mmq0g.png"
-          }
-        }
-      }
-    ],
-    "galleryPosts": [],
-    "videoYouTube": null,
-    "videoUpload": null,
-    "videoVimeo": null,
-    "outcome": "Approved by the agency's creative director.",
-    "press": "<p dir=\"auto\"><br class=\"trailing-break\"></p>"
-  },
-  {
-    "id": "dNUYnViBz",
-    "slug": "morpho",
-    "draft": false,
-    "projectName": "Morpho",
-    "linkText": "studiomorpho.com",
-    "linkUrl": "https://studiomorpho.framer.ai",
-    "color": "rgb(43, 77, 229)",
-    "isTemplate": false,
-    "year": "2024",
-    "type": "Branding • Interface • Framer Development",
-    "what": "Website",
-    "description": "Studio Morpho is a branding and web design agency built on a simple idea: brands evolve, and their websites should evolve with them. Its old site had none of that motion. It felt generic, with little of the studio’s personality or point of view. The brief was to create a digital presence that felt considered and confident without slipping into corporate restraint or visual noise.",
-    "challenge": "The site needed to feel distinctive without trying too hard: confident, not loud; polished, not sterile. It had to position Morpho as a creative partner with taste, precision, and strategic judgment while staying clear and easy to use.",
-    "solution": "I designed and built the site in Framer around a clear structure, sharper copy, and subtle interactions that keep the page moving without competing with the work. Elegant typography and deliberate pacing give the studio a more confident presence, and every detail supports the same message: Morpho knows how to turn good taste into useful design.",
-    "thumb": "https://framerusercontent.com/images/KVLnm3X9cZsGyTeceTxK8TCfcwY.png",
-    "heroImage": "https://framerusercontent.com/images/p0Ye6aSFxNxtyUJyBatmOZLaTo.png",
-    "gallery": [
-      {
-        "id": "kDQ6n0_Q2",
-        "fieldData": {
-          "EXFrlMu4f": {
-            "type": "image",
-            "value": "https://framerusercontent.com/images/RgqivLTzn8aAFIS2jrftOsJokTo.png"
-          }
-        }
-      },
-      {
-        "id": "O4G1TZWoL",
-        "fieldData": {
-          "EXFrlMu4f": {
-            "type": "image",
-            "value": "https://framerusercontent.com/images/M5wy1MDmjBSeOTOdcu8FR43n9Nc.png"
-          }
-        }
-      }
-    ],
-    "galleryPosts": [],
-    "videoYouTube": null,
-    "videoUpload": null,
-    "videoVimeo": null,
-    "outcome": "",
-    "press": "<p dir=\"auto\"><br class=\"trailing-break\"></p>"
-  },
-  {
-    "id": "MYYXSJIbD",
-    "slug": "prattu",
-    "draft": false,
-    "projectName": "Prattu",
-    "linkText": "https://apps.apple.com/br/app/prattu",
-    "linkUrl": "https://apps.apple.com/br/app/prattu/id6504876416",
-    "color": "rgb(126, 217, 87)",
-    "isTemplate": false,
-    "year": "2024",
-    "type": "UX Architecture • Interface",
-    "what": "App",
-    "description": "Prattu is a delivery app without the delivery: you order, pick up and eat, with no fees. And there's a social layer. You see where your friends are actually eating and get recommendations from people you know, not from an algorithm.",
-    "challenge": "A lot of screens that had to feel like one thing. Ordering and social discovery usually live apart, and here they share the same interface: fast for someone who just wants to eat, engaging for someone who wants to browse. At that volume the risk isn't one bad screen. It's dozens of screens that don't look like they came from the same place.",
-    "solution": "They came in with the strategy settled, positioning, features and model, so I started by auditing what already existed: the scope, the flows, what was holding up and what wasn't. Some journeys I changed. Some screens didn't exist yet and I added them. Then the full set of screens in Figma, with hierarchy, states and components consistent across the product, so the social layer never gets in the way of ordering and ordering never kills the browsing. The idea arrived solved. Making it hold up as a product didn't.",
-    "thumb": "https://framerusercontent.com/images/iS5bWnQ9qvfj61aENpgRsLzRNQM.png",
-    "heroImage": "https://framerusercontent.com/images/GjcGfqQkIPo7uJfKBv1Bvyfo0.png",
-    "gallery": [
-      {
-        "id": "P5_9B0a1r",
-        "fieldData": {
-          "EXFrlMu4f": {
-            "type": "image",
-            "value": "https://framerusercontent.com/images/qYI4U1YFJeexwKVuIHQlGtsJfJY.png"
-          }
-        }
-      },
-      {
-        "id": "KwS7raoH4",
-        "fieldData": {
-          "EXFrlMu4f": {
-            "type": "image",
-            "value": "https://framerusercontent.com/images/AkC1xBba5jumqRnCUJAjG4FbtPo.png"
-          }
-        }
-      },
-      {
-        "id": "e6ttagAFg",
-        "fieldData": {
-          "EXFrlMu4f": {
-            "type": "image",
-            "value": "https://framerusercontent.com/images/ByPwynfcoPLOs7z8MWjraY1sf48.png"
-          }
-        }
-      },
-      {
-        "id": "J1ApoHGOa",
-        "fieldData": {
-          "EXFrlMu4f": {
-            "type": "image",
-            "value": "https://framerusercontent.com/images/7o9roh1sIY2X6b8TMJ57YjhFncg.png"
-          }
-        }
-      },
-      {
-        "id": "c6FtwGqYw",
-        "fieldData": {
-          "EXFrlMu4f": {
-            "type": "image",
-            "value": "https://framerusercontent.com/images/3e4Aeo3qgKS422YV9XpzUsQh1Y.png"
-          }
-        }
-      }
-    ],
-    "galleryPosts": [],
-    "videoYouTube": null,
-    "videoUpload": "https://framerusercontent.com/assets/IG7yId7UZAVoCMLalukjxD4PjQ.mp4",
-    "videoVimeo": null,
-    "outcome": "Live on the App Store.",
-    "press": "<p dir=\"auto\"><br class=\"trailing-break\"></p>"
-  },
-  {
-    "id": "blwKqdmtp",
-    "slug": "go-ink",
-    "draft": false,
-    "projectName": "Go Ink",
-    "linkText": "goink.com.br",
-    "linkUrl": "https://goink.framer.ai",
-    "color": "rgb(255, 91, 19)",
-    "isTemplate": false,
-    "year": "2023",
-    "type": "Product Strategy • Brand • Interface",
-    "what": "Personal project · App",
-    "description": "Go Ink is a marketplace where tattoo artists only sell the work they actually want to do, each piece already priced, sized and placed on the body. No client and no brief: I built it alone, out of something I watched happen for years while I ran a tattoo studio.",
-    "challenge": "Artists were constantly posting drawings on Facebook captioned \"available to tattoo.\" Their weeks were full of commercial work: the same lettering, the same little hearts, the same names. Meanwhile the pieces they were dying to make sat stranded in a sketchbook. And clients kept asking for the safe thing, because the safe thing was all they'd ever been shown. Every platform in the category sold the artist's time. None of them sold the artist's work.",
-    "solution": "Go Ink flips who chooses: the artist uploads only the pieces they want to tattoo, each one already priced, sized and placed on the body. The client swipes, picks one and books the session.\n\nI took it end to end on my own: market research, product strategy, the name, the logo, the app, the site and the T-shirt.",
-    "thumb": "https://framerusercontent.com/images/mMoTMdXWpPO55AjoarNJEVwxFM.jpg",
-    "heroImage": "https://framerusercontent.com/images/UmWw6hYRX2osXcebDShkiekDuE.png",
-    "gallery": [
-      {
-        "id": "Nu8NmqRt5",
-        "fieldData": {
-          "EXFrlMu4f": {
-            "type": "image",
-            "value": "https://framerusercontent.com/images/CytSZxwVMT6PkH5xNkq7xCjlI.png"
-          }
-        }
-      },
-      {
-        "id": "eYLWuHjOT",
-        "fieldData": {
-          "EXFrlMu4f": {
-            "type": "image",
-            "value": "https://framerusercontent.com/images/h0CeYErkJ8vuxnes6VLzzsO8Uo.png"
-          }
-        }
-      },
-      {
-        "id": "qXKEUXXEc",
-        "fieldData": {
-          "EXFrlMu4f": {
-            "type": "image",
-            "value": "https://framerusercontent.com/images/3ruhkzp7WyIwAu6l0BHJbo2ENo.png"
-          }
-        }
-      }
-    ],
-    "galleryPosts": [],
-    "videoYouTube": "https://www.youtube.com/watch?v=A2U0nzGS094",
-    "videoUpload": null,
-    "videoVimeo": null,
-    "outcome": "",
-    "press": "<p dir=\"auto\"><br class=\"trailing-break\"></p>"
-  },
-  {
-    "id": "LlO_fOLPl",
-    "slug": "tattoo-connect",
-    "draft": true,
-    "projectName": "Tattoo Connect",
-    "linkText": "tattooconnect.com.br",
-    "linkUrl": "https://tattooconnect.framer.ai/",
-    "color": "rgb(109, 8, 238)",
-    "isTemplate": false,
-    "year": "2025",
-    "type": "Visual Identity • Web Interface • Framer Development",
-    "what": "Website",
-    "description": "Tattoo Connect helps serious clients find some of the best tattoo artists in Brazil. The brief was to build a curated platform with a premium experience—one that celebrates original work, earns trust, and feels nothing like the generic tattoo directories already online.",
-    "challenge": "The platform had to work for both sides: artists who did not want to be listed beside amateur work, and clients who cared about quality, style, and fit. It needed to feel bold and credible while keeping discovery simple.",
-    "solution": "I built the concept from the ground up: brand identity, UX strategy, and a responsive site in Framer. The dark, typographic interface puts each artist’s work and personality first, while curated content and personal support guide clients toward the right match. Tattoo Connect is not another directory. It is a more considered way for serious clients and established artists to find each other.",
-    "thumb": "https://framerusercontent.com/images/gVEHR9ganVIXGNq1rmYj4bdrGyw.jpg",
-    "heroImage": "https://framerusercontent.com/images/AboSXbO0TdHNOYV6gTzcA7SwTg.png",
-    "gallery": [
-      {
-        "id": "RaRIioYv5",
-        "fieldData": {
-          "EXFrlMu4f": {
-            "type": "image",
-            "value": "https://framerusercontent.com/images/JAo7hG38RgkVfw1HBIpOodsFc.png"
-          }
-        }
-      },
-      {
-        "id": "BUWsmXTOp",
-        "fieldData": {
-          "EXFrlMu4f": {
-            "type": "image",
-            "value": "https://framerusercontent.com/images/Ymb0ABQbxdAiy4aSVgiq9yq6s.png"
-          }
-        }
-      }
-    ],
-    "galleryPosts": [],
-    "videoYouTube": null,
-    "videoUpload": null,
-    "videoVimeo": null,
-    "outcome": "",
-    "press": "<p dir=\"auto\"><br class=\"trailing-break\"></p>"
-  },
-  {
-    "id": "n8HoLbsDk",
-    "slug": "made-in-brazil",
-    "draft": true,
-    "projectName": "Made In Brazil",
-    "linkText": "https://madeinbrazil.framer.website",
-    "linkUrl": "https://madeinbrazil.framer.website/",
-    "color": "rgb(16, 106, 247)",
-    "isTemplate": true,
-    "year": "2025",
-    "type": "Framer Template",
-    "what": "Website",
-    "description": "This template is for creatives who are done blending in. Minimal without feeling empty, bold without becoming noisy. Every interaction is designed to make the work feel alive and give the portfolio the confidence of a much bigger practice.",
-    "challenge": "Most portfolios look good but do very little selling. They show the work without explaining the value behind it, so strong designers lose opportunities to louder, less capable ones. Made in Brazil was built to close that gap and make good work harder to overlook.",
-    "solution": "The template does more than display projects. Its hierarchy guides attention, the typography sets a confident tone, and the structure turns each case study into a clear argument for the designer behind it. Built in Framer, it is fast, flexible, and easy to grow with your career.",
-    "thumb": "https://framerusercontent.com/images/6cAivbbyzCtLG9DR4SEot8DgnoY.jpg",
-    "heroImage": "https://framerusercontent.com/images/zK6KfGL1AqvR2UTm2d2zoCVyxc.png",
-    "gallery": [
-      {
-        "id": "Dk7UpfGZd",
-        "fieldData": {
-          "EXFrlMu4f": {
-            "type": "image",
-            "value": "https://framerusercontent.com/images/GrT9mFhU3cVRUDNismX8LfV4.png"
-          }
-        }
-      },
-      {
-        "id": "cz6jgXKN6",
-        "fieldData": {
-          "EXFrlMu4f": {
-            "type": "image",
-            "value": "https://framerusercontent.com/images/6Y2KtlOQ7PXpu3uNplkWs9sOAk.png"
-          }
-        }
-      }
-    ],
-    "galleryPosts": [],
-    "videoYouTube": null,
-    "videoUpload": null,
-    "videoVimeo": null,
-    "outcome": "",
-    "press": "<p dir=\"auto\"><br class=\"trailing-break\"></p>"
-  },
-  {
-    "id": "tyU9sXEQP",
-    "slug": "gabo",
-    "draft": true,
-    "projectName": "Gabo",
-    "linkText": "https://gabo.framer.ai",
-    "linkUrl": "https://gabo.framer.ai",
-    "color": "rgb(150, 218, 249)",
-    "isTemplate": true,
-    "year": "2025",
-    "type": "Framer Template",
-    "what": "Website",
-    "description": "We are transforming idle devices into a distributed network for cost-effective, faster, more secure, and environmentally friendly data computing.",
-    "challenge": "We are transforming idle devices into a distributed network for cost-effective, faster, more secure, and environmentally friendly data computing.",
-    "solution": "We are transforming idle devices into a distributed network for cost-effective, faster, more secure, and environmentally friendly data computing.",
-    "thumb": "https://framerusercontent.com/images/mCoPOus5jqbT3OJTYbe09wuPs.jpg",
-    "heroImage": "https://framerusercontent.com/images/oAzJkGUOb7q8uMKQORlTIL065o.png",
-    "gallery": [
-      {
-        "id": "iPl4D1YTC",
-        "fieldData": {
-          "EXFrlMu4f": {
-            "type": "image",
-            "value": "https://framerusercontent.com/images/vbfQWFMloHoy9HDYVmJzVk2EJU.png"
-          }
-        }
-      },
-      {
-        "id": "y8X60iSZJ",
-        "fieldData": {
-          "EXFrlMu4f": {
-            "type": "image",
-            "value": "https://framerusercontent.com/images/WsxwCiHNDdnYgl0mZs5SiPbKHs.png"
-          }
-        }
-      },
-      {
-        "id": "pUJtd_b5i",
-        "fieldData": {
-          "EXFrlMu4f": {
-            "type": "image",
-            "value": "https://framerusercontent.com/images/ArIRe37Oz0OlSoZmqmxzjkzawfE.png"
-          }
-        }
-      },
-      {
-        "id": "EGRMgl6_m",
-        "fieldData": {
-          "EXFrlMu4f": {
-            "type": "image",
-            "value": "https://framerusercontent.com/images/xRQJEIj2Ep1mb3rTI7dFIoJABGI.png"
-          }
-        }
-      }
-    ],
-    "galleryPosts": [],
-    "videoYouTube": null,
-    "videoUpload": null,
-    "videoVimeo": null,
-    "outcome": "",
-    "press": "<p dir=\"auto\"><br class=\"trailing-break\"></p>"
-  },
-  {
-    "id": "ZiiDnN4H4",
-    "slug": "ai-now",
-    "draft": true,
-    "projectName": "AI Now",
-    "linkText": "ainow.framer.ai",
-    "linkUrl": null,
-    "color": "rgb(255, 4, 82)",
-    "isTemplate": true,
-    "year": "2025",
-    "type": "Framer Template",
-    "what": "Website",
-    "description": "AI Now is a modular Framer template for startups, SaaS products, and AI companies that need to look credible from day one. The system pairs a futuristic visual language with a clear, practical structure that is easy to adapt as the product grows.",
-    "challenge": "AI websites tend to blur together: dark gradients, vague promises, and the same borrowed language. The challenge was to create something recognizably technical without looking like every other AI landing page.",
-    "solution": "I gave AI Now a strong visual system: generated imagery, vivid color on dark backgrounds, and crisp, high-contrast type. The layout is responsive and modular, so fast-moving teams can launch quickly and keep expanding without rebuilding the site.\n\nNavigation stays simple, calls to action are easy to find, and every section has a clear job. The result is a template that feels technical, credible, and ready to ship.",
-    "thumb": "https://framerusercontent.com/images/lxpLHg5VvmvcaP1RCEZLClDvSc.jpg",
-    "heroImage": "https://framerusercontent.com/images/Pr9OgknJXzETmXqQGSyNWM6cylM.png",
-    "gallery": [
-      {
-        "id": "iPl4D1YTC",
-        "fieldData": {
-          "EXFrlMu4f": {
-            "type": "image",
-            "value": "https://framerusercontent.com/images/w1Gy3fVsoBVfi0Ylt8qfZfPw68.png"
-          }
-        }
-      },
-      {
-        "id": "y8X60iSZJ",
-        "fieldData": {
-          "EXFrlMu4f": {
-            "type": "image",
-            "value": "https://framerusercontent.com/images/aO19Z556mCCGLmSYknjPaAmVoc.png"
-          }
-        }
-      },
-      {
-        "id": "MRHdEgSLI",
-        "fieldData": {
-          "EXFrlMu4f": {
-            "type": "image",
-            "value": "https://framerusercontent.com/images/2GVCTTj8LEVUgV1Ty5YFft4rPg.png"
-          }
-        }
-      }
-    ],
-    "galleryPosts": [],
-    "videoYouTube": null,
-    "videoUpload": null,
-    "videoVimeo": null,
-    "outcome": "",
-    "press": "<p dir=\"auto\"><br class=\"trailing-break\"></p>"
-  },
-  {
-    "id": "ARToe1CYj",
-    "slug": "tumulto-ai",
-    "draft": true,
-    "projectName": "Tumulto.AI",
-    "linkText": "tumulto.ai",
-    "linkUrl": "tumulto.framer.ai",
-    "color": "rgb(255, 145, 231)",
-    "isTemplate": false,
-    "year": "2025",
-    "type": "Visual Identity • Web Interface • Framer Development",
-    "what": "Website",
-    "description": "TUMULTO.AI is an AI-powered agency for high-ticket mentors building online businesses. The brand needed to feel disruptive without falling into the usual AI clichés, and the site had to make a complex mix of automation, sales, and growth easy to understand.",
-    "challenge": "The market was full of agencies selling the same vague promise: generic automation, generic design, generic growth. The challenge was to give TUMULTO a clear position and explain its AI-led system without turning the site into a wall of jargon.",
-    "solution": "I worked as both strategist and designer. I defined the central idea—TUMULTO as a growth engine for mentors—then built the identity and a conversational site in Framer around it. The experience shows how AI agents support lead qualification, sales, and onboarding, tying the technology to outcomes the client can actually understand.",
-    "thumb": "https://framerusercontent.com/images/yIJ0uh7iobZy4NrmY8jA9Ee8MmA.jpg",
-    "heroImage": "https://framerusercontent.com/images/fX2Ao9Ylpi5lmQRLb6w2nk8CKek.png",
-    "gallery": [
-      {
-        "id": "W5lDOuscE",
-        "fieldData": {
-          "EXFrlMu4f": {
-            "type": "image",
-            "value": "https://framerusercontent.com/images/VFAGr15y7vN8BT79BIl9noCq2ro.png"
-          }
-        }
-      },
-      {
-        "id": "VeIjJZX54",
-        "fieldData": {
-          "EXFrlMu4f": {
-            "type": "image",
-            "value": "https://framerusercontent.com/images/tcD6T37HJFzq23D5dQMU73oBP0.png"
-          }
-        }
-      },
-      {
-        "id": "gKJLoYz8I",
-        "fieldData": {
-          "EXFrlMu4f": {
-            "type": "image",
-            "value": "https://framerusercontent.com/images/LXUekfUj5ZLoH76VnXGlsI.png"
-          }
-        }
-      },
-      {
-        "id": "WAy6RpVOc",
-        "fieldData": {
-          "EXFrlMu4f": {
-            "type": "image",
-            "value": "https://framerusercontent.com/images/HXOak9hZGysDUTKY4CtoNoFSkuU.png"
-          }
-        }
-      },
-      {
-        "id": "Ypuhbszuw",
-        "fieldData": {
-          "EXFrlMu4f": {
-            "type": "image",
-            "value": "https://framerusercontent.com/images/Hjp6tgQcurPmPXiXwEXyodWkQ.png"
-          }
-        }
-      }
-    ],
-    "galleryPosts": [],
-    "videoYouTube": null,
-    "videoUpload": null,
-    "videoVimeo": null,
-    "outcome": "",
-    "press": "<p dir=\"auto\"><br class=\"trailing-break\"></p>"
-  }
+ {
+  "id": "FyAgVoB63",
+  "slug": "flashbang",
+  "draft": false,
+  "projectName": "Flashbang",
+  "linkText": "flashbang.com.br",
+  "linkUrl": "https://flashbang.com.br",
+  "color": "rgb(239, 88, 145)",
+  "isTemplate": false,
+  "year": "2025",
+  "type": "Brand • Interface • Framer Development",
+  "what": "Website",
+  "description": "Flashbang is a creative production company that works like a collective: designers, photographers, musicians, and filmmakers taking ideas from set to screen. Its old site showed none of that—dated identity, weak copy, none of the energy the team brings to a shoot. They wanted something modern, built with the same level of craft they bring to the work.",
+  "challenge": "A production company is judged on taste before anything else, and Flashbang’s was invisible online. The category made it worse: everyone had converged on the same restrained, elegant, forgettable look. Building a site as pretty as everyone else’s would have been the safest way to stay invisible.",
+  "solution": "I reviewed more than forty direct competitors before drawing a single screen. The pattern held across all of them, which told me exactly what not to do. So the site goes in the opposite direction: tall typography, high-contrast color, constant movement, and navigation that stays out of the way so the work can fill the screen.\n\nI designed and built it in Framer on a CMS robust enough for the way Flashbang actually works: services split across photo, video, and events, with each project carrying its own raw footage and stills. The team can publish an entire shoot without calling a designer.",
+  "thumb": "https://framerusercontent.com/images/F5H6s53nkUP2iyD4PFr4cEcA.jpg",
+  "heroImage": "https://framerusercontent.com/images/ilkTxlE3dfP8Xj7Oy3y6dKlNM.png",
+  "gallery": [
+   {
+    "id": "d823X7SVO",
+    "fieldData": {
+     "EXFrlMu4f": {
+      "type": "image",
+      "value": "https://framerusercontent.com/images/ilsjB78mZEgb2pQ2Uz4J06RPc5Y.png"
+     }
+    }
+   },
+   {
+    "id": "SWZeCg4U8",
+    "fieldData": {
+     "EXFrlMu4f": {
+      "type": "image",
+      "value": "https://framerusercontent.com/images/WIwVH7gRu0YF5wPmkJjXiw94uU.png"
+     }
+    }
+   },
+   {
+    "id": "cwNGTZJ9X",
+    "fieldData": {
+     "EXFrlMu4f": {
+      "type": "image",
+      "value": "https://framerusercontent.com/images/oMeAf18M8YfxBAhbFeh89Lm41I.png"
+     }
+    }
+   },
+   {
+    "id": "dS6x8yEeh",
+    "fieldData": {
+     "EXFrlMu4f": {
+      "type": "image",
+      "value": "https://framerusercontent.com/images/6V8Uj7bldyuAFh6F26xFQsxvlY.png"
+     }
+    }
+   },
+   {
+    "id": "tiebOuOEL",
+    "fieldData": {
+     "EXFrlMu4f": {
+      "type": "image",
+      "value": "https://framerusercontent.com/images/cuMJy2Y9PA8GAk6TMISNRbkvvI.png"
+     }
+    }
+   }
+  ],
+  "galleryPosts": [],
+  "videoYouTube": null,
+  "videoUpload": null,
+  "videoVimeo": "https://vimeo.com/1166752442?fl=pl&fe=ti",
+  "outcome": "Approved in the first round and live ever since.",
+  "press": "<p dir=\"auto\"><br class=\"trailing-break\"></p>"
+ },
+ {
+  "id": "UbmLu6P91",
+  "slug": "tilt-tech",
+  "draft": false,
+  "projectName": "Tilt Tech",
+  "linkText": "tilt.technology",
+  "linkUrl": "https://tilt.technology",
+  "color": "rgb(93, 45, 230)",
+  "isTemplate": false,
+  "year": "2025",
+  "type": "Product Strategy • Interface • Framer Development • Design Leadership",
+  "what": "Website · Design leadership (9 months)",
+  "description": "TILT turns idle devices—phones, TVs, even cars—into a distributed computing network, helping companies process data faster and at lower cost without building more infrastructure. Brazilian founders, operating from the US, selling complex infrastructure to technical buyers.",
+  "challenge": "They sold four products and the site showed a blur. What they had looked nothing like the technology behind it, and worse: everything sat there as one undifferentiated block, with no product structure at all. Visitors couldn't see where one thing ended and the next began, which meant they couldn't understand what they were buying, in a high-ticket category with a buyer who is skeptical by nature.",
+  "solution": "I gave the offering a clear architecture: four products across three layers. Hardware at the base (TiltGrid and TiltEdge), a data mesh above it (TiltData), and intelligence on top (TiltMaxx). That structure did not exist before, and it made the whole offer understandable in a single scroll.\n\nThen came the site: dark and spatial, with layered 3D scenes where every point of light represents another device joining the network. I designed the interface in Figma and built it in Framer.\n\nThe site led to a nine-month role as head of design. I carried the same structure into every buyer touchpoint, from sales decks for a highly technical, high-ticket product to the rest of the prospect journey. Not just the front door—the whole path.",
+  "thumb": "https://framerusercontent.com/images/0oMeB8he8g6TuX29KnDcZlEN6U.png",
+  "heroImage": "https://framerusercontent.com/images/Nb9BKoRMofMwtn4nPjrbFHAsM.png",
+  "gallery": [
+   {
+    "id": "M70c4YEan",
+    "fieldData": {
+     "EXFrlMu4f": {
+      "type": "image",
+      "value": "https://framerusercontent.com/images/adk30eGHJLUQj4cFiuDYA5V2wKo.png"
+     }
+    }
+   },
+   {
+    "id": "PjP5NnjFF",
+    "fieldData": {
+     "EXFrlMu4f": {
+      "type": "image",
+      "value": "https://framerusercontent.com/images/kXLHhM0BknUaM1lzBgjess1enY.png"
+     }
+    }
+   },
+   {
+    "id": "vFlH0ohyJ",
+    "fieldData": {
+     "EXFrlMu4f": {
+      "type": "image",
+      "value": "https://framerusercontent.com/images/gYmZ1rWpVyMDgi8zSE8elrsXGE.png"
+     }
+    }
+   },
+   {
+    "id": "uQF761NhB",
+    "fieldData": {
+     "EXFrlMu4f": {
+      "type": "image",
+      "value": "https://framerusercontent.com/images/mI1INZsca1hL6jTdlebt6H1NJhU.png"
+     }
+    }
+   },
+   {
+    "id": "GzGzAQT6j",
+    "fieldData": {
+     "EXFrlMu4f": {
+      "type": "image",
+      "value": "https://framerusercontent.com/images/OSkOiOEaZ4m8veb6w41Yof2HSNQ.png"
+     }
+    }
+   }
+  ],
+  "galleryPosts": [],
+  "videoYouTube": null,
+  "videoUpload": "https://framerusercontent.com/assets/IHL4DYgoKry6OHx2Or9tgVg8z8.mp4",
+  "videoVimeo": null,
+  "outcome": "One website turned into nine months as their head of design.",
+  "press": "<p dir=\"auto\"><br class=\"trailing-break\"></p>"
+ },
+ {
+  "id": "rEwtJaoJV",
+  "slug": "tattoaria",
+  "draft": false,
+  "projectName": "Tattoaria",
+  "linkText": "",
+  "linkUrl": null,
+  "color": "rgb(255, 255, 255)",
+  "isTemplate": false,
+  "year": "2015 — 2020",
+  "type": "Positioning • Brand • Growth",
+  "what": "Own business · Physical operation",
+  "description": "It started as a blog. Two years later, Tattoaria was one of Brazil’s three biggest tattoo studios and the official tattoo studio at Lollapalooza. There were no resident artists. The lineup changed every week inside a warehouse with a bar, a barbershop, and a pool table.",
+  "challenge": "Every tattoo studio sells the same thing: a fixed lineup of artists and a chair. The good ones compete on who's on the wall, the rest compete on price, and the whole category is interchangeable. I didn't want a better studio. I wanted one that couldn't be compared to a studio at all, which meant the studio itself had to become the product, not the artists inside it.",
+  "solution": "Tattoaria became the first rotating tattoo studio in the world: no resident artists, new ones from Brazil and abroad every week. That single move rewrote the economics of the business. Artists wanted in because it was a stage, clients came back because the lineup was never the same, and the business stopped depending on any one name. I built all of it: concept, brand, positioning, growth and marketing. From the 2015 platform, which made artists want in before there was a studio to work in, to the warehouse that opened in March 2016 with a barbershop, bar and pool table around it, to the tattoo truck touring the country. Harley-Davidson, Jack Daniel's, Nickelodeon and Vans all ran projects with us.",
+  "thumb": "https://framerusercontent.com/images/jKgetsTeJnXlmR7GIfgj7svM4nQ.png",
+  "heroImage": "https://framerusercontent.com/images/DtdQtD33UikF7z6OM2S644SRDQ.png",
+  "gallery": [
+   {
+    "id": "bNs0KRduT",
+    "fieldData": {
+     "EXFrlMu4f": {
+      "type": "image",
+      "value": "https://framerusercontent.com/images/TdiSeBsASTSGnCaeBZPMDkzIhA.png"
+     }
+    }
+   },
+   {
+    "id": "a7CtRhMcp",
+    "fieldData": {
+     "EXFrlMu4f": {
+      "type": "image",
+      "value": "https://framerusercontent.com/images/mZ1ACPlAYmxLmrtxWmBQNiqVz0.png"
+     }
+    }
+   },
+   {
+    "id": "EX0QuVIqj",
+    "fieldData": {
+     "EXFrlMu4f": {
+      "type": "image",
+      "value": "https://framerusercontent.com/images/8dBsHREDoGzXJKDCmRljY3Uprw.png"
+     }
+    }
+   },
+   {
+    "id": "nhlGbztWu",
+    "fieldData": {
+     "EXFrlMu4f": {
+      "type": "image",
+      "value": "https://framerusercontent.com/images/EgQ11jclF84p4kL8FaceHEr7fY.png"
+     }
+    }
+   },
+   {
+    "id": "ydLA0G7Lo",
+    "fieldData": {
+     "EXFrlMu4f": {
+      "type": "image",
+      "value": "https://framerusercontent.com/images/A98p8G1Ipvv5nsBvS0ITl8TOZIY.png"
+     }
+    }
+   }
+  ],
+  "galleryPosts": [
+   {
+    "id": "UvGVQZ30I",
+    "fieldData": {
+     "XvHArp0_t": {
+      "type": "image",
+      "value": "https://framerusercontent.com/images/Y9C1gcxTJKZ5LiEcUPcOZN57l4.png"
+     }
+    }
+   },
+   {
+    "id": "fVSNqE_Pf",
+    "fieldData": {
+     "XvHArp0_t": {
+      "type": "image",
+      "value": "https://framerusercontent.com/images/XVkpTKeWgC8HwcAJ3ul2SlIcdk.png"
+     }
+    }
+   },
+   {
+    "id": "DwrG1QfKY",
+    "fieldData": {
+     "XvHArp0_t": {
+      "type": "image",
+      "value": "https://framerusercontent.com/images/XWJ5dZGTOTYwEx3jsaJnuFkPiA.png"
+     }
+    }
+   },
+   {
+    "id": "Q91AiXjC3",
+    "fieldData": {
+     "XvHArp0_t": {
+      "type": "image",
+      "value": "https://framerusercontent.com/images/AuU0Bjf6PiDhB67v70kHiLY06J8.png"
+     }
+    }
+   }
+  ],
+  "videoYouTube": "https://www.youtube.com/watch?v=9_4p9i0kPaw",
+  "videoUpload": null,
+  "videoVimeo": null,
+  "outcome": "Top 3 tattoo studios in Brazil in under two years · official studio of Lollapalooza Brasil three years running, alongside Chevrolet · peak above R$300k a month · closed during the pandemic.",
+  "press": "<p dir=\"auto\"><a href=\"https://vejasp.abril.com.br/cidades/tattoaria-house-tatuagem-estudio-moema/\"><strong>Veja São Paulo</strong></a> · New studio hosts sought-after tattoo artists on a rotating system</p><p dir=\"auto\"><a href=\"https://revistapegn.globo.com/Banco-de-ideias/Estetica-e-bem-estar/noticia/2019/06/empreendedor-fatura-alto-com-tattoo-truck.html\"><strong>Pequenas Empresas &amp; Grandes Negócios</strong></a> · Entrepreneur earns big with a tattoo truck</p><p dir=\"auto\"><a href=\"https://catracalivre.com.br/criatividade/tattoaria-e-a-primeira-plataforma-de-referencia-para-tatuagem-no-brasil/\"><strong>Catraca Livre</strong></a> · The first reference platform for tattooing in Brazil</p><p dir=\"auto\"><a href=\"https://followthecolours.com.br/tattoo-friday/tattoaria-house-em-sao-paulo/\"><strong>Follow the Colours</strong></a> · The world's first rotating tattoo studio</p>"
+ },
+ {
+  "id": "UJ5oUBf6Q",
+  "slug": "filmboss",
+  "draft": false,
+  "projectName": "Filmboss",
+  "linkText": "filmboss.com.br",
+  "linkUrl": null,
+  "color": "rgb(219, 0, 60)",
+  "isTemplate": false,
+  "year": "2025",
+  "type": "Interface • Framer Development",
+  "what": "Website · Product launch",
+  "description": "Filmboss does not teach filmmaking as art. It teaches filmmakers how to make videos that win clients—and get paid for them. The course covers fundamentals, AI, and the psychology of the sale. It is taught by Rick, who has shot for Adobe, iFood, and Mercado Pago and has more than 2,000 students. He was preparing to launch a new version.",
+  "challenge": "The market was a wall of identical sales pages: same layout, same stock-photo energy, same promises stacked one after another. This launch also had to justify a high price in a category where everyone claims the same transformation. A page built from the usual formula would look like just another course before anyone read a word. The product was not the problem. The format the category had settled on was.",
+  "solution": "So it stopped being a sales page and became a brand experience. An original layout with movement and hard hierarchy, 3D assets built in Spline to bring energy without weighing the page down, and an interface as direct and unapologetic as the course itself, aligned with the student he wants rather than the one the category expects. Designed in Figma and built by me in Framer, in time for the launch.",
+  "thumb": "https://framerusercontent.com/images/lWwEibXemZXvP0oHutUWMF8NZac.jpg",
+  "heroImage": "https://framerusercontent.com/images/W5qVUHKTzSPWw7oK9gPcIsqcNYc.png",
+  "gallery": [
+   {
+    "id": "LzCeOydfw",
+    "fieldData": {
+     "EXFrlMu4f": {
+      "type": "image",
+      "value": "https://framerusercontent.com/images/JszujGpbIJ1ObuVbWe8R3wFih0.png"
+     }
+    }
+   },
+   {
+    "id": "g6rDyWaNG",
+    "fieldData": {
+     "EXFrlMu4f": {
+      "type": "image",
+      "value": "https://framerusercontent.com/images/740yhSJWKgjcamXnzq9Ng53W7IA.png"
+     }
+    }
+   },
+   {
+    "id": "Qi_fiK_4w",
+    "fieldData": {
+     "EXFrlMu4f": {
+      "type": "image",
+      "value": "https://framerusercontent.com/images/yDWWqmwjRA7phnPld38gF8Oq6Q.png"
+     }
+    }
+   },
+   {
+    "id": "GOUYhpqwv",
+    "fieldData": {
+     "EXFrlMu4f": {
+      "type": "image",
+      "value": "https://framerusercontent.com/images/KaJv4ne4lkydGa0LUn0fn8GYW5Y.png"
+     }
+    }
+   }
+  ],
+  "galleryPosts": [],
+  "videoYouTube": null,
+  "videoUpload": null,
+  "videoVimeo": null,
+  "outcome": "",
+  "press": "<p dir=\"auto\"><br class=\"trailing-break\"></p>"
+ },
+ {
+  "id": "wA6L97Qjq",
+  "slug": "roadr",
+  "draft": false,
+  "projectName": "Roadr",
+  "linkText": "https://roadr.com/",
+  "linkUrl": "https://roadr.com/",
+  "color": "rgb(255, 255, 255)",
+  "isTemplate": false,
+  "year": "2024",
+  "type": "Product Strategy • Interface • Framer Development",
+  "what": "Website",
+  "description": "Roadr is a roadside assistance app for the worst moments on the road: a dead battery, a flat tire, a breakdown at five in the morning on the highway. The site was not driving enough downloads, and the brief was simple: make it look better.",
+  "challenge": "Nobody downloads a roadside assistance app while already stranded. The site did need the redesign they asked for, but on its own it was never going to move the numbers, because the bigger problem was timing: it was talking to a driver already stuck on the shoulder, stressed, phone at 12%, who is not browsing an app store. An emergency app is never bought during the emergency. It sells like insurance, on a day when nothing is wrong.",
+  "solution": "I repositioned Roadr from a rescue product to a prevention product and rebuilt the site around the day before the breakdown. The scroll moves through real scenarios with one clear action from start to finish: install it now, so it is already there when you need it.\n\nI designed the interface in Figma, built the site in Framer, and then designed the full app experience for the in-house team.",
+  "thumb": "https://framerusercontent.com/images/QqQdWNwPT6BLBu8Ju95s1PyocIY.jpg",
+  "heroImage": "https://framerusercontent.com/images/Pa8lVadGpSaCfQimNX2sg9CVs.png",
+  "gallery": [
+   {
+    "id": "qXRLy8Tjk",
+    "fieldData": {
+     "EXFrlMu4f": {
+      "type": "image",
+      "value": "https://framerusercontent.com/images/A0C6BMM4KgTmBbhLG7aQ3VaNQCE.png"
+     }
+    }
+   },
+   {
+    "id": "lVXRMaHm5",
+    "fieldData": {
+     "EXFrlMu4f": {
+      "type": "image",
+      "value": "https://framerusercontent.com/images/ltejRNtpAfQWUH1OTuY9oeo94.png"
+     }
+    }
+   },
+   {
+    "id": "Fo2sBIopX",
+    "fieldData": {
+     "EXFrlMu4f": {
+      "type": "image",
+      "value": "https://framerusercontent.com/images/OHhzGRmetkCHdyMzW7PMZ6axMcw.png"
+     }
+    }
+   }
+  ],
+  "galleryPosts": [],
+  "videoYouTube": null,
+  "videoUpload": null,
+  "videoVimeo": null,
+  "outcome": "Around a 60% increase in app downloads (client-reported).",
+  "press": "<p dir=\"auto\"><br class=\"trailing-break\"></p>"
+ },
+ {
+  "id": "SlHrn0EXR",
+  "slug": "charlotte-de-witte",
+  "draft": false,
+  "projectName": "Charlotte de Witte",
+  "linkText": "charlottedewitte.com",
+  "linkUrl": "https://charlottedewitte.framer.ai",
+  "color": "rgb(255, 3, 94)",
+  "isTemplate": false,
+  "year": "2024",
+  "type": "Art Direction • Interface • Framer Development",
+  "what": "Pitch project · Website and campaign",
+  "description": "Charlotte de Witte is one of the biggest names in techno: #9 in DJ Mag’s Top 100, a festival headliner, and the founder of her own label, KNTXT. Raw, hypnotic sets and an audience that follows the sound, not the singles.",
+  "challenge": "Her site looked like a press kit. Static layout, safe hierarchy, the same template every touring artist uses, the exact opposite of what she does on stage. And a screen has no volume: you can't borrow the intensity of the music. It has to be built with typography, contrast and rhythm, or it simply isn't there.",
+  "solution": "I treated the site as an extension of the set, not a page about it. Brutalist typography takes over the screen and sets the tone above the fold, while a dark, high-contrast palette comes straight from the floors she plays.\n\nThe experience comes alive through movement. I built it in Framer with scroll-driven animation, microinteractions that build tension, and transitions that never break the flow. The navigation is almost invisible on purpose: the goal is immersion, not structure. The same visual language carried into the key art and campaign posts. The project came through a US agency that regularly sent work my way.",
+  "thumb": "https://framerusercontent.com/images/MMbjLpkAUv0A9OPUyHJBfJ3Zp8.jpg",
+  "heroImage": "https://framerusercontent.com/images/S3MUdybLqO1h96Mgoyvf9hSuc38.png",
+  "gallery": [
+   {
+    "id": "Hj90tzIYf",
+    "fieldData": {
+     "EXFrlMu4f": {
+      "type": "image",
+      "value": "https://framerusercontent.com/images/70KPKA1MdYfCLQWf3hlgaE5lvmA.png"
+     }
+    }
+   },
+   {
+    "id": "THLmFONWM",
+    "fieldData": {
+     "EXFrlMu4f": {
+      "type": "image",
+      "value": "https://framerusercontent.com/images/aAiUp3l3ALL4uoo9YFvyrlmv0o.png"
+     }
+    }
+   },
+   {
+    "id": "x_rXVQkqR",
+    "fieldData": {
+     "EXFrlMu4f": {
+      "type": "image",
+      "value": "https://framerusercontent.com/images/01T003LS0WJncAl8YmWtUHdEwTY.png"
+     }
+    }
+   },
+   {
+    "id": "FHQJiUU1j",
+    "fieldData": {
+     "EXFrlMu4f": {
+      "type": "image",
+      "value": "https://framerusercontent.com/images/xFqhxzNAdh3RZATBbGGcWyivvi0.png"
+     }
+    }
+   },
+   {
+    "id": "VNQtZgF_l",
+    "fieldData": {
+     "EXFrlMu4f": {
+      "type": "image",
+      "value": "https://framerusercontent.com/images/AEGeWUqw1qXPUwasJ7Wq0RuGGg.png"
+     }
+    }
+   },
+   {
+    "id": "rRPVLguA3",
+    "fieldData": {
+     "EXFrlMu4f": {
+      "type": "image",
+      "value": "https://framerusercontent.com/images/UnhUx4ZLt8bzfcUvzcFyYivUU.png"
+     }
+    }
+   },
+   {
+    "id": "uE0Pi6HnN",
+    "fieldData": {
+     "EXFrlMu4f": {
+      "type": "image",
+      "value": "https://framerusercontent.com/images/LT3KHW2fN9KhAlW2jya4qrOY0.png"
+     }
+    }
+   },
+   {
+    "id": "ehz5fLkYu",
+    "fieldData": {
+     "EXFrlMu4f": {
+      "type": "image",
+      "value": "https://framerusercontent.com/images/zhGTwOBRcbv3nKtljQNF7QzamsA.png"
+     }
+    }
+   },
+   {
+    "id": "wsrmmomcF",
+    "fieldData": {
+     "EXFrlMu4f": {
+      "type": "image",
+      "value": "https://framerusercontent.com/images/KLYStvDPkymCItuw0ElyKXtw0ZA.png"
+     }
+    }
+   }
+  ],
+  "galleryPosts": [
+   {
+    "id": "JPh6Opa_L",
+    "fieldData": {
+     "XvHArp0_t": {
+      "type": "image",
+      "value": "https://framerusercontent.com/images/Rpootp0AKoT904Eg5Fk01vyiMn0.jpg"
+     }
+    }
+   },
+   {
+    "id": "X8j1olCUn",
+    "fieldData": {
+     "XvHArp0_t": {
+      "type": "image",
+      "value": "https://framerusercontent.com/images/Bbl8DQW1lEzOtZGKel9wDbj2i3U.jpg"
+     }
+    }
+   }
+  ],
+  "videoYouTube": null,
+  "videoUpload": null,
+  "videoVimeo": null,
+  "outcome": "",
+  "press": "<p dir=\"auto\"><br class=\"trailing-break\"></p>"
+ },
+ {
+  "id": "VQQ_qODoi",
+  "slug": "amor-de-cão",
+  "draft": false,
+  "projectName": "Amor de Cão",
+  "linkText": "amordecao.com.br",
+  "linkUrl": "https://amordecao.com.br/",
+  "color": "rgb(242, 232, 204)",
+  "isTemplate": false,
+  "year": "2025",
+  "type": "Product Strategy • Brand • Interface",
+  "what": "Brand · App · Website",
+  "description": "Life with a dog needs people. Amor de Cão is a community app for dog people: owners, adopters, professionals, rescuers, and those who don't have a dog but chose this life anyway. Four ways to care in one app: communities that welcome and answer, a Diary that keeps track of the dog's day, a weekly Circle that turns some attention back on the person doing the caring, and adoption happening inside the network instead of beside it.",
+  "challenge": "They hired me twice. First for the launch site, and months later, with the app already live and downloads far below target, to rebuild the screens. The screens were part of the problem, yes: amateurish, inconsistent, nothing that would earn a stranger's trust. But the audit turned up nine bottlenecks, and the worst ones weren't visual. The app opened on a swipe screen, so it read as a dating app before anyone understood what it was. One woman said her husband wouldn't let her use it, for exactly that reason. Onboarding demanded effort before delivering any value. The communities, which were the whole point, were empty. And the app had launched without a single metric in place, so every decision until then had been made on the founder's gut.",
+  "solution": "I ran a strategy sprint and delivered the product blueprint: a new ICP, market and competitor analysis, nine bottlenecks, one north-star metric with a clear trigger for when it changes, and seven decisions the team could stop reopening. The first was to remove matching for good and put communities at the center of the logged-in experience, with adoption as an open shelf rather than a closed funnel.\n\nFrom there, I rebuilt the foundation: positioning, narrative, brand, logo, and design system, plus 28 mapped screens and a handoff covering every state and edge case—enough for the dev team to build without having to guess what I meant.",
+  "thumb": "https://framerusercontent.com/images/JMpxWooYyeLcSdnZCac5TVEBFU.png",
+  "heroImage": "https://framerusercontent.com/images/izE2tTnnZJpIboG9PGDRKbXm1Wc.png",
+  "gallery": [
+   {
+    "id": "I9MIsAAgJ",
+    "fieldData": {
+     "EXFrlMu4f": {
+      "type": "image",
+      "value": "https://framerusercontent.com/images/d29At3SuIca9yZ4UgnNobMni6c.gif"
+     }
+    }
+   },
+   {
+    "id": "hLj9XgQPV",
+    "fieldData": {
+     "EXFrlMu4f": {
+      "type": "image",
+      "value": "https://framerusercontent.com/images/nSrUXikeHAmETAdHpwGU9YblWsk.jpg"
+     }
+    }
+   },
+   {
+    "id": "xMTXubTPr",
+    "fieldData": {
+     "EXFrlMu4f": {
+      "type": "image",
+      "value": "https://framerusercontent.com/images/SV7v1kFAbaFdVZ8MOsrpORHvAg.jpg"
+     }
+    }
+   },
+   {
+    "id": "v5AOmczWA",
+    "fieldData": {
+     "EXFrlMu4f": {
+      "type": "image",
+      "value": "https://framerusercontent.com/images/WZt7YcXDDWpZPViKU3By241OuQ.jpg"
+     }
+    }
+   },
+   {
+    "id": "suDF2L1Us",
+    "fieldData": {
+     "EXFrlMu4f": {
+      "type": "image",
+      "value": "https://framerusercontent.com/images/5oaWm21OUAgWveltgiyNWRFH4UI.jpg"
+     }
+    }
+   },
+   {
+    "id": "nf9IhJyJ8",
+    "fieldData": {
+     "EXFrlMu4f": {
+      "type": "image",
+      "value": "https://framerusercontent.com/images/SahCJ5Ra1Epd5nraptTcRQH5I4k.jpg"
+     }
+    }
+   },
+   {
+    "id": "famhCVBlm",
+    "fieldData": {
+     "EXFrlMu4f": {
+      "type": "image",
+      "value": "https://framerusercontent.com/images/EFBcPnzom8OGpnez9tBZ39BU0Zk.jpg"
+     }
+    }
+   }
+  ],
+  "galleryPosts": [
+   {
+    "id": "ePJxmNQd4",
+    "fieldData": {
+     "XvHArp0_t": {
+      "type": "image",
+      "value": "https://framerusercontent.com/images/xnLr5O6I34GfAiP6r2oRnf1NUw.png"
+     }
+    }
+   },
+   {
+    "id": "Q0b_eG9le",
+    "fieldData": {
+     "XvHArp0_t": {
+      "type": "image",
+      "value": "https://framerusercontent.com/images/lsEUWrfciNVlq3VeX3FgF4OLj8.png"
+     }
+    }
+   }
+  ],
+  "videoYouTube": null,
+  "videoUpload": null,
+  "videoVimeo": null,
+  "outcome": "Product repositioned and rebuilt end to end, relaunching now.",
+  "press": "<p dir=\"auto\"><br class=\"trailing-break\"></p>"
+ },
+ {
+  "id": "yy5o7ujlA",
+  "slug": "ccarbon",
+  "draft": false,
+  "projectName": "cCarbon",
+  "linkText": "ccarbon.com",
+  "linkUrl": null,
+  "color": "rgb(242, 78, 30)",
+  "isTemplate": false,
+  "year": "2022",
+  "type": "Art Direction • Interface",
+  "what": "Agency work · Website redesign",
+  "description": "cCarbon sells carbon market and climate finance analysis, the kind of data that moves money in a sector most people can't even describe. Their buyers are institutional, technical and skeptical by trade.",
+  "challenge": "Climate finance competes on credibility, and every site in the category looks like a PDF: long pages, no hierarchy, nothing to hold on to. The hard part was never making it look good. It was making dense, technical content readable without stripping out what makes it valuable, because this buyer distrusts anything that looks simplified.",
+  "solution": "I built two directions on the same principle: turn density into something the reader can get through. The first is light and clear, with 3D natural elements carrying transparency and renewal, for the audience buying clarity and environmental alignment. The second is dark and spatial, cCarbon as the firm that sees past the noise, navigating complexity like a satellite above the data, for the audience buying intellectual firepower. Same content, two arguments about who they are. I rebuilt the entire interface, through the US agency that had them as a client.",
+  "thumb": "https://framerusercontent.com/images/ACwtfY2ENIyUao5Z0THidFr5M.jpg",
+  "heroImage": "https://framerusercontent.com/images/ACJaGZmFwbQqjTHQdhlbH8YGJw.jpg",
+  "gallery": [
+   {
+    "id": "oCus19gBV",
+    "fieldData": {
+     "EXFrlMu4f": {
+      "type": "image",
+      "value": "https://framerusercontent.com/images/FZO3dvBHGziwwWxLG53RHH5DQ.png"
+     }
+    }
+   },
+   {
+    "id": "YFDxlQ9xl",
+    "fieldData": {
+     "EXFrlMu4f": {
+      "type": "image",
+      "value": "https://framerusercontent.com/images/szLPAneLVSFvCSagSj9UtPWmsU0.png"
+     }
+    }
+   },
+   {
+    "id": "d9UFi4oD3",
+    "fieldData": {
+     "EXFrlMu4f": {
+      "type": "image",
+      "value": "https://framerusercontent.com/images/iBGvdxHSrgphLBeodNPglc3uFtc.png"
+     }
+    }
+   },
+   {
+    "id": "TiaL2Xgxr",
+    "fieldData": {
+     "EXFrlMu4f": {
+      "type": "image",
+      "value": "https://framerusercontent.com/images/wZxo3vOPr1Tv8ZyNDXLIYu6Y5Fk.png"
+     }
+    }
+   },
+   {
+    "id": "cl1wNovhX",
+    "fieldData": {
+     "EXFrlMu4f": {
+      "type": "image",
+      "value": "https://framerusercontent.com/images/Uq0j9YQUQboz6n4gh7nK4mmq0g.png"
+     }
+    }
+   }
+  ],
+  "galleryPosts": [],
+  "videoYouTube": null,
+  "videoUpload": null,
+  "videoVimeo": null,
+  "outcome": "Approved by the agency's creative director.",
+  "press": "<p dir=\"auto\"><br class=\"trailing-break\"></p>"
+ },
+ {
+  "id": "dNUYnViBz",
+  "slug": "morpho",
+  "draft": false,
+  "projectName": "Morpho",
+  "linkText": "studiomorpho.com",
+  "linkUrl": "https://studiomorpho.framer.ai",
+  "color": "rgb(43, 77, 229)",
+  "isTemplate": false,
+  "year": "2024",
+  "type": "Branding • Interface • Framer Development",
+  "what": "Website",
+  "description": "Studio Morpho is a branding and web design agency built on a simple idea: brands evolve, and their websites should evolve with them. Its old site had none of that motion. It felt generic, with little of the studio’s personality or point of view. The brief was to create a digital presence that felt considered and confident without slipping into corporate restraint or visual noise.",
+  "challenge": "The site needed to feel distinctive without trying too hard: confident, not loud; polished, not sterile. It had to position Morpho as a creative partner with taste, precision, and strategic judgment while staying clear and easy to use.",
+  "solution": "I designed and built the site in Framer around a clear structure, sharper copy, and subtle interactions that keep the page moving without competing with the work. Elegant typography and deliberate pacing give the studio a more confident presence, and every detail supports the same message: Morpho knows how to turn good taste into useful design.",
+  "thumb": "https://framerusercontent.com/images/KVLnm3X9cZsGyTeceTxK8TCfcwY.png",
+  "heroImage": "https://framerusercontent.com/images/p0Ye6aSFxNxtyUJyBatmOZLaTo.png",
+  "gallery": [
+   {
+    "id": "kDQ6n0_Q2",
+    "fieldData": {
+     "EXFrlMu4f": {
+      "type": "image",
+      "value": "https://framerusercontent.com/images/RgqivLTzn8aAFIS2jrftOsJokTo.png"
+     }
+    }
+   },
+   {
+    "id": "O4G1TZWoL",
+    "fieldData": {
+     "EXFrlMu4f": {
+      "type": "image",
+      "value": "https://framerusercontent.com/images/M5wy1MDmjBSeOTOdcu8FR43n9Nc.png"
+     }
+    }
+   }
+  ],
+  "galleryPosts": [],
+  "videoYouTube": null,
+  "videoUpload": null,
+  "videoVimeo": null,
+  "outcome": "",
+  "press": "<p dir=\"auto\"><br class=\"trailing-break\"></p>"
+ },
+ {
+  "id": "MYYXSJIbD",
+  "slug": "prattu",
+  "draft": false,
+  "projectName": "Prattu",
+  "linkText": "https://apps.apple.com/br/app/prattu",
+  "linkUrl": "https://apps.apple.com/br/app/prattu/id6504876416",
+  "color": "rgb(126, 217, 87)",
+  "isTemplate": false,
+  "year": "2024",
+  "type": "UX Architecture • Interface",
+  "what": "App",
+  "description": "Prattu is a delivery app without the delivery: you order, pick up and eat, with no fees. And there's a social layer. You see where your friends are actually eating and get recommendations from people you know, not from an algorithm.",
+  "challenge": "A lot of screens that had to feel like one thing. Ordering and social discovery usually live apart, and here they share the same interface: fast for someone who just wants to eat, engaging for someone who wants to browse. At that volume the risk isn't one bad screen. It's dozens of screens that don't look like they came from the same place.",
+  "solution": "They came in with the strategy settled, positioning, features and model, so I started by auditing what already existed: the scope, the flows, what was holding up and what wasn't. Some journeys I changed. Some screens didn't exist yet and I added them. Then the full set of screens in Figma, with hierarchy, states and components consistent across the product, so the social layer never gets in the way of ordering and ordering never kills the browsing. The idea arrived solved. Making it hold up as a product didn't.",
+  "thumb": "https://framerusercontent.com/images/iS5bWnQ9qvfj61aENpgRsLzRNQM.png",
+  "heroImage": "https://framerusercontent.com/images/GjcGfqQkIPo7uJfKBv1Bvyfo0.png",
+  "gallery": [
+   {
+    "id": "P5_9B0a1r",
+    "fieldData": {
+     "EXFrlMu4f": {
+      "type": "image",
+      "value": "https://framerusercontent.com/images/qYI4U1YFJeexwKVuIHQlGtsJfJY.png"
+     }
+    }
+   },
+   {
+    "id": "KwS7raoH4",
+    "fieldData": {
+     "EXFrlMu4f": {
+      "type": "image",
+      "value": "https://framerusercontent.com/images/AkC1xBba5jumqRnCUJAjG4FbtPo.png"
+     }
+    }
+   },
+   {
+    "id": "e6ttagAFg",
+    "fieldData": {
+     "EXFrlMu4f": {
+      "type": "image",
+      "value": "https://framerusercontent.com/images/ByPwynfcoPLOs7z8MWjraY1sf48.png"
+     }
+    }
+   },
+   {
+    "id": "J1ApoHGOa",
+    "fieldData": {
+     "EXFrlMu4f": {
+      "type": "image",
+      "value": "https://framerusercontent.com/images/7o9roh1sIY2X6b8TMJ57YjhFncg.png"
+     }
+    }
+   },
+   {
+    "id": "c6FtwGqYw",
+    "fieldData": {
+     "EXFrlMu4f": {
+      "type": "image",
+      "value": "https://framerusercontent.com/images/3e4Aeo3qgKS422YV9XpzUsQh1Y.png"
+     }
+    }
+   }
+  ],
+  "galleryPosts": [],
+  "videoYouTube": null,
+  "videoUpload": "https://framerusercontent.com/assets/IG7yId7UZAVoCMLalukjxD4PjQ.mp4",
+  "videoVimeo": null,
+  "outcome": "Live on the App Store.",
+  "press": "<p dir=\"auto\"><br class=\"trailing-break\"></p>"
+ },
+ {
+  "id": "blwKqdmtp",
+  "slug": "go-ink",
+  "draft": false,
+  "projectName": "Go Ink",
+  "linkText": "goink.com.br",
+  "linkUrl": "https://goink.framer.ai",
+  "color": "rgb(255, 91, 19)",
+  "isTemplate": false,
+  "year": "2023",
+  "type": "Product Strategy • Brand • Interface",
+  "what": "Personal project · App",
+  "description": "Go Ink is a marketplace where tattoo artists only sell the work they actually want to do, each piece already priced, sized and placed on the body. No client and no brief: I built it alone, out of something I watched happen for years while I ran a tattoo studio.",
+  "challenge": "Artists were constantly posting drawings on Facebook captioned \"available to tattoo.\" Their weeks were full of commercial work: the same lettering, the same little hearts, the same names. Meanwhile the pieces they were dying to make sat stranded in a sketchbook. And clients kept asking for the safe thing, because the safe thing was all they'd ever been shown. Every platform in the category sold the artist's time. None of them sold the artist's work.",
+  "solution": "Go Ink flips who chooses: the artist uploads only the pieces they want to tattoo, each one already priced, sized and placed on the body. The client swipes, picks one and books the session.\n\nI took it end to end on my own: market research, product strategy, the name, the logo, the app, the site and the T-shirt.",
+  "thumb": "https://framerusercontent.com/images/mMoTMdXWpPO55AjoarNJEVwxFM.jpg",
+  "heroImage": "https://framerusercontent.com/images/UmWw6hYRX2osXcebDShkiekDuE.png",
+  "gallery": [
+   {
+    "id": "Nu8NmqRt5",
+    "fieldData": {
+     "EXFrlMu4f": {
+      "type": "image",
+      "value": "https://framerusercontent.com/images/CytSZxwVMT6PkH5xNkq7xCjlI.png"
+     }
+    }
+   },
+   {
+    "id": "eYLWuHjOT",
+    "fieldData": {
+     "EXFrlMu4f": {
+      "type": "image",
+      "value": "https://framerusercontent.com/images/h0CeYErkJ8vuxnes6VLzzsO8Uo.png"
+     }
+    }
+   },
+   {
+    "id": "qXKEUXXEc",
+    "fieldData": {
+     "EXFrlMu4f": {
+      "type": "image",
+      "value": "https://framerusercontent.com/images/3ruhkzp7WyIwAu6l0BHJbo2ENo.png"
+     }
+    }
+   }
+  ],
+  "galleryPosts": [],
+  "videoYouTube": "https://www.youtube.com/watch?v=A2U0nzGS094",
+  "videoUpload": null,
+  "videoVimeo": null,
+  "outcome": "",
+  "press": "<p dir=\"auto\"><br class=\"trailing-break\"></p>"
+ }
 ]
