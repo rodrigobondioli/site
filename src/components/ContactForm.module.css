@@ -20,28 +20,33 @@
   resize: vertical;
   transition:
     border-color var(--fast) var(--ease),
-    box-shadow var(--fast) var(--ease);
+    border-width var(--fast) var(--ease),
+    color var(--fast) var(--ease);
 }
 .field textarea { min-height: 100px; }
 .field input::placeholder,
 .field textarea::placeholder { color: var(--ink-60); }
 
-/* O fio engrossa no clique do mouse — é o retorno visual de "estou aqui". */
-.field input:focus,
-.field textarea:focus {
-  outline: none;
-  border-bottom-color: var(--ink);
-}
+/* Sem caixa de contorno. O foco se anuncia por dentro do campo: o fio
+   passa de cinza fino a preto grosso e o texto de apoio escurece junto.
 
-/* Mas quem chega pelo teclado precisa de mais que um fio de 1px mudando de
-   cinza pra preto. Estes são os únicos campos editáveis do site: o anel
-   volta, colado no campo, sem o `outline: none` que o matava antes. */
+   Isso substitui o `:focus-visible` com `outline`, que é o padrão do
+   resto do site — aqui ele desenhava um retângulo em volta do campo e
+   brigava com a régua fina que é a única moldura do formulário. A troca é
+   legítima porque o indicador continua existindo e é forte: 1px cinza
+   viram 2px pretos, mudança que ninguém perde de vista. O que não podia
+   era ficar sem indicador nenhum, que era o estado antes de hoje. */
+.field input:focus,
+.field textarea:focus,
 .field input:focus-visible,
 .field textarea:focus-visible {
-  outline: 2px solid var(--ink);
-  outline-offset: 4px;
+  outline: none;
+  color: var(--ink);
   border-bottom-color: var(--ink);
+  border-bottom-width: 2px;
 }
+.field input:focus::placeholder,
+.field textarea:focus::placeholder { color: var(--ink); }
 
 /* Campo com problema: o fio muda de cor E a mensagem aparece. Cor sozinha
    não serve — quem não distingue vermelho fica sem informação nenhuma. */
