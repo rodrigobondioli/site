@@ -98,11 +98,21 @@
   }
   .statsInner {
     grid-template-columns: 1fr;
-    gap: var(--s2);
+    /* o respiro vem do padding de cada linha, não do gap: é o que deixa a
+       régua no meio exato entre uma e outra */
+    gap: 0;
   }
   /* empilhado, alinhar à esquerda: centrado, cada linha começaria num
      lugar diferente e a coluna de números sumiria */
   .stat { justify-content: flex-start; }
+  /* Uma régua entre as linhas, igual à que corre em cima da faixa. Em três
+     colunas a separação era o espaço; empilhado, espaço sozinho não separa
+     — vira uma lista de três frases soltas. */
+  .stat + .stat {
+    margin-top: var(--s2);
+    padding-top: var(--s2);
+    border-top: var(--hairline) solid var(--rule);
+  }
 }
 
 @media (max-width: 860px) {
