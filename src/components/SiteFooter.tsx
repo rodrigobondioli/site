@@ -1,5 +1,6 @@
 import Link from "next/link"
 import { SpinningLogo } from "./Logo"
+import RollLabel from "./RollLabel"
 import styles from "./SiteFooter.module.css"
 
 /**
@@ -16,6 +17,9 @@ import styles from "./SiteFooter.module.css"
  *
  * A marca gira com as mesmas rajadas da capa: é o mesmo SpinningLogo, não
  * uma cópia da física. Se um dia o vento mudar, muda nos dois.
+ *
+ * E os links de rede dão a mesma cambalhota dos botões e da saída das
+ * páginas de projeto — é o hover do site, não do botão.
  */
 
 const SOCIAL = [
@@ -45,8 +49,9 @@ export function SiteFooter() {
                   target="_blank"
                   rel="noopener noreferrer"
                   className={styles.link}
+                  data-roll-host=""
                 >
-                  {label}
+                  <RollLabel text={label} underline />
                 </a>
               </li>
             ))}
