@@ -22,7 +22,10 @@ export default function SiteNav({
 }) {
   return (
     <header className={`${styles.nav} ${dark ? styles.dark : ""}`}>
-      <Link href="/work" className={styles.brand}>
+      {/* O nome leva pra home. Antes apontava pra /work, o mesmo destino do
+          "Back to portfolio": dois links pro mesmo lugar e nenhuma saída
+          pra capa. */}
+      <Link href="/" className={styles.brand}>
         <strong>Rodrigo Bondioli</strong>
         <span className={styles.dot}>·</span>
         <span className={styles.role}>Nexialist Designer</span>

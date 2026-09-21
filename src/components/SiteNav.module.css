@@ -18,6 +18,12 @@
   font-size: var(--t-body-sm);
   line-height: 1.3;
 }
+/* Sublinha só o nome no hover, não o cargo: o clique é no nome. */
+.brand:hover strong {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-thickness: from-font;
+}
 .brand strong { font-weight: 600; }
 .dot { opacity: 0.45; }
 .role { color: var(--ink-60); }
