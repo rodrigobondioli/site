@@ -40,6 +40,9 @@
 .email { font-weight: 400; }
 
 .bio {
+  /* Normal, nao bold: decisao do Rodrigo em 21/09. O Framer usava 700
+     aqui, mas em tres linhas corridas o bold pesa demais. */
+  font-weight: 400;
   max-width: 34ch;
 }
 
