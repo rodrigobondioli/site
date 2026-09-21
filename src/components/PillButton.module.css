@@ -13,7 +13,7 @@
   background: var(--accent-pink);
   color: var(--ink);
   font-size: 15px;
-  font-weight: 500;
+  font-weight: 400;
   line-height: 20px;
   white-space: nowrap;
   transition: filter var(--fast) var(--ease);

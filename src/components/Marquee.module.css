@@ -32,15 +32,18 @@
   background: var(--accent);
   font-family: var(--font-display), system-ui, sans-serif;
   font-size: var(--t-h5);
-  font-weight: 500;
+  font-weight: 400;
   line-height: 1.1;
   text-transform: uppercase;
   white-space: nowrap;
 }
 
+/* Anda pra esquerda: começa alinhado e escorrega meia pista. Como são duas
+   cópias da lista, ao chegar em -50% o desenho é idêntico ao do começo e o
+   loop reinicia sem pulo. */
 @keyframes slide {
-  from { transform: translate3d(-50%, 0, 0); }
-  to   { transform: translate3d(0, 0, 0); }
+  from { transform: translate3d(0, 0, 0); }
+  to   { transform: translate3d(-50%, 0, 0); }
 }
 
 @media (prefers-reduced-motion: reduce) {
