@@ -101,6 +101,40 @@ npm run build   # gera ./out
 - **`MeetingBar`** entra depois que o hero sai e sai de novo quando a seção
   amarela (`.on-accent`, `#contact`) alcança a altura dela.
 
+## Responsivo: três degraus e uma curva
+
+O site tem **exatamente três breakpoints** — `640`, `900`, `1100`. Não
+existe um quarto. Um valor novo (620, 768, 1024…) é sinal de que a regra
+está compensando um layout que não flexiona; conserte o layout ou suba/desça
+pro degrau vizinho.
+
+- **640** — celular: gutter já está em 16, grade do arquivo vira uma coluna,
+  herói empilha, overline sobe pra 12px.
+- **900** — tablet: grade do arquivo em duas colunas, rodapé empilha, faixa
+  de números solta a altura fixa.
+- **1100** — o bloco de duas colunas da página de projeto vira uma.
+
+**Por que o rodapé quebra em 900 e não em 640:** medido, em 641px os três
+blocos somam 528px numa caixa de 518. Em fila eles estouram *antes* de
+chegar no celular, então a quebra sobe pro degrau de cima. Não baixe isso
+sem medir de novo.
+
+**O gutter não usa media query.** É uma curva só:
+
+    --gutter: max(16px, min(24.375vw - 101px, 8.6vw, 124px));
+
+Até 480 dá 16 (celular). De 480 a 640 sobe em reta até encostar exatamente
+nos 8.6vw. De 640 pra cima é o 8.6vw do Framer, travado em 124. As três
+pernas se encontram nos mesmos valores nas junções — arrastar a janela não
+produz salto. O `@media` que existia aqui fazia 55px virar 16px ao cruzar
+641. **Todo valor de 640 pra cima é idêntico ao do Framer**; mexer na curva
+quebra a paridade de pixel do desktop inteiro.
+
+## Idioma
+
+O site é **em inglês**. Isso vale pro texto visível, `alt`, `aria-label` e
+`title` — comentário de código e mensagem de commit seguem em português.
+
 ## Onde vai cada arquivo
 
 | o quê | pasta |
