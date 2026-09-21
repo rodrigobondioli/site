@@ -1,7 +1,16 @@
 .footer {
   background: var(--bg);
-  /* No Framer: 56 da seção + 48 internos antes da linha do logo */
-  padding-block: calc(var(--s5) * 2) var(--s5);
+  /* O topo daqui é metade de um vão entre seções, não um número próprio.
+     Era `calc(var(--s5) * 2)` = 112 (o 56 da seção + 48 internos do Framer,
+     depois que o 48 virou 56). Só que a regra do sistema diz que o vão se
+     mede ENTRE seções, não por seção: com 176 vindo do fecho, dava 288 —
+     o segundo maior buraco da página, e nenhuma das duas pontas tinha
+     escolhido esse número.
+
+     Agora o rodapé traz 88, o fecho traz 88, e o vão fecha em 176, que é o
+     mesmo de todos os outros da página. Na página de projeto, onde o ritmo
+     é 88, o rodapé sozinho já entrega o vão certo. */
+  padding-block: var(--s6) var(--s5);
 }
 
 .inner {

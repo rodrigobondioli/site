@@ -1,6 +1,9 @@
 .closing {
   background: linear-gradient(var(--accent) 0%, var(--bg) 100%);
-  padding-block: var(--s7);
+  /* Em cima, a quebra maior. Embaixo, metade do vão — a outra metade vem do
+     rodapé. Com 176 dos dois lados o vão dava 288 e o degradê já tinha
+     virado o fundo da página muito antes: era faixa lisa, não respiro. */
+  padding-block: var(--s7) var(--s6);
 }
 
 .inner {

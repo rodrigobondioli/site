@@ -351,9 +351,13 @@
 
 /* ---------- YouTube ---------- */
 
+/* O vão entre o "about" e este vídeo dava 352: 176 de baixo do about mais
+   176 de cima daqui. Era o maior buraco da página e ninguém escolheu esse
+   número — as duas seções escolheram 176 cada uma, sem saber da outra. O
+   about já entrega o vão inteiro, então aqui o topo é zero. */
 .youtube {
   background: var(--accent);
-  padding-top: var(--s7);
+  padding-top: 0;
   padding-bottom: 0;
 }
 .youtubeInner {
