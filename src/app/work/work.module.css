@@ -142,9 +142,12 @@
 
 .intro { display: flex; flex-direction: column; gap: var(--s4); }
 
+/* Sem z-index o irmão seguinte pinta por cima: a régua grudava e o texto
+   passava POR CIMA dela em vez de por baixo. */
 .metaRow {
   position: sticky;
   top: 56px;
+  z-index: 2;
   display: flex;
   justify-content: space-between;
   gap: var(--s3);

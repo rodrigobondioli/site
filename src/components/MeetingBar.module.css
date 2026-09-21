@@ -10,7 +10,7 @@
   display: flex;
   align-items: center;
   gap: 12px;
-  width: min(420px, calc(100vw - var(--s4)));
+  width: min(357px, calc(100vw - var(--s4)));
   height: 64px;
   padding: var(--s1);
   border: 1px solid rgba(255, 255, 255, 0.24);

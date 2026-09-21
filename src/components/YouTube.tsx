@@ -35,6 +35,7 @@ export default function YouTube({
   const [on, setOn] = useState(false)
   const [mounted, setMounted] = useState(false)
   const [sound, setSound] = useState(false)
+  const [playing, setPlaying] = useState(false)
   const host = useRef<HTMLDivElement>(null)
   const frame = useRef<HTMLIFrameElement>(null)
 
@@ -59,6 +60,25 @@ export default function YouTube({
     return () => io.disconnect()
   }, [autoplay, mounted])
 
+  /* O player recarrega o módulo de legenda sozinho — quando o vídeo começa,
+     e de novo a cada volta do loop. Uma rajada no load não segura: tem que
+     insistir enquanto ele estiver tocando. Um postMessage a cada 2s não
+     custa nada perto de deixar legenda aparecendo num vídeo de campanha. */
+  useEffect(() => {
+    if (!playing) return
+    const tick = () => {
+      command("unloadModule", ["captions"])
+      command("unloadModule", ["cc"])
+    }
+    const bursts = [0, 250, 700, 1500].map((ms) => window.setTimeout(tick, ms))
+    const id = window.setInterval(tick, 2000)
+    return () => {
+      bursts.forEach(window.clearTimeout)
+      window.clearInterval(id)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [playing])
+
   function command(func: string, args: unknown[] = []) {
     frame.current?.contentWindow?.postMessage(
       JSON.stringify({ event: "command", func, args }),
@@ -66,20 +86,6 @@ export default function YouTube({
     )
   }
 
-  /**
-   * Desliga a legenda de verdade.
-   *
-   * cc_load_policy=0 é só uma sugestão: se a pessoa tem legenda ligada por
-   * padrão na conta do YouTube, ou se o vídeo tem legenda automática, o
-   * player liga assim mesmo. O jeito que funciona é descarregar o módulo —
-   * "captions" no player antigo, "cc" no HTML5, e os dois nomes custam o
-   * mesmo. E repetir: o player recarrega o módulo quando o vídeo começa,
-   * então uma chamada só no load não segura.
-   */
-  function killCaptions() {
-    command("unloadModule", ["captions"])
-    command("unloadModule", ["cc"])
-  }
 
   function toggleSound() {
     const next = !sound
@@ -103,11 +109,7 @@ export default function YouTube({
             title={title}
             allow="autoplay; encrypted-media; picture-in-picture"
             tabIndex={-1}
-            onLoad={() => {
-              ;[0, 300, 900, 2000, 4000].forEach((ms) =>
-                window.setTimeout(killCaptions, ms)
-              )
-            }}
+            onLoad={() => setPlaying(true)}
           />
         ) : null}
         <button
