@@ -15,6 +15,10 @@ import { useEffect, useRef, type ReactNode } from "react"
  *
  * Curva easeOutCubic: sai rápido e assenta devagar no fim, como o Rodrigo
  * pediu. Linear ficaria mecânico.
+ *
+ * `lag` atrasa a largada: a peça precisa subir mais um tanto da janela
+ * antes de começar. É o que desencontra uma grade inteira — três cards
+ * lado a lado entram na tela juntos, mas não se revelam juntos.
  */
 
 type Props = {
@@ -24,6 +28,8 @@ type Props = {
   span?: number
   /** deslocamento inicial da imagem, em px */
   shift?: number
+  /** atraso da largada, em frações da altura da janela */
+  lag?: number
 }
 
 export default function MaskReveal({
@@ -31,6 +37,7 @@ export default function MaskReveal({
   className,
   span = 0.62,
   shift = 40,
+  lag = 0,
 }: Props) {
   const ref = useRef<HTMLDivElement>(null)
 
@@ -51,7 +58,7 @@ export default function MaskReveal({
     const progress = () => {
       const r = node.getBoundingClientRect()
       const h = window.innerHeight
-      return Math.min(1, Math.max(0, (h - r.top) / (h * span)))
+      return Math.min(1, Math.max(0, (h - r.top - h * lag) / (h * span)))
     }
 
     // estado inicial: mascara quem ainda não começou a entrar
@@ -95,7 +102,7 @@ export default function MaskReveal({
       io.disconnect()
       cancelAnimationFrame(frame)
     }
-  }, [span, shift])
+  }, [span, shift, lag])
 
   /* Sem máscara no HTML de origem, de propósito.
      Se a peça nascesse mascarada e a pessoa recarregasse a página no meio

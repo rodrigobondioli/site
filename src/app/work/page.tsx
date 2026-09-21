@@ -43,6 +43,13 @@ const TAGS = ["Concept", "Brand", "App design", "Landing page"]
 /* Com largura e altura declaradas o navegador reserva a caixa antes da
    imagem chegar. Sem isso a caixa nasce com altura zero, a máscara calcula
    o progresso em cima de uma posição errada e a peça pula quando carrega. */
+/* Desencontro dos cards do arquivo. Três entram na tela lado a lado; se
+   todos largassem no mesmo ponto, a grade piscaria inteira de uma vez.
+   Hash multiplicativo em vez de Math.random: o servidor e o navegador
+   chegam no mesmo número, e o resultado é o mesmo a cada visita — o que
+   varia é de card pra card, não de carregamento pra carregamento. */
+const scatter = (i: number) => ((i * 2654435761) % 1000) / 1000
+
 const SHOTS = [
   { src: "/site/work-2.png", w: 848, h: 834 },
   { src: "/site/work-3.png", w: 848, h: 647 },
@@ -241,14 +248,20 @@ export default function WorkPage() {
             </div>
 
             <ul className={s.grid}>
-              {projects.map((p) => (
+              {projects.map((p, i) => (
                 <li key={p.slug}>
-                  <ProjectCard
-                    slug={p.slug}
-                    name={p.projectName ?? p.slug}
-                    what={p.type}
-                    thumb={asset(p.thumb)}
-                  />
+                  <MaskReveal
+                    lag={0.04 + scatter(i) * 0.2}
+                    span={0.5 + scatter(i + 7) * 0.24}
+                    shift={28}
+                  >
+                    <ProjectCard
+                      slug={p.slug}
+                      name={p.projectName ?? p.slug}
+                      what={p.type}
+                      thumb={asset(p.thumb)}
+                    />
+                  </MaskReveal>
                 </li>
               ))}
             </ul>
