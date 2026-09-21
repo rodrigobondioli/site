@@ -35,22 +35,31 @@
   margin: 0;
 }
 
-/* O e-mail é o mesmo tamanho, mas em peso normal e sublinhado — é o que
-   diferencia o link do rótulo ao lado. */
-.email { font-weight: 400; }
+/* O e-mail em peso normal e sublinhado — é o que o diferencia do rótulo.
+   Um passo abaixo do rótulo no tamanho: no Framer os dois eram 12.8, mas
+   o Rodrigo pediu menor duas vezes. Voltar pra var(--t-body-sm) se mudar
+   de ideia. */
+.email {
+  font-weight: 400;
+  font-size: var(--t-caption);
+}
 
 .bio {
   /* Normal, nao bold: decisao do Rodrigo em 21/09. O Framer usava 700
      aqui, mas em tres linhas corridas o bold pesa demais. */
   font-weight: 400;
-  max-width: 34ch;
+  /* 325px, medido no Framer — cabe em três linhas. Era 34ch, e `ch` muda
+     com o peso da fonte: ao trocar bold por normal o glifo encolheu, a
+     caixa encolheu junto e o texto virou quatro linhas. */
+  max-width: 325px;
 }
 
 .contact {
   display: flex;
   flex-direction: column;
   align-items: flex-end;
-  gap: var(--s1);
+  /* 4px: no Framer o e-mail quase encosta no rótulo */
+  gap: 4px;
   text-align: right;
 }
 
