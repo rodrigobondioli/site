@@ -8,19 +8,32 @@ import styles from "./Brands.module.css"
  *
  * Os nomes ficam aqui, não no texto corrido da bio: assim dá pra mexer na
  * lista sem reescrever o parágrafo.
+ *
+ * Ordem alfabética, de propósito. Com dez nomes qualquer ordem passa por
+ * curadoria; com dezenove, a ordem vira ranking — quem lê entende que os
+ * primeiros são os melhores. O alfabeto não diz nada sobre ninguém.
  */
 
 const BRANDS: [string, string][] = [
+  ["Banco do Brasil", "https://www.bb.com.br"],
+  ["Chevrolet", "https://www.chevrolet.com.br"],
+  ["Cinemark", "https://www.cinemark.com.br"],
   ["Coca-Cola", "https://www.coca-cola.com"],
-  ["Unilever", "https://www.unilever.com"],
-  ["Vivo", "https://www.vivo.com.br"],
-  ["Itaú", "https://www.itau.com.br"],
-  ["Havaianas", "https://www.havaianas.com.br"],
+  ["Embratel", "https://www.embratel.com.br"],
   ["Fiat", "https://www.fiat.com.br"],
-  ["Nike", "https://www.nike.com"],
-  ["Vale", "https://www.vale.com"],
-  ["Harley Davidson", "https://www.harley-davidson.com"],
   ["Ford", "https://www.ford.com"],
+  ["Harley Davidson", "https://www.harley-davidson.com"],
+  ["Havaianas", "https://www.havaianas.com.br"],
+  ["Itaú", "https://www.itau.com.br"],
+  ["Kopenhagen", "https://www.kopenhagen.com.br"],
+  ["L\u2019Oréal Paris", "https://www.loreal-paris.com.br"],
+  ["Moto Guzzi", "https://www.motoguzzi.com"],
+  ["Natura", "https://www.natura.com.br"],
+  ["Nike", "https://www.nike.com"],
+  ["Sony", "https://www.sony.com"],
+  ["Unilever", "https://www.unilever.com"],
+  ["Vale", "https://www.vale.com"],
+  ["Vivo", "https://www.vivo.com.br"],
 ]
 
 export default function Brands({ label }: { label: string }) {

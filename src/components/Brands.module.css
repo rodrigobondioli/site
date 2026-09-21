@@ -11,11 +11,19 @@
   border-bottom: var(--hairline) solid var(--rule);
 }
 
-/* Mesmo estilo do manifesto: Alpha Lyrae, 48/57.6 no desktop. */
+/* Alpha Lyrae, um degrau abaixo do manifesto.
+   A lista nasceu com dez nomes em --t-h2 e ocupava três linhas. Com
+   dezenove, o mesmo corpo dava nove linhas num laptop de 1440 e onze num
+   celular: uma parede de tipo de display, não uma lista. Um degrau abaixo
+   devolve cinco linhas no desktop e sete no celular — 174px de altura,
+   contra os 173px que os dez nomes ocupavam antes.
+
+   Ou seja: os nove nomes novos entram sem custar um pixel de altura, e a
+   coluna do vídeo continua quadrada porque a linha do grid não cresce. */
 .line {
   font-family: var(--font-display), system-ui, sans-serif;
   font-weight: 500;
-  font-size: var(--t-h2);
+  font-size: var(--t-h3);
   line-height: 1.2;
 }
 
