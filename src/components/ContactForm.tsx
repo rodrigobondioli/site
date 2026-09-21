@@ -1,36 +1,25 @@
 "use client"
 
-import { useEffect, useRef, useState } from "react"
+import { useRef, useState } from "react"
 import styles from "./ContactForm.module.css"
 import PillButton from "./PillButton"
 
 /**
- * Formulário de contato. O site é estático — não há servidor pra receber
- * POST. O envio monta um e-mail pré-preenchido e entrega pro cliente de
- * e-mail da pessoa.
+ * Formulário de contato. Envia de verdade: POST pra /api/contact, que
+ * manda o e-mail pela Resend.
  *
- * O problema de `mailto:` é que ele não avisa nada: não há callback, não
- * há erro. Se a pessoa não tem cliente de e-mail configurado, ou o
- * navegador bloqueia a navegação, ela clica e NADA acontece na tela — e
- * não tem como saber se funcionou.
+ * Antes isto era um `mailto:`, que não avisa nada — sem cliente de e-mail
+ * configurado a pessoa clicava e nada acontecia na tela. Agora o servidor
+ * responde, então os estados são reais: enviando, enviado, falhou.
  *
- * A saída é observar o efeito colateral: quando o cliente de e-mail abre,
- * a janela perde o foco. Então disparamos o mailto e esperamos. Se a
- * janela saiu de foco, deu certo. Se em 1,4s continuamos aqui, muito
- * provavelmente não abriu — e aí mostramos o endereço e a mensagem
- * prontos pra copiar, em vez de deixar a pessoa no escuro.
- *
- * Não é detecção perfeita (nada é, com mailto). É a diferença entre errar
- * mostrando uma alternativa e errar não mostrando nada.
- *
- * Se um dia isso virar volume, trocar `abrirEmail` por um fetch pro
- * Resend/Formspree é uma função — os estados abaixo continuam valendo.
+ * O caminho manual continua existindo, mas só como rede: se a rota cair
+ * ou a Resend recusar, a pessoa vê o endereço e a mensagem prontos pra
+ * copiar em vez de perder o que escreveu.
  */
 
 const TO = "hello@rodrigobondioli.com"
-const ESPERA = 1400
 
-type Estado = "parado" | "abrindo" | "aberto" | "manual"
+type Estado = "parado" | "enviando" | "enviado" | "falhou"
 type Erros = { name?: string; email?: string; brief?: string }
 
 /* Deliberadamente frouxo: validação de e-mail que tenta ser esperta
@@ -45,6 +34,8 @@ export default function ContactForm() {
   const [erros, setErros] = useState<Erros>({})
   const [estado, setEstado] = useState<Estado>("parado")
   const [copiado, setCopiado] = useState(false)
+  /* Campo invisível. Robô preenche tudo que encontra; gente não vê. */
+  const [armadilha, setArmadilha] = useState("")
 
   const nameRef = useRef<HTMLInputElement>(null)
   const emailRef = useRef<HTMLInputElement>(null)
@@ -63,44 +54,24 @@ export default function ContactForm() {
     return e
   }
 
-  function abrirEmail() {
-    window.location.href = `mailto:${TO}?subject=${encodeURIComponent(
-      assunto
-    )}&body=${encodeURIComponent(mensagem)}`
+  async function enviar() {
+    setEstado("enviando")
+    try {
+      const r = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, email, brief, website: armadilha }),
+      })
+      if (!r.ok) throw new Error(String(r.status))
+      setEstado("enviado")
+    } catch {
+      setEstado("falhou")
+    }
   }
-
-  /* A janela perdeu o foco enquanto esperávamos: o cliente de e-mail
-     abriu. Fechamos como sucesso e paramos de esperar. */
-  useEffect(() => {
-    if (estado !== "abrindo") return
-
-    let vivo = true
-    const abriu = () => {
-      if (!vivo) return
-      vivo = false
-      setEstado("aberto")
-    }
-
-    window.addEventListener("blur", abriu, { once: true })
-    document.addEventListener("visibilitychange", abriu, { once: true })
-
-    const t = window.setTimeout(() => {
-      if (!vivo) return
-      vivo = false
-      setEstado("manual")
-    }, ESPERA)
-
-    return () => {
-      vivo = false
-      window.clearTimeout(t)
-      window.removeEventListener("blur", abriu)
-      document.removeEventListener("visibilitychange", abriu)
-    }
-  }, [estado])
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
-    if (estado === "abrindo") return
+    if (estado === "enviando") return
 
     const achados = validar()
     setErros(achados)
@@ -114,8 +85,7 @@ export default function ContactForm() {
       return
     }
 
-    setEstado("abrindo")
-    abrirEmail()
+    void enviar()
   }
 
   async function copiarMensagem() {
@@ -128,7 +98,7 @@ export default function ContactForm() {
     }
   }
 
-  const ocupado = estado === "abrindo"
+  const ocupado = estado === "enviando"
 
   return (
     <form className={styles.form} onSubmit={handleSubmit} noValidate>
@@ -211,55 +181,55 @@ export default function ContactForm() {
         ) : null}
       </div>
 
+      {/* Armadilha de robô: fora da tela, sem foco no tab, sem autofill. */}
+      <div className={styles.armadilha} aria-hidden="true">
+        <label htmlFor="cf-website">Website</label>
+        <input
+          id="cf-website"
+          type="text"
+          name="website"
+          tabIndex={-1}
+          autoComplete="off"
+          value={armadilha}
+          onChange={(e) => setArmadilha(e.target.value)}
+        />
+      </div>
+
       <div className={styles.actions}>
-        <PillButton
-          type="submit"
-          busy={ocupado}
-          busyLabel="Opening your email…"
-        >
+        <PillButton type="submit" busy={ocupado} busyLabel="Sending…">
           Start with the problem
         </PillButton>
       </div>
 
-      {/* Os dois desfechos. `aria-live` porque eles aparecem depois do
-          clique, longe de onde o foco está. */}
+      {/* Os desfechos. `aria-live` porque eles aparecem depois do clique,
+          longe de onde o foco está. */}
       <div className={styles.resultado} aria-live="polite">
-        {estado === "aberto" ? (
+        {estado === "enviado" ? (
           <p className={styles.ok}>
-            Your email client should be open with the message ready. Didn&rsquo;t
-            open?{" "}
-            <button type="button" className={styles.link} onClick={() => setEstado("manual")}>
-              Send it by hand
-            </button>
-            .
+            Got it — the message is in my inbox. I answer everything myself,
+            usually within a day.
           </p>
         ) : null}
 
-        {estado === "manual" ? (
+        {estado === "falhou" ? (
           <div className={styles.manual}>
             <p>
-              Your browser didn&rsquo;t open an email client. Write to{" "}
-              <a href={`mailto:${TO}`}>{TO}</a> — or copy everything and paste it
-              into whatever you use.
+              Something broke on the way out — my fault, not yours. Nothing was
+              lost: write to <a href={`mailto:${TO}`}>{TO}</a>, or copy the
+              message below and send it from wherever you like.
             </p>
             <div className={styles.manualActions}>
               <button type="button" className={styles.link} onClick={copiarMensagem}>
                 {copiado ? "Copied" : "Copy message"}
               </button>
-              <button
-                type="button"
-                className={styles.link}
-                onClick={() => {
-                  setEstado("abrindo")
-                  abrirEmail()
-                }}
-              >
+              <button type="button" className={styles.link} onClick={() => void enviar()}>
                 Try again
               </button>
             </div>
           </div>
         ) : null}
       </div>
+
     </form>
   )
 }

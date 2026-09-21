@@ -98,3 +98,13 @@
   cursor: pointer;
 }
 .link:hover { text-decoration-thickness: 2px; }
+
+/* Fora da tela, mas presente no DOM: um robô preenche o que encontra,
+   e é isso que o denuncia. `display: none` alguns robôs sabem pular. */
+.armadilha {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}

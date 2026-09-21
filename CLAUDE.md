@@ -1,7 +1,8 @@
 # rodrigobondioli.com
 
-Site pessoal do Rodrigo Bondioli. Next.js 15 (App Router) com `output: "export"` —
-HTML estático puro, sem servidor. Deploy na Vercel (Hobby), domínio na Hostinger.
+Site pessoal do Rodrigo Bondioli. Next.js 15 (App Router) na Vercel (Hobby).
+Todas as páginas são pré-geradas no build; a única rota de servidor é
+`/api/contact`, que manda o formulário por e-mail.
 
 Saímos do Framer em 21/09/2026 pra cortar custo. **A regra que rege tudo aqui:
 mesma cara do Framer, código e design system novos.**
@@ -62,8 +63,12 @@ npm run build   # gera ./out
   rolagem e mata o `position: sticky` da imagem do destaque.
 - **Scroll suave é Lenis** — o mesmo que o Framer usava (dá pra ver a classe
   `.lenis` no html do site publicado).
-- **Formulário de contato não tem backend.** Site estático não recebe POST; o
-  envio monta um `mailto:`. Trocar por Resend é trocar a função `handleSubmit`.
+- **O formulário envia de verdade**, por `/api/contact` → Resend. Isso é o
+  motivo de o site não ser mais `output: "export"`: export puro não compila
+  rota nenhuma. A conta Resend já tem `send.rodrigobondioli.com` verificado
+  (SPF/DKIM) e uma chave só de envio travada nesse domínio. As variáveis
+  estão em `.env.example`; sem elas a rota responde 500 e o formulário mostra
+  o caminho manual em vez de engolir o que a pessoa escreveu.
 - **Legenda do YouTube:** `cc_load_policy=0` é só sugestão. O player recarrega o
   módulo de legenda a cada volta do loop. Só segura chamando `unloadModule`
   (nos dois nomes, `captions` e `cc`) de tempos em tempos enquanto toca.
