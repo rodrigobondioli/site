@@ -1,163 +1,173 @@
-/* Página de projeto. Fundo escuro, ao contrário do resto do site: aqui o
-   trabalho é que tem que brilhar, e imagem de tela clara some no branco.
+/* Página de projeto. Medida no Framer, não estimada.
 
-   O sistema é o mesmo da /work — mesmos sete passos de espaçamento, mesmas
-   réguas de largura fixa, nada arredondado. A única coisa nova é `--tint`,
-   a cor do próprio projeto, que entra em doses pequenas: a linha da capa e
-   a seta do próximo. Usada em área grande ela brigaria com as imagens. */
+   Tudo aqui sai de três números: a capa é 16:9, o intervalo entre blocos é
+   88, e os blocos de texto são duas colunas de 420 e resto com 88 no meio.
+   O resto do sistema é o mesmo da /work — mesmas fontes, mesma régua,
+   nada arredondado. */
 
-.page { padding-bottom: var(--s7); }
+.page { background: var(--bg-dark); }
 
 /* ---------- Capa ---------- */
 
-.hero { padding-top: var(--s6); }
-.heroInner {
-  display: flex;
-  flex-direction: column;
-  gap: var(--s5);
-}
+.heroSection { padding-top: var(--s6); }
 
-.heroText {
-  display: flex;
-  flex-direction: column;
-  gap: var(--s3);
-  padding-bottom: var(--s4);
-  border-bottom: var(--hairline) solid var(--tint, var(--rule));
-}
-
-/* O separador é desenhado, não digitado: se `what` faltar, não sobra um
-   ponto órfão depois do ano. */
-.sep { padding-inline: 0.5em; opacity: 0.5; }
-
-.title { text-wrap: balance; }
-
-.heroImage { width: 100%; }
-.heroImage img { width: 100%; height: auto; }
-
-/* ---------- Ficha e descrição ---------- */
-
-.intro { padding-top: var(--s6); }
-.introInner {
-  display: flex;
-  flex-direction: column;
-  gap: var(--s5);
-}
-
-.metaRow {
-  display: flex;
-  justify-content: space-between;
-  gap: var(--s3);
-  padding-bottom: var(--s2);
-  border-bottom: var(--hairline) solid var(--rule);
-}
-.metaRow a:hover { text-decoration: underline; text-underline-offset: 3px; }
-
-/* A linha de abertura não atravessa a tela inteira: passando de ~70
-   caracteres o olho perde o começo da linha seguinte. */
-.lead { max-width: 62ch; }
-
-/* ---------- Vídeo ---------- */
-
-.videoSection { padding-top: var(--s6); }
-
-/* ---------- Problema e resposta ---------- */
-
-.case { padding-top: var(--s7); }
-.caseInner {
-  display: flex;
-  flex-direction: column;
-  gap: var(--s5);
-}
-
-.block {
-  display: flex;
-  flex-direction: column;
-  gap: var(--s3);
-  max-width: 62ch;
-}
-
-/* Imagem menor que a coluna fica centrada, não esticada — ampliar peça de
-   interface além do tamanho original borra o texto dentro dela. */
-.shot {
-  width: 100%;
-  max-width: max-content;
-  margin-inline: auto;
+/* A imagem não é cortada: o Framer usa `contain` dentro de uma caixa 16:9.
+   Peça de interface esticada ou cortada perde o que ela tem pra mostrar. */
+.hero {
+  aspect-ratio: 16 / 9;
   overflow: hidden;
 }
-.shot img { width: 100%; height: auto; }
+.hero img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
 
-/* ---------- Posts ---------- */
+/* ---------- Nome, disciplinas, ano ---------- */
 
-.posts { padding-top: var(--s7); }
-.postsInner {
+.titleSection { padding-top: var(--s4); }
+
+.titleRow {
   display: flex;
-  flex-direction: column;
+  align-items: center;
   gap: var(--s5);
 }
-.postsGrid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
+
+.name { color: #fff; }
+
+/* As disciplinas e o ano andam juntos, separados por barras. */
+.meta {
+  display: flex;
+  align-items: center;
   gap: var(--s2);
+  color: rgb(128, 128, 128);
 }
-@media (max-width: 900px) { .postsGrid { grid-template-columns: repeat(2, 1fr); } }
-@media (max-width: 600px) { .postsGrid { grid-template-columns: 1fr; } }
 
-/* ---------- Resultado ---------- */
+/* A barra é desenhada entre dois itens, nunca digitada. Quatro projetos não
+   têm link, e no Framer as duas barras ficavam coladas ("GROWTH / / 2015").
+   Com ::before só o item que tem um irmão antes ganha a sua. */
+.metaItem + .metaItem::before {
+  content: "/";
+  padding-right: var(--s2);
+  opacity: 0.6;
+}
+.metaItem a:hover { text-decoration: underline; text-underline-offset: 3px; }
 
-.outcome { padding-top: var(--s7); }
-.outcomeInner {
+@media (max-width: 860px) {
+  .titleRow { flex-direction: column; align-items: flex-start; gap: var(--s3); }
+}
+
+/* ---------- Abertura e régua ---------- */
+
+.leadSection { padding-top: var(--s4); }
+.ruleSection { padding-top: var(--s6); }
+
+.rule {
+  display: block;
+  width: 100%;
+  height: var(--hairline);
+  background: var(--rule-dark);
+}
+
+/* ---------- Corpo ---------- */
+
+.body { padding-top: var(--s6); }
+
+/* 88 entre tudo: bloco de texto, vídeo, galeria. Um intervalo só, do começo
+   ao fim da página — é o que dá o ritmo. */
+.bodyInner {
   display: flex;
   flex-direction: column;
-  gap: var(--s3);
-  padding-top: var(--s4);
-  border-top: var(--hairline) solid var(--rule);
+  gap: var(--s6);
 }
-.outcomeText { max-width: 20ch; text-wrap: balance; }
+
+/* Título à esquerda numa coluna de 420, texto à direita no que sobra. */
+.block {
+  display: grid;
+  grid-template-columns: 420px 1fr;
+  gap: var(--s6);
+  align-items: start;
+}
+.blockTitle { color: #fff; }
+.blockBody { color: #fff; }
+
+@media (max-width: 1000px) {
+  .block { grid-template-columns: 1fr; gap: var(--s3); }
+}
+
+/* ---------- Mídia ---------- */
+
+.video { background: #000; }
+
+/* Uma imagem por linha, 24 entre elas. */
+.gallery {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--s3);
+}
+
+/* Os posts são quadrados de rede social: duas colunas, intervalo menor. */
+.posts {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--s2);
+}
+@media (max-width: 700px) { .posts { grid-template-columns: 1fr; } }
+
+.shot { width: 100%; overflow: hidden; }
+.shot img { width: 100%; height: auto; }
+
+/* ---------- Press ---------- */
 
 .press { display: flex; flex-direction: column; gap: var(--s2); }
+/* O editor do Framer deixava parágrafos vazios pra trás */
 .press p:empty { display: none; }
+.press strong { font-weight: 700; }
 .press a {
   text-decoration: underline;
   text-underline-offset: 3px;
   text-decoration-thickness: from-font;
 }
-.press a:hover { color: var(--tint, inherit); }
+.press a:hover { text-decoration: none; }
 
-/* ---------- Próximo ---------- */
+/* ---------- Anterior e próximo ---------- */
 
-.next { padding-top: var(--s7); }
-.nextInner {
+/* O degradê é o que fecha a página escura: ela escurece até o preto antes
+   do contato claro começar. Sem ele o corte fica seco. */
+.pager {
+  margin-top: var(--s6);
+  background: linear-gradient(#101010 0%, #000 100%);
+}
+.pagerInner {
   display: flex;
+  justify-content: space-between;
   align-items: center;
-  gap: var(--s3);
-  padding-block: var(--s5);
-  border-top: var(--hairline) solid var(--rule);
-  border-bottom: var(--hairline) solid var(--rule);
+  padding-top: var(--s5);
+  padding-bottom: var(--s5);
+  color: #fff;
 }
-.nextName {
-  margin-left: auto;
-  text-align: right;
-}
-.nextArrow {
-  flex: 0 0 auto;
-  display: grid;
-  place-items: center;
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  background: var(--tint, var(--accent-pink));
-  color: var(--ink);
-  transition: transform var(--fast) var(--ease);
-}
-.nextInner:hover .nextArrow { transform: translateX(4px); }
-.nextInner:hover .nextName { text-decoration: underline; text-underline-offset: 6px; }
+.pagerInner a:hover { text-decoration: underline; text-underline-offset: 4px; }
 
-@media (max-width: 640px) {
-  .nextInner { flex-wrap: wrap; }
-  .nextName { margin-left: 0; text-align: left; width: 100%; }
+/* ---------- Contato ---------- */
+
+.closing {
+  background: linear-gradient(var(--accent) 0%, var(--bg) 100%);
+  padding-block: var(--s7);
 }
-
-/* ---------- Voltar ---------- */
-
-.back { padding-top: var(--s6); }
-.backInner { display: flex; }
+.closingInner {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s6);
+  /* o título abaixo se mede por esta caixa, não pela viewport */
+  container-type: inline-size;
+}
+.closingHead { display: flex; flex-direction: column; gap: var(--s4); }
+.closingTitle {
+  font-size: calc(100cqw / 12.05);
+  line-height: 1.1;
+  text-transform: none;
+  text-wrap: nowrap;
+}
+@media (max-width: 700px) {
+  .closingTitle { font-size: var(--t-h1); text-wrap: balance; }
+}

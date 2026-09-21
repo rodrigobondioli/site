@@ -96,10 +96,11 @@ export function hasText(html?: string | null): boolean {
   return html.replace(/<[^>]+>/g, "").replace(/&nbsp;/g, "").trim() !== ""
 }
 
-/** O projeto seguinte na ordem do arquivo; do último volta pro primeiro. */
-export function neighbour(slug: string): Project | null {
+/** Os vizinhos na ordem do arquivo. O primeiro não tem anterior e o último
+ *  não tem próximo: a faixa mostra um lado só, como no Framer. */
+export function around(slug: string): { prev: Project | null; next: Project | null } {
   const lista = orderedProjects(ORDER)
   const i = lista.findIndex((p) => p.slug === slug)
-  if (i < 0 || lista.length < 2) return null
-  return lista[(i + 1) % lista.length]
+  if (i < 0) return { prev: null, next: null }
+  return { prev: lista[i - 1] ?? null, next: lista[i + 1] ?? null }
 }

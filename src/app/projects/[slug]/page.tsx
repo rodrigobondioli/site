@@ -3,28 +3,29 @@ import Link from "next/link"
 import SiteNav from "@/components/SiteNav"
 import SmoothScroll from "@/components/SmoothScroll"
 import { SiteFooter } from "@/components/SiteFooter"
+import MeetingBar from "@/components/MeetingBar"
 import MaskReveal from "@/components/MaskReveal"
 import ProjectVideo from "@/components/ProjectVideo"
-import PillButton from "@/components/PillButton"
+import ContactForm from "@/components/ContactForm"
 import {
   getProject,
   allSlugs,
   asset,
   galleryUrls,
   hasText,
-  neighbour,
+  around,
 } from "@/lib/projects"
 import { imageSize } from "@/lib/imageSize"
 import s from "./project.module.css"
 
-/* Uma página, dezesseis conteúdos. A estrutura abaixo é a mesma pra todos;
-   o que muda é o que vem do projects.json.
+/* Uma página, um conteúdo por projeto. A estrutura abaixo foi medida no
+   Framer, não inventada: capa 16:9 → nome · disciplinas · ano → abertura →
+   régua → os quatro blocos de duas colunas (título à esquerda, texto à
+   direita, 88 de intervalo) com as mídias intercaladas → faixa de anterior
+   e próximo → o mesmo contato da /work.
 
-   Metade dos campos é opcional — vídeo existe em 5 dos 16, outcome em 7,
-   link em 12, press em 1. Por isso cada bloco decide sozinho se aparece:
-   um projeto sem vídeo não deixa buraco, ele simplesmente não tem aquela
-   seção. Foi assim que o template aguentou o Tattoaria (tudo preenchido) e
-   o Gabo (o mínimo) sem virar dois templates. */
+   Metade dos campos é opcional — vídeo em 5 dos 16, outcome em 7, link em
+   12, press em 1. Cada bloco decide sozinho se aparece. */
 
 export function generateStaticParams() {
   return allSlugs().map((slug) => ({ slug }))
@@ -50,6 +51,7 @@ export async function generateMetadata({
   const slug = lerSlug((await params).slug)
   const p = getProject(slug)
   if (!p) return {}
+  const capa = asset(p.heroImage)
   return {
     title: p.projectName ?? slug,
     description: p.description ?? undefined,
@@ -57,24 +59,35 @@ export async function generateMetadata({
     openGraph: {
       title: p.projectName ?? slug,
       description: p.description ?? undefined,
-      images: asset(p.heroImage) ? [asset(p.heroImage) as string] : undefined,
+      images: capa ? [capa] : undefined,
     },
   }
 }
 
-/** Imagem da galeria com as dimensões lidas do arquivo, sob a máscara. */
+/** Bloco de conteúdo: título à esquerda, texto à direita. Os quatro
+ *  (challenge, solution, outcome, press) têm exatamente esta forma. */
+function Block({
+  title,
+  children,
+}: {
+  title: string
+  children: React.ReactNode
+}) {
+  return (
+    <div className={s.block}>
+      <h2 className={`h3 ${s.blockTitle}`}>{title}</h2>
+      <div className={s.blockBody}>{children}</div>
+    </div>
+  )
+}
+
+/** Imagem com as dimensões lidas do arquivo, sob a máscara de revelação. */
 function Shot({ src, alt, lag }: { src: string; alt: string; lag: number }) {
   const size = imageSize(src)
   return (
     <MaskReveal className={s.shot} lag={lag} span={0.58} shift={32}>
       {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img
-        src={src}
-        alt={alt}
-        loading="lazy"
-        width={size?.w}
-        height={size?.h}
-      />
+      <img src={src} alt={alt} loading="lazy" width={size?.w} height={size?.h} />
     </MaskReveal>
   )
 }
@@ -89,201 +102,187 @@ export default async function ProjectPage({
   if (!p) return null
 
   const name = p.projectName ?? slug
-  const hero = asset(p.heroImage)
-  const heroSize = imageSize(hero)
+  const capa = asset(p.heroImage)
+  const capaSize = imageSize(capa)
   const shots = galleryUrls(p.gallery)
   const posts = galleryUrls(p.galleryPosts)
-  const next = neighbour(slug)
-
-  /* A galeria se divide entre os dois textos: um terço ilustra o problema,
-     o resto ilustra a resposta. Com duas imagens dá uma pra cada lado; com
-     nove, três e seis. Nunca sobra bloco vazio. */
-  const corte = Math.ceil(shots.length / 3)
-  const antes = shots.slice(0, corte)
-  const depois = shots.slice(corte)
-
+  const { prev, next } = around(slug)
   const temVideo = Boolean(p.videoYouTube || p.videoVimeo || p.videoUpload)
+
+  /* type / link / ano, separados por barras — mas só entre os que existem.
+     Quatro projetos não têm link, e o Framer deixava as duas barras coladas
+     ("• GROWTH / / 2015"). É o separador órfão: aqui ele não nasce. */
+  const meta: React.ReactNode[] = []
+  if (p.type) meta.push(<span key="type">{p.type}</span>)
+  if (p.linkUrl)
+    meta.push(
+      <a key="link" href={p.linkUrl} target="_blank" rel="noopener noreferrer">
+        {p.linkText ?? p.linkUrl.replace(/^https?:\/\//, "")}
+      </a>
+    )
+  if (p.year) meta.push(<span key="year">{p.year}</span>)
 
   return (
     <>
       <SmoothScroll />
-      <SiteNav dark ctaHref="/work#contact" />
+      <SiteNav dark back ctaHref="#contact" />
 
-      {/* A cor do projeto vira variável local: o acento da página é dele,
-          não do site. */}
-      <main
-        className={`on-dark ${s.page}`}
-        style={p.color ? ({ "--tint": p.color } as React.CSSProperties) : undefined}
-      >
+      <main className={`on-dark ${s.page}`}>
         {/* ---------- Capa ---------- */}
-        <section className={`section ${s.hero}`}>
-          <div className={`container ${s.heroInner}`}>
-            <div className={s.heroText}>
-              <p className="overline">
-                {p.year}
-                {p.what ? <span className={s.sep}>·</span> : null}
-                {p.what}
-              </p>
-              <h1 className={`h1 ${s.title}`}>{name}</h1>
-            </div>
-
-            {hero ? (
-              <MaskReveal className={s.heroImage} span={0.5} shift={24}>
-                {/* eslint-disable-next-line @next/next/no-img-element */}
+        <section className={`section ${s.heroSection}`}>
+          <div className="container">
+            <div className={s.hero}>
+              {capa ? (
+                /* eslint-disable-next-line @next/next/no-img-element */
                 <img
-                  src={hero}
+                  src={capa}
                   alt={name}
-                  width={heroSize?.w}
-                  height={heroSize?.h}
-                  /* a capa é o que a pessoa vê primeiro: carrega na frente */
+                  width={capaSize?.w}
+                  height={capaSize?.h}
+                  /* é o que a pessoa vê primeiro: carrega na frente */
                   fetchPriority="high"
-                />
-              </MaskReveal>
-            ) : null}
-          </div>
-        </section>
-
-        {/* ---------- Ficha e descrição ---------- */}
-        <section className={`section ${s.intro}`}>
-          <div className={`container ${s.introInner}`}>
-            <div className={s.metaRow}>
-              {p.linkUrl ? (
-                <a
-                  className="overline"
-                  href={p.linkUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  {p.linkText ?? p.linkUrl.replace(/^https?:\/\//, "")}
-                </a>
-              ) : (
-                <span className="overline">{name}</span>
-              )}
-              <span className="overline">{p.type}</span>
-            </div>
-
-            {p.description ? (
-              <p className={`body-lg ${s.lead}`}>{p.description}</p>
-            ) : null}
-          </div>
-        </section>
-
-        {/* ---------- Vídeo ---------- */}
-        {temVideo ? (
-          <section className={`section ${s.videoSection}`}>
-            <div className="container">
-              <ProjectVideo
-                youtube={p.videoYouTube}
-                vimeo={p.videoVimeo}
-                file={asset(p.videoUpload)}
-                title={name}
-              />
-            </div>
-          </section>
-        ) : null}
-
-        {/* ---------- Problema e resposta ---------- */}
-        <section className={`section ${s.case}`}>
-          <div className={`container ${s.caseInner}`}>
-            {p.challenge ? (
-              <div className={s.block}>
-                <div className="head-row">
-                  <h2 className="h4">The challenge</h2>
-                  <span className="rule rule-md" />
-                </div>
-                <p className="body">{p.challenge}</p>
-              </div>
-            ) : null}
-
-            {antes.map((src, i) => (
-              <Shot key={src} src={src} alt={`${name} — ${i + 1}`} lag={0.04 + (i % 3) * 0.05} />
-            ))}
-
-            {p.solution ? (
-              <div className={s.block}>
-                <div className="head-row">
-                  <h2 className="h4">The solution</h2>
-                  <span className="rule rule-md" />
-                </div>
-                <p className="body">{p.solution}</p>
-              </div>
-            ) : null}
-
-            {depois.map((src, i) => (
-              <Shot
-                key={src}
-                src={src}
-                alt={`${name} — ${antes.length + i + 1}`}
-                lag={0.04 + (i % 3) * 0.05}
-              />
-            ))}
-          </div>
-        </section>
-
-        {/* ---------- Posts ---------- */}
-        {posts.length ? (
-          <section className={`section ${s.posts}`}>
-            <div className={`container ${s.postsInner}`}>
-              <div className="head-row">
-                <h2 className="h5">Social</h2>
-                <span className="rule rule-sm" />
-              </div>
-              <ul className={s.postsGrid}>
-                {posts.map((src, i) => (
-                  <li key={src}>
-                    <Shot src={src} alt={`${name} — post ${i + 1}`} lag={0.04 + (i % 3) * 0.06} />
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </section>
-        ) : null}
-
-        {/* ---------- Resultado ---------- */}
-        {p.outcome || hasText(p.press) ? (
-          <section className={`section ${s.outcome}`}>
-            <div className={`container ${s.outcomeInner}`}>
-              <p className="overline">Outcome</p>
-              {p.outcome ? <p className={`h3 ${s.outcomeText}`}>{p.outcome}</p> : null}
-              {hasText(p.press) ? (
-                <div
-                  className={s.press}
-                  /* HTML do nosso próprio CMS, exportado do Framer: são
-                     parágrafos e links, nada de script. Só o Tattoaria usa. */
-                  dangerouslySetInnerHTML={{ __html: p.press as string }}
                 />
               ) : null}
             </div>
-          </section>
-        ) : null}
-
-        {/* ---------- Próximo ---------- */}
-        {next ? (
-          <section className={`section ${s.next}`}>
-            <Link href={`/projects/${next.slug}`} className={`container ${s.nextInner}`}>
-              <span className="overline">Next project</span>
-              <span className={`h2 ${s.nextName}`}>
-                {next.projectName ?? next.slug}
-              </span>
-              <span className={s.nextArrow} aria-hidden="true">
-                <svg viewBox="0 0 18 18" width="18" height="18" fill="none"
-                     stroke="currentColor" strokeWidth="1.6"
-                     strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M3.5 9h11M10 4.5 14.5 9 10 13.5" />
-                </svg>
-              </span>
-            </Link>
-          </section>
-        ) : null}
-
-        <section className={`section ${s.back}`}>
-          <div className={`container ${s.backInner}`}>
-            <PillButton href="/work#projects">See all work</PillButton>
           </div>
         </section>
+
+        {/* ---------- Nome, disciplinas, ano ---------- */}
+        <section className={`section ${s.titleSection}`}>
+          <div className={`container ${s.titleRow}`}>
+            <h1 className={`h3 ${s.name}`}>{name}</h1>
+            <p className={`overline ${s.meta}`}>
+              {meta.map((n, i) => (
+                <span className={s.metaItem} key={i}>
+                  {n}
+                </span>
+              ))}
+            </p>
+          </div>
+        </section>
+
+        {/* ---------- Abertura ---------- */}
+        {p.description ? (
+          <section className={`section ${s.leadSection}`}>
+            <p className={`container body-lg`}>{p.description}</p>
+          </section>
+        ) : null}
+
+        <div className={`section ${s.ruleSection}`}>
+          <div className="container">
+            <span className={s.rule} />
+          </div>
+        </div>
+
+        {/* ---------- O problema, e o que veio depois ---------- */}
+        <section className={`section ${s.body}`}>
+          <div className={`container ${s.bodyInner}`}>
+            {p.challenge ? (
+              <Block title="The challenge">
+                <p className="body">{p.challenge}</p>
+              </Block>
+            ) : null}
+
+            {temVideo ? (
+              <div className={s.video}>
+                <ProjectVideo
+                  youtube={p.videoYouTube}
+                  vimeo={p.videoVimeo}
+                  file={asset(p.videoUpload)}
+                  title={name}
+                />
+              </div>
+            ) : null}
+
+            {shots.length ? (
+              <div className={s.gallery}>
+                {shots.map((src, i) => (
+                  <Shot
+                    key={src}
+                    src={src}
+                    alt={`${name} — ${i + 1}`}
+                    lag={0.04 + (i % 3) * 0.05}
+                  />
+                ))}
+              </div>
+            ) : null}
+
+            {p.solution ? (
+              <Block title="The solution">
+                <p className="body">{p.solution}</p>
+              </Block>
+            ) : null}
+
+            {posts.length ? (
+              <div className={s.posts}>
+                {posts.map((src, i) => (
+                  <Shot
+                    key={src}
+                    src={src}
+                    alt={`${name} — post ${i + 1}`}
+                    lag={0.04 + (i % 2) * 0.06}
+                  />
+                ))}
+              </div>
+            ) : null}
+
+            {p.outcome ? (
+              <Block title="The outcome">
+                <p className="body">{p.outcome}</p>
+              </Block>
+            ) : null}
+
+            {hasText(p.press) ? (
+              <Block title="Press">
+                <div
+                  className={`body ${s.press}`}
+                  /* HTML do nosso próprio CMS, exportado do Framer: parágrafos
+                     e links, nada de script. Só o Tattoaria usa. */
+                  dangerouslySetInnerHTML={{ __html: p.press as string }}
+                />
+              </Block>
+            ) : null}
+          </div>
+        </section>
+
+        {/* ---------- Anterior e próximo ---------- */}
+        <nav className={s.pager} aria-label="Outros projetos">
+          <div className={`section ${s.pagerInner}`}>
+            {prev ? (
+              <Link className="overline" href={`/projects/${prev.slug}`}>
+                <span aria-hidden="true">‹ </span>
+                {prev.projectName ?? prev.slug}
+              </Link>
+            ) : (
+              <span />
+            )}
+            {next ? (
+              <Link className="overline" href={`/projects/${next.slug}`}>
+                {next.projectName ?? next.slug}
+                <span aria-hidden="true"> ›</span>
+              </Link>
+            ) : (
+              <span />
+            )}
+          </div>
+        </nav>
       </main>
 
+      {/* ---------- Contato: o mesmo fecho da /work ---------- */}
+      <section className={`section ${s.closing}`} id="contact">
+        <div className={`container ${s.closingInner}`}>
+          <div className={s.closingHead}>
+            <p className="body-lg">
+              Enough about me. Let&rsquo;s talk about your next move.
+            </p>
+            <p className={`h1 ${s.closingTitle}`}>Your next decision.</p>
+          </div>
+          <ContactForm />
+        </div>
+      </section>
+
       <SiteFooter />
+      <MeetingBar />
     </>
   )
 }
