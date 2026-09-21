@@ -140,6 +140,13 @@ input, textarea, select { font: inherit; color: inherit; }
   outline-offset: 3px;
 }
 
+/* No celular o gutter de 8.6vw dava 33px num aparelho de 390 — margem de
+   desktop numa tela onde cada pixel de largura conta. 16 é o --s2, passo
+   que já existe: a margem encolhe sem entrar um número novo no sistema. */
+@media (max-width: 640px) {
+  :root { --gutter: var(--s2); }
+}
+
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   *, *::before, *::after {

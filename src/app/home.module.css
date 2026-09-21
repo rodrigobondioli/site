@@ -11,7 +11,10 @@
 
 /* Exceção de pôster: 32px em todas as bordas, sem o gutter de 124px.
    Está documentada, não é descuido. */
-.page { --gutter-poster: clamp(20px, 3vw, 32px); }
+/* O piso desceu de 20 pra 16 junto com o resto do site: no celular a
+   margem é a mesma em toda página. O teto de 32 fica — aqui a borda é
+   igual nos quatro lados, é pôster, não coluna de texto. */
+.page { --gutter-poster: clamp(16px, 3vw, 32px); }
 
 .top { align-self: start; }
 
