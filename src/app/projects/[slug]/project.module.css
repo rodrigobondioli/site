@@ -15,16 +15,17 @@
    encostava no botão. */
 .heroSection { padding-top: calc(var(--s6) * 2); }
 
-/* A imagem não é cortada: o Framer usa `contain` dentro de uma caixa 16:9.
-   Peça de interface esticada ou cortada perde o que ela tem pra mostrar. */
-.hero {
-  aspect-ratio: 16 / 9;
-  overflow: hidden;
-}
+/* A capa ocupa a largura inteira da coluna e a altura vem da própria
+   imagem. Nada de caixa 16:9 fixa: nove das onze capas são 16:9, mas a do
+   Flashbang e a do Amor de Cão são 4:3 — dentro de uma caixa 16:9 elas
+   ganhavam barras nas laterais e não chegavam na largura certa.
+
+   O `width`/`height` no <img> vem do arquivo, lido em tempo de build, então
+   o navegador já reserva a altura certa antes da imagem chegar. */
 .hero img {
+  display: block;
   width: 100%;
-  height: 100%;
-  object-fit: contain;
+  height: auto;
 }
 
 /* ---------- Nome, disciplinas, ano ---------- */
