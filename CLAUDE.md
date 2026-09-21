@@ -1,0 +1,84 @@
+# rodrigobondioli.com
+
+Site pessoal do Rodrigo Bondioli. Next.js 15 (App Router) com `output: "export"` —
+HTML estático puro, sem servidor. Deploy na Vercel (Hobby), domínio na Hostinger.
+
+Saímos do Framer em 21/09/2026 pra cortar custo. **A regra que rege tudo aqui:
+mesma cara do Framer, código e design system novos.**
+
+## O que está pronto e o que falta
+
+- [x] `/` — capa de uma tela, logo girando (física própria, portada do Framer)
+- [x] `/thanks`
+- [x] `/work` — a página grande: hero, destaque, arquivo, sobre, YouTube, contato
+- [ ] `/projects/[slug]` — 16 páginas, conteúdo em `src/content/projects.json`.
+      Estrutura extraída do Framer está descrita na conversa; o template é
+      escuro (`--bg-dark`), ao contrário do resto do site.
+- [ ] `/mediakit` — conteúdo em `src/content/mediakit.json` (era `/mediakit/home`
+      no Framer; a URL nova é `/mediakit`)
+
+As URLs antigas foram mantidas. Só essa mudou.
+
+## Como trabalhar nisso
+
+O jeito que funcionou, e que vale repetir: **medir o Framer, não estimar.**
+
+O site antigo continua publicado em <https://only-experiment-626593.framer.app>.
+Abrir a página lá e a nossa lado a lado, e comparar com `getComputedStyle` —
+não no olho. Quase todo erro desta migração veio de estimar em vez de medir:
+raio de borda que não existia, entrelinha 1.5 onde era 1.3, largura máxima de
+container que o Framer não tem, régua de 88 onde era 224.
+
+Duas armadilhas que já custaram tempo:
+
+1. **Nem todo "efeito" é animação.** A régua do projeto em destaque sobe sozinha
+   e só depois o texto chega — isso é *layout*, 788px de espera, não um fade.
+   Medir a distância entre os elementos antes de escrever qualquer `transition`.
+2. **`100vw` conta a barra de rolagem.** Foi o que criou scroll horizontal no
+   ticker. Usar `100%` e deixar a seção cortar.
+
+```bash
+npm run dev     # localhost:3000
+npm run build   # gera ./out
+```
+
+## Decisões que não são negociáveis sem falar com o Rodrigo
+
+- **Fontes:** só Alpha Lyrae (títulos) e Inter (resto). Ele mandou apagar o
+  resto. Alpha Lyrae é SIL OFL 1.1, auto-hospedada em `public/fonts`.
+- **Espaçamento:** sete passos, `--s1` a `--s7` em `globals.css`. O Framer tinha
+  acumulado 19 valores onde o sistema documentava 7. Não inventar um oitavo.
+- **Réguas** (as linhas curtas ao lado dos títulos) têm largura fixa por
+  instância: `.rule-lg` 224, `.rule-md` 156, `.rule-sm` 88. Isso foi decisão
+  dele depois de um teste com `1fr` que deu errado — a linha encostava no texto.
+  Não "consertar" isso.
+- **Nada arredondado** no `/work`. Thumbs, vídeos e imagens são de canto vivo.
+- **Botão:** sempre `PillButton`. Rosa, texto preto, 48 de altura, cambalhota 3D
+  no hover.
+
+## Armadilhas do projeto
+
+- **`overflow-x: clip`** no html/body, não `hidden`: `hidden` vira contexto de
+  rolagem e mata o `position: sticky` da imagem do destaque.
+- **Scroll suave é Lenis** — o mesmo que o Framer usava (dá pra ver a classe
+  `.lenis` no html do site publicado).
+- **Formulário de contato não tem backend.** Site estático não recebe POST; o
+  envio monta um `mailto:`. Trocar por Resend é trocar a função `handleSubmit`.
+- **Legenda do YouTube:** `cc_load_policy=0` é só sugestão. O player recarrega o
+  módulo de legenda a cada volta do loop. Só segura chamando `unloadModule`
+  (nos dois nomes, `captions` e `cc`) de tempos em tempos enquanto toca.
+- **Imagens dos projetos** estão em `public/projects/<slug>/`. O CMS do Framer
+  guardava URLs de `framerusercontent.com`; `src/content/assets.json` traduz
+  URL → arquivo local, e `asset()` em `src/lib/projects.ts` faz a busca.
+- **`_site-v2-descarte/`, `site-v2/`, `quak/`, `antipato/`** e afins são entulho
+  do repo antigo. Estão no `.gitignore` e fora do `tsconfig`. Não entram no build.
+
+## Onde vai cada arquivo
+
+| o quê | pasta |
+|---|---|
+| fotos, avatar, logos do site | `public/images/` |
+| assets da página `/work` | `public/site/` |
+| vídeos | `public/video/` |
+| imagens dos projetos | `public/projects/<slug>/` |
+| logos de cliente | `public/logos/` |
