@@ -1,0 +1,33 @@
+.page {
+  /* 100svh em vez de 100vh: no iOS a barra de URL não corta mais o conteúdo */
+  min-height: 100svh;
+  display: grid;
+  place-items: center;
+  padding: var(--s5) var(--gutter);
+  background-color: var(--ink);
+  background-image: url("/images/thanks-bg.webp");
+  background-size: cover;
+  background-position: center;
+  color: #fff;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--s2);
+  padding: clamp(var(--s4), 6vw, 56px);
+  border: var(--hairline) solid #fff;
+  text-align: center;
+  /* legibilidade sobre a foto, sem escurecer a imagem inteira */
+  backdrop-filter: blur(2px);
+  background: rgba(16, 16, 16, 0.25);
+}
+
+.rule {
+  width: 100%;
+  height: var(--hairline);
+  margin: 0;
+  border: 0;
+  background: #fff;
+}

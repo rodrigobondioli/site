@@ -1,0 +1,76 @@
+.footer {
+  background: var(--bg);
+  padding-block: var(--s5);
+}
+
+.inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s4);
+}
+
+.logo {
+  flex: 0 0 auto;
+  display: block;
+}
+
+/* --- Redes --- */
+
+.social {
+  display: flex;
+  align-items: center;
+  gap: var(--s3);
+}
+
+/* O "/" é desenhado, não é nó de texto. Se um link sair, o separador sai
+   junto — nunca sobra uma barra órfã. */
+.social li + li::before {
+  content: "/";
+  margin-right: var(--s3);
+  color: var(--ink-25);
+}
+
+.link {
+  font-size: var(--t-body-sm);
+  color: var(--ink);
+  transition: opacity var(--fast) var(--ease);
+}
+.link:hover { opacity: 0.55; }
+
+/* --- Assinatura --- */
+
+.signature {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s1);
+  font-size: var(--t-body-sm);
+  color: var(--ink);
+  white-space: nowrap;
+}
+
+.mark {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--ink);
+}
+
+/* --- Mobile --- *
+ * O space-between de três filhos não cabe em telas estreitas: as redes
+ * espremem e a assinatura quebra no meio. Abaixo de 720px cada bloco
+ * ganha a própria linha. */
+@media (max-width: 720px) {
+  .inner {
+    flex-direction: column;
+    gap: var(--s4);
+    text-align: center;
+  }
+
+  .social {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--s2);
+  }
+  .social li + li::before { margin-right: var(--s2); }
+}

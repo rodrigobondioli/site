@@ -1,0 +1,254 @@
+/* =========================================================================
+   rodrigobondioli.com — design system
+   Escrito do zero em 21/09/2026. Não herda a escala do Framer.
+
+   O Framer acumulou 19 valores de espaçamento onde o sistema documentava 7.
+   Aqui são 7, sem exceção, e o que mudava de tamanho entre breakpoints agora
+   escala sozinho com clamp() — não existe mais "valor de tablet" e "valor de
+   phone" pra desencontrar.
+   ========================================================================= */
+
+/* ---------- 1. Tokens ---------- */
+
+:root {
+  /* --- Cor. Paleta do Rodrigo, mantida. --- */
+  --bg:             #f1f1f1;   /* fundo padrão */
+  --bg-dark:        #101010;   /* páginas de projeto */
+  --ink:            #101010;
+  --ink-60:         rgba(16, 16, 16, 0.6);
+  --ink-25:         rgba(16, 16, 16, 0.25);
+  --ink-10:         rgba(16, 16, 16, 0.1);
+  --paper:          #ffffff;
+  --paper-40:       rgba(242, 242, 242, 0.4);
+  --rule:           rgba(16, 16, 16, 0.1);   /* hairline em fundo claro */
+  --rule-dark:      rgba(242, 242, 242, 0.2); /* hairline em fundo escuro */
+
+  --accent:         #e7f99a;   /* verde-limão — destaques */
+  --accent-violet:  #6d08ee;   /* roxo — seção de contato */
+  --accent-pink:    #ff00d7;
+  --accent-cyan:    #00fff6;
+
+  --ok:             #1f8f5e;
+  --warn:           #c77b00;
+  --err:            #d42d2d;
+
+  /* --- Espaçamento. Sete passos. Base 8. --- *
+   * Os quatro primeiros são fixos: dentro de um componente, distância não
+   * deve mudar com a largura da tela. Os três últimos são fluidos, porque
+   * respiro de seção em 390px e em 1920px não pode ser o mesmo número.     */
+  --s1: 8px;    /* ícone → label, pares inline. Piso. Nada abaixo disso.  */
+  --s2: 16px;   /* itens de lista, gap de grid, interior de pílula         */
+  --s3: 24px;   /* padding de card                                        */
+  --s4: 32px;   /* blocos dentro de uma seção                             */
+  --s5: clamp(32px,  4vw,  56px);   /* separação de grupos                */
+  --s6: clamp(56px,  7vw,  88px);   /* entre seções                       */
+  --s7: clamp(88px, 12vw, 176px);   /* quebra maior de seção              */
+
+  /* --- Layout --- *
+   * Gutter fluido: 24px no celular, 124px no desktop, sem degrau.
+   * O contêiner é obrigatório em toda seção — era a regra que a produção
+   * não cumpria em nenhum lugar.                                          */
+  --gutter: clamp(24px, 6.5vw, 124px);
+  --container: 1440px;
+  --measure: 68ch;   /* medida máxima de texto corrido */
+
+  /* --- Tipografia --- *
+   * Escala fluida. O número do Framer vira o teto, e abaixo disso encolhe
+   * proporcionalmente. h1 de 5rem em 1440px não cabe em 390px.            */
+  --t-h1: clamp(2.5rem, 7vw,   5rem);
+  --t-h2: clamp(2rem,   4.5vw, 3rem);
+  --t-h3: clamp(1.4rem, 2.5vw, 1.81rem);
+  --t-h4: clamp(1.25rem, 2vw,  1.5rem);
+  --t-h5: 1rem;
+  --t-body-lg: clamp(1rem,   1.4vw, 1.2rem);
+  --t-body:    1rem;
+  --t-body-sm: 0.8rem;
+  --t-caption: 0.7rem;
+  --t-overline: 0.7rem;
+
+  /* --- Forma --- */
+  --r-control: 8px;
+  --r-card: 16px;
+  --r-pill: 999px;
+  --hairline: 1px;
+
+  /* --- Movimento --- */
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --fast: 160ms;
+  --slow: 420ms;
+}
+
+/* ---------- 2. Reset ---------- */
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html {
+  -webkit-text-size-adjust: 100%;
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-body), system-ui, sans-serif;
+  font-size: var(--t-body);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+h1, h2, h3, h4, h5, h6, p, figure, blockquote { margin: 0; }
+ul, ol { margin: 0; padding: 0; list-style: none; }
+img, video, svg, canvas { display: block; max-width: 100%; height: auto; }
+a { color: inherit; text-decoration: none; }
+button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; }
+input, textarea, select { font: inherit; color: inherit; }
+
+/* Foco visível de verdade — some no clique, aparece no teclado */
+:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ---------- 3. Tipografia ---------- */
+
+.h1, .h2, .h3, .h4, .h5 {
+  font-family: var(--font-display), system-ui, sans-serif;
+  font-weight: 500;
+  letter-spacing: 0;
+  /* títulos longos não quebram deixando uma palavra órfã na última linha */
+  text-wrap: balance;
+}
+
+.h1 { font-size: var(--t-h1); line-height: 1;    text-transform: none; }
+.h2 { font-size: var(--t-h2); line-height: 1.05; text-transform: uppercase; }
+.h3 { font-size: var(--t-h3); line-height: 1.2;  text-transform: uppercase; }
+.h4 { font-size: var(--t-h4); line-height: 1.1;  text-transform: uppercase; }
+.h5 { font-size: var(--t-h5); line-height: 1.1;  text-transform: uppercase; }
+
+.overline {
+  font-size: var(--t-overline);
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.body-lg { font-size: var(--t-body-lg); line-height: 1.4; max-width: var(--measure); }
+.body    { font-size: var(--t-body);    line-height: 1.5; max-width: var(--measure); }
+.body-sm { font-size: var(--t-body-sm); line-height: 1.5; }
+.caption { font-size: var(--t-caption); line-height: 1.4; color: var(--ink-60); }
+
+/* ---------- 4. Layout ---------- */
+
+/* Toda seção usa isto. Sem exceção — é a regra que a produção não cumpria. */
+.section {
+  width: 100%;
+  padding-inline: var(--gutter);
+}
+
+.container {
+  width: 100%;
+  max-width: var(--container);
+  margin-inline: auto;
+}
+
+/* Sangria controlada: o filho escapa do gutter sem quebrar o contêiner */
+.bleed {
+  width: 100vw;
+  margin-inline: calc(50% - 50vw);
+}
+
+.stack     { display: flex; flex-direction: column; }
+.row       { display: flex; flex-direction: row; align-items: center; }
+.row-wrap  { display: flex; flex-direction: row; align-items: center; flex-wrap: wrap; }
+.between   { justify-content: space-between; }
+
+.gap-1 { gap: var(--s1); } .gap-2 { gap: var(--s2); } .gap-3 { gap: var(--s3); }
+.gap-4 { gap: var(--s4); } .gap-5 { gap: var(--s5); } .gap-6 { gap: var(--s6); }
+
+/* ---------- 5. Peças recorrentes ---------- */
+
+/* Régua ao lado de um título. Largura fixa de propósito — é acento, não
+   linha divisória. Decisão do Rodrigo em 21/09 depois de um teste que deu
+   errado com 1fr: a linha encostava no texto dos dois lados. */
+.rule {
+  flex: 0 0 auto;
+  width: clamp(56px, 12vw, 156px);
+  height: var(--hairline);
+  background: var(--rule);
+}
+.on-dark .rule { background: var(--rule-dark); }
+
+/* Linha de cabeçalho: TÍTULO — régua — legenda à direita */
+.head-row {
+  display: flex;
+  align-items: center;
+  gap: var(--s3);
+  width: 100%;
+}
+.head-row > :last-child { margin-left: auto; }
+
+@media (max-width: 640px) {
+  /* No celular a régua some: não sobra largura pra ela significar nada */
+  .head-row { flex-wrap: wrap; gap: var(--s2); }
+  .head-row .rule { display: none; }
+  .head-row > :last-child { margin-left: 0; }
+}
+
+/* Pílula. Três tamanhos, nenhum quarto. */
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s2);
+  border-radius: var(--r-pill);
+  background: var(--accent);
+  white-space: nowrap;
+}
+.pill-lg { padding: var(--s2) var(--s4); }
+.pill-md { padding: var(--s2) var(--s3); }
+.pill-sm { padding: var(--s1) var(--s2); gap: var(--s1); background: var(--paper); }
+
+/* Card. Um shell só. */
+.card {
+  border: var(--hairline) solid var(--rule);
+  border-radius: var(--r-card);
+  padding: var(--s3);
+  background: var(--paper);
+}
+/* Cards empilhados compartilham a borda em vez de somar duas */
+.card-stack > .card + .card { border-top: 0; border-radius: 0; }
+.card-stack > .card:first-child { border-radius: var(--r-card) var(--r-card) 0 0; }
+.card-stack > .card:last-child  { border-radius: 0 0 var(--r-card) var(--r-card); }
+
+/* ---------- 6. Tema escuro (páginas de projeto) ---------- */
+
+.on-dark {
+  background: var(--bg-dark);
+  color: #f2f2f2;
+  --rule: var(--rule-dark);
+}
+.on-dark .caption { color: rgba(242, 242, 242, 0.6); }
+
+/* ---------- 7. Utilitários ---------- */
+
+.sr-only {
+  position: absolute;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.tnum { font-variant-numeric: tabular-nums; font-feature-settings: "tnum"; }

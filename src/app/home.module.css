@@ -1,0 +1,66 @@
+/* Home — pôster. Uma tela, sem rolagem. */
+
+.page {
+  /* svh, não vh: no iOS o vh conta a barra de URL e empurra conteúdo pra fora */
+  height: 100svh;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  padding: var(--gutter-poster, 32px);
+  overflow: hidden;
+}
+
+/* Exceção de pôster: 32px em todas as bordas, sem o gutter de 124px.
+   Está documentada, não é descuido. */
+.page { --gutter-poster: clamp(20px, 3vw, 32px); }
+
+.top { align-self: start; }
+
+.center {
+  display: grid;
+  place-items: center;
+}
+
+.bottom {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--s4);
+}
+
+.label {
+  font-size: var(--t-body-sm);
+  font-weight: 600;
+  line-height: 1.35;
+  margin: 0;
+}
+
+.bio {
+  max-width: 34ch;
+}
+
+.contact {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: var(--s1);
+  text-align: right;
+}
+
+/* --- Mobile --- *
+ * O space-between embaixo não cabe: a bio espreme numa coluna de 40% e o
+ * e-mail quebra. Abaixo de 640px vira coluna, bio em cima, contato embaixo,
+ * tudo alinhado à esquerda. */
+@media (max-width: 640px) {
+  .bottom {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--s4);
+  }
+
+  .bio { max-width: none; }
+
+  .contact {
+    align-items: flex-start;
+    text-align: left;
+  }
+}
