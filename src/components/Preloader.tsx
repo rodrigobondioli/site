@@ -112,16 +112,20 @@ export default function Preloader() {
     }
   }, [])
 
-  /* Trava a rolagem enquanto a tela está no ar. `overflow: hidden` no html
-     seria veneno em regime normal (mata o `position: sticky` da página de
-     destaque), mas aqui ele sai junto com a tela. */
+  /* Trava a rolagem enquanto a tela está no ar. Só o eixo vertical: o
+     `overflow-x: clip` da folha global tem que continuar valendo, senão o
+     ticker inclinado volta a criar rolagem lateral.
+
+     Quem impede o salto de ~15px quando a barra some e volta é o
+     `scrollbar-gutter: stable` no html — sem ele a página inteira
+     escorrega de lado no instante em que esta tela sai. */
   useEffect(() => {
     if (fora) return
     const html = document.documentElement
-    const anterior = html.style.overflow
-    html.style.overflow = "hidden"
+    const anterior = html.style.overflowY
+    html.style.overflowY = "hidden"
     return () => {
-      html.style.overflow = anterior
+      html.style.overflowY = anterior
     }
   }, [fora])
 

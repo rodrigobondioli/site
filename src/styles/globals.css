@@ -88,6 +88,12 @@ html {
   /* clip, nao hidden: hidden viraria contexto de rolagem e mataria o
      position:sticky da imagem do projeto em destaque */
   overflow-x: clip;
+  /* O espaço da barra de rolagem fica reservado mesmo quando não há barra.
+     Sem isto, travar a rolagem (a tela de carregamento faz isso) some com
+     a barra, a página fica ~15px mais larga e tudo escorrega de lado
+     quando ela volta. Também iguala a largura entre uma página que rola e
+     outra que não rola. */
+  scrollbar-gutter: stable;
 }
 
 body {
