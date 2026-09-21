@@ -1,3 +1,16 @@
+/* Mesmo invólucro do meta row do case: label pequeno, régua fina embaixo,
+   e as palavras abaixo dela. */
+.wrap {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s3);
+}
+
+.label {
+  padding-bottom: var(--s2);
+  border-bottom: var(--hairline) solid var(--rule);
+}
+
 /* Mesmo estilo do manifesto: Alpha Lyrae, 48/57.6 no desktop. */
 .line {
   font-family: var(--font-display), system-ui, sans-serif;

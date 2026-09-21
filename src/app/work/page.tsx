@@ -292,7 +292,7 @@ export default function WorkPage() {
                 expensive problem, and stay through launch&mdash;until the
                 brand, product, and experience work as one.
                 </p>
-                <Brands label="Marcas que já trabalhei:" />
+                <Brands label="Marcas que já trabalhei" />
               </div>
             </div>
 
