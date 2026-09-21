@@ -1,0 +1,49 @@
+/* A janela: mostra uma linha por vez. Sem ela as duas faces aparecem juntas
+   no meio do giro e a coisa vira texto dobrado, não cambalhota.
+
+   A folga lateral existe porque a perspectiva aumenta a face da frente:
+   translateZ com perspective(280px) a deixa ~3,7% maior, e a última letra
+   batia na janela. O padding empurra o corte pra fora, a margem negativa
+   devolve a largura — o corte vertical continua colado. */
+.mask {
+  display: inline-block;
+  height: var(--roll-h, 20px);
+  padding-inline: 0.6em;
+  margin-inline: -0.6em;
+  overflow: hidden;
+}
+
+.roll {
+  position: relative;
+  display: block;
+  transform-style: preserve-3d;
+  /* a perspectiva vai no próprio transform: com a janela no meio, ela não
+     desceria de um ancestral */
+  transform: perspective(280px) rotateX(0deg);
+  /* sai rápido, chega macia: cambalhota, não catraca */
+  transition: transform 560ms cubic-bezier(0.22, 1, 0.3, 1);
+}
+
+.face {
+  display: block;
+  backface-visibility: hidden;
+}
+
+/* metade da altura da linha — é o raio do cubo */
+.front { transform: translateZ(calc(var(--roll-h, 20px) / 2)); }
+.back {
+  position: absolute;
+  inset: 0;
+  transform: rotateX(-90deg) translateZ(calc(var(--roll-h, 20px) / 2));
+}
+
+/* O hover vem do elemento inteiro, não deste invólucro. */
+:global([data-roll-host]:hover) .roll,
+:global([data-roll-host]:focus-visible) .roll {
+  transform: perspective(280px) rotateX(90deg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .roll { transition: none; }
+  :global([data-roll-host]:hover) .roll { transform: perspective(280px) rotateX(0deg); }
+}

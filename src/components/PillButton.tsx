@@ -1,12 +1,13 @@
 import Link from "next/link"
+import RollLabel from "./RollLabel"
 import styles from "./PillButton.module.css"
 
 /**
  * O botão do site. Um componente só pra todos: se um dia o hover mudar,
  * muda em todos os lugares de uma vez.
  *
- * A segunda face do rótulo é `aria-hidden`: leitor de tela lê a palavra
- * uma vez só, mesmo estando duas vezes no HTML.
+ * A cambalhota do hover mora no RollLabel — é o mesmo efeito da saída
+ * "Back to portfolio" nas páginas de projeto.
  */
 
 type Props = {
@@ -15,19 +16,6 @@ type Props = {
   type?: "button" | "submit"
   className?: string
   external?: boolean
-}
-
-function Label({ text }: { text: string }) {
-  return (
-    <span className={styles.mask}>
-      <span className={styles.roll}>
-        <span className={`${styles.face} ${styles.front}`}>{text}</span>
-        <span className={`${styles.face} ${styles.back}`} aria-hidden="true">
-          {text}
-        </span>
-      </span>
-    </span>
-  )
 }
 
 export default function PillButton({
@@ -44,25 +32,26 @@ export default function PillButton({
       return (
         <a
           className={cls}
+          data-roll-host=""
           href={href}
           {...(external || href.startsWith("http")
             ? { target: "_blank", rel: "noopener noreferrer" }
             : {})}
         >
-          <Label text={children} />
+          <RollLabel text={children} />
         </a>
       )
     }
     return (
-      <Link className={cls} href={href}>
-        <Label text={children} />
+      <Link className={cls} data-roll-host="" href={href}>
+        <RollLabel text={children} />
       </Link>
     )
   }
 
   return (
-    <button className={cls} type={type}>
-      <Label text={children} />
+    <button className={cls} data-roll-host="" type={type}>
+      <RollLabel text={children} />
     </button>
   )
 }

@@ -1,5 +1,6 @@
 import Link from "next/link"
 import PillButton from "./PillButton"
+import RollLabel from "./RollLabel"
 import styles from "./SiteNav.module.css"
 
 /**
@@ -31,8 +32,8 @@ export default function SiteNav({
         <span className={styles.role}>Nexialist Designer</span>
       </Link>
       {back ? (
-        <Link href="/work#projects" className={styles.back}>
-          Back to portfolio
+        <Link href="/work#projects" className={styles.back} data-roll-host="">
+          <RollLabel text="Back to portfolio" />
         </Link>
       ) : null}
       <PillButton href={ctaHref}>Say hello</PillButton>
