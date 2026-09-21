@@ -55,6 +55,11 @@
   gap: var(--s1);
 }
 
+.statLabel {
+  font-size: var(--t-body-sm);
+  line-height: 1.3;
+}
+
 .statNumber {
   font-family: var(--font-body), system-ui, sans-serif;
   font-size: 28px;
@@ -148,7 +153,13 @@
 
 .case { display: flex; flex-direction: column; gap: var(--s5); }
 .block { display: flex; flex-direction: column; gap: var(--s2); }
-.shot { width: 100%; }
+/* O Framer não estica imagem além do tamanho original — quando a peça é
+   menor que a coluna, ela fica centrada. */
+.shot {
+  width: 100%;
+  max-width: max-content;
+  margin-inline: auto;
+}
 
 @media (max-width: 900px) {
   .featured { padding-right: 0; }
@@ -180,13 +191,19 @@
 .about { padding-bottom: var(--s7); }
 .aboutInner { display: flex; flex-direction: column; gap: var(--s5); }
 
-/* Duas colunas iguais, sem respiro entre elas — como no Framer */
+/* Duas colunas iguais, sem respiro entre elas, centradas uma na outra.
+   O vídeo é quadrado (623 no Framer) e encosta na esquerda da coluna. */
 .aboutBody {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  align-items: start;
+  align-items: center;
 }
-.aboutVideo { width: 100%; background: var(--ink-10); }
+.aboutVideo {
+  width: min(623px, 100%);
+  aspect-ratio: 1;
+  object-fit: cover;
+  background: var(--ink-10);
+}
 
 .credentials { display: flex; flex-direction: column; }
 .credentials li {
@@ -225,13 +242,20 @@
   background: linear-gradient(var(--accent) 0%, var(--bg) 100%);
   padding-block: var(--s7);
 }
-.closingInner { display: flex; flex-direction: column; gap: var(--s6); }
+.closingInner {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s6);
+  /* o título abaixo se mede por esta caixa, não pela viewport: 100vw conta
+     a barra de rolagem e o texto saía 1% maior que o do Framer */
+  container-type: inline-size;
+}
 .closingHead { display: flex; flex-direction: column; gap: var(--s4); }
 
 /* O Framer escala este título pra encher a linha (SVG de texto ajustado).
    Aqui é a mesma conta: largura util dividida pelo comprimento da frase. */
 .closingTitle {
-  font-size: calc((100vw - 2 * var(--gutter)) / 12.05);
+  font-size: calc(100cqw / 12.05);
   line-height: 1.1;
   text-transform: none;
   text-wrap: nowrap;

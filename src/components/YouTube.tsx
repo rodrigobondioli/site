@@ -12,11 +12,13 @@ export default function YouTube({
   title,
   start,
   className,
+  hideLabel = false,
 }: {
   id: string
   title: string
   start?: number
   className?: string
+  hideLabel?: boolean
 }) {
   const [on, setOn] = useState(false)
   const src =
@@ -46,7 +48,7 @@ export default function YouTube({
               <path d="M8 5v14l11-7z" />
             </svg>
           </span>
-          <span className={styles.label}>{title}</span>
+          {hideLabel ? null : <span className={styles.label}>{title}</span>}
         </button>
       )}
     </div>

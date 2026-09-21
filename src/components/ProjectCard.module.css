@@ -22,5 +22,9 @@
 .what {
   padding: var(--s1) var(--s2);
   text-align: center;
+  /* Igual ao Framer: uma linha só, cortada nas pontas. Quebrar faria os
+     cards da mesma fileira ficarem de alturas diferentes. */
+  white-space: nowrap;
+  overflow: hidden;
   border-top: var(--hairline) solid var(--rule);
 }

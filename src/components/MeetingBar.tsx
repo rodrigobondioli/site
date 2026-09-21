@@ -12,7 +12,10 @@ export default function MeetingBar({ label = "Book a call" }: { label?: string }
       target="_blank"
       rel="noopener noreferrer"
     >
-      <span className={styles.avatar} aria-hidden="true" />
+      <span className={styles.avatar} aria-hidden="true">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src="/images/rodrigo.png" alt="" width={42} height={42} />
+      </span>
       <span className={styles.label}>{label}</span>
       <span className={styles.arrow} aria-hidden="true">
         <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#fff" strokeWidth="2">

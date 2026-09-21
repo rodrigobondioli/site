@@ -78,7 +78,7 @@ export default function WorkPage() {
         {/* ---------- Video de abertura ---------- */}
         <section className={`section ${s.reel}`}>
           <div className={`container ${s.reelInner}`}>
-            <YouTube id="QSAe2rouM24" title="Ford + Tattoaria" />
+            <YouTube id="QSAe2rouM24" title="Ford + Tattoaria" hideLabel />
             <p className="caption">
               Ford + Tattoaria campaign, in partnership with JWT (J. Walter
               Thompson).

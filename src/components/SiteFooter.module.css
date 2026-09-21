@@ -18,6 +18,8 @@
 
 /* --- Redes --- */
 
+.social a { line-height: 1.3; }
+
 .social {
   display: flex;
   align-items: center;
@@ -68,7 +70,9 @@
     text-align: center;
   }
 
-  .social {
+  .social a { line-height: 1.3; }
+
+.social {
     flex-wrap: wrap;
     justify-content: center;
     gap: var(--s2);

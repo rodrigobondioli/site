@@ -31,7 +31,8 @@
   background: var(--accent);
   font-family: var(--font-display), system-ui, sans-serif;
   font-size: var(--t-h5);
-  line-height: 1;
+  font-weight: 500;
+  line-height: 1.1;
   text-transform: uppercase;
   white-space: nowrap;
 }
