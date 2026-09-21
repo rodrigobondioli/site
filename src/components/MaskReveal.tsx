@@ -48,11 +48,14 @@ export default function MaskReveal({
     let frame = 0
     let running = false
 
-    const draw = () => {
+    const progress = () => {
       const r = node.getBoundingClientRect()
       const h = window.innerHeight
-      // começa quando o topo da peça entra pela base da janela
-      const p = Math.min(1, Math.max(0, (h - r.top) / (h * span)))
+      return Math.min(1, Math.max(0, (h - r.top) / (h * span)))
+    }
+
+    // estado inicial: mascara quem ainda não começou a entrar
+    const apply = (p: number) => {
       const e = 1 - Math.pow(1 - p, 3)
       node.style.clipPath = `inset(${((1 - e) * 100).toFixed(2)}% 0 0 0)`
       if (inner) {
@@ -60,6 +63,11 @@ export default function MaskReveal({
           1
         )}px, 0)`
       }
+    }
+    apply(progress())
+
+    const draw = () => {
+      apply(progress())
       frame = requestAnimationFrame(draw)
     }
 
@@ -73,9 +81,13 @@ export default function MaskReveal({
       cancelAnimationFrame(frame)
     }
 
+    /* Uma janela inteira de folga de cada lado. Com margem pequena o
+       IntersectionObserver avisava tarde num scroll rápido: quando o loop
+       começava, o progresso já era 1 e a peça aparecia inteira de uma vez,
+       sem máscara nenhuma. Agora o loop já está rodando quando ela entra. */
     const io = new IntersectionObserver(
       ([entry]) => (entry.isIntersecting ? start() : stop()),
-      { rootMargin: "120px" }
+      { rootMargin: "100% 0px 100% 0px" }
     )
     io.observe(node)
 
@@ -85,12 +97,14 @@ export default function MaskReveal({
     }
   }, [span, shift])
 
+  /* Sem máscara no HTML de origem, de propósito.
+     Se a peça nascesse mascarada e a pessoa recarregasse a página no meio
+     dela, o JS calcularia progresso 1 no primeiro quadro e a imagem
+     saltaria de invisível pra inteira — o "aparece do nada" que o Rodrigo
+     viu. Quem põe a máscara é o efeito abaixo, e só em quem ainda não
+     chegou a hora. Se o JS não rodar, a imagem simplesmente aparece. */
   return (
-    <div
-      className={className}
-      ref={ref}
-      style={{ clipPath: "inset(100% 0 0 0)", willChange: "clip-path" }}
-    >
+    <div className={className} ref={ref} style={{ willChange: "clip-path" }}>
       {children}
     </div>
   )

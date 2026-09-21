@@ -40,6 +40,15 @@ const CREDENTIALS: [string, string][] = [
 
 const TAGS = ["Concept", "Brand", "App design", "Landing page"]
 
+/* Com largura e altura declaradas o navegador reserva a caixa antes da
+   imagem chegar. Sem isso a caixa nasce com altura zero, a máscara calcula
+   o progresso em cima de uma posição errada e a peça pula quando carrega. */
+const SHOTS = [
+  { src: "/site/work-2.png", w: 848, h: 834 },
+  { src: "/site/work-3.png", w: 848, h: 647 },
+  { src: "/site/work-4.png", w: 848, h: 614 },
+]
+
 export default function WorkPage() {
   const projects = orderedProjects(order as string[])
 
@@ -183,6 +192,8 @@ export default function WorkPage() {
                   className={s.shot}
                   src="/site/work-6.png"
                   alt="Go Ink brand"
+                  width={848}
+                  height={468}
                   loading="lazy"
                 />
               </MaskReveal>
@@ -200,14 +211,19 @@ export default function WorkPage() {
                 </p>
               </div>
 
-              {["/site/work-2.png", "/site/work-3.png", "/site/work-4.png"].map(
-                (src) => (
-                  <MaskReveal className={s.shotWrap} key={src}>
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img className={s.shot} src={src} alt="Go Ink" loading="lazy" />
-                  </MaskReveal>
-                )
-              )}
+              {SHOTS.map(({ src, w, h }) => (
+                <MaskReveal className={s.shotWrap} key={src}>
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    className={s.shot}
+                    src={src}
+                    alt="Go Ink"
+                    width={w}
+                    height={h}
+                    loading="lazy"
+                  />
+                </MaskReveal>
+              ))}
             </div>
             </div>
           </div>
