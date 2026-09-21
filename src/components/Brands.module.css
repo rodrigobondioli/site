@@ -19,10 +19,34 @@
   line-height: 1.2;
 }
 
-/* Sublinhado sempre: é o que diz que a palavra é clicável. O hover só
-   engrossa o traço — sem trocar cor nem peso. */
+/* Duas linhas, não uma. A fina está sempre lá, dizendo que a palavra é
+   clicável; a grossa entra por cima no hover, varrendo da esquerda pra
+   direita.
+
+   São gradientes de fundo em vez de `text-decoration` porque
+   `text-decoration-thickness` não anima — trocá-la no hover dá um pulo
+   seco, que era o que estava acontecendo aqui. `background-size` anima, e
+   a técnica sobrevive à palavra quebrar em duas linhas.
+
+   A ordem importa: o primeiro gradiente fica por cima. */
 .brand {
   /* "Coca-Cola" e "Harley Davidson" não quebram no meio */
   white-space: nowrap;
-  text-underline-offset: 0.12em;
+  text-decoration: none;
+  padding-bottom: 0.12em;
+  background-image:
+    linear-gradient(currentColor, currentColor),
+    linear-gradient(currentColor, currentColor);
+  background-repeat: no-repeat;
+  background-position: 0 100%, 0 100%;
+  background-size: 0% 2px, 100% 1px;
+  transition: background-size 420ms cubic-bezier(0.22, 1, 0.3, 1);
+}
+.brand:hover,
+.brand:focus-visible {
+  background-size: 100% 2px, 100% 1px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .brand { transition: none; }
 }
