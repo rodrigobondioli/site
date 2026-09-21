@@ -177,3 +177,9 @@
   text-decoration-thickness: from-font;
 }
 .press a:hover { text-decoration: none; }
+/* Mesma ideia do rodapé: 20px viram 44 pelo padding de uma caixa inline,
+   sem mexer no fluxo. Entre um link e o próximo há 38px, então 12 de cada
+   lado ainda deixam 14 de folga — as áreas não encostam. */
+@media (pointer: coarse) {
+  .press a { padding-block: 12px; }
+}

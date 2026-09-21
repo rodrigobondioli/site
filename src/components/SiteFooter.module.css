@@ -34,6 +34,18 @@
   color: var(--ink-25);
 }
 
+/* Dedo não acerta 16px. O padding vai no próprio <a>, que é inline: em
+ * caixa inline o padding vertical não entra no cálculo da linha, então ele
+ * estica a área de toque sem mover nada — nem altura, nem espaçamento, nem
+ * a janela da cambalhota (o `overflow: hidden` é do `.mask`, aqui dentro).
+ * As redes têm 37px de folga em cima e 38 entre si; 14 de cada lado sobem
+ * os 16px pra 44 e ainda deixam 9px de respiro entre as áreas vizinhas.
+ * Só em ponteiro grosso: no mouse isso faria a cambalhota começar a girar
+ * 14px antes de o cursor chegar no texto. */
+@media (pointer: coarse) {
+  .link { padding-block: 14px; }
+}
+
 .link {
   font-size: var(--t-body-sm);
   color: var(--ink);
