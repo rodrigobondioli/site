@@ -1,6 +1,7 @@
 .footer {
   background: var(--bg);
-  padding-block: var(--s5);
+  /* No Framer: 56 da seção + 48 internos antes da linha do logo */
+  padding-block: calc(var(--s5) * 2) var(--s5);
 }
 
 .inner {

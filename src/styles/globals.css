@@ -48,8 +48,8 @@
    * Gutter fluido: 24px no celular, 124px no desktop, sem degrau.
    * O contêiner é obrigatório em toda seção — era a regra que a produção
    * não cumpria em nenhum lugar.                                          */
-  --gutter: clamp(24px, 6.5vw, 124px);
-  --container: 1440px;
+  --gutter: clamp(24px, 8.6vw, 124px);
+  --container: none;   /* o Framer nao limita: 100% - gutter dos dois lados */
   --measure: 68ch;   /* medida máxima de texto corrido */
 
   /* --- Tipografia --- *
@@ -68,7 +68,7 @@
 
   /* --- Forma --- */
   --r-control: 8px;
-  --r-card: 16px;
+  --r-card: 0;      /* medido no Framer: nada arredondado no /work */
   --r-pill: 999px;
   --hairline: 1px;
 
@@ -131,7 +131,7 @@ input, textarea, select { font: inherit; color: inherit; }
 }
 
 .h1 { font-size: var(--t-h1); line-height: 1;    text-transform: none; }
-.h2 { font-size: var(--t-h2); line-height: 1.05; text-transform: uppercase; }
+.h2 { font-size: var(--t-h2); line-height: 1.2;  text-transform: none; }
 .h3 { font-size: var(--t-h3); line-height: 1.2;  text-transform: uppercase; }
 .h4 { font-size: var(--t-h4); line-height: 1.1;  text-transform: uppercase; }
 .h5 { font-size: var(--t-h5); line-height: 1.1;  text-transform: uppercase; }
@@ -144,10 +144,10 @@ input, textarea, select { font: inherit; color: inherit; }
   text-transform: uppercase;
 }
 
-.body-lg { font-size: var(--t-body-lg); line-height: 1.4; max-width: var(--measure); }
-.body    { font-size: var(--t-body);    line-height: 1.5; max-width: var(--measure); }
-.body-sm { font-size: var(--t-body-sm); line-height: 1.5; }
-.caption { font-size: var(--t-caption); line-height: 1.4; color: var(--ink-60); }
+.body-lg { font-size: var(--t-body-lg); line-height: 1.3; }
+.body    { font-size: var(--t-body);    line-height: 1.3; }
+.body-sm { font-size: var(--t-body-sm); line-height: 1.3; }
+.caption { font-size: var(--t-body-sm); line-height: 1.3; color: var(--ink); }
 
 /* ---------- 4. Layout ---------- */
 
@@ -184,10 +184,15 @@ input, textarea, select { font: inherit; color: inherit; }
    errado com 1fr: a linha encostava no texto dos dois lados. */
 .rule {
   flex: 0 0 auto;
-  width: clamp(56px, 12vw, 156px);
   height: var(--hairline);
   background: var(--rule);
 }
+/* Larguras medidas no Framer, uma por linha de cabecalho. Acento, nao divisor. */
+.rule-lg { width: 224px; }
+.rule-md { width: 156px; }
+.rule-sm { width: 88px; }
+/* Sobre o amarelo o fio precisa de mais contraste pra existir */
+.on-accent .rule { background: var(--ink-25); }
 .on-dark .rule { background: var(--rule-dark); }
 
 /* Linha de cabeçalho: TÍTULO — régua — legenda à direita */
@@ -222,14 +227,11 @@ input, textarea, select { font: inherit; color: inherit; }
 /* Card. Um shell só. */
 .card {
   border: var(--hairline) solid var(--rule);
-  border-radius: var(--r-card);
   padding: var(--s3);
   background: var(--paper);
 }
 /* Cards empilhados compartilham a borda em vez de somar duas */
-.card-stack > .card + .card { border-top: 0; border-radius: 0; }
-.card-stack > .card:first-child { border-radius: var(--r-card) var(--r-card) 0 0; }
-.card-stack > .card:last-child  { border-radius: 0 0 var(--r-card) var(--r-card); }
+.card-stack > .card + .card { border-top: 0; }
 
 /* ---------- 6. Tema escuro (páginas de projeto) ---------- */
 

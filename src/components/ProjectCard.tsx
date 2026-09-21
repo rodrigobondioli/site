@@ -2,10 +2,10 @@ import Link from "next/link"
 import styles from "./ProjectCard.module.css"
 
 /**
- * Card do arquivo. Imagem + nome + o que foi feito.
- *
- * As duas faixas de texto dividem a borda em vez de somarem duas linhas de
- * 1px — era o defeito do card no Framer, visível quando o padding cresceu.
+ * Card do arquivo, medido no Framer: imagem 4:3 sem borda nem raio, faixa do
+ * nome com 16px de padding e faixa do que foi feito com 8px/16px. Os fios de
+ * 1px vêm de um contorno só em volta das duas faixas, com um divisor no meio
+ * — no Framer as duas caixas tinham borda própria e a linha aparecia dobrada.
  */
 export default function ProjectCard({
   slug,
@@ -26,10 +26,12 @@ export default function ProjectCard({
           <img src={thumb} alt="" loading="lazy" />
         ) : null}
       </div>
-      <div className={styles.name}>
-        <h3 className="h4">{name}</h3>
+      <div className={styles.meta}>
+        <div className={styles.name}>
+          <h3 className="h5">{name}</h3>
+        </div>
+        {what ? <p className={`body-sm ${styles.what}`}>{what}</p> : null}
       </div>
-      {what ? <div className={styles.what}>{what}</div> : null}
     </Link>
   )
 }

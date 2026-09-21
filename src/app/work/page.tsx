@@ -1,5 +1,6 @@
 import type { Metadata } from "next"
 import SiteNav from "@/components/SiteNav"
+import SmoothScroll from "@/components/SmoothScroll"
 import { SiteFooter } from "@/components/SiteFooter"
 import MeetingBar from "@/components/MeetingBar"
 import HeroLogos from "@/components/HeroLogos"
@@ -42,6 +43,7 @@ export default function WorkPage() {
 
   return (
     <>
+      <SmoothScroll />
       <SiteNav />
 
       <main>
@@ -87,7 +89,10 @@ export default function WorkPage() {
         {/* ---------- Manifesto ---------- */}
         <section className={`section ${s.statement}`}>
           <div className={`container ${s.statementInner}`}>
-            <p className="overline">No point of view, no project.</p>
+            <div className={s.headLine}>
+              <p className="overline">No point of view, no project.</p>
+              <span className="rule rule-sm" />
+            </div>
             <p className={s.statementText}>
               Everyone is a prompt designer now. The result? Work that looks
               like it came from the same machine&mdash;because it did. I use the
@@ -116,6 +121,7 @@ export default function WorkPage() {
             </figure>
 
             <div className={s.featuredContent}>
+              <div className={s.intro}>
               <div className={s.metaRow}>
                 <a
                   className="overline"
@@ -128,7 +134,7 @@ export default function WorkPage() {
                 <span className="overline">Get inspired. Get inked.</span>
               </div>
 
-              <p className="body-lg">
+              <p className="body">
                 Go Ink is a marketplace where tattoo artists only sell the work
                 they actually want to do, each piece already priced, sized and
                 placed on the body. No client and no brief: I built it alone,
@@ -144,7 +150,9 @@ export default function WorkPage() {
                   </li>
                 ))}
               </ul>
+            </div>
 
+            <div className={s.case}>
               <YouTube id="A2U0nzGS094" title="Go Ink APP by Tattoaria" />
 
               <div className={s.block}>
@@ -196,15 +204,16 @@ export default function WorkPage() {
                 )
               )}
             </div>
+            </div>
           </div>
         </section>
 
         {/* ---------- Arquivo ---------- */}
         <section className={`section ${s.archive}`} id="projects">
-          <div className="container">
+          <div className={`container ${s.archiveInner}`}>
             <div className="head-row">
               <h2 className="h3">Selected work</h2>
-              <span className="rule" />
+              <span className="rule rule-lg" />
               <p className="overline">
                 Work that started with a problem, not a prompt.
               </p>
@@ -235,7 +244,7 @@ export default function WorkPage() {
           <div className={`container ${s.aboutInner}`}>
             <div className="head-row">
               <h2 className="h3">I&rsquo;m Rodrigo Bondioli</h2>
-              <span className="rule" />
+              <span className="rule rule-md" />
               <p className="overline">Nexialist Designer</p>
             </div>
 
@@ -276,11 +285,11 @@ export default function WorkPage() {
         </section>
 
         {/* ---------- YouTube ---------- */}
-        <section className={`section ${s.youtube}`}>
+        <section className={`section on-accent ${s.youtube}`}>
           <div className={`container ${s.youtubeInner}`}>
             <div className="head-row">
               <h2 className="h4">Content creator</h2>
-              <span className="rule" />
+              <span className="rule rule-sm" />
               <p className="overline">YouTube @falabondioli</p>
             </div>
 
@@ -292,7 +301,7 @@ export default function WorkPage() {
 
             <div className="head-row">
               <p className="overline">31K subscribers</p>
-              <span className="rule" />
+              <span className="rule rule-md" />
               <h3 className="h4">No bullshit</h3>
             </div>
           </div>

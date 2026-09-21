@@ -1,8 +1,9 @@
 /* =========================================================================
-   /work — a página do portfólio.
-   Tudo aqui usa os passos de espaçamento do globals.css. Nenhum número
-   solto: onde o Framer tinha 124px, 176px, 88px e 56px, aqui é --gutter,
-   --s7, --s6 e --s5, que encolhem sozinhos no celular.
+   /work — medidas tiradas do Framer publicado (getComputedStyle), nao do olho.
+
+   Desktop: gutter 124, sem largura maxima de conteudo (o Framer nao limita).
+   Os respiros grandes sao 176 / 124 / 88 / 56 / 32 / 16 / 8 — os mesmos
+   passos do design system, aqui escritos como --s7..--s1.
    ========================================================================= */
 
 /* ---------- Hero ---------- */
@@ -11,7 +12,7 @@
   position: relative;
   min-height: 100svh;
   display: grid;
-  align-items: center;
+  place-items: center;
   padding-inline: var(--gutter);
   overflow: hidden;
 }
@@ -19,148 +20,156 @@
 .heroInner {
   position: relative;
   z-index: 2;
-  padding-block: var(--s7) calc(var(--s7) + 64px);
+  display: flex;
+  flex-direction: column;
+  gap: var(--s3);
+  padding-bottom: var(--s5);
   pointer-events: none;
 }
 
-/* A faixa de números encosta no rodapé do hero, com um fio em cima */
+/* Faixa de numeros: 88px de altura, vidro leve, fio em cima */
 .stats {
   position: absolute;
   inset: auto 0 0 0;
   z-index: 10;
+  height: 88px;
+  display: flex;
+  align-items: center;
   padding-inline: var(--gutter);
   border-top: var(--hairline) solid var(--rule);
-  background: rgba(242, 242, 242, 0.4);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  background: rgba(242, 242, 242, 0.2);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
 }
 
 .statsInner {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   gap: var(--s3);
-  padding-block: var(--s2);
 }
 
 .stat {
   display: flex;
-  align-items: baseline;
+  align-items: center;
   gap: var(--s1);
-  justify-content: center;
 }
-.stat:first-child { justify-content: flex-start; }
-.stat:last-child  { justify-content: flex-end; }
 
 .statNumber {
-  font-family: var(--font-display), system-ui, sans-serif;
-  font-size: var(--t-h4);
-  line-height: 1;
-}
-.statLabel { font-size: var(--t-body-sm); color: var(--ink-60); }
-
-@media (max-width: 720px) {
-  .statsInner { grid-template-columns: 1fr; gap: var(--s1); padding-block: var(--s2); }
-  .stat, .stat:first-child, .stat:last-child { justify-content: flex-start; }
-  .heroInner { padding-block: var(--s7) calc(var(--s7) + 96px); }
+  font-family: var(--font-body), system-ui, sans-serif;
+  font-size: 28px;
+  font-weight: 600;
+  line-height: 1.1;
 }
 
-/* ---------- Vídeo de abertura ---------- */
+@media (max-width: 860px) {
+  .stats { height: auto; padding-block: var(--s2); }
+  .statsInner { flex-direction: column; align-items: flex-start; gap: var(--s1); }
+  .heroInner { padding-bottom: 120px; }
+}
+
+/* ---------- Video de abertura ---------- */
 
 .reel { padding-bottom: var(--s6); }
-.reelInner { display: flex; flex-direction: column; gap: var(--s1); align-items: center; }
-.reelInner > :global(.caption) { text-align: center; }
+.reelInner { display: flex; flex-direction: column; gap: var(--s1); text-align: center; }
 
 /* ---------- Manifesto ---------- */
 
 .statement { padding-block: var(--s6) var(--s7); }
 .statementInner { display: flex; flex-direction: column; gap: var(--s6); }
 
+/* Alpha Lyrae 48/57.6, largura inteira — medido no Framer */
 .statementText {
   font-family: var(--font-display), system-ui, sans-serif;
+  font-weight: 500;
   font-size: var(--t-h2);
-  line-height: 1.1;
-  max-width: 22ch;
-  max-width: min(100%, 26ch);
-  text-wrap: balance;
+  line-height: 1.2;
 }
-@media (max-width: 900px) { .statementText { max-width: none; } }
+
+.headLine {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s3);
+}
 
 /* ---------- Projeto em destaque ---------- */
 
-.featured { padding-bottom: var(--s7); }
-.featuredHead { padding-bottom: var(--s6); }
-.dash { display: inline-block; margin-right: var(--s2); }
+/* O Framer usa padding 0 124 176 0: a imagem sangra na esquerda. */
+.featured {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s6);
+  padding-right: var(--gutter);
+  padding-bottom: var(--s7);
+}
+.featuredHead { padding-left: var(--gutter); }
+.dash { display: inline-block; margin-right: var(--s3); }
 
-/* Imagem à esquerda sangra até a borda da tela; o conteúdo respeita o gutter.
-   Era o que o Framer fazia com padding="0 124px 176px 0". */
 .featuredBody {
   display: grid;
-  grid-template-columns: minmax(0, 44%) minmax(0, 1fr);
+  grid-template-columns: 1fr 1fr;
   gap: var(--s5);
   align-items: start;
-  padding-right: var(--gutter);
 }
 
 .featuredImage {
   position: sticky;
   top: 0;
-  height: 100svh;
+  aspect-ratio: 767 / 910;
   overflow: hidden;
 }
 .featuredImage img { width: 100%; height: 100%; object-fit: cover; }
 
+/* Os dois blocos da coluna: introducao e caso. 124 entre eles. */
 .featuredContent {
   display: flex;
   flex-direction: column;
-  gap: var(--s5);
-  padding-top: var(--s5);
+  gap: var(--s7);
 }
 
+.intro { display: flex; flex-direction: column; gap: var(--s4); }
+
 .metaRow {
+  position: sticky;
+  top: 56px;
   display: flex;
   justify-content: space-between;
   gap: var(--s3);
   padding-bottom: var(--s2);
   border-bottom: var(--hairline) solid var(--rule);
+  background: var(--bg);
 }
 .metaRow a:hover { text-decoration: underline; text-underline-offset: 3px; }
 
-.tags { display: flex; flex-wrap: wrap; gap: var(--s2); }
-.tag { color: var(--ink); }
-.tagDot {
-  width: 6px; height: 6px;
-  border-radius: 50%;
-  background: var(--accent-cyan);
-}
-.tag:nth-child(2n) .tagDot { background: var(--accent-pink); }
+.tags { display: flex; flex-wrap: wrap; gap: var(--s1); }
+.tagDot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent-cyan); }
+.tags li:nth-child(2n) .tagDot { background: var(--accent-pink); }
 
-.block { display: flex; flex-direction: column; gap: var(--s3); }
-.shot { width: 100%; border-radius: var(--r-control); }
+.case { display: flex; flex-direction: column; gap: var(--s5); }
+.block { display: flex; flex-direction: column; gap: var(--s2); }
+.shot { width: 100%; }
 
 @media (max-width: 900px) {
-  .featuredBody {
-    grid-template-columns: 1fr;
-    padding-right: 0;
-    gap: var(--s5);
-  }
-  .featuredImage { position: static; height: auto; aspect-ratio: 4 / 5; }
-  .featuredContent { padding-inline: var(--gutter); padding-top: 0; }
+  .featured { padding-right: 0; }
+  .featuredBody { grid-template-columns: 1fr; gap: var(--s5); }
+  .featuredImage { position: static; aspect-ratio: 4 / 5; }
+  .featuredContent { padding-inline: var(--gutter); }
+  .metaRow { position: static; }
 }
 
 /* ---------- Arquivo ---------- */
 
-.archive { padding-bottom: var(--s7); }
-.archive > :global(.container) {
-  display: flex;
-  flex-direction: column;
-  gap: var(--s6);
-}
+.archive { padding-bottom: 0; }
+.archiveInner { display: flex; flex-direction: column; gap: var(--s6); }
 
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  grid-template-columns: repeat(3, 1fr);
   gap: var(--s4) var(--s2);
 }
+@media (max-width: 900px) { .grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 600px) { .grid { grid-template-columns: 1fr; } }
 
 /* ---------- Ticker ---------- */
 
@@ -171,23 +180,15 @@
 .about { padding-bottom: var(--s7); }
 .aboutInner { display: flex; flex-direction: column; gap: var(--s5); }
 
+/* Duas colunas iguais, sem respiro entre elas — como no Framer */
 .aboutBody {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: var(--s6);
+  grid-template-columns: 1fr 1fr;
   align-items: start;
 }
-.aboutVideo {
-  width: 100%;
-  border-radius: var(--r-control);
-  background: var(--ink-10);
-}
+.aboutVideo { width: 100%; background: var(--ink-10); }
 
-.credentials {
-  display: flex;
-  flex-direction: column;
-  border-top: var(--hairline) solid var(--rule);
-}
+.credentials { display: flex; flex-direction: column; }
 .credentials li {
   display: flex;
   justify-content: space-between;
@@ -195,6 +196,7 @@
   padding-block: var(--s2);
   border-bottom: var(--hairline) solid var(--rule);
 }
+.credentials li:first-child { border-top: var(--hairline) solid var(--rule); }
 
 @media (max-width: 900px) {
   .aboutBody { grid-template-columns: 1fr; gap: var(--s4); }
@@ -205,24 +207,35 @@
 
 .youtube {
   background: var(--accent);
-  padding-block: var(--s7) var(--s7);
+  padding-top: var(--s7);
+  padding-bottom: 0;
 }
 .youtubeInner {
   max-width: 1140px;
+  margin-inline: auto;
   display: flex;
   flex-direction: column;
   gap: var(--s4);
 }
-.youtube :global(.rule) { background: var(--ink-25); }
 
 /* ---------- Contato ---------- */
 
-/* O Framer termina o amarelo aqui com um tom mais lavado. Mesma cor, menos
-   saturação, feito com color-mix em vez de um segundo hex pra manter. */
+/* Gradiente do amarelo pro fundo da pagina — medido no Framer */
 .closing {
-  background: color-mix(in srgb, var(--accent) 45%, var(--bg));
+  background: linear-gradient(var(--accent) 0%, var(--bg) 100%);
   padding-block: var(--s7);
 }
 .closingInner { display: flex; flex-direction: column; gap: var(--s6); }
 .closingHead { display: flex; flex-direction: column; gap: var(--s4); }
-.closingTitle { font-size: var(--t-h1); }
+
+/* O Framer escala este título pra encher a linha (SVG de texto ajustado).
+   Aqui é a mesma conta: largura util dividida pelo comprimento da frase. */
+.closingTitle {
+  font-size: calc((100vw - 2 * var(--gutter)) / 12.05);
+  line-height: 1.1;
+  text-transform: none;
+  text-wrap: nowrap;
+}
+@media (max-width: 700px) {
+  .closingTitle { font-size: var(--t-h1); text-wrap: balance; }
+}

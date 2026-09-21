@@ -30,15 +30,15 @@
   border-radius: var(--r-pill);
   background: var(--accent);
   font-family: var(--font-display), system-ui, sans-serif;
-  font-size: var(--t-h4);
+  font-size: var(--t-h5);
   line-height: 1;
   text-transform: uppercase;
   white-space: nowrap;
 }
 
 @keyframes slide {
-  from { transform: translate3d(0, 0, 0); }
-  to   { transform: translate3d(-50%, 0, 0); }
+  from { transform: translate3d(-50%, 0, 0); }
+  to   { transform: translate3d(0, 0, 0); }
 }
 
 @media (prefers-reduced-motion: reduce) {

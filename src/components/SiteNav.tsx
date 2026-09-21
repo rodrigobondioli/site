@@ -2,8 +2,8 @@ import Link from "next/link"
 import styles from "./SiteNav.module.css"
 
 /**
- * Navegação do topo. Nome à esquerda, CTA à direita.
- * Fica sobre o conteúdo (position fixed) e não empurra o hero.
+ * Navegação do topo. Medidas do Framer: nome em 12.8px, pílula de 48px de
+ * altura com padding lateral de 24 e texto preto sobre o rosa.
  */
 export default function SiteNav({ dark = false }: { dark?: boolean }) {
   return (
@@ -13,7 +13,7 @@ export default function SiteNav({ dark = false }: { dark?: boolean }) {
         <span className={styles.dot}>·</span>
         <span className={styles.role}>Nexialist Designer</span>
       </Link>
-      <a href="mailto:hello@rodrigobondioli.com" className={styles.cta}>
+      <a href="#contact" className={styles.cta}>
         Say hello
       </a>
     </header>
