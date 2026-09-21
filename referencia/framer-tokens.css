@@ -1,0 +1,84 @@
+/* Design tokens extraídos do Framer — rodrigobondioli.com
+   Fonte: getProjectXml (ColorStyles + TextStyles), 21/09/2026 */
+
+:root {
+  /* Cores */
+  --white: rgb(255, 255, 255);
+  --black-100: rgb(16, 16, 16);
+  --black-50: rgba(0, 0, 0, 0.5);
+  --black-25: rgba(0, 0, 0, 0.25);
+  --black-10: rgba(0, 0, 0, 0.1);
+  --primary: rgb(255, 0, 215);
+  --secondary: rgb(0, 255, 246);
+  --tertiary: rgb(231, 249, 154);
+  --electric-violet: rgb(130, 45, 255);
+  --success: rgb(31, 143, 94);
+  --warning: rgb(199, 123, 0);
+  --error: rgb(212, 45, 45);
+  --error-muted: rgba(255, 34, 68, 0.15);
+  --grey-1: rgb(128, 128, 128);
+  --stroke-dark-bg: rgba(242, 242, 242, 0.2);
+  --frosted-40: rgba(242, 242, 242, 0.4);
+  --background: rgb(241, 241, 241);
+
+  /* Espaçamento — escala travada em 18/09/2026 */
+  --space-1: 8px;    /* ícone → label, pares inline. piso absoluto */
+  --space-2: 16px;   /* itens de lista, gaps de grid, gap interno de pílula */
+  --space-3: 24px;   /* padding de card */
+  --space-4: 32px;   /* gaps de bloco dentro de seção */
+  --space-5: 56px;   /* separação de grupos */
+  --space-6: 88px;   /* entre seções de página */
+  --space-7: 176px;  /* quebra maior de seção (2 × 88) */
+  --gutter: 124px;         /* gutter de página desktop */
+  --gutter-tablet: 32px;
+  --gutter-phone: 24px;
+  --gutter-poster: 32px;   /* exceção Home / full-bleed */
+  --container: 1440px;
+
+  /* Raios */
+  --radius-control: 8px;
+  --radius-card: 16px;
+  --radius-pill: 99px;
+
+  /* Famílias */
+  --font-display: "Alpha Lyrae", system-ui, sans-serif;  /* ⚠ licença a confirmar */
+  --font-body: Inter, system-ui, sans-serif;
+  --font-mono: "Atkinson Hyperlegible Mono", ui-monospace, monospace;
+}
+
+/* Estilos de texto */
+.heading-1 { font-family: var(--font-display); font-weight: 500; font-size: 5rem;    line-height: 1em;    letter-spacing: 0;      text-transform: none; }
+.heading-2 { font-family: var(--font-display); font-weight: 500; font-size: 3rem;    line-height: 1.05em; letter-spacing: 0;      text-transform: uppercase; }
+.heading-3 { font-family: var(--font-display); font-weight: 500; font-size: 1.81rem; line-height: 1.2em;  letter-spacing: 0;      text-transform: uppercase; }
+.heading-4 { font-family: var(--font-display); font-weight: 500; font-size: 1.5rem;  line-height: 1.1em;  letter-spacing: 0;      text-transform: uppercase; }
+.heading-5 { font-family: var(--font-display); font-weight: 500; font-size: 1rem;    line-height: 1.1em;  letter-spacing: 0;      text-transform: uppercase; }
+.overline   { font-family: var(--font-body); font-weight: 600; font-size: 0.7rem; line-height: 1em;   letter-spacing: 0.1em;  text-transform: uppercase; }
+.body-small { font-family: var(--font-body); font-weight: 400; font-size: 0.8rem; line-height: 1.3em; }
+.body-medium{ font-family: var(--font-body); font-weight: 400; font-size: 1rem;   line-height: 1.3em; }
+.body-large { font-family: var(--font-body); font-weight: 400; font-size: 1.2rem; line-height: 1.3em; }
+.button     { font-family: var(--font-body); font-weight: 500; font-size: 0.9rem; line-height: 1.2em; }
+.caption    { font-family: var(--font-body); font-weight: 400; font-size: 0.7rem; line-height: 1.4em; }
+.nav-back   { font-family: var(--font-body); font-weight: 400; font-size: 0.8rem; line-height: 1.3em; }
+.code       { font-family: var(--font-mono); font-weight: 400; font-size: 0.75rem; line-height: 1.4em; letter-spacing: -0.02em; }
+
+/* Reset mínimo + base */
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  background: var(--background);
+  color: var(--black-100);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+a { color: inherit; }
+img, video { display: block; max-width: 100%; }
+button { font: inherit; }
+
+/* Gutters responsivos — regra do design system */
+.gutter { padding-inline: var(--gutter); }
+@media (max-width: 1024px) { .gutter { padding-inline: var(--gutter-tablet); } }
+@media (max-width: 640px)  { .gutter { padding-inline: var(--gutter-phone); } }
+
+/* Contêiner — "every section carries maxWidth 1440px, no exceptions" */
+.container { width: 100%; max-width: var(--container); margin-inline: auto; }
