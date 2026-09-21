@@ -21,10 +21,17 @@
 .pill:hover { filter: brightness(1.06); }
 
 /* A janela: mostra uma linha por vez. Sem ela as duas faces aparecem
-   juntas no meio do giro e a coisa vira texto dobrado, não cambalhota. */
+   juntas no meio do giro e a coisa vira texto dobrado, não cambalhota.
+
+   A folga lateral existe porque a perspectiva aumenta a face da frente:
+   translateZ(10px) com perspective(280px) a deixa 3,7% maior, e a última
+   letra batia na janela. O padding empurra o corte pra fora, a margem
+   negativa devolve a largura — o corte vertical continua colado. */
 .mask {
   display: inline-block;
   height: 20px;
+  padding-inline: 0.6em;
+  margin-inline: -0.6em;
   overflow: hidden;
 }
 

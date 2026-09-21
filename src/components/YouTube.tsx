@@ -145,7 +145,7 @@ export default function YouTube({
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src={`https://i.ytimg.com/vi/${id}/maxresdefault.jpg`} alt="" loading="lazy" />
           <span className={styles.play} aria-hidden="true">
-            <svg viewBox="0 0 24 24" width="28" height="28" fill="#fff">
+            <svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor">
               <path d="M8 5v14l11-7z" />
             </svg>
           </span>

@@ -26,9 +26,19 @@
   border-radius: 50%;
   background: rgba(16, 16, 16, 0.72);
   backdrop-filter: blur(6px);
-  transition: transform var(--fast) var(--ease), background var(--fast) var(--ease);
+  /* branco no círculo escuro, preto quando ele vira rosa — a mesma regra
+     da seta da barra de agendamento */
+  color: #fff;
+  transition:
+    transform var(--fast) var(--ease),
+    background var(--fast) var(--ease),
+    color var(--fast) var(--ease);
 }
-.facade:hover .play { transform: scale(1.06); background: var(--accent-pink); }
+.facade:hover .play {
+  transform: scale(1.06);
+  background: var(--accent-pink);
+  color: var(--ink);
+}
 
 .label {
   position: absolute;
