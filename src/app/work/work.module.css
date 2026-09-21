@@ -122,6 +122,43 @@
   .heroInner { padding-bottom: 120px; }
 }
 
+/* Tela baixa: celular deitado, e também uma janela de desktop achatada.
+
+   Aqui o problema não é largura, é altura — por isso esta é a única
+   consulta do site medida em `height`, e ela não conta como um quarto
+   degrau: os três degraus (640/900/1100) continuam sendo os de largura.
+
+   O que quebrava: a faixa é `position: absolute` presa no fundo do herói,
+   e o herói tem `min-height: 100svh`. Quando o conteúdo não cabe em uma
+   tela baixa, o herói cresce além da janela e a faixa vai junto. Medido,
+   antes: em 932×430 o título entrava 47px por cima da faixa, em 1024×500
+   30px, em 1180×560 25px; e em 844×390 a faixa inteira ficava fora da
+   tela, presa num fundo de herói que ninguém vê sem rolar.
+
+   A correção é a mesma da versão de celular: a faixa sai do absoluto e
+   vira a segunda linha da grade. O título ocupa o que sobra, a faixa
+   ocupa o que precisa, e nada passa por cima de nada. As três colunas
+   ficam — a tela é larga, empilhar aqui seria desperdício.
+
+   Medido, depois: sobreposição zero nas seis telas baixas testadas, faixa
+   visível em todas, e nada muda de 600 de altura pra cima. */
+@media (max-height: 560px) {
+  .hero {
+    grid-template-rows: 1fr auto;
+    padding-inline: 0;
+  }
+  .heroInner {
+    padding-inline: var(--gutter);
+    padding-bottom: 0;
+  }
+  .stats {
+    position: static;
+    justify-self: stretch;
+    height: auto;
+    padding-block: var(--s2);
+  }
+}
+
 /* ---------- Video de abertura ---------- */
 
 .reel { padding-bottom: var(--s6); }

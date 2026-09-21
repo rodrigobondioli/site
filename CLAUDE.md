@@ -119,6 +119,17 @@ blocos somam 528px numa caixa de 518. Em fila eles estouram *antes* de
 chegar no celular, então a quebra sobe pro degrau de cima. Não baixe isso
 sem medir de novo.
 
+**Existe uma única consulta de altura**, `@media (max-height: 560px)`, no
+herói da `/work`. Ela não é um quarto degrau — os três degraus são de
+largura. Ela existe porque a faixa de números é `position: absolute`
+presa no fundo de um herói com `min-height: 100svh`: em tela baixa
+(celular deitado, janela de desktop achatada) o herói cresce além da
+janela e leva a faixa junto. Medido antes da correção: 47px de
+sobreposição em 932×430, 30px em 1024×500, 25px em 1180×560, e em
+844×390 a faixa inteira fora da tela. A correção tira a faixa do
+absoluto. **Um bug de tela baixa não se conserta com breakpoint de
+largura** — foi o que deixou esse passar: 844 de largura é "desktop".
+
 **O gutter não usa media query.** É uma curva só:
 
     --gutter: max(16px, min(24.375vw - 101px, 8.6vw, 124px));
