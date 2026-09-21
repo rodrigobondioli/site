@@ -62,9 +62,10 @@
 
 /* --- Mobile --- *
  * O space-between de três filhos não cabe em telas estreitas: as redes
- * espremem e a assinatura quebra no meio. Abaixo de 720px cada bloco
- * ganha a própria linha. */
-@media (max-width: 720px) {
+ * espremem e a assinatura quebra no meio. Medido: em 641px a soma dos três
+ * blocos dá 528 numa caixa de 518 — estoura 10px. Por isso a quebra fica
+ * em 900 (um dos três degraus do site) e não em 640. */
+@media (max-width: 900px) {
   .inner {
     flex-direction: column;
     gap: var(--s4);

@@ -52,7 +52,12 @@
    * Gutter fluido: 24px no celular, 124px no desktop, sem degrau.
    * O contêiner é obrigatório em toda seção — era a regra que a produção
    * não cumpria em nenhum lugar.                                          */
-  --gutter: clamp(24px, 8.6vw, 124px);
+  /* Uma curva só, sem degrau. Até 480 a margem é 16 (o --s2, celular);
+     de 480 a 640 ela sobe em linha reta até encontrar os 8.6vw do Framer;
+     daí pra cima é o 8.6vw de sempre, travado em 124. As três pernas se
+     encostam nos mesmos valores nas junções, então arrastar a janela não
+     produz salto nenhum. */
+  --gutter: max(16px, min(24.375vw - 101px, 8.6vw, 124px));
   --container: none;   /* o Framer nao limita: 100% - gutter dos dois lados */
   --measure: 68ch;   /* medida máxima de texto corrido */
 
@@ -140,11 +145,15 @@ input, textarea, select { font: inherit; color: inherit; }
   outline-offset: 3px;
 }
 
-/* No celular o gutter de 8.6vw dava 33px num aparelho de 390 — margem de
-   desktop numa tela onde cada pixel de largura conta. 16 é o --s2, passo
-   que já existe: a margem encolhe sem entrar um número novo no sistema. */
+/* O gutter de celular (16px) vem da própria curva de --gutter lá em cima,
+   sem media query: era este @media que produzia o salto de 55px pra 16px
+   ao cruzar 641. */
+
+/* Caixa alta com espacejamento em 11.2px fica no limite do legível numa
+   tela de 390. No celular o overline sobe pra 12px — o mínimo confortável
+   pra versalete. No desktop segue o valor do Framer. */
 @media (max-width: 640px) {
-  :root { --gutter: var(--s2); }
+  :root { --t-overline: 0.75rem; }
 }
 
 @media (prefers-reduced-motion: reduce) {

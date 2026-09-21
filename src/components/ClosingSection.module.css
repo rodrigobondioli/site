@@ -30,6 +30,6 @@
   text-transform: none;
   text-wrap: nowrap;
 }
-@media (max-width: 700px) {
+@media (max-width: 640px) {
   .title { font-size: var(--t-h1); text-wrap: balance; }
 }

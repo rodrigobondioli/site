@@ -62,7 +62,7 @@ export default function ProjectPager({
   if (!prev && !next) return null
 
   return (
-    <nav className={styles.pager} aria-label="Outros projetos">
+    <nav className={styles.pager} aria-label="More projects">
       <div className={`section ${styles.inner}`}>
         {prev ? <Card p={prev} dir="prev" /> : null}
         {next ? <Card p={next} dir="next" /> : null}
