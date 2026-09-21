@@ -51,7 +51,7 @@ export default function MeetingBar({
 
   return (
     <a
-      className={`${styles.bar} ${visible ? styles.on : ""}`}
+      className={`no-underline ${styles.bar} ${visible ? styles.on : ""}`}
       href={BOOKING}
       target="_blank"
       rel="noopener noreferrer"

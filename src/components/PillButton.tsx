@@ -25,7 +25,7 @@ export default function PillButton({
   className = "",
   external = false,
 }: Props) {
-  const cls = `${styles.pill} ${className}`
+  const cls = `no-underline ${styles.pill} ${className}`
 
   if (href) {
     if (external || href.startsWith("http") || href.startsWith("mailto:") || href.startsWith("#")) {

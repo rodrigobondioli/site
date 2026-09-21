@@ -26,14 +26,14 @@ export default function SiteNav({
       {/* O nome leva pra home. Antes apontava pra /work, o mesmo destino do
           "Back to portfolio": dois links pro mesmo lugar e nenhuma saída
           pra capa. */}
-      <Link href="/" className={styles.brand}>
+      <Link href="/" className={`no-underline ${styles.brand}`}>
         <strong>Rodrigo Bondioli</strong>
         <span className={styles.dot}>·</span>
         <span className={styles.role}>Nexialist Designer</span>
       </Link>
       {back ? (
         <Link href="/work#projects" className={styles.back} data-roll-host="">
-          <RollLabel text="Back to portfolio" />
+          <RollLabel text="Back to portfolio" underline />
         </Link>
       ) : null}
       <PillButton href={ctaHref}>Say hello</PillButton>

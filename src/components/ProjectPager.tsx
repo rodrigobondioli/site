@@ -34,7 +34,7 @@ function Card({ p, dir }: { p: Project; dir: "prev" | "next" }) {
   const name = p.projectName ?? p.slug
 
   return (
-    <Link className={styles.card} href={`/projects/${p.slug}`}>
+    <Link className={`no-underline ${styles.card}`} href={`/projects/${p.slug}`}>
       <span className={styles.media}>
         {thumb ? (
           /* eslint-disable-next-line @next/next/no-img-element */

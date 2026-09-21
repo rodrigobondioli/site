@@ -29,6 +29,18 @@
   backface-visibility: hidden;
 }
 
+/* O sublinhado do link não chega aqui sozinho. `.mask` é `inline-block`,
+   ou seja, uma caixa atômica: decoração de ancestral não entra nela, e
+   `text-decoration` não é herdada, então nem `inherit` resolve. Cada face
+   precisa carregar a sua — e é por isso que ela é uma opção explícita.
+   Foi o que fez o "Back to portfolio" perder o sublinhado quando ganhou
+   a cambalhota. */
+.underlined .face {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-thickness: from-font;
+}
+
 /* metade da altura da linha — é o raio do cubo */
 .front { transform: translateZ(calc(var(--roll-h, 20px) / 2)); }
 .back {

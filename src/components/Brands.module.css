@@ -19,15 +19,10 @@
   line-height: 1.2;
 }
 
-/* Sublinha só a palavra no hover — sem trocar cor nem peso. */
+/* Sublinhado sempre: é o que diz que a palavra é clicável. O hover só
+   engrossa o traço — sem trocar cor nem peso. */
 .brand {
   /* "Coca-Cola" e "Harley Davidson" não quebram no meio */
   white-space: nowrap;
-  text-decoration: none;
   text-underline-offset: 0.12em;
-  text-decoration-thickness: from-font;
-}
-.brand:hover,
-.brand:focus-visible {
-  text-decoration: underline;
 }

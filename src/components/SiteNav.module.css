@@ -49,7 +49,4 @@
   /* a janela da cambalhota tem a altura de uma linha deste texto */
   --roll-h: 17px;
   line-height: var(--roll-h);
-  text-decoration: underline;
-  text-underline-offset: 3px;
-  text-decoration-thickness: from-font;
 }

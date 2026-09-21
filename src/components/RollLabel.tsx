@@ -13,11 +13,21 @@ import styles from "./RollLabel.module.css"
  * A altura da janela vem de `--roll-h` (20px por padrão, a entrelinha da
  * pílula). Quem tiver outro tamanho de texto declara o seu.
  *
+ * `underline` existe porque `text-decoration` não é herdada e a janela é
+ * uma caixa atômica: o sublinhado do link não alcança as faces sozinho.
+ * Link de texto liga; botão e card não.
+ *
  * A segunda face é `aria-hidden`: leitor de tela lê a palavra uma vez só.
  */
-export default function RollLabel({ text }: { text: string }) {
+export default function RollLabel({
+  text,
+  underline = false,
+}: {
+  text: string
+  underline?: boolean
+}) {
   return (
-    <span className={styles.mask}>
+    <span className={`${styles.mask} ${underline ? styles.underlined : ""}`}>
       <span className={styles.roll}>
         <span className={`${styles.face} ${styles.front}`}>{text}</span>
         <span className={`${styles.face} ${styles.back}`} aria-hidden="true">

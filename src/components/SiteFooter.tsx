@@ -1,5 +1,5 @@
 import Link from "next/link"
-import { Logo } from "./Logo"
+import { SpinningLogo } from "./Logo"
 import styles from "./SiteFooter.module.css"
 
 /**
@@ -13,6 +13,9 @@ import styles from "./SiteFooter.module.css"
  * O separador "/" entre as redes é desenhado com ::before em vez de virar
  * nó de texto. Assim ele nunca sobra sozinho se um link for removido —
  * que foi exatamente o bug do separador órfão nos metadados de projeto.
+ *
+ * A marca gira com as mesmas rajadas da capa: é o mesmo SpinningLogo, não
+ * uma cópia da física. Se um dia o vento mudar, muda nos dois.
  */
 
 const SOCIAL = [
@@ -28,9 +31,9 @@ export function SiteFooter() {
   return (
     <footer className={`${styles.footer} section`}>
       <div className={`${styles.inner} container`}>
-        <Link href="/" className={styles.logo} aria-label="Rodrigo Bondioli — home">
+        <Link href="/" className={`no-underline ${styles.logo}`} aria-label="Rodrigo Bondioli — home">
           {/* sem title: o aria-label do link já nomeia isto */}
-          <Logo size={44} />
+          <SpinningLogo size={44} />
         </Link>
 
         <nav aria-label="Social">

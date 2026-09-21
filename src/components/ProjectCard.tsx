@@ -19,7 +19,7 @@ export default function ProjectCard({
   thumb?: string | null
 }) {
   return (
-    <Link href={`/projects/${slug}`} className={styles.card}>
+    <Link href={`/projects/${slug}`} className={`no-underline ${styles.card}`}>
       <div className={styles.media}>
         {thumb ? (
           /* eslint-disable-next-line @next/next/no-img-element */
