@@ -21,6 +21,10 @@
   --paper:          #ffffff;
   --paper-40:       rgba(242, 242, 242, 0.4);
   --rule:           rgba(16, 16, 16, 0.1);   /* hairline em fundo claro */
+  /* O unico vermelho do sistema, e so pra erro de formulario. Escolhido
+     pra passar em contraste sobre o amarelo do fecho, que e onde ele
+     aparece: vermelho mais vivo some naquele fundo. */
+  --erro:           #a5281b;
   --rule-dark:      rgba(242, 242, 242, 0.2); /* hairline em fundo escuro */
 
   --accent:         #e7f99a;   /* verde-limão — destaques */

@@ -8,6 +8,14 @@ import styles from "./PillButton.module.css"
  *
  * A cambalhota do hover mora no RollLabel — é o mesmo efeito da saída
  * "Back to portfolio" nas páginas de projeto.
+ *
+ * `busy` existe porque este botão envia o formulário, e um botão que não
+ * sabe dizer "estou ocupado" deixa a pessoa clicando de novo achando que
+ * não funcionou. Ele desabilita junto: `aria-busy` avisa o leitor de tela,
+ * `disabled` impede o segundo envio.
+ *
+ * Nada disso vale pro modo link: um <a> não tem estado desabilitado. Se
+ * um link precisa ficar inativo, ele não deve ser um link.
  */
 
 type Props = {
@@ -16,6 +24,11 @@ type Props = {
   type?: "button" | "submit"
   className?: string
   external?: boolean
+  disabled?: boolean
+  /** ocupado: troca o rótulo, desabilita e avisa o leitor de tela */
+  busy?: boolean
+  busyLabel?: string
+  onClick?: () => void
 }
 
 export default function PillButton({
@@ -24,6 +37,10 @@ export default function PillButton({
   type = "button",
   className = "",
   external = false,
+  disabled = false,
+  busy = false,
+  busyLabel,
+  onClick,
 }: Props) {
   const cls = `no-underline ${styles.pill} ${className}`
 
@@ -49,9 +66,20 @@ export default function PillButton({
     )
   }
 
+  const rotulo = busy ? busyLabel ?? children : children
+
   return (
-    <button className={cls} data-roll-host="" type={type}>
-      <RollLabel text={children} />
+    <button
+      className={cls}
+      data-roll-host=""
+      type={type}
+      disabled={disabled || busy}
+      aria-busy={busy || undefined}
+      onClick={onClick}
+    >
+      {/* a chave força o cubo a remontar quando o rótulo muda: sem ela as
+          duas faces ficariam com textos diferentes no meio do giro */}
+      <RollLabel key={rotulo} text={rotulo} />
     </button>
   )
 }

@@ -18,3 +18,16 @@
   transition: filter var(--fast) var(--ease);
 }
 .pill:hover { filter: brightness(1.06); }
+/* O clique tem que ter resposta física, senão o botão parece uma imagem. */
+.pill:active { transform: scale(0.98); }
+
+/* Ocupado ou inativo: o rosa perde força e o cursor avisa que não adianta
+   clicar. `pointer-events` fica ligado de propósito — cursor `not-allowed`
+   só aparece em elemento que ainda recebe o mouse. */
+.pill:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  filter: none;
+  transform: none;
+}
+.pill[aria-busy="true"] { cursor: progress; }
