@@ -154,7 +154,14 @@
    dele passa, a descrição empurra a régua pra cima — que é o que o Framer
    faz. Se a régua ficasse solta dentro de .intro, ela grudaria até o fim
    do bloco e o texto passaria por baixo dela em vez de empurrá-la. */
-.metaHolder { flex: 1 1 auto; }
+.metaHolder {
+  flex: 1 1 auto;
+  /* O respiro que impede a descrição de encostar na régua. O sticky só
+     anda dentro da caixa de conteúdo, então esses 56px são onde a régua
+     começa a ser empurrada — 56 antes do texto chegar, não quando ele
+     encosta. É o mesmo padding que o Framer usa nesse invólucro. */
+  padding-bottom: var(--s5);
+}
 
 .introBottom { display: flex; flex-direction: column; gap: var(--s4); }
 
