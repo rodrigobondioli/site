@@ -22,9 +22,27 @@
     inset 0 1px 0 0 rgba(255, 255, 255, 0.13),
     0 14px 40px 0 rgba(0, 0, 0, 0.28);
   color: #fff;
-  transition: transform var(--fast) var(--ease), background var(--fast) var(--ease);
+  /* escondida enquanto o hero está na tela */
+  opacity: 0;
+  visibility: hidden;
+  transform: translateX(-50%) translateY(16px);
+  transition:
+    opacity 380ms var(--ease),
+    transform 380ms var(--ease),
+    visibility 0s linear 380ms,
+    background var(--fast) var(--ease);
 }
-.bar:hover {
+.on {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(0);
+  transition:
+    opacity 380ms var(--ease),
+    transform 380ms var(--ease),
+    visibility 0s,
+    background var(--fast) var(--ease);
+}
+.on:hover {
   background: rgba(16, 16, 16, 0.72);
   transform: translateX(-50%) translateY(-2px);
 }

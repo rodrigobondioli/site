@@ -85,10 +85,14 @@
 html {
   -webkit-text-size-adjust: 100%;
   scroll-behavior: smooth;
+  /* clip, nao hidden: hidden viraria contexto de rolagem e mataria o
+     position:sticky da imagem do projeto em destaque */
+  overflow-x: clip;
 }
 
 body {
   margin: 0;
+  overflow-x: clip;
   background: var(--bg);
   color: var(--ink);
   font-family: var(--font-body), system-ui, sans-serif;

@@ -1,6 +1,9 @@
+/* 100vw conta a barra de rolagem e sobrava alguns px pra direita.
+   104% com -2% de margem cobre os cantos que a inclinacao deixa vazios,
+   e quem corta e a secao. */
 .viewport {
-  width: 100vw;
-  margin-inline: calc(50% - 50vw);
+  width: 104%;
+  margin-inline: -2%;
   overflow: hidden;
   rotate: -3deg;
   padding-block: var(--s2);

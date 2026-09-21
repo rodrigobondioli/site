@@ -42,16 +42,18 @@
   -webkit-backdrop-filter: blur(5px);
 }
 
+/* No Framer sao tres celulas que dividem a largura, cada uma com o
+   conteudo centrado — nao itens jogados nas pontas. */
 .statsInner {
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
   align-items: center;
-  justify-content: space-between;
-  gap: var(--s3);
 }
 
 .stat {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: var(--s1);
 }
 
@@ -184,7 +186,10 @@
 
 /* ---------- Ticker ---------- */
 
-.ticker { padding-block: var(--s7); }
+.ticker {
+  padding-block: var(--s7);
+  overflow: hidden;
+}
 
 /* ---------- Sobre ---------- */
 
