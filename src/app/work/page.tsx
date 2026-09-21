@@ -119,7 +119,7 @@ export default function WorkPage() {
             <div className={s.featuredImageCol}>
               <ScrollReveal className={s.featuredImage}>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src="/site/work-5.png" alt="Go Ink — Get inspired, get inked" />
+                <img src="/images/homem-charuto.webp" alt="Go Ink — Get inspired, get inked" />
               </ScrollReveal>
             </div>
 
