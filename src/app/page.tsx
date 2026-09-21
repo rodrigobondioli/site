@@ -43,7 +43,7 @@ export default function HomePage() {
           <CopyEmail
             email="hello@rodrigobondioli.com"
             copiedLabel="Email copied"
-            className={styles.label}
+            className={`${styles.label} ${styles.email}`}
           />
         </div>
       </footer>

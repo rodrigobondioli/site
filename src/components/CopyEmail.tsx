@@ -189,7 +189,9 @@ export default function CopyEmail({
         padding: 0,
         border: "none",
         background: "none",
-        font: "inherit",
+        /* nada de `font: inherit` aqui: estilo inline ganha da classe, e a
+           classe que vem de fora é justamente quem define o tamanho. O
+           reset global já faz o botão herdar a fonte. */
         cursor: "pointer",
         perspective,
         WebkitTapHighlightColor: "transparent",

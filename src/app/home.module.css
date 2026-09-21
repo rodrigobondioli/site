@@ -27,12 +27,17 @@
   gap: var(--s4);
 }
 
+/* Medido no Framer: 12.8/16.64 em bold. */
 .label {
   font-size: var(--t-body-sm);
-  font-weight: 600;
-  line-height: 1.35;
+  font-weight: 700;
+  line-height: 1.3;
   margin: 0;
 }
+
+/* O e-mail é o mesmo tamanho, mas em peso normal e sublinhado — é o que
+   diferencia o link do rótulo ao lado. */
+.email { font-weight: 400; }
 
 .bio {
   max-width: 34ch;
