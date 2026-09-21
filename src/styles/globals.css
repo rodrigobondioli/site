@@ -215,10 +215,13 @@ p, li, figcaption, blockquote, dd { text-wrap: pretty; }
   margin-inline: auto;
 }
 
-/* Sangria controlada: o filho escapa do gutter sem quebrar o contêiner */
+/* Sangria controlada: o filho escapa do gutter sem quebrar o contêiner.
+   Em vw isto estouraria: `100vw` conta a barra de rolagem, que desde o
+   `scrollbar-gutter: stable` está sempre reservada. A conta pelo gutter
+   chega no mesmo lugar sem contar o que não existe. */
 .bleed {
-  width: 100vw;
-  margin-inline: calc(50% - 50vw);
+  width: calc(100% + 2 * var(--gutter));
+  margin-inline: calc(-1 * var(--gutter));
 }
 
 .stack     { display: flex; flex-direction: column; }

@@ -35,8 +35,12 @@
   padding: var(--s1) var(--s2);
   text-align: center;
   /* Igual ao Framer: uma linha só, cortada nas pontas. Quebrar faria os
-     cards da mesma fileira ficarem de alturas diferentes. */
+     cards da mesma fileira ficarem de alturas diferentes.
+     O `text-overflow` é o que transforma o corte em reticências em vez de
+     letra cortada no meio — e só funciona porque o item da grade ganhou
+     `min-width: 0`; antes a caixa crescia em vez de cortar. */
   white-space: nowrap;
   overflow: hidden;
+  text-overflow: ellipsis;
   border-top: var(--hairline) solid var(--rule);
 }

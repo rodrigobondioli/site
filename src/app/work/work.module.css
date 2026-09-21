@@ -219,6 +219,17 @@
   grid-template-columns: repeat(3, 1fr);
   gap: var(--s4) var(--s2);
 }
+/* Item de grid nasce com `min-width: auto`: ele se recusa a ficar menor que
+   o próprio conteúdo. A linha de disciplinas do card é `white-space: nowrap`,
+   e a mais longa ("Product Strategy • Interface • Framer Development") mede
+   472px — então cada coluna ficava travada nesse mínimo, `1fr` deixava de
+   valer (as colunas saíam desiguais já em 1440) e o card transbordava o
+   container. Como o html tem `overflow-x: clip`, isso não virava barra de
+   rolagem: virava card decepado. No celular sumiam 161px, mais da metade.
+
+   Com `min-width: 0` a coluna volta a poder encolher, e aí o corte do texto
+   acontece onde devia — no próprio texto. */
+.grid > li { min-width: 0; }
 @media (max-width: 900px) { .grid { grid-template-columns: repeat(2, 1fr); } }
 @media (max-width: 600px) { .grid { grid-template-columns: 1fr; } }
 

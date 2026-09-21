@@ -10,7 +10,10 @@
   display: flex;
   align-items: center;
   gap: 12px;
-  width: min(357px, calc(100vw - var(--s4)));
+  /* 100vw inclui a barra de rolagem, e com `scrollbar-gutter: stable` ela
+     está sempre reservada — a conta sobrava ~15px e a barra estourava o
+     documento em telas muito estreitas. 100% do body já é a largura útil. */
+  width: min(357px, calc(100% - var(--s4)));
   height: 64px;
   padding: var(--s1);
   border: 1px solid rgba(255, 255, 255, 0.24);
