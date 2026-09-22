@@ -40,7 +40,8 @@ Duas armadilhas que já custaram tempo:
 
 ```bash
 npm run dev     # localhost:3000
-npm run build   # gera ./out
+npm run build   # build de produção (.next)
+npm run start   # serve o build em localhost:3000
 ```
 
 ## Decisões que não são negociáveis sem falar com o Rodrigo

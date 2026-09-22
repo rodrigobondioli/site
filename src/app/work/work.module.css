@@ -376,8 +376,14 @@
   margin-block: auto;
 }
 
+/* O vão entre vídeo e texto sai da largura do vídeo, não de um `gap` na
+   grade: um gap empurraria a coluna do texto, e o texto começar no meio
+   da tela é o que bate com o Framer (lá não há vídeo, só o texto). Sem o
+   desconto o vídeo encostava no texto de 1440 pra baixo — a coluna já é
+   mais estreita que 623 ali. --s5 é o mesmo vão entre imagem e texto do
+   projeto em destaque. */
 .aboutVideo {
-  width: min(623px, 100%);
+  width: min(623px, 100% - var(--s5));
   aspect-ratio: 1;
   object-fit: cover;
   background: var(--ink-10);
@@ -395,6 +401,8 @@
 
 @media (max-width: 900px) {
   .aboutBody { grid-template-columns: 1fr; gap: var(--s4); }
+  /* empilhado não há vizinho do lado: o vídeo volta a ocupar a coluna */
+  .aboutVideo { width: min(623px, 100%); }
   .credentials li { flex-direction: column; gap: var(--s1); }
 }
 
