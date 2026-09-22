@@ -49,15 +49,19 @@
   --s7: clamp(88px, 12vw, 176px);   /* quebra maior de seção              */
 
   /* --- Layout --- *
-   * Gutter fluido: 24px no celular, 124px no desktop, sem degrau.
+   * Gutter fluido: 16px no celular, 124px só em tela bem grande, sem degrau.
    * O contêiner é obrigatório em toda seção — era a regra que a produção
    * não cumpria em nenhum lugar.                                          */
   /* Uma curva só, sem degrau. Até 480 a margem é 16 (o --s2, celular);
-     de 480 a 640 ela sobe em linha reta até encontrar os 8.6vw do Framer;
-     daí pra cima é o 8.6vw de sempre, travado em 124. As três pernas se
-     encostam nos mesmos valores nas junções, então arrastar a janela não
-     produz salto nenhum. */
-  --gutter: max(16px, min(24.375vw - 101px, 8.6vw, 124px));
+     de 480 a 640 ela sobe em linha reta até encontrar os 6vw; daí pra
+     cima é 6vw, travado em 124 (que só chega em ~2070px). As três pernas
+     se encostam nos mesmos valores nas junções (16 em 480, 38.4 em 640),
+     então arrastar a janela não produz salto nenhum.
+
+     Era 8.6vw, o valor do Framer — 124px de cada lado já em 1440, 17% da
+     tela só de margem. Em 22/09/2026 o Rodrigo decidiu soltar a paridade
+     aqui e ir de 6vw: 86px em 1440, 77 em 1280, 54 em 900. */
+  --gutter: max(16px, min(14vw - 51.2px, 6vw, 124px));
   --container: none;   /* o Framer nao limita: 100% - gutter dos dois lados */
   --measure: 68ch;   /* medida máxima de texto corrido */
 
