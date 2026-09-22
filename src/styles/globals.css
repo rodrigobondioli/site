@@ -93,7 +93,6 @@
 
 html {
   -webkit-text-size-adjust: 100%;
-  scroll-behavior: smooth;
   /* clip, nao hidden: hidden viraria contexto de rolagem e mataria o
      position:sticky da imagem do projeto em destaque */
   overflow-x: clip;
@@ -104,6 +103,12 @@ html {
      outra que não rola. */
   scrollbar-gutter: stable;
 }
+
+/* Âncora suave só onde o Lenis não está. Com ele no ar, os dois scrolls
+   suaves brigam: qualquer `scrollTo` nativo vira uma animação do
+   navegador disputando a posição com a do Lenis. A documentação dele pede
+   `scroll-behavior` desligado; a classe `.lenis` no html é o sinal. */
+html:not(.lenis) { scroll-behavior: smooth; }
 
 body {
   margin: 0;
@@ -157,7 +162,7 @@ input, textarea, select { font: inherit; color: inherit; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  html { scroll-behavior: auto; }
+  html:not(.lenis) { scroll-behavior: auto; }
   *, *::before, *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;

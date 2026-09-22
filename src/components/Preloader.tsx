@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react"
 import { marcarCarregando, marcarPronto } from "@/lib/ready"
+import { irProTopo, soltarScroll, travarScroll } from "@/lib/lenis"
 import styles from "./Preloader.module.css"
 
 /**
@@ -125,13 +126,21 @@ export default function Preloader() {
      Quem impede o salto de ~15px quando a barra some e volta é o
      `scrollbar-gutter: stable` no html — sem ele a página inteira
      escorrega de lado no instante em que esta tela sai. */
+  /* O `overflow` sozinho não segura o Lenis: ele escreve a posição por
+     JS, e rolagem programática passa por cima de `overflow: hidden`.
+     Medido antes desta trava: rodando a roda durante o carregamento, a
+     página ia parar em 3.656px por baixo da tela, e saía no meio do
+     site. Então as duas travas — a do CSS pra quem não tem Lenis, a do
+     Lenis pra quem tem. */
   useEffect(() => {
     if (fora) return
     const html = document.documentElement
     const anterior = html.style.overflowY
     html.style.overflowY = "hidden"
+    travarScroll()
     return () => {
       html.style.overflowY = anterior
+      soltarScroll()
     }
   }, [fora])
 
@@ -139,7 +148,7 @@ export default function Preloader() {
     if (!saindo) return
     const t = window.setTimeout(() => {
       setFora(true)
-      window.scrollTo(0, 0)
+      irProTopo()
       // agora sim: quem estava esperando pra animar pode começar
       marcarPronto()
     }, 620)

@@ -2,6 +2,7 @@
 
 import { useEffect } from "react"
 import Lenis from "lenis"
+import { registrarLenis, removerLenis } from "@/lib/lenis"
 
 /**
  * Scroll suave. O Framer usava Lenis (dá pra ver a classe .lenis no <html>
@@ -26,12 +27,9 @@ export default function SmoothScroll() {
       wheelMultiplier: 1,
     })
 
-    let frame = 0
-    const raf = (time: number) => {
-      lenis.raf(time)
-      frame = requestAnimationFrame(raf)
-    }
-    frame = requestAnimationFrame(raf)
+    /* Sem laço próprio: quem gira o Lenis é o compasso do site, e ele
+       roda antes de qualquer efeito amarrado ao scroll no mesmo quadro. */
+    registrarLenis(lenis)
 
     /* A página cresce depois do primeiro clique: fonte que troca, imagem
        preguiçosa que chega, vídeo que reserva altura. O Lenis mede o
@@ -119,7 +117,7 @@ export default function SmoothScroll() {
       document.removeEventListener("click", onClick)
       escutarGesto(false)
       ro.disconnect()
-      cancelAnimationFrame(frame)
+      removerLenis(lenis)
       lenis.destroy()
     }
   }, [])

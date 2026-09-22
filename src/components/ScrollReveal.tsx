@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useRef, type ReactNode } from "react"
+import { aCadaQuadro } from "@/lib/lenis"
 
 /**
  * Revelação amarrada ao scroll — não é um "entrou, animou".
@@ -11,7 +12,8 @@ import { useEffect, useRef, type ReactNode } from "react"
  * desfaz. É isso que dá a sensação de peso, e é o que um
  * `transition: opacity .6s` disparado uma vez não entrega.
  *
- * Custo: um rAF só enquanto a peça está na tela. Fora dela, zero.
+ * Custo: um passo no compasso do site (src/lib/lenis.ts) enquanto a peça
+ * está perto da tela. Fora dela, zero.
  *
  * As três armadilhas abaixo são as mesmas que o MaskReveal levou — este
  * aqui ficou pra trás na correção, e por isso repetiu o bug de "às vezes
@@ -54,8 +56,7 @@ export default function ScrollReveal({
       return
     }
 
-    let frame = 0
-    let running = false
+    let desligar: (() => void) | null = null
 
     const draw = () => {
       const r = node.getBoundingClientRect()
@@ -72,23 +73,17 @@ export default function ScrollReveal({
       ).toFixed(3)}deg)`
     }
 
-    const loop = () => {
-      draw()
-      frame = requestAnimationFrame(loop)
-    }
-
     // estado inicial aplicado pelo JS, não pelo HTML — ver o comentário
     // no JSX lá embaixo
     draw()
 
     const start = () => {
-      if (running) return
-      running = true
-      frame = requestAnimationFrame(loop)
+      if (desligar) return
+      desligar = aCadaQuadro(draw)
     }
     const stop = () => {
-      running = false
-      cancelAnimationFrame(frame)
+      desligar?.()
+      desligar = null
     }
 
     /* Uma janela inteira de folga de cada lado. Com 100px o observer
@@ -102,7 +97,7 @@ export default function ScrollReveal({
 
     return () => {
       io.disconnect()
-      cancelAnimationFrame(frame)
+      stop()
     }
   }, [span, o0, o1, s0, s1, r0, r1])
 

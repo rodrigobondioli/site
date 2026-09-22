@@ -1,6 +1,7 @@
 "use client"
 
-import { useEffect, useRef, type ReactNode } from "react"
+import { useEffect, useRef, type CSSProperties, type ReactNode } from "react"
+import { aCadaQuadro } from "@/lib/lenis"
 
 /**
  * Revelação por máscara, de baixo pra cima, amarrada ao scroll.
@@ -30,6 +31,7 @@ type Props = {
   shift?: number
   /** atraso da largada, em frações da altura da janela */
   lag?: number
+  style?: CSSProperties
 }
 
 export default function MaskReveal({
@@ -38,6 +40,7 @@ export default function MaskReveal({
   span = 0.62,
   shift = 40,
   lag = 0,
+  style,
 }: Props) {
   const ref = useRef<HTMLDivElement>(null)
 
@@ -52,8 +55,7 @@ export default function MaskReveal({
       return
     }
 
-    let frame = 0
-    let running = false
+    let desligar: (() => void) | null = null
 
     /* A porta: 0 enquanto a imagem não tem pixels, 1 depois que ela pode
        ser pintada. O que vai pra tela é o MENOR entre o progresso do
@@ -121,7 +123,6 @@ export default function MaskReveal({
     const draw = () => {
       apply(valor())
       desenhou = true
-      frame = requestAnimationFrame(draw)
     }
 
     /* Rede de segurança. `apply` acima já escreveu a máscara no nó; se o
@@ -136,8 +137,7 @@ export default function MaskReveal({
     }, 2500)
 
     const start = () => {
-      if (running) return
-      running = true
+      if (desligar) return
 
       /* A peça está a menos de uma janela daqui, mas a imagem é
          `loading="lazy"` e quem decide a hora do fetch é o navegador — que
@@ -152,11 +152,11 @@ export default function MaskReveal({
         if (!prazo) prazo = window.setTimeout(liberar, 1200)
       }
 
-      frame = requestAnimationFrame(draw)
+      desligar = aCadaQuadro(draw)
     }
     const stop = () => {
-      running = false
-      cancelAnimationFrame(frame)
+      desligar?.()
+      desligar = null
     }
 
     /* Uma janela inteira de folga de cada lado. Com margem pequena o
@@ -171,7 +171,7 @@ export default function MaskReveal({
 
     return () => {
       io.disconnect()
-      cancelAnimationFrame(frame)
+      stop()
       clearTimeout(rede)
       if (prazo) clearTimeout(prazo)
       if (img) {
@@ -188,7 +188,7 @@ export default function MaskReveal({
      viu. Quem põe a máscara é o efeito abaixo, e só em quem ainda não
      chegou a hora. Se o JS não rodar, a imagem simplesmente aparece. */
   return (
-    <div className={className} ref={ref} style={{ willChange: "clip-path" }}>
+    <div className={className} ref={ref} style={{ ...style, willChange: "clip-path" }}>
       {children}
     </div>
   )

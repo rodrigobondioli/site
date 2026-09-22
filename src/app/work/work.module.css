@@ -271,10 +271,13 @@
 .case { display: flex; flex-direction: column; gap: var(--s5); }
 .block { display: flex; flex-direction: column; gap: var(--s2); }
 /* O Framer não estica imagem além do tamanho original — quando a peça é
-   menor que a coluna, ela fica centrada. */
+   menor que a coluna, ela fica centrada. O teto é a largura da própria
+   imagem, que vem do JSX (`style.maxWidth`). Era `max-content`, e isso
+   zerava a caixa: antes de a imagem chegar o navegador não sabe a
+   largura dela, a caixa nascia com 0 de largura e 0 de altura, e a
+   página crescia 1.884px enquanto a pessoa rolava. */
 .shotWrap {
   width: 100%;
-  max-width: max-content;
   margin-inline: auto;
   overflow: hidden;
 }

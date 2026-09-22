@@ -1,6 +1,9 @@
 import type { Metadata } from "next"
 import Preloader from "@/components/Preloader"
 import { display, body } from "./fonts"
+// o CSS que o Lenis pede: altura automática no html, trava que respeita
+// `stop()`, iframes sem ponteiro durante o scroll suave
+import "lenis/dist/lenis.css"
 import "@/styles/globals.css"
 
 export const metadata: Metadata = {

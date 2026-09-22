@@ -193,7 +193,7 @@ export default function WorkPage() {
                 </p>
               </div>
 
-              <MaskReveal className={s.shotWrap}>
+              <MaskReveal className={s.shotWrap} style={{ maxWidth: 848 }}>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   className={s.shot}
@@ -219,7 +219,7 @@ export default function WorkPage() {
               </div>
 
               {SHOTS.map(({ src, w, h }) => (
-                <MaskReveal className={s.shotWrap} key={src}>
+                <MaskReveal className={s.shotWrap} key={src} style={{ maxWidth: w }}>
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     className={s.shot}
