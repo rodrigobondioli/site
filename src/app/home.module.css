@@ -35,7 +35,8 @@
 }
 
 /* Link de texto no tamanho do nome, peso normal e sublinhado — o mesmo
-   tratamento do e-mail lá embaixo, que é o outro link da página. */
+   tratamento do e-mail lá embaixo, que é o outro link da página. O hover
+   também é o dele: o cubo do CubeLink. */
 .socialLink {
   font-size: var(--t-body-sm);
   line-height: 1.3;

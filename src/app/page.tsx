@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import { SpinningLogo } from "@/components/Logo"
 import CopyEmail from "@/components/CopyEmail"
+import CubeLink from "@/components/CubeLink"
 import styles from "./home.module.css"
 
 export const metadata: Metadata = {
@@ -29,14 +30,9 @@ function Social({ className }: { className: string }) {
       <ul className={styles.social}>
         {SOCIAL.map(({ label, href }) => (
           <li key={href}>
-            <a
-              className={styles.socialLink}
-              href={href}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
+            <CubeLink className={styles.socialLink} href={href}>
               {label}
-            </a>
+            </CubeLink>
           </li>
         ))}
       </ul>
