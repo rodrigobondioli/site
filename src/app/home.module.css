@@ -34,11 +34,11 @@
   gap: var(--s2);
 }
 
-/* Link de texto no tamanho do nome, peso normal e sublinhado — o mesmo
-   tratamento do e-mail lá embaixo, que é o outro link da página. O hover
-   também é o dele: o cubo do CubeLink. */
+/* Igual ao e-mail lá embaixo, que é o outro link da página: mesmo
+   tamanho (--t-caption, um passo abaixo do rótulo), peso normal,
+   sublinhado, e o mesmo cubo no hover (CubeLink). */
 .socialLink {
-  font-size: var(--t-body-sm);
+  font-size: var(--t-caption);
   line-height: 1.3;
 }
 
