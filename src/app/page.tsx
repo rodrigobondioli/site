@@ -10,10 +10,45 @@ export const metadata: Metadata = {
   alternates: { canonical: "/" },
 }
 
+const SOCIAL = [
+  { label: "YouTube", href: "https://www.youtube.com/@falabondioli" },
+  { label: "Instagram", href: "https://www.instagram.com/falabondioli/" },
+  { label: "LinkedIn", href: "https://www.linkedin.com/in/bondioli/" },
+  { label: "Substack", href: "https://falabondioli.substack.com/" },
+]
+
+/* Duas instâncias, uma por lugar: no desktop as redes ficam no canto de
+   cima, no celular descem pro fim da página. O CSS mostra uma e esconde a
+   outra com `display: none`, que também a tira da leitura de tela — quem
+   usa leitor ouve a lista uma vez só. Reordenar uma instância única por
+   CSS exigiria desmontar o header e o footer (`display: contents`), e os
+   dois são marcos de navegação que valem mais que a economia. */
+function Social({ className }: { className: string }) {
+  return (
+    <nav aria-label="Social" className={className}>
+      <ul className={styles.social}>
+        {SOCIAL.map(({ label, href }) => (
+          <li key={href}>
+            <a
+              className={styles.socialLink}
+              href={href}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {label}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+  )
+}
+
 /**
  * Home — pôster de uma tela só, sem rolagem.
  *
- * Quatro elementos ancorados nos cantos e a marca girando no centro.
+ * Elementos ancorados nos cantos e a marca girando no centro. No canto de
+ * cima à direita, as redes — não existiam no Framer, entraram em 22/09.
  * No Framer isso era um `Main` absoluto em top:174px/left:244px com um
  * padding de 56px que não renderizava nada (todos os filhos eram absolutos).
  * Aqui é um grid de três linhas: topo, centro, base.
@@ -26,6 +61,8 @@ export default function HomePage() {
     <main className={styles.page}>
       <header className={styles.top}>
         <p className={styles.label}>Rodrigo Bondioli</p>
+
+        <Social className={styles.socialTop} />
       </header>
 
       <div className={styles.center}>
@@ -46,6 +83,8 @@ export default function HomePage() {
             className={`${styles.label} ${styles.email}`}
           />
         </div>
+
+        <Social className={styles.socialBottom} />
       </footer>
     </main>
   )
