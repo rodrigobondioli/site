@@ -6,7 +6,11 @@ import localFont from "next/font/local"
  * Alpha Lyrae  → títulos.  SIL Open Font License 1.1, © 2021 Fontfabric.
  * Inter        → todo o resto. SIL Open Font License 1.1.
  *
- * Ambas self-hospedadas em public/fonts. Nenhuma requisição externa, nem em
+ * Ambas self-hospedadas em public/fonts, cada uma com o texto da licença
+ * ao lado (OFL-AlphaLyrae.txt, OFL-Inter.txt) — a OFL pede que o aviso
+ * acompanhe o arquivo. A Alpha Lyrae não está no Google Fonts, e não
+ * precisa: a licença vem gravada na própria fonte (Fontfabric, OFL 1.1,
+ * sem restrição de uso na web). Conferido em 24/09. Nenhuma requisição externa, nem em
  * runtime nem no build — o build roda offline. (Chegamos aqui porque
  * `next/font/google` falha em rede sem acesso ao fonts.googleapis.com, e um
  * build que depende de rede é um build que um dia quebra sozinho.)

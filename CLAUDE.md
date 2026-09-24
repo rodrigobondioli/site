@@ -49,6 +49,10 @@ npm run start   # serve o build em localhost:3000
 
 - **Fontes:** só Alpha Lyrae (títulos) e Inter (resto). Ele mandou apagar o
   resto. Alpha Lyrae é SIL OFL 1.1, auto-hospedada em `public/fonts`.
+  Ela não está no Google Fonts — é da Fontfabric, e a licença vem gravada
+  no arquivo. Os textos da OFL ficam ao lado das fontes (`OFL-*.txt`).
+  Em 23/09/2026 ele testou trocar tudo pela Geist e decidiu manter a Alpha:
+  é a assinatura do site, e a Geist é a cara de SaaS.
 - **Espaçamento:** sete passos, `--s1` a `--s7` em `globals.css`. O Framer tinha
   acumulado 19 valores onde o sistema documentava 7. Não inventar um oitavo.
 - **Réguas** (as linhas curtas ao lado dos títulos) têm largura fixa por
