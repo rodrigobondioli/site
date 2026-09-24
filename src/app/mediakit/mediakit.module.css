@@ -1,0 +1,378 @@
+/* =========================================================================
+   /mediakit
+
+   A estrutura e os números vieram do Framer (/mediakit/home, medido com
+   getComputedStyle, não estimado). A roupa é a da /work: cabeçalho com
+   régua, canto vivo em tudo, hairline de --rule, e as grades descendo de
+   3 → 2 → 1 coluna nos mesmos três degraus do site (640 / 900 / 1100).
+
+   O que ficou pra trás do Framer de propósito: raio de 16px nos cards,
+   padding de 40/56 (aqui é --s3/--s4) e a fita adesiva colada no vídeo.
+   ========================================================================= */
+
+/* ---------- Capa ---------- */
+
+.hero {
+  position: relative;
+  min-height: 100svh;
+  display: grid;
+  place-items: center;
+  padding-inline: var(--gutter);
+  overflow: hidden;
+}
+
+/* A faixa é textura: passa por trás do vídeo e sangra pros dois lados.
+   Largura 100%, não 100vw — vw conta a barra de rolagem, que o
+   `scrollbar-gutter: stable` mantém sempre reservada, e a sobra vira
+   scroll horizontal. Foi exatamente o bug do ticker da /work.
+
+   Aqui mora só o lugar dela. Quem corre é o TypeBand. */
+.band {
+  position: absolute;
+  inset: 50% 0 auto 0;
+  translate: 0 -50%;
+}
+
+.heroInner {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--s4);
+}
+
+.meta {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--s2);
+  width: 100%;
+}
+
+/* Quadrado, canto vivo, medido no Framer: 294 em 1440, 246 em 900, 219 em
+   810 — as três pontas caem em cima de min(294px, 28vw). O piso de 180
+   impede que ele vire selo perto do degrau de 640. */
+.stage {
+  width: max(180px, min(294px, 28vw));
+  aspect-ratio: 1;
+  object-fit: cover;
+  background: var(--ink-10);
+}
+
+@media (max-width: 640px) {
+  .meta {
+    flex-direction: column;
+    align-items: center;
+    gap: var(--s1);
+  }
+  /* no celular o vídeo ocupa a largura e fica em pé, como no Framer */
+  .stage {
+    width: 100%;
+    aspect-ratio: 327 / 400;
+  }
+  /* Com o vídeo ocupando a largura inteira, a faixa deixaria de ser
+     palavra e viraria um caco de letra de cada lado dele. Então ela sai
+     de trás e desce pro fim do herói, sangrando pelos dois gutters —
+     continua sendo textura, mas dá pra ler. */
+  .hero {
+    align-content: center;
+    gap: var(--s5);
+  }
+  .band {
+    position: static;
+    translate: none;
+    order: 2;
+    width: calc(100% + 2 * var(--gutter));
+    margin-inline: calc(-1 * var(--gutter));
+  }
+  .heroInner { order: 1; }
+}
+
+/* ---------- Ritmo das seções ---------- */
+
+/* 88 entre seções (o respiro do Framer e o --s6 daqui), 56 entre o
+   cabeçalho e o conteúdo. */
+.sec { padding-top: var(--s6); }
+.secInner {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s5);
+}
+
+/* ---------- Audiência ---------- */
+
+.claim {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s4);
+}
+
+.facts {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s1);
+}
+.facts strong { font-weight: 600; }
+
+/* Faixa de números: três colunas, e os dois campeões ocupam duas.
+   É o desenho do Framer — Subscribers e Total impressions são os que
+   carregam a página. */
+.stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--s2);
+}
+/* item de grid nasce com min-width:auto e se recusa a encolher; sem isto
+   um rótulo longo trava a coluna e o card é decepado — foi o bug da
+   grade do arquivo na /work */
+.stats > li { min-width: 0; }
+.wide { grid-column: span 2; }
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: var(--s1);
+  min-height: var(--s7);
+  padding: var(--s3);
+  border: var(--hairline) solid var(--rule);
+}
+
+/* Países e faixa etária: duas listas lado a lado, com a mesma régua entre
+   linhas das credenciais da /work. */
+.tables {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--s5);
+}
+.table {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s3);
+}
+.rows {
+  display: flex;
+  flex-direction: column;
+}
+.rows li {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--s3);
+  padding-block: var(--s2);
+  border-bottom: var(--hairline) solid var(--rule);
+}
+.rows li:first-child {
+  border-top: var(--hairline) solid var(--rule);
+}
+
+/* ---------- Cartelas de cor ---------- */
+
+.pairs,
+.trio {
+  display: grid;
+  gap: var(--s2);
+}
+.pairs { grid-template-columns: repeat(2, 1fr); }
+.trio  { grid-template-columns: repeat(3, 1fr); }
+.pairs > li,
+.trio > li { min-width: 0; }
+
+.tile {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: var(--s2);
+  min-height: var(--s7);
+  padding: var(--s4);
+}
+.accent { background: var(--accent); }
+.violet {
+  gap: var(--s1);
+  background: var(--accent-violet);
+  color: #f2f2f2;
+}
+
+/* ---------- Formatos e valores ---------- */
+
+/* Tabela de verdade: são três colunas de dados, e um leitor de tela
+   anuncia o cabeçalho de cada célula. `separate` porque no celular as
+   linhas viram grade, e aí a régua muda de dono — sai das células e vai
+   pra linha. */
+.rates {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  text-align: left;
+}
+.rates th,
+.rates td {
+  padding-block: var(--s3);
+  padding-right: var(--s3);
+  vertical-align: middle;
+  border-bottom: var(--hairline) solid var(--rule);
+}
+.rates thead th {
+  padding-block: var(--s2);
+  border-top: var(--hairline) solid var(--rule);
+}
+.rates th:last-child,
+.rates td:last-child {
+  padding-right: 0;
+  text-align: right;
+  white-space: nowrap;
+}
+.rates td strong { font-weight: 600; }
+/* a coluna do meio é a que tem texto corrido: ela fica com a folga */
+.rates col.delivers { width: 44%; }
+
+.extensions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s2);
+}
+
+/* ---------- Seleção de vídeos ---------- */
+
+.picks {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--s4) var(--s2);
+}
+.picks > li { min-width: 0; }
+
+/* ---------- Sobre ---------- */
+
+/* Mesmo bloco da /work: título com régua, duas colunas iguais, e as
+   credenciais fechando em linhas com hairline. */
+.about {
+  padding-top: var(--s7);
+  padding-bottom: var(--s5);
+}
+.aboutInner {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s5);
+}
+.aboutHead {
+  display: flex;
+  align-items: center;
+  gap: var(--s3);
+}
+
+.aboutBody {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: stretch;
+}
+
+/* O vão entre foto e texto sai da largura da foto, não de um `gap` na
+   grade: com gap a coluna de texto seria empurrada e deixaria de começar
+   no meio da página. É o mesmo desconto do vídeo da /work. */
+.aboutPhoto {
+  width: min(623px, 100% - var(--s5));
+  aspect-ratio: 1;
+  object-fit: cover;
+  background: var(--ink-10);
+}
+
+.aboutText {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s5);
+}
+/* O cargo fica no topo; o resto do texto se centra na folga que sobrar —
+   igualzinho à /work. */
+.aboutRole { flex: 0 0 auto; }
+.aboutCopy {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s5);
+  margin-block: auto;
+}
+
+.credentials {
+  display: flex;
+  flex-direction: column;
+}
+.credentials li {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--s3);
+  padding-block: var(--s2);
+  border-bottom: var(--hairline) solid var(--rule);
+}
+.credentials li:first-child {
+  border-top: var(--hairline) solid var(--rule);
+}
+
+/* ---------- Os três degraus ---------- */
+
+@media (max-width: 1100px) {
+  /* seis cartelas roxas em três colunas ficam estreitas antes de a tela
+     virar tablet: o texto delas é título, não legenda */
+  .trio { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 900px) {
+  .stats { grid-template-columns: repeat(2, 1fr); }
+  .pairs { grid-template-columns: 1fr; }
+  .tables { grid-template-columns: 1fr; }
+  .aboutBody {
+    grid-template-columns: 1fr;
+    gap: var(--s4);
+  }
+  /* empilhada não há vizinho do lado: a foto volta a ocupar a coluna */
+  .aboutPhoto { width: min(623px, 100%); }
+  .credentials li {
+    flex-direction: column;
+    gap: var(--s1);
+  }
+}
+
+@media (max-width: 640px) {
+  .stats,
+  .trio,
+  .picks { grid-template-columns: 1fr; }
+  /* em uma coluna não existe "duas colunas" pra ocupar */
+  .wide { grid-column: auto; }
+
+  .aboutHead { flex-wrap: wrap; gap: var(--s2); }
+  /* a régua é global: dentro do módulo ela só é alcançada por :global */
+  .aboutHead :global(.rule) { display: none; }
+
+  /* A tabela vira lista: formato e preço na primeira linha, descrição na
+     segunda. O cabeçalho some da tela mas continua no leitor de tela.
+
+     `display: block` na tabela e no corpo não é enfeite: com o <table>
+     em `display: table`, as linhas viram grade mas a tabela continua
+     dimensionando as colunas por dentro e cada linha ficava com pouco
+     mais da metade da largura da tela. */
+  .rates,
+  .rates tbody { display: block; }
+  .rates thead {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+  .rates tr {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: var(--s1) var(--s3);
+    padding-block: var(--s3);
+    border-bottom: var(--hairline) solid var(--rule);
+  }
+  .rates td {
+    padding: 0;
+    border-bottom: 0;
+  }
+  /* Colocação explícita: o preço sobe pra primeira linha, ao lado do
+     formato, e a descrição ocupa a segunda inteira. Na ordem do HTML ele
+     é o terceiro, e sem isto cairia numa terceira linha sozinho. */
+  .rates td:nth-child(1) { grid-area: 1 / 1; }
+  .rates td:nth-child(2) { grid-area: 2 / 1 / 3 / -1; }
+  .rates td:nth-child(3) { grid-area: 1 / 2; justify-self: end; }
+}

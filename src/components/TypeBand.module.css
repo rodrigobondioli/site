@@ -1,0 +1,58 @@
+/* A faixa. Quem posiciona é quem usa; aqui mora só o recorte e a corrida. */
+
+.band {
+  overflow: clip;
+  pointer-events: none;
+  user-select: none;
+  /* contêiner de consulta: é contra a largura DELA que cada cópia mede o
+     mínimo, e não contra `vw` — que conta a barra de rolagem e foi o que
+     um dia criou scroll horizontal no ticker da /work */
+  container-type: inline-size;
+}
+
+.track {
+  display: flex;
+  width: max-content;
+  animation: slide 30s linear infinite;
+  /* promove a camada uma vez, em vez de o navegador redecidir a cada
+     quadro — a mesma regra do logo que gira na capa */
+  will-change: transform;
+}
+
+/* 288px é a medida do Framer e vale de 1440 pra cima. Abaixo disso a
+   faixa acompanha a largura da janela: em tela estreita, letra de 288
+   deixa meio caractere na tela e a palavra deixa de existir. Uma curva
+   só, sem degrau — o mesmo princípio do --gutter.
+
+   O mínimo de uma cópia é a largura da faixa: assim duas cópias sempre
+   cobrem a tela depois do deslocamento, sem precisar de uma terceira. */
+.copy {
+  min-width: 100cqw;
+  padding-right: var(--s2);
+  font-family: var(--font-display), system-ui, sans-serif;
+  font-weight: 500;
+  font-size: min(288px, 20vw);
+  line-height: 1;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+/* Duas cópias idênticas: ao andar meia pista o desenho é o mesmo do
+   começo e o loop reinicia sem pulo. */
+@keyframes slide {
+  from { transform: translate3d(0, 0, 0); }
+  to   { transform: translate3d(-50%, 0, 0); }
+}
+
+/* Fora da tela ela para, e a camada deixa de ser prometida ao navegador. */
+.parada .track {
+  animation-play-state: paused;
+  will-change: auto;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .track {
+    animation: none;
+    will-change: auto;
+  }
+}
