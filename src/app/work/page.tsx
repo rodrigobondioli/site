@@ -294,7 +294,7 @@ export default function WorkPage() {
               <div className={s.aboutText}>
                 {/* O cargo sai do cabeçalho e vem pra cá: encostado no topo
                     do vídeo e na esquerda do texto. */}
-                <p className={`overline ${s.aboutRole}`}>Nexialist Designer</p>
+                <p className={`overline ${s.aboutRole}`}>Digital Product Strategist</p>
                 <div className={s.aboutCopy}>
                 <p className="body">
                 Big projects rarely fail because of execution. They fail because

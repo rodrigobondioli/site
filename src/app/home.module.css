@@ -28,6 +28,11 @@
 
 .socialBottom { display: none; }
 
+/* Copiado do .brand do SiteNav: ponto a 45%, cargo em peso normal e cinza */
+.brand { display: flex; align-items: baseline; gap: 0.35em; }
+.dot { opacity: 0.45; font-weight: 400; }
+.role { color: var(--ink-60); font-weight: 400; }
+
 .social {
   display: flex;
   flex-wrap: wrap;
@@ -104,6 +109,7 @@
   .bio { max-width: none; }
 
   .socialTop { display: none; }
+  .role, .dot { display: none; }
   .socialBottom { display: block; }
 
   .contact {

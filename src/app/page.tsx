@@ -5,7 +5,7 @@ import CubeLink from "@/components/CubeLink"
 import styles from "./home.module.css"
 
 export const metadata: Metadata = {
-  title: "Rodrigo Bondioli · Nexialist Designer",
+  title: "Rodrigo Bondioli · Digital Product Strategist",
   description:
     "Rodrigo Bondioli works at the intersection of design and AI, with more than 20 years leading design for startups and global brands.",
   alternates: { canonical: "/" },
@@ -56,7 +56,14 @@ export default function HomePage() {
   return (
     <main className={styles.page}>
       <header className={styles.top}>
-        <p className={styles.label}>Rodrigo Bondioli</p>
+        {/* O mesmo desenho do nome da barra das outras páginas (SiteNav):
+            nome, ponto apagado, cargo em cinza — e o cargo some no celular,
+            como lá. */}
+        <p className={`${styles.label} ${styles.brand}`}>
+          <span>Rodrigo Bondioli</span>
+          <span className={styles.dot} aria-hidden="true">·</span>
+          <span className={styles.role}>Digital Product Strategist</span>
+        </p>
 
         <Social className={styles.socialTop} />
       </header>

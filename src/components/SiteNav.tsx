@@ -33,7 +33,7 @@ export default function SiteNav({
       <Link href={brandHref} className={`no-underline ${styles.brand}`}>
         <strong>Rodrigo Bondioli</strong>
         <span className={styles.dot}>·</span>
-        <span className={styles.role}>Nexialist Designer</span>
+        <span className={styles.role}>Digital Product Strategist</span>
       </Link>
       {back ? (
         <Link href="/work#projects" className={styles.back} data-roll-host="">
