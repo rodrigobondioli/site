@@ -13,12 +13,19 @@
   padding-block: var(--s6) var(--s5);
 }
 
+/* Três colunas, e não um `space-between` de três filhos: com
+   space-between o bloco do meio só cai no centro da página se os dois das
+   pontas tiverem a mesma largura — e não têm (o logo mede 44, a assinatura
+   ~190). Medido, as redes ficavam 55px à esquerda do centro. Com as
+   laterais em `1fr`, o meio é o centro de verdade, e a assinatura encosta
+   na direita sozinha. */
 .inner {
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
   align-items: center;
-  justify-content: space-between;
   gap: var(--s4);
 }
+.inner > :last-child { justify-self: end; }
 
 .logo {
   flex: 0 0 auto;
@@ -88,10 +95,13 @@
  * em 900 (um dos três degraus do site) e não em 640. */
 @media (max-width: 900px) {
   .inner {
-    flex-direction: column;
+    grid-template-columns: 1fr;
+    justify-items: center;
     gap: var(--s4);
     text-align: center;
   }
+  /* empilhado não existe "direita": a assinatura volta pro centro */
+  .inner > :last-child { justify-self: center; }
 
   .social a { line-height: var(--roll-h, 17px); }
 
