@@ -30,7 +30,17 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" className={`${display.variable} ${body.variable}`}>
+    /* `data-loading` entra no <html> quando o módulo do Preloader é
+       avaliado — antes da hidratação, de propósito (é o que impede os
+       efeitos de começarem atrás da cortina). O React compara o HTML do
+       servidor com o do navegador e reclama do atributo a mais; é o mesmo
+       caso do <body> logo abaixo, e a marca é justamente algo que o
+       servidor não tem como ter. */
+    <html
+      lang="en"
+      className={`${display.variable} ${body.variable}`}
+      suppressHydrationWarning
+    >
       {/* Extensões (ColorZilla, gramática, gerenciadores de senha) injetam
           atributos no <body> antes do React montar. O aviso de hidratação
           que sai disso não é do nosso código e não tem o que consertar. */}
